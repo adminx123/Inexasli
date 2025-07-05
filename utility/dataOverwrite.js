@@ -25,6 +25,26 @@ function openDataOverwriteModal() {
                 Delete all stored data? This can't be undone.
             </div>
             <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button onclick="clearCurrentFormData()" style="
+                    padding: 14px 20px;
+                    background: rgba(45, 90, 61, 0.9);
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
+                    color: #fff;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 12px;
+                    font-size: 14px;
+                    cursor: pointer;
+                    font-family: 'Geist', sans-serif;
+                    font-weight: bold;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
+                ">
+                    <i class="bx bx-trash-alt" style="margin-right: 8px; font-size: 14px;"></i>Clear current form
+                </button>
                 <button onclick="confirmDataOverwrite()" style="
                     padding: 14px 20px;
                     background: rgba(45, 90, 61, 0.9);
@@ -183,12 +203,130 @@ function showDataOverwriteError() {
     }
 }
 
+/**
+ * Clear current form data for the active module based on lastGridItemUrl
+ */
+function clearCurrentFormData() {
+    try {
+        const lastGridItemUrl = localStorage.getItem('lastGridItemUrl');
+        
+        if (!lastGridItemUrl) {
+            showClearFormError('No active form found');
+            return;
+        }
+
+        // Extract module name from URL pattern like /ai/calorie/calorieiq.html
+        const moduleMatch = lastGridItemUrl.match(/\/ai\/([^\/]+)\//);
+        if (!moduleMatch || !moduleMatch[1]) {
+            showClearFormError('Could not identify current module');
+            return;
+        }
+
+        const moduleName = moduleMatch[1].toLowerCase();
+        
+        // Define storage keys for each module (including special cases like income)
+        const moduleStorageKeys = {
+            'calorie': ['calorieIqInput', 'calorieIqResponse'],
+            'decision': ['decisionIqInput', 'decisionIqResponse'],
+            'enneagram': ['enneagramIqInput', 'enneagramIqResponse'],
+            'event': ['eventIqInput', 'eventIqResponse'],
+            'fashion': ['fashionIqInput', 'fashionIqResponse'],
+            'income': ['incomeIqInput', 'incomeIqResponse', 'incomeIqinput1', 'incomeIqInput2', 'incomeIqExpense', 'incomeIqAssets', 'incomeIqLiabilities'],
+            'philosophy': ['philosophyIqInput', 'philosophyIqResponse'],
+            'quiz': ['quizIqInput', 'quizIqResponse'],
+            'period': ['periodIqInput', 'periodIqResponse'],
+            'categories': ['categoriesIqInput', 'categoriesIqResponse']
+        };
+
+        const keysToRemove = moduleStorageKeys[moduleName];
+        
+        if (!keysToRemove) {
+            showClearFormError(`Module '${moduleName}' not supported`);
+            return;
+        }
+
+        // Remove the specified keys
+        let removedCount = 0;
+        keysToRemove.forEach(key => {
+            if (localStorage.getItem(key) !== null) {
+                localStorage.removeItem(key);
+                removedCount++;
+            }
+        });
+
+        console.log(`Clear current form completed: removed ${removedCount} items for ${moduleName} module`);
+        showClearFormSuccess(moduleName, removedCount);
+        
+    } catch (error) {
+        console.error('Error clearing current form data:', error);
+        showClearFormError('Error occurred while clearing form data');
+    }
+}
+
+/**
+ * Show success message after clearing current form data
+ */
+function showClearFormSuccess(moduleName, removedCount) {
+    const successContent = `
+        <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
+            <div style="color: #28a745; font-size: 48px; margin-bottom: 20px;">✓</div>
+            <p style="color: #555; font-size: 0.95rem; margin: 0;">
+                Cleared ${removedCount} items for ${moduleName} module
+            </p>
+        </div>
+    `;
+    
+    // Update current modal content
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.innerHTML = successContent;
+            
+            // Close modal after brief delay
+            setTimeout(() => {
+                window.closeModal();
+            }, 1500);
+        }
+    }
+}
+
+/**
+ * Show error message if clearing current form fails
+ */
+function showClearFormError(message) {
+    const errorContent = `
+        <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
+            <div style="color: #dc3545; font-size: 48px; margin-bottom: 20px;">✗</div>
+            <p style="color: #555; font-size: 0.95rem; margin: 0;">
+                ${message}
+            </p>
+        </div>
+    `;
+    
+    // Update current modal content
+    const modal = document.querySelector('.modal');
+    if (modal) {
+        const modalContent = modal.querySelector('.modal-content');
+        if (modalContent) {
+            modalContent.innerHTML = errorContent;
+            
+            // Close modal after brief delay
+            setTimeout(() => {
+                window.closeModal();
+            }, 2000);
+        }
+    }
+}
+
 // Make functions globally accessible
 window.openDataOverwriteModal = openDataOverwriteModal;
 window.confirmDataOverwrite = confirmDataOverwrite;
+window.clearCurrentFormData = clearCurrentFormData;
 
 // Export functions for module usage
 export { 
     openDataOverwriteModal, 
-    confirmDataOverwrite 
+    confirmDataOverwrite,
+    clearCurrentFormData
 };
