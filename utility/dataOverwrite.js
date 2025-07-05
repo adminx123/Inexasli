@@ -67,7 +67,7 @@ function confirmDataOverwrite() {
             'lastgridurl_response',
             'lastGridItemUrl',
             'categoriesPageSelection',
-            
+
             // AI module inputs and responses
             'calorieIqInput',
             'calorieIqResponse',
@@ -77,8 +77,9 @@ function confirmDataOverwrite() {
             'enneagramIqResponse',
             'eventIqInput',
             'eventIqResponse',
-            'fashionIQInput',
+            'fashionIqInput', // correct key for fashion input
             'fashionIQResponse',
+            'incomeIqInput', // correct key for income input
             'incomeIqinput1',
             'incomeIqInput2',
             'incomeIqExpense',
@@ -89,7 +90,7 @@ function confirmDataOverwrite() {
             'philosophyIqResponse',
             'quizIqInput',
             'quizIqResponse',
-            
+
             // Future modules
             'adventureIqInput',
             'adventureIqResponse',
@@ -97,16 +98,16 @@ function confirmDataOverwrite() {
             'speculationIqResponse',
             'symptomIqInput',
             'symptomIqResponse',
-            
+
             // Income-specific data
             'taxCalculationsStale',
             'taxCalculationsStaleTimestamp',
             'frequencySettings',
             'currencySymbol',
-            
+
             // UI preferences that should be cleared
             'inexasli_global_swipe_hint_seen',
-            
+
             // Authentication
             'authenticated'
         ];
