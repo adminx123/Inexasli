@@ -78,7 +78,7 @@ function confirmDataOverwrite() {
             'eventIqInput',
             'eventIqResponse',
             'fashionIqInput', // correct key for fashion input
-            'fashionIQResponse',
+            'fashionIqResponse', // correct key for fashion response
             'incomeIqInput', // correct key for income input
             'incomeIqinput1',
             'incomeIqInput2',
