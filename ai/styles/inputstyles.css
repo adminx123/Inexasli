@@ -197,7 +197,7 @@ textarea {
   margin: 8px auto; /* Centered with vertical spacing */
   font-size: 16px; /* Readable font size */
   line-height: 1.5; /* Improved readability */
-  border: 1px solid #7c7c7c;
+  border: 1px solid rgba(107, 114, 128, 0.2);
   border-radius: 6px; /* Modern rounded corners */
   background-color: #f9f9f9; /* Subtle off-white background */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle depth */
@@ -244,7 +244,7 @@ input[type="number"]:focus,
 input[type="text"]:focus,
 select:focus,
 textarea:focus {
-  border-color: #6b7280;
+  border-color: rgba(107, 114, 128, 0.3);
   box-shadow: 0 0 8px rgba(107, 114, 128, 0.3);
 }
 
