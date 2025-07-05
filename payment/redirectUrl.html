@@ -225,7 +225,8 @@
                         task: 'linkPaymentToFingerprint',
                         email: checkData.customerEmail,
                         customerId: checkData.customerId,
-                        fingerprint: fingerprint
+                        fingerprint: fingerprint,
+                        tier: checkData.tier || 'BASIC'
                     })
                 });
 
@@ -256,7 +257,8 @@
                             task: 'linkPaymentToFingerprint',
                             email: checkData.customerEmail,
                             customerId: checkData.customerId,
-                            fingerprint: fingerprint
+                            fingerprint: fingerprint,
+                            tier: checkData.tier || 'BASIC'
                         })
                     });
 
