@@ -38,12 +38,20 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
                 
                 <div class="subscription-tiers">
-                    <div class="tier-option" data-price-id="default">
-                        <input type="radio" name="subscription-tier" value="default" id="tier-default" checked>
-                        <label for="tier-default" class="tier-label">
+                    <div class="tier-option" data-price-id="price_1R9egSILSdrwu9bgkFhjxXMs">
+                        <input type="radio" name="subscription-tier" value="price_1R9egSILSdrwu9bgkFhjxXMs" id="tier-basic" checked>
+                        <label for="tier-basic" class="tier-label">
                             <div class="tier-name">Basic Plan</div>
-                            <div class="tier-price">$2.99/year</div>
+                            <div class="tier-price">$2.99</div>
                             <div class="tier-features">• All AI tools • Basic support</div>
+                        </label>
+                    </div>
+                    <div class="tier-option" data-price-id="price_1RhZYOILSdrwu9bgJ25yhEov">
+                        <input type="radio" name="subscription-tier" value="price_1RhZYOILSdrwu9bgJ25yhEov" id="tier-monthly">
+                        <label for="tier-monthly" class="tier-label">
+                            <div class="tier-name">Monthly Plan</div>
+                            <div class="tier-price">$4.99/month</div>
+                            <div class="tier-features">• All AI tools • Monthly billing</div>
                         </label>
                     </div>
                     <div class="tier-option" data-price-id="price_1R9egnILSdrwu9bgKFghOlih">
