@@ -842,6 +842,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
 
+        // Listen for API responses to auto-collapse the input container
+        document.addEventListener('api-response-received', function(e) {
+            console.log('[DataIn] API response received, checking if container should collapse:', e.detail);
+            // Only collapse if the container is currently visible
+            if (isVisible && dataContainer) {
+                console.log('[DataIn] Collapsing input container to show response');
+                toggleDataContainer();
+            }
+        });
+
         // Listen for grid item selection events from promptgrid.js
         document.addEventListener('promptGridItemSelected', function (e) {
             const url = e.detail.url;
