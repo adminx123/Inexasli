@@ -36,7 +36,27 @@ document.addEventListener('DOMContentLoaded', async function() {
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
-                <button class="payment-pay-button" id="pay-button" type="button">Subscribe - $2.99</button>
+                
+                <div class="subscription-tiers">
+                    <div class="tier-option" data-price-id="default">
+                        <input type="radio" name="subscription-tier" value="default" id="tier-default" checked>
+                        <label for="tier-default" class="tier-label">
+                            <div class="tier-name">Basic Plan</div>
+                            <div class="tier-price">$2.99/year</div>
+                            <div class="tier-features">• All AI tools • Basic support</div>
+                        </label>
+                    </div>
+                    <div class="tier-option" data-price-id="price_1R9egnILSdrwu9bgKFghOlih">
+                        <input type="radio" name="subscription-tier" value="price_1R9egnILSdrwu9bgKFghOlih" id="tier-premium">
+                        <label for="tier-premium" class="tier-label">
+                            <div class="tier-name">Premium Plan</div>
+                            <div class="tier-price">$29.99/year</div>
+                            <div class="tier-features">• All AI tools • Priority support • Advanced features</div>
+                        </label>
+                    </div>
+                </div>
+                
+                <button class="payment-pay-button" id="pay-button" type="button">Subscribe Now</button>
                 <div class="payment-button-row">
                     <button class="payment-support-link recovery-button" id="recovery-button" type="button">I have paid</button>
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="payment-support-link">Customer Portal</a>
@@ -525,6 +545,94 @@ function addPaymentModalStyles() {
                 gap: 3px;
             }
         }
+        
+        /* Subscription Tier Styles */
+        .subscription-tiers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .tier-option {
+            position: relative;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .tier-option:hover {
+            border-color: rgba(45, 90, 61, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(45, 90, 61, 0.1);
+        }
+        
+        .tier-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .tier-option input[type="radio"]:checked + .tier-label {
+            border-color: #2d5a3d;
+            background: rgba(45, 90, 61, 0.05);
+        }
+        
+        .tier-option input[type="radio"]:checked + .tier-label:before {
+            content: '✓';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            background: #2d5a3d;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .tier-label {
+            display: block;
+            padding: 16px;
+            border: 2px solid rgba(45, 90, 61, 0.2);
+            border-radius: 12px;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            text-align: left;
+        }
+        
+        .tier-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d5a3d;
+            margin-bottom: 4px;
+            font-family: "Geist", sans-serif;
+        }
+        
+        .tier-price {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #4a7c59;
+            margin-bottom: 8px;
+            font-family: "Geist", sans-serif;
+        }
+        
+        .tier-features {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.4;
+            font-family: "Inter", sans-serif;
+        }
     `;
     
     document.head.appendChild(style);
@@ -894,7 +1002,17 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     emailInput.disabled = true;
     payButton.disabled = true;
 
-    const payload = { task: "pay", client_email: email, client_name: name };
+    // Get selected subscription tier
+    const selectedTier = document.querySelector('input[name="subscription-tier"]:checked');
+    const selectedPriceId = selectedTier ? selectedTier.value : 'default';
+    console.log("Selected subscription tier:", selectedPriceId);
+
+    const payload = { 
+        task: "pay", 
+        client_email: email, 
+        client_name: name,
+        price_id: selectedPriceId === 'default' ? null : selectedPriceId
+    };
     console.log("Sending payload to Cloudflare Worker:", payload);
 
     try {
