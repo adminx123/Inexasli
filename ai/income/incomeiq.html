@@ -25,7 +25,6 @@
 .tax-recalc-notification {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
-.income-dependantsContainer { display: none; }
 </style>
 
 <div class="row1 product-description-container">
@@ -42,6 +41,18 @@
 </div>
 
 <!-- Stage 1: Tax Residency & Personal Details -->
+<!-- NEW ARCHITECTURE: This section now uses a state-machine approach with:
+     - IntroStateManager: Centralized state management with event system
+     - DropdownManager: Handles dropdown dependencies and population
+     - VisibilityManager: Manages conditional field visibility
+     - IntroSectionController: Coordinates all intro functionality
+     
+     Benefits:
+     - Eliminates race conditions with proper event-driven updates
+     - Robust state restoration with validation and retry logic
+     - Centralized state management for reliable conditional UI logic
+     - Clean separation of concerns for maintainability
+-->
 <div class="row1" data-step-label="Tax Residency">
     <h3 class="tooltip1" data-tooltip="Where you're legally considered to live for tax purposes, based on factors like time spent or ties to the country.">
         Select Tax Residency<span class="tooltip1-content"></span>
@@ -80,7 +91,7 @@
         <option value="">Select Filing Status</option>
     </select>
 
-    <div id="income-specifics" style="display: none; text-align: center;">
+    <div id="income-specifics" style=" text-align: center;">
         <h3 class="tooltip1" data-tooltip="Relevant personal information.">
             Select Personal Details<span class="tooltip1-content"></span>
         </h3>
@@ -840,136 +851,681 @@ import setJSON from '/utility/setJSON.js';
         OTHER: ["Province", "State", "Region", "District", "Territory", "Prefecture", "County", "Municipality"]
     };
 
-    // Filing status mapping by country
+    // Filing status mapping by country with metadata for conditional UI
     const filingStatusMap = {
         CAN: [
-            { value: "single_no_dependants", text: "Single, No Dependants" },
-            { value: "single_with_dependants", text: "Single with Dependants" },
-            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
-            { value: "single_self_disabled", text: "Single, Self-Disabled" },
-            { value: "single_caregiver", text: "Single, Caregiver" },
-            { value: "common_law_no_dependants", text: "Common-Law, No Dependants" },
-            { value: "common_law_with_dependants", text: "Common-Law with Dependants" },
-            { value: "common_law_with_disabled_dependants", text: "Common-Law with Disabled Dependants" },
-            { value: "common_law_self_disabled", text: "Common-Law, Self-Disabled" },
-            { value: "common_law_spouse_disabled", text: "Common-Law, Spouse-Disabled" },
-            { value: "common_law_caregiver", text: "Common-Law, Caregiver" },
-            { value: "married_no_dependants", text: "Married, No Dependants" },
-            { value: "married_with_dependants", text: "Married with Dependants" },
-            { value: "married_with_disabled_dependants", text: "Married with Disabled Dependants" },
-            { value: "married_self_disabled", text: "Married, Self-Disabled" },
-            { value: "married_spouse_disabled", text: "Married, Spouse-Disabled" },
-            { value: "married_caregiver", text: "Married, Caregiver" },
-            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
-            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
-            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
-            { value: "separated_no_dependants", text: "Separated, No Dependants" },
-            { value: "separated_with_dependants", text: "Separated with Dependants" },
-            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+            { value: "single_no_dependants", text: "Single, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_dependants", text: "Single with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "single_self_disabled", text: "Single, Self-Disabled", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_caregiver", text: "Single, Caregiver", showSpouseFields: false, showDisabledDependants: false },
+            { value: "common_law_no_dependants", text: "Common-Law, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "common_law_with_dependants", text: "Common-Law with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "common_law_with_disabled_dependants", text: "Common-Law with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "common_law_self_disabled", text: "Common-Law, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "common_law_spouse_disabled", text: "Common-Law, Spouse-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "common_law_caregiver", text: "Common-Law, Caregiver", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_no_dependants", text: "Married, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_with_dependants", text: "Married with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_with_disabled_dependants", text: "Married with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "married_self_disabled", text: "Married, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_spouse_disabled", text: "Married, Spouse-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_caregiver", text: "Married, Caregiver", showSpouseFields: true, showDisabledDependants: false },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "separated_no_dependants", text: "Separated, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_dependants", text: "Separated with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true }
         ],
         USA: [
-            { value: "single_no_dependants", text: "Single, No Dependants" },
-            { value: "single_with_dependants", text: "Single with Dependants" },
-            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
-            { value: "single_self_disabled", text: "Single, Self-Disabled" },
-            { value: "single_caregiver", text: "Single, Caregiver" },
-            { value: "married_filing_jointly_no_dependants", text: "Married Filing Jointly, No Dependants" },
-            { value: "married_filing_jointly_with_dependants", text: "Married Filing Jointly with Dependants" },
-            { value: "married_filing_jointly_with_disabled_dependants", text: "Married Filing Jointly with Disabled Dependants" },
-            { value: "married_filing_jointly_self_disabled", text: "Married Filing Jointly, Self-Disabled" },
-            { value: "married_filing_jointly_spouse_disabled", text: "Married Filing Jointly, Spouse-Disabled" },
-            { value: "married_filing_jointly_caregiver", text: "Married Filing Jointly, Caregiver" },
-            { value: "married_filing_separately_no_dependants", text: "Married Filing Separately, No Dependants" },
-            { value: "married_filing_separately_with_dependants", text: "Married Filing Separately with Dependants" },
-            { value: "married_filing_separately_with_disabled_dependants", text: "Married Filing Separately with Disabled Dependants" },
-            { value: "married_filing_separately_self_disabled", text: "Married Filing Separately, Self-Disabled" },
-            { value: "head_of_household_no_dependants", text: "Head of Household, No Dependants" },
-            { value: "head_of_household_with_dependants", text: "Head of Household with Dependants" },
-            { value: "head_of_household_with_disabled_dependants", text: "Head of Household with Disabled Dependants" },
-            { value: "head_of_household_caregiver", text: "Head of Household, Caregiver" },
-            { value: "qualifying_widow_no_dependants", text: "Qualifying Widow(er), No Dependants" },
-            { value: "qualifying_widow_with_dependants", text: "Qualifying Widow(er) with Dependants" },
-            { value: "qualifying_widow_with_disabled_dependants", text: "Qualifying Widow(er) with Disabled Dependants" }
+            { value: "single_no_dependants", text: "Single, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_dependants", text: "Single with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "single_self_disabled", text: "Single, Self-Disabled", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_caregiver", text: "Single, Caregiver", showSpouseFields: false, showDisabledDependants: false },
+            { value: "married_filing_jointly_no_dependants", text: "Married Filing Jointly, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_jointly_with_dependants", text: "Married Filing Jointly with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_jointly_with_disabled_dependants", text: "Married Filing Jointly with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "married_filing_jointly_self_disabled", text: "Married Filing Jointly, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_jointly_spouse_disabled", text: "Married Filing Jointly, Spouse-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_jointly_caregiver", text: "Married Filing Jointly, Caregiver", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_separately_no_dependants", text: "Married Filing Separately, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_separately_with_dependants", text: "Married Filing Separately with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_filing_separately_with_disabled_dependants", text: "Married Filing Separately with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "married_filing_separately_self_disabled", text: "Married Filing Separately, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "head_of_household_no_dependants", text: "Head of Household, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "head_of_household_with_dependants", text: "Head of Household with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "head_of_household_with_disabled_dependants", text: "Head of Household with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "head_of_household_caregiver", text: "Head of Household, Caregiver", showSpouseFields: false, showDisabledDependants: false },
+            { value: "qualifying_widow_no_dependants", text: "Qualifying Widow(er), No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "qualifying_widow_with_dependants", text: "Qualifying Widow(er) with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "qualifying_widow_with_disabled_dependants", text: "Qualifying Widow(er) with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true }
         ],
         UK: [
-            { value: "single_no_dependants", text: "Single, No Dependants" },
-            { value: "single_with_dependants", text: "Single with Dependants" },
-            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
-            { value: "single_self_disabled", text: "Single, Self-Disabled" },
-            { value: "single_caregiver", text: "Single, Caregiver" },
-            { value: "married_or_civil_partnership_no_dependants", text: "Married or Civil Partnership, No Dependants" },
-            { value: "married_or_civil_partnership_with_dependants", text: "Married or Civil Partnership with Dependants" },
-            { value: "married_or_civil_partnership_with_disabled_dependants", text: "Married or Civil Partnership with Disabled Dependants" },
-            { value: "married_or_civil_partnership_self_disabled", text: "Married or Civil Partnership, Self-Disabled" },
-            { value: "married_or_civil_partnership_spouse_disabled", text: "Married or Civil Partnership, Spouse-Disabled" },
-            { value: "married_or_civil_partnership_caregiver", text: "Married or Civil Partnership, Caregiver" },
-            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
-            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
-            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
-            { value: "separated_no_dependants", text: "Separated, No Dependants" },
-            { value: "separated_with_dependants", text: "Separated with Dependants" },
-            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+            { value: "single_no_dependants", text: "Single, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_dependants", text: "Single with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "single_self_disabled", text: "Single, Self-Disabled", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_caregiver", text: "Single, Caregiver", showSpouseFields: false, showDisabledDependants: false },
+            { value: "married_or_civil_partnership_no_dependants", text: "Married or Civil Partnership, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_civil_partnership_with_dependants", text: "Married or Civil Partnership with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_civil_partnership_with_disabled_dependants", text: "Married or Civil Partnership with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "married_or_civil_partnership_self_disabled", text: "Married or Civil Partnership, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_civil_partnership_spouse_disabled", text: "Married or Civil Partnership, Spouse-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_civil_partnership_caregiver", text: "Married or Civil Partnership, Caregiver", showSpouseFields: true, showDisabledDependants: false },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "separated_no_dependants", text: "Separated, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_dependants", text: "Separated with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true }
         ],
         AUS: [
-            { value: "single_no_dependants", text: "Single, No Dependants" },
-            { value: "single_with_dependants", text: "Single with Dependants" },
-            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
-            { value: "single_self_disabled", text: "Single, Self-Disabled" },
-            { value: "single_caregiver", text: "Single, Caregiver" },
-            { value: "married_or_de_facto_no_dependants", text: "Married or De Facto, No Dependants" },
-            { value: "married_or_de_facto_with_dependants", text: "Married or De Facto with Dependants" },
-            { value: "married_or_de_facto_with_disabled_dependants", text: "Married or De Facto with Disabled Dependants" },
-            { value: "married_or_de_facto_self_disabled", text: "Married or De Facto, Self-Disabled" },
-            { value: "married_or_de_facto_spouse_disabled", text: "Married or De Facto, Spouse-Disabled" },
-            { value: "married_or_de_facto_caregiver", text: "Married or De Facto, Caregiver" },
-            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
-            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
-            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
-            { value: "separated_no_dependants", text: "Separated, No Dependants" },
-            { value: "separated_with_dependants", text: "Separated with Dependants" },
-            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+            { value: "single_no_dependants", text: "Single, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_dependants", text: "Single with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "single_self_disabled", text: "Single, Self-Disabled", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_caregiver", text: "Single, Caregiver", showSpouseFields: false, showDisabledDependants: false },
+            { value: "married_or_de_facto_no_dependants", text: "Married or De Facto, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_de_facto_with_dependants", text: "Married or De Facto with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_de_facto_with_disabled_dependants", text: "Married or De Facto with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "married_or_de_facto_self_disabled", text: "Married or De Facto, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_de_facto_spouse_disabled", text: "Married or De Facto, Spouse-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "married_or_de_facto_caregiver", text: "Married or De Facto, Caregiver", showSpouseFields: true, showDisabledDependants: false },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "separated_no_dependants", text: "Separated, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_dependants", text: "Separated with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true }
         ],
         OTHER: [
-            { value: "single_no_dependants", text: "Single, No Dependants" },
-            { value: "single_with_dependants", text: "Single with Dependants" },
-            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants" },
-            { value: "single_self_disabled", text: "Single, Self-Disabled" },
-            { value: "single_caregiver", text: "Single, Caregiver" },
-            { value: "coupled_no_dependants", text: "Coupled, No Dependants" },
-            { value: "coupled_with_dependants", text: "Coupled with Dependants" },
-            { value: "coupled_with_disabled_dependants", text: "Coupled with Disabled Dependants" },
-            { value: "coupled_self_disabled", text: "Coupled, Self-Disabled" },
-            { value: "coupled_spouse_disabled", text: "Coupled, Spouse-Disabled" },
-            { value: "coupled_caregiver", text: "Coupled, Caregiver" },
-            { value: "widowed_no_dependants", text: "Widowed, No Dependants" },
-            { value: "widowed_with_dependants", text: "Widowed with Dependants" },
-            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants" },
-            { value: "separated_no_dependants", text: "Separated, No Dependants" },
-            { value: "separated_with_dependants", text: "Separated with Dependants" },
-            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants" }
+            { value: "single_no_dependants", text: "Single, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_dependants", text: "Single with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_with_disabled_dependants", text: "Single with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "single_self_disabled", text: "Single, Self-Disabled", showSpouseFields: false, showDisabledDependants: false },
+            { value: "single_caregiver", text: "Single, Caregiver", showSpouseFields: false, showDisabledDependants: false },
+            { value: "coupled_no_dependants", text: "Coupled, No Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "coupled_with_dependants", text: "Coupled with Dependants", showSpouseFields: true, showDisabledDependants: false },
+            { value: "coupled_with_disabled_dependants", text: "Coupled with Disabled Dependants", showSpouseFields: true, showDisabledDependants: true },
+            { value: "coupled_self_disabled", text: "Coupled, Self-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "coupled_spouse_disabled", text: "Coupled, Spouse-Disabled", showSpouseFields: true, showDisabledDependants: false },
+            { value: "coupled_caregiver", text: "Coupled, Caregiver", showSpouseFields: true, showDisabledDependants: false },
+            { value: "widowed_no_dependants", text: "Widowed, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_dependants", text: "Widowed with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "widowed_with_disabled_dependants", text: "Widowed with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true },
+            { value: "separated_no_dependants", text: "Separated, No Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_dependants", text: "Separated with Dependants", showSpouseFields: false, showDisabledDependants: false },
+            { value: "separated_with_disabled_dependants", text: "Separated with Disabled Dependants", showSpouseFields: false, showDisabledDependants: true }
         ]
     };
 
-    // Status arrays for logic
-    const singleStatuses = [
-        'single_no_dependants', 'single_with_dependants', 'single_with_disabled_dependants', 'single_self_disabled', 'single_caregiver',
-        'widowed_no_dependants', 'widowed_with_dependants', 'widowed_with_disabled_dependants', 'separated_no_dependants',
-        'separated_with_dependants', 'separated_with_disabled_dependants', 'head_of_household_no_dependants',
-        'head_of_household_with_dependants', 'head_of_household_with_disabled_dependants', 'head_of_household_caregiver',
-        'qualifying_widow_no_dependants', 'qualifying_widow_with_dependants', 'qualifying_widow_with_disabled_dependants'
-    ];
+    // ===== REDESIGNED INTRO SECTION STATE MANAGEMENT =====
+    
+    /**
+     * IntroStateManager - Centralized state management for intro section
+     * Handles all intro section state with validation and event-driven updates
+     */
+    class IntroStateManager {
+        constructor() {
+            this.state = {
+                country: '',
+                subregion: '',
+                residency: '',
+                filingStatus: '',
+                ageSelf: '',
+                employmentStatus: '',
+                ageSpouse: '',
+                employmentStatusSpouse: '',
+                birthYearDisabledDependants: ''
+            };
+            
+            this.listeners = new Map();
+            this.isInitialized = false;
+            this.pendingOperations = [];
+            
+            console.log("[IntroStateManager] Initialized");
+        }
+        
+        // Add event listener for state changes
+        addEventListener(event, callback) {
+            if (!this.listeners.has(event)) {
+                this.listeners.set(event, []);
+            }
+            this.listeners.get(event).push(callback);
+        }
+        
+        // Remove event listener
+        removeEventListener(event, callback) {
+            if (this.listeners.has(event)) {
+                const callbacks = this.listeners.get(event);
+                const index = callbacks.indexOf(callback);
+                if (index > -1) {
+                    callbacks.splice(index, 1);
+                }
+            }
+        }
+        
+        // Emit event to all listeners
+        emit(event, data) {
+            if (this.listeners.has(event)) {
+                this.listeners.get(event).forEach(callback => {
+                    try {
+                        callback(data);
+                    } catch (error) {
+                        console.error(`[IntroStateManager] Error in ${event} listener:`, error);
+                    }
+                });
+            }
+        }
+        
+        // Update state and emit change events
+        updateState(field, value) {
+            const oldValue = this.state[field];
+            this.state[field] = value;
+            
+            console.log(`[IntroStateManager] State updated: ${field} = ${value}`);
+            
+            // Emit specific field change event
+            this.emit(`${field}Changed`, { field, value, oldValue });
+            
+            // Emit general state change event
+            this.emit('stateChanged', { field, value, oldValue, state: { ...this.state } });
+        }
+        
+        // Get current state
+        getState() {
+            return { ...this.state };
+        }
+        
+        // Get specific field value
+        getField(field) {
+            return this.state[field];
+        }
+        
+        // Validate state for conditional logic
+        isValidForConditionalLogic() {
+            return this.state.country && this.state.filingStatus;
+        }
+        
+        // Set initialization complete
+        setInitialized(initialized = true) {
+            this.isInitialized = initialized;
+            if (initialized) {
+                console.log("[IntroStateManager] Initialization complete, processing pending operations");
+                this.processPendingOperations();
+            }
+        }
+        
+        // Add operation to pending queue if not initialized
+        addPendingOperation(operation) {
+            if (!this.isInitialized) {
+                this.pendingOperations.push(operation);
+                return true;
+            }
+            return false;
+        }
+        
+        // Process all pending operations
+        processPendingOperations() {
+            while (this.pendingOperations.length > 0) {
+                const operation = this.pendingOperations.shift();
+                try {
+                    operation();
+                } catch (error) {
+                    console.error("[IntroStateManager] Error processing pending operation:", error);
+                }
+            }
+        }
+        
+        // Load state from FormPersistence
+        loadFromFormPersistence(formPersistence) {
+            if (!formPersistence) return;
+            
+            const savedData = formPersistence.getSavedFormData();
+            if (!savedData) return;
+            
+            console.log("[IntroStateManager] Loading state from FormPersistence:", savedData);
+            
+            // Update state from saved data
+            Object.keys(this.state).forEach(field => {
+                if (savedData[field] !== undefined) {
+                    this.state[field] = savedData[field];
+                }
+            });
+            
+            this.emit('stateLoaded', { state: { ...this.state } });
+        }
+        
+        // Save state to FormPersistence
+        saveToFormPersistence(formPersistence) {
+            if (!formPersistence) return;
+            
+            console.log("[IntroStateManager] Saving state to FormPersistence");
+            formPersistence.saveFormData();
+        }
+    }
+    
+    /**
+     * DropdownManager - Manages dropdown dependencies and population
+     * Handles the complex relationships between country, subregion, and filing status
+     */
+    class DropdownManager {
+        constructor(stateManager) {
+            this.stateManager = stateManager;
+            this.dropdowns = {
+                country: document.getElementById('income-country'),
+                subregion: document.getElementById('income-subregion'),
+                residency: document.getElementById('income-residency'),
+                filingStatus: document.getElementById('income-filingStatus')
+            };
+            
+            this.containers = {
+                subregion: document.getElementById('income-subregionContainer')
+            };
+            
+            this.setupEventListeners();
+            console.log("[DropdownManager] Initialized");
+        }
+        
+        setupEventListeners() {
+            // Listen for country changes to update subregion and filing status
+            this.stateManager.addEventListener('countryChanged', (data) => {
+                this.updateSubregionDropdown(data.value);
+                this.updateFilingStatusDropdown(data.value);
+            });
+        }
+        
+        // Update subregion dropdown based on country
+        updateSubregionDropdown(country) {
+            const subregionDropdown = this.dropdowns.subregion;
+            const subregionContainer = this.containers.subregion;
+            
+            if (!subregionDropdown) {
+                console.error("[DropdownManager] Subregion dropdown not found");
+                return;
+            }
+            
+            // Clear existing options
+            subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
+            
+            if (country && subregionMap[country]) {
+                console.log(`[DropdownManager] Adding ${subregionMap[country].length} subregions for ${country}`);
+                subregionMap[country].forEach(subregionName => {
+                    const option = document.createElement('option');
+                    option.text = subregionName;
+                    option.value = subregionName;
+                    subregionDropdown.appendChild(option);
+                });
+                subregionContainer.style.display = 'block';
+            } else {
+                console.log(`[DropdownManager] No subregions found for country: ${country}`);
+                subregionContainer.style.display = 'none';
+            }
+            
+            // Clear subregion value if country changed
+            this.stateManager.updateState('subregion', '');
+        }
+        
+        // Update filing status dropdown based on country
+        updateFilingStatusDropdown(country) {
+            const filingStatusDropdown = this.dropdowns.filingStatus;
+            
+            if (!filingStatusDropdown) {
+                console.error("[DropdownManager] Filing status dropdown not found");
+                return;
+            }
+            
+            // Clear existing options
+            filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
+            
+            if (country && filingStatusMap[country]) {
+                console.log(`[DropdownManager] Adding ${filingStatusMap[country].length} filing statuses for ${country}`);
+                filingStatusMap[country].forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.value;
+                    optionElement.text = option.text;
+                    filingStatusDropdown.appendChild(optionElement);
+                });
+            } else {
+                console.log(`[DropdownManager] No filing statuses found for country: ${country}`);
+            }
+            
+            // Clear filing status value if country changed
+            this.stateManager.updateState('filingStatus', '');
+        }
+        
+        // Validate that all required dropdowns are properly populated
+        validateDropdowns() {
+            const errors = [];
+            
+            Object.entries(this.dropdowns).forEach(([name, dropdown]) => {
+                if (!dropdown) {
+                    errors.push(`${name} dropdown not found`);
+                } else if (dropdown.options.length <= 1) {
+                    errors.push(`${name} dropdown has no valid options`);
+                }
+            });
+            
+            return {
+                isValid: errors.length === 0,
+                errors: errors
+            };
+        }
+        
+        // Restore dropdown values from state
+        restoreDropdownValues(state) {
+            console.log("[DropdownManager] Restoring dropdown values from state:", state);
+            
+            return new Promise((resolve) => {
+                const operations = [];
+                
+                // Restore country first
+                if (state.country && this.dropdowns.country) {
+                    this.dropdowns.country.value = state.country;
+                    
+                    // Update dependent dropdowns
+                    this.updateSubregionDropdown(state.country);
+                    this.updateFilingStatusDropdown(state.country);
+                    
+                    // Wait for dropdowns to be populated, then restore values
+                    operations.push(
+                        this.waitForDropdownPopulation('subregion', state.subregion),
+                        this.waitForDropdownPopulation('filingStatus', state.filingStatus)
+                    );
+                }
+                
+                // Restore other simple dropdowns
+                if (state.residency && this.dropdowns.residency) {
+                    this.dropdowns.residency.value = state.residency;
+                }
+                
+                Promise.all(operations).then(() => {
+                    console.log("[DropdownManager] All dropdown values restored");
+                    resolve();
+                });
+            });
+        }
+        
+        // Wait for dropdown to be populated and then set value
+        waitForDropdownPopulation(dropdownName, value) {
+            return new Promise((resolve) => {
+                if (!value) {
+                    resolve();
+                    return;
+                }
+                
+                const dropdown = this.dropdowns[dropdownName];
+                if (!dropdown) {
+                    console.warn(`[DropdownManager] Dropdown ${dropdownName} not found`);
+                    resolve();
+                    return;
+                }
+                
+                let attempts = 0;
+                const maxAttempts = 10;
+                
+                const trySetValue = () => {
+                    attempts++;
+                    
+                    // Check if the option exists
+                    const option = Array.from(dropdown.options).find(opt => opt.value === value);
+                    if (option) {
+                        dropdown.value = value;
+                        console.log(`[DropdownManager] Set ${dropdownName} to ${value}`);
+                        resolve();
+                    } else if (attempts < maxAttempts) {
+                        // Wait and try again
+                        setTimeout(trySetValue, 50);
+                    } else {
+                        console.warn(`[DropdownManager] Could not set ${dropdownName} to ${value} after ${maxAttempts} attempts`);
+                        resolve();
+                    }
+                };
+                
+                trySetValue();
+            });
+        }
+    }
+    
+    /**
+     * VisibilityManager - Manages conditional field visibility
+     * Handles showing/hiding spouse fields and dependants based on filing status
+     */
+    class VisibilityManager {
+        constructor(stateManager) {
+            this.stateManager = stateManager;
+            this.elements = {
+                specifics: document.getElementById('income-specifics'),
+                spouseFields: document.querySelector('.income-spouseFields'),
+                dependantsContainer: document.querySelector('.income-dependantsContainer')
+            };
+            
+            this.setupEventListeners();
+            console.log("[VisibilityManager] Initialized");
+        }
+        
+        setupEventListeners() {
+            // Listen for state changes that affect visibility
+            this.stateManager.addEventListener('filingStatusChanged', () => {
+                this.updateAllVisibility();
+            });
+            
+            this.stateManager.addEventListener('stateLoaded', () => {
+                this.updateAllVisibility();
+            });
+        }
+        
+        // Update all conditional visibility
+        updateAllVisibility() {
+            this.updateSpecificsVisibility();
+            this.updateSpouseVisibility();
+            this.updateDependantsVisibility();
+            
+            // Adjust container size when conditional content appears
+            this.adjustContainerSize();
+        }
+        
+        // Adjust container size after visibility changes
+        adjustContainerSize() {
+            if (window.dataInContainerManager && window.dataInContainerManager.adjustContainerSize) {
+                setTimeout(() => {
+                    // Pass the form container so it can measure the actual content height
+                    const formContainer = document.querySelector('.device-container') || document.querySelector('.data-container-in');
+                    window.dataInContainerManager.adjustContainerSize(formContainer);
+                }, 100);
+            }
+        }
+        
+        // Show/hide personal details section
+        updateSpecificsVisibility() {
+            const specificsDiv = this.elements.specifics;
+            const filingStatus = this.stateManager.getField('filingStatus');
+            
+            if (!specificsDiv) return;
+            
+            const shouldShow = Boolean(filingStatus);
+            specificsDiv.style.display = shouldShow ? 'block' : 'none';
+            
+            console.log(`[VisibilityManager] Specifics visibility: ${shouldShow} (filingStatus: ${filingStatus})`);
+        }
+        
+        // Show/hide spouse fields based on filing status
+        updateSpouseVisibility() {
+            const spouseFields = this.elements.spouseFields;
+            const country = this.stateManager.getField('country');
+            const filingStatus = this.stateManager.getField('filingStatus');
+            
+            if (!spouseFields) return;
+            
+            const metadata = this.getFilingStatusMetadata(country, filingStatus);
+            const shouldShow = metadata.showSpouseFields && Boolean(filingStatus);
+            
+            spouseFields.style.display = shouldShow ? 'block' : 'none';
+            
+            console.log(`[VisibilityManager] Spouse fields visibility: ${shouldShow} (country: ${country}, filingStatus: ${filingStatus})`);
+        }
+        
+        // Show/hide dependants container based on filing status
+        updateDependantsVisibility() {
+            const dependantsContainer = this.elements.dependantsContainer;
+            const country = this.stateManager.getField('country');
+            const filingStatus = this.stateManager.getField('filingStatus');
+            
+            if (!dependantsContainer) return;
+            
+            const metadata = this.getFilingStatusMetadata(country, filingStatus);
+            const shouldShow = metadata.showDisabledDependants && Boolean(filingStatus);
+            
+            dependantsContainer.style.display = shouldShow ? 'block' : 'none';
+            
+            console.log(`[VisibilityManager] Dependants container visibility: ${shouldShow} (country: ${country}, filingStatus: ${filingStatus})`);
+        }
+        
+        // Get filing status metadata
+        getFilingStatusMetadata(country, filingStatus) {
+            if (!country || !filingStatus || !filingStatusMap[country]) {
+                return { showSpouseFields: false, showDisabledDependants: false };
+            }
+            
+            const statusOption = filingStatusMap[country].find(option => option.value === filingStatus);
+            return statusOption ? {
+                showSpouseFields: statusOption.showSpouseFields,
+                showDisabledDependants: statusOption.showDisabledDependants
+            } : { showSpouseFields: false, showDisabledDependants: false };
+        }
+    }
+    
+    /**
+     * IntroSectionController - Main controller that coordinates all intro section functionality
+     * Replaces the old fragmented approach with a unified, reliable system
+     */
+    class IntroSectionController {
+        constructor() {
+            this.stateManager = new IntroStateManager();
+            this.dropdownManager = new DropdownManager(this.stateManager);
+            this.visibilityManager = new VisibilityManager(this.stateManager);
+            
+            this.isInitialized = false;
+            this.formPersistence = null;
+            
+            console.log("[IntroSectionController] Initialized");
+        }
+        
+        // Initialize the intro section with FormPersistence integration
+        async initialize(formPersistence) {
+            console.log("[IntroSectionController] Starting initialization");
+            
+            this.formPersistence = formPersistence;
+            
+            // Setup DOM event listeners
+            this.setupDOMEventListeners();
+            
+            // Load saved state
+            this.stateManager.loadFromFormPersistence(formPersistence);
+            
+            // Restore dropdown values and visibility
+            await this.restoreIntroState();
+            
+            // Mark as initialized
+            this.stateManager.setInitialized(true);
+            this.isInitialized = true;
+            
+            console.log("[IntroSectionController] Initialization complete");
+        }
+        
+        // Setup DOM event listeners for form inputs
+        setupDOMEventListeners() {
+            const fieldMappings = {
+                'income-country': 'country',
+                'income-subregion': 'subregion',
+                'income-residency': 'residency',
+                'income-filingStatus': 'filingStatus',
+                'income-ageSelf': 'ageSelf',
+                'income-employmentStatus': 'employmentStatus',
+                'income-ageSpouse': 'ageSpouse',
+                'income-employmentStatusSpouse': 'employmentStatusSpouse',
+                'income-birthYearDisabledDependants': 'birthYearDisabledDependants'
+            };
+            
+            Object.entries(fieldMappings).forEach(([elementId, stateField]) => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    const handler = (event) => {
+                        this.stateManager.updateState(stateField, event.target.value);
+                        this.saveFormData();
+                    };
+                    
+                    element.addEventListener('change', handler);
+                    element.addEventListener('input', handler);
+                    
+                    console.log(`[IntroSectionController] Setup listener for ${elementId} -> ${stateField}`);
+                }
+            });
+        }
+        
+        // Restore intro section state from saved data
+        async restoreIntroState() {
+            console.log("[IntroSectionController] Restoring intro state");
+            
+            const state = this.stateManager.getState();
+            
+            // Restore dropdown values (handles dependencies)
+            await this.dropdownManager.restoreDropdownValues(state);
+            
+            // Restore other input values
+            this.restoreInputValues(state);
+            
+            // Update visibility after restoration
+            this.visibilityManager.updateAllVisibility();
+            
+            console.log("[IntroSectionController] Intro state restoration complete");
+        }
+        
+        // Restore input field values
+        restoreInputValues(state) {
+            const inputMappings = {
+                'income-ageSelf': state.ageSelf,
+                'income-employmentStatus': state.employmentStatus,
+                'income-ageSpouse': state.ageSpouse,
+                'income-employmentStatusSpouse': state.employmentStatusSpouse,
+                'income-birthYearDisabledDependants': state.birthYearDisabledDependants
+            };
+            
+            Object.entries(inputMappings).forEach(([elementId, value]) => {
+                const element = document.getElementById(elementId);
+                if (element && value) {
+                    element.value = value;
+                    console.log(`[IntroSectionController] Restored ${elementId} = ${value}`);
+                }
+            });
+        }
+        
+        // Save form data
+        saveFormData() {
+            if (this.formPersistence) {
+                this.stateManager.saveToFormPersistence(this.formPersistence);
+            }
+        }
+        
+        // Get current intro state
+        getIntroState() {
+            return this.stateManager.getState();
+        }
+        
+        // Check if intro section is valid for conditional logic
+        isValidForConditionalLogic() {
+            return this.stateManager.isValidForConditionalLogic();
+        }
+    }
+    
+    // Global intro section controller instance
+    let introSectionController = null;
 
-    const statusesWithDisabledDependants = [
-        'single_with_disabled_dependants', 'widowed_with_disabled_dependants', 'separated_with_disabled_dependants',
-        'married_with_disabled_dependants', 'common_law_with_disabled_dependants', 'coupled_with_disabled_dependants',
-        'qualifying_widow_with_disabled_dependants', 'married_filing_jointly_with_disabled_dependants',
-        'married_filing_separately_with_disabled_dependants', 'head_of_household_with_disabled_dependants',
-        'married_or_civil_partnership_with_disabled_dependants', 'married_or_de_facto_with_disabled_dependants'
-    ];
-
-    // Initialize form functionality
+    // Initialize form functionality with new state management
     function initIncomeForm() {
-        console.log("[IncomeIQ] Initializing form functionality");
+        console.log("[IncomeIQ] Initializing form functionality with new state management");
         
         // Use FormPersistence instance created by datain.js, or create our own if not available
         incomeFormPersistence = window.incomeFormPersistence;
@@ -982,7 +1538,7 @@ import setJSON from '/utility/setJSON.js';
                     singleSelection: [],
                     multiSelection: [],
                     customFormDataCollector: null,
-                    customFormRepopulator: customFormRepopulator
+                    customFormRepopulator: null // Let new system handle this
                 });
             } else {
                 console.error("[IncomeIQ] FormPersistence class not available");
@@ -992,62 +1548,12 @@ import setJSON from '/utility/setJSON.js';
         
         console.log("[IncomeIQ] Using FormPersistence instance:", incomeFormPersistence);
         
+        // Initialize new intro section controller
+        introSectionController = new IntroSectionController();
+        introSectionController.initialize(incomeFormPersistence);
+        
         // Set up additional input handlers for normalization
         setupAdditionalInputHandlers();
-        
-        const countryDropdown = document.getElementById('income-country');
-        const subregionDropdown = document.getElementById('income-subregion');
-        const filingStatusDropdown = document.getElementById('income-filingStatus');
-        const specificsDiv = document.getElementById('income-specifics');
-
-        // Setup country dropdown
-        if (countryDropdown) {
-            console.log("[IncomeIQ] Setting up country dropdown event listener");
-            countryDropdown.addEventListener('change', function() {
-                const selectedCountry = this.value;
-                console.log("[IncomeIQ] Country changed to:", selectedCountry);
-                updateSubregionDropdown(selectedCountry);
-                updateFilingStatusOptions(selectedCountry);
-                updateSpecificsVisibility();
-                // After updating dropdown options, repopulate saved values
-                repopulateFromSavedData();
-                saveFormData(); // Save when country changes
-            });
-        } else {
-            console.error("[IncomeIQ] Country dropdown not found!");
-        }
-
-        // Setup subregion dropdown to save when changed
-        if (subregionDropdown) {
-            subregionDropdown.addEventListener('change', function() {
-                saveFormData(); // Save when subregion changes
-            });
-        }
-
-        // Setup filing status dropdown
-        if (filingStatusDropdown) {
-            filingStatusDropdown.addEventListener('change', function() {
-                updateDependantsVisibility();
-                updateMaritalStatusVisibility();
-                updateSpecificsVisibility();
-                saveFormData(); // Save when filing status changes
-                
-                // Adjust container size when conditional content appears
-                if (window.dataInContainerManager && window.dataInContainerManager.adjustContainerSize) {
-                    setTimeout(() => {
-                        // Pass the form container so it can measure the actual content height
-                        const formContainer = document.querySelector('.device-container') || document.querySelector('.data-container-in');
-                        window.dataInContainerManager.adjustContainerSize(formContainer);
-                    }, 100);
-                }
-            });
-        }
-
-        // Setup input change handlers for all form fields
-        setupInputHandlers();
-
-        // Load saved data and repopulate form
-        loadSavedData();
 
         // Setup generate button
         const generateBtn = document.getElementById('generate-income-btn');
@@ -1065,65 +1571,16 @@ import setJSON from '/utility/setJSON.js';
 
         // Export the FormPersistence instance for external access
         window.incomeFormPersistence = incomeFormPersistence;
-        console.log("[IncomeIQ] FormPersistence instance exported to window");
+        window.introSectionController = introSectionController;
+        console.log("[IncomeIQ] FormPersistence instance and IntroSectionController exported to window");
     }
 
-    // Update subregion dropdown based on country selection
-    function updateSubregionDropdown(country) {
-        console.log("[IncomeIQ] updateSubregionDropdown called with country:", country);
-        const subregionDropdown = document.getElementById('income-subregion');
-        const subregionContainer = document.getElementById('income-subregionContainer');
-        
-        if (!subregionDropdown) {
-            console.error("[IncomeIQ] subregion dropdown not found");
-            return;
-        }
-
-        subregionDropdown.innerHTML = '<option value="">Select Tax Subregion</option>';
-
-        if (country && subregionMap[country]) {
-            console.log("[IncomeIQ] Adding subregions for", country, ":", subregionMap[country].length, "options");
-            subregionMap[country].forEach(subregionName => {
-                const option = document.createElement('option');
-                option.text = subregionName;
-                option.value = subregionName;
-                subregionDropdown.appendChild(option);
-            });
-            subregionContainer.style.display = 'block';
-        } else {
-            console.log("[IncomeIQ] No subregions found for country:", country);
-            subregionContainer.style.display = 'none';
-        }
-    }
-
-    // Attach listeners to all relevant intro fields
-    function setupIntroSectionHandlers() {
-        const introFieldIds = [
-            'income-country',
-            'income-subregion',
-            'income-residency',
-            'income-filingStatus',
-            'income-ageSelf',
-            'income-employmentStatus',
-            'income-ageSpouse',
-            'income-employmentStatusSpouse',
-            'income-birthYearDisabledDependants'
-        ];
-        introFieldIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.removeEventListener('change', saveIntroSectionToLocalStorage);
-                el.removeEventListener('input', saveIntroSectionToLocalStorage);
-                el.addEventListener('change', saveIntroSectionToLocalStorage);
-                el.addEventListener('input', saveIntroSectionToLocalStorage);
-            }
-        });
-    }
-
-    // FormPersistence integration functions
+    // Legacy functions for backward compatibility
     function saveFormData() {
-        if (incomeFormPersistence) {
-            console.log("[IncomeIQ] Saving form data via FormPersistence");
+        if (introSectionController) {
+            introSectionController.saveFormData();
+        } else if (incomeFormPersistence) {
+            console.log("[IncomeIQ] Saving form data via FormPersistence (legacy)");
             incomeFormPersistence.saveFormData();
             
             // Also normalize and save income/expense data when form is saved
@@ -1135,92 +1592,72 @@ import setJSON from '/utility/setJSON.js';
                 }
             }
         } else {
-            console.warn("[IncomeIQ] FormPersistence not initialized, cannot save data");
+            console.warn("[IncomeIQ] No state management system available, cannot save data");
         }
     }
 
     function loadSavedData() {
-        if (incomeFormPersistence) {
-            console.log("[IncomeIQ] Loading saved data via FormPersistence");
-            // FormPersistence will automatically repopulate during init
-            // But we need to trigger dropdown updates for dependent fields
-            const countryDropdown = document.getElementById('income-country');
-            if (countryDropdown && countryDropdown.value) {
-                updateSubregionDropdown(countryDropdown.value);
-                updateFilingStatusOptions(countryDropdown.value);
-                updateSpecificsVisibility();
-                // Re-populate after dropdown updates
-                setTimeout(() => repopulateFromSavedData(), 100);
-            }
-        } else {
-            console.warn("[IncomeIQ] FormPersistence not initialized, cannot load data");
+        // New system handles this automatically during initialization
+        console.log("[IncomeIQ] loadSavedData called - handled by new state management system");
+    }
+
+    function customFormRepopulator(data) {
+        // New system handles this automatically
+        console.log("[IncomeIQ] customFormRepopulator called - handled by new state management system");
+    }
+
+    // Legacy visibility functions - now delegated to new system
+    function updateDependantsVisibility() {
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.visibilityManager.updateDependantsVisibility();
+        }
+    }
+
+    function updateMaritalStatusVisibility() {
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.visibilityManager.updateSpouseVisibility();
+        }
+    }
+
+    function updateSpecificsVisibility() {
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.visibilityManager.updateSpecificsVisibility();
+        }
+    }
+
+    function updateSubregionDropdown(country) {
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.dropdownManager.updateSubregionDropdown(country);
+        }
+    }
+
+    function updateFilingStatusOptions(country) {
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.dropdownManager.updateFilingStatusDropdown(country);
         }
     }
 
     function repopulateFromSavedData() {
-        if (incomeFormPersistence) {
-            console.log("[IncomeIQ] Re-populating form from saved data");
-            const savedData = incomeFormPersistence.getSavedFormData();
-            if (savedData) {
-                customFormRepopulator(savedData);
-            }
-        }
+        // New system handles this automatically
+        console.log("[IncomeIQ] repopulateFromSavedData called - handled by new state management system");
     }
 
-    function customFormRepopulator(data) {
-        if (!data) return;
-        console.log("[IncomeIQ] Custom form repopulator called with data:", data);
-        
-        // Repopulate form fields using standard FormPersistence method
-        if (incomeFormPersistence) {
-            incomeFormPersistence.repopulateGenericForm(data);
+    // Helper function to get filing status metadata (backward compatibility)
+    function getFilingStatusMetadata(country, filingStatus) {
+        if (!country || !filingStatus || !filingStatusMap[country]) {
+            return { showSpouseFields: false, showDisabledDependants: false };
         }
         
-        // Handle special logic for dependent dropdowns
-        if (data.country) {
-            const countryDropdown = document.getElementById('income-country');
-            if (countryDropdown) {
-                countryDropdown.value = data.country;
-                updateSubregionDropdown(data.country);
-                updateFilingStatusOptions(data.country);
-                
-                // Set subregion after dropdown is populated
-                if (data.subregion) {
-                    setTimeout(() => {
-                        const subregionDropdown = document.getElementById('income-subregion');
-                        if (subregionDropdown) {
-                            console.log("[IncomeIQ] Setting subregion to:", data.subregion);
-                            subregionDropdown.value = data.subregion;
-                        }
-                    }, 50);
-                }
-                
-                // Set filing status after dropdown is populated, then update visibility
-                if (data.filingStatus) {
-                    setTimeout(() => {
-                        const filingStatusDropdown = document.getElementById('income-filingStatus');
-                        if (filingStatusDropdown) {
-                            console.log("[IncomeIQ] Setting filing status to:", data.filingStatus);
-                            filingStatusDropdown.value = data.filingStatus;
-                        }
-                        // Ensure visibility logic is always triggered after repopulation
-                        updateDependantsVisibility();
-                        updateMaritalStatusVisibility();
-                        updateSpecificsVisibility();
-                    }, 50);
-                }
-            }
-        } else {
-            setTimeout(() => {
-                updateDependantsVisibility();
-                updateMaritalStatusVisibility();
-                updateSpecificsVisibility();
-            }, 150);
-        }
+        const statusOption = filingStatusMap[country].find(option => option.value === filingStatus);
+        return statusOption ? {
+            showSpouseFields: statusOption.showSpouseFields,
+            showDisabledDependants: statusOption.showDisabledDependants
+        } : { showSpouseFields: false, showDisabledDependants: false };
     }
 
     function setupInputHandlers() {
-        // FormPersistence handles basic saving, but we need additional logic for normalization
+        // New system handles intro section input listeners
+        // Just setup additional handlers for normalization
         console.log("[IncomeIQ] Setting up additional input handlers for normalization");
         setupAdditionalInputHandlers();
     }
@@ -1326,58 +1763,84 @@ import setJSON from '/utility/setJSON.js';
         console.log("[IncomeIQ] 📊 Dashboard update triggered, updateAllMetrics:", updateAllMetrics);
     }
 
-    // Update filing status options based on country
+    // Update filing status options based on country (legacy compatibility)
     function updateFilingStatusOptions(country) {
-        const filingStatusDropdown = document.getElementById('income-filingStatus');
-        if (!filingStatusDropdown) return;
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.dropdownManager.updateFilingStatusDropdown(country);
+        } else {
+            // Fallback for legacy compatibility
+            const filingStatusDropdown = document.getElementById('income-filingStatus');
+            if (!filingStatusDropdown) return;
 
-        filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
+            filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
 
-        if (country && filingStatusMap[country]) {
-            filingStatusMap[country].forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option.value;
-                optionElement.text = option.text;
-                filingStatusDropdown.appendChild(optionElement);
-            });
+            if (country && filingStatusMap[country]) {
+                filingStatusMap[country].forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option.value;
+                    optionElement.text = option.text;
+                    filingStatusDropdown.appendChild(optionElement);
+                });
+            }
         }
-    }
-
-    // Show/hide dependants container based on filing status
+    }    // Show/hide dependants container based on filing status (legacy compatibility)
     function updateDependantsVisibility() {
-        const dependantsContainer = document.querySelector('.income-dependantsContainer');
-        const filingStatusDropdown = document.getElementById('income-filingStatus');
-        if (!dependantsContainer || !filingStatusDropdown) {
-            console.warn('[IncomeIQ] updateDependantsVisibility: missing container or dropdown');
-            return;
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.visibilityManager.updateDependantsVisibility();
+        } else {
+            // Fallback for legacy compatibility
+            const dependantsContainer = document.querySelector('.income-dependantsContainer');
+            const filingStatusDropdown = document.getElementById('income-filingStatus');
+            const countryDropdown = document.getElementById('income-country');
+            
+            if (!dependantsContainer || !filingStatusDropdown || !countryDropdown) {
+                console.warn('[IncomeIQ] updateDependantsVisibility: missing container or dropdown');
+                return;
+            }
+            
+            const selectedCountry = countryDropdown.value;
+            const selectedFilingStatus = filingStatusDropdown.value;
+            const metadata = getFilingStatusMetadata(selectedCountry, selectedFilingStatus);
+            
+            dependantsContainer.style.display = metadata.showDisabledDependants ? 'block' : 'none';
+            console.log(`[IncomeIQ] updateDependantsVisibility: country='${selectedCountry}', filingStatus='${selectedFilingStatus}', show=${metadata.showDisabledDependants}`);
         }
-        const selectedFilingStatus = filingStatusDropdown.value;
-        const shouldShow = statusesWithDisabledDependants.includes(selectedFilingStatus);
-        dependantsContainer.style.display = shouldShow ? 'block' : 'none';
-        console.log(`[IncomeIQ] updateDependantsVisibility: filingStatus='${selectedFilingStatus}', show=${shouldShow}`);
     }
 
-    // Show/hide spouse fields based on filing status
+    // Show/hide spouse fields based on filing status (legacy compatibility)
     function updateMaritalStatusVisibility() {
-        const spouseFields = document.querySelector('.income-spouseFields');
-        const filingStatusDropdown = document.getElementById('income-filingStatus');
-        
-               
-        if (!spouseFields || !filingStatusDropdown) return;
-        
-        const selectedFilingStatus = filingStatusDropdown.value;
-        const isSingle = singleStatuses.includes(selectedFilingStatus);
-        spouseFields.style.display = isSingle || !selectedFilingStatus ? 'none' : 'block';
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.visibilityManager.updateSpouseVisibility();
+        } else {
+            // Fallback for legacy compatibility
+            const spouseFields = document.querySelector('.income-spouseFields');
+            const filingStatusDropdown = document.getElementById('income-filingStatus');
+            const countryDropdown = document.getElementById('income-country');
+            
+            if (!spouseFields || !filingStatusDropdown || !countryDropdown) return;
+            
+            const selectedCountry = countryDropdown.value;
+            const selectedFilingStatus = filingStatusDropdown.value;
+            const metadata = getFilingStatusMetadata(selectedCountry, selectedFilingStatus);
+            
+            spouseFields.style.display = metadata.showSpouseFields && selectedFilingStatus ? 'block' : 'none';
+            console.log(`[IncomeIQ] updateMaritalStatusVisibility: country='${selectedCountry}', filingStatus='${selectedFilingStatus}', show=${metadata.showSpouseFields}`);
+        }
     }
 
-    // Show/hide personal details section
+    // Show/hide personal details section (legacy compatibility)
     function updateSpecificsVisibility() {
-        const specificsDiv = document.getElementById('income-specifics');
-        const filingStatusDropdown = document.getElementById('income-filingStatus');
-        
-        if (!specificsDiv || !filingStatusDropdown) return;
-        
-        specificsDiv.style.display = filingStatusDropdown.value ? 'block' : 'none';
+        if (introSectionController && introSectionController.isInitialized) {
+            introSectionController.visibilityManager.updateSpecificsVisibility();
+        } else {
+            // Fallback for legacy compatibility
+            const specificsDiv = document.getElementById('income-specifics');
+            const filingStatusDropdown = document.getElementById('income-filingStatus');
+            
+            if (!specificsDiv || !filingStatusDropdown) return;
+            
+            specificsDiv.style.display = filingStatusDropdown.value ? 'block' : 'none';
+        }
     }
 
     // Generate IncomeIQ report - ONLY send normalized incomeIqinput1 data
@@ -1567,9 +2030,13 @@ import setJSON from '/utility/setJSON.js';
     // Export functions for external access
     window.incomeIq = { 
         getFormData: () => incomeFormPersistence ? incomeFormPersistence.getSavedFormData() : null,
-        saveFormData: () => incomeFormPersistence ? incomeFormPersistence.saveFormData() : null,
-        loadSavedData: loadSavedData,
-        customFormRepopulator: customFormRepopulator
+        saveFormData: () => saveFormData(),
+        loadSavedData: () => loadSavedData(),
+        customFormRepopulator: customFormRepopulator,
+        // New state management access
+        getIntroState: () => introSectionController ? introSectionController.getIntroState() : null,
+        isValidForConditionalLogic: () => introSectionController ? introSectionController.isValidForConditionalLogic() : false,
+        introSectionController: () => introSectionController
     };
 
     // Normalize income and expenses function
