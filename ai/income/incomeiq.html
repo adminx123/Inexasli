@@ -25,6 +25,7 @@
 .tax-recalc-notification {
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
+.income-dependantsContainer { display: none; }
 </style>
 
 <div class="row1 product-description-container">
@@ -1194,20 +1195,27 @@ import setJSON from '/utility/setJSON.js';
                     }, 50);
                 }
                 
-                // Set filing status after dropdown is populated
+                // Set filing status after dropdown is populated, then update visibility
                 if (data.filingStatus) {
                     setTimeout(() => {
                         const filingStatusDropdown = document.getElementById('income-filingStatus');
                         if (filingStatusDropdown) {
                             console.log("[IncomeIQ] Setting filing status to:", data.filingStatus);
                             filingStatusDropdown.value = data.filingStatus;
-                            updateDependantsVisibility();
-                            updateMaritalStatusVisibility();
-                            updateSpecificsVisibility();
                         }
+                        // Ensure visibility logic is always triggered after repopulation
+                        updateDependantsVisibility();
+                        updateMaritalStatusVisibility();
+                        updateSpecificsVisibility();
                     }, 50);
                 }
             }
+        } else {
+            setTimeout(() => {
+                updateDependantsVisibility();
+                updateMaritalStatusVisibility();
+                updateSpecificsVisibility();
+            }, 150);
         }
     }
 
@@ -1339,11 +1347,14 @@ import setJSON from '/utility/setJSON.js';
     function updateDependantsVisibility() {
         const dependantsContainer = document.querySelector('.income-dependantsContainer');
         const filingStatusDropdown = document.getElementById('income-filingStatus');
-        
-        if (!dependantsContainer || !filingStatusDropdown) return;
-        
+        if (!dependantsContainer || !filingStatusDropdown) {
+            console.warn('[IncomeIQ] updateDependantsVisibility: missing container or dropdown');
+            return;
+        }
         const selectedFilingStatus = filingStatusDropdown.value;
-        dependantsContainer.style.display = statusesWithDisabledDependants.includes(selectedFilingStatus) ? 'block' : 'none';
+        const shouldShow = statusesWithDisabledDependants.includes(selectedFilingStatus);
+        dependantsContainer.style.display = shouldShow ? 'block' : 'none';
+        console.log(`[IncomeIQ] updateDependantsVisibility: filingStatus='${selectedFilingStatus}', show=${shouldShow}`);
     }
 
     // Show/hide spouse fields based on filing status
@@ -1351,6 +1362,7 @@ import setJSON from '/utility/setJSON.js';
         const spouseFields = document.querySelector('.income-spouseFields');
         const filingStatusDropdown = document.getElementById('income-filingStatus');
         
+               
         if (!spouseFields || !filingStatusDropdown) return;
         
         const selectedFilingStatus = filingStatusDropdown.value;
