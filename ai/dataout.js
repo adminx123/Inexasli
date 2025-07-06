@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 position: fixed;
                 top: 0;
                 left: 0;
-                background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #2a2a2a 100%);
+                background: linear-gradient(135deg, #888888 0%, #ffffff 50%, #888888 100%);
                 padding: 4px;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 overflow: hidden;
                 font-family: "Inter", sans-serif;
                 opacity: 1;
-                color: #e0e0e0;
+                color: #333333;
             }
 
             .data-container-out .data-content {
