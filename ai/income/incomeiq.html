@@ -1030,6 +1030,15 @@ import setJSON from '/utility/setJSON.js';
                 updateMaritalStatusVisibility();
                 updateSpecificsVisibility();
                 saveFormData(); // Save when filing status changes
+                
+                // Adjust container size when conditional content appears
+                if (window.dataInContainerManager && window.dataInContainerManager.adjustContainerSize) {
+                    setTimeout(() => {
+                        // Pass the form container so it can measure the actual content height
+                        const formContainer = document.querySelector('.device-container') || document.querySelector('.data-container-in');
+                        window.dataInContainerManager.adjustContainerSize(formContainer);
+                    }, 100);
+                }
             });
         }
 
