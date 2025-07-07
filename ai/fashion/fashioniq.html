@@ -246,38 +246,14 @@
     }
   }
 
-  // Simple initialization - set up event listeners
-  function initialize() {
-    // Set up generate button event listener
-    const generateBtn = document.getElementById('generate-fashion-btn');
-    if (generateBtn) {
-      generateBtn.removeEventListener('click', handleGenerateFashionIq);
-      generateBtn.addEventListener('click', handleGenerateFashionIq);
-    } else {
-      console.error("[FashionIQ] Generate button not found!");
-    }
+  // Initialization - simplified to match calorie module pattern
+  document.getElementById('generate-fashion-btn').addEventListener('click', handleGenerateFashionIq);
 
-    // Initial button state check
-    updateButtonState();
-
-    // Listen for image upload changes
-    document.addEventListener('imageUploadChanged', updateButtonState);
-  }
-
-  // Initialize immediately if DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initialize);
-  } else {
-    initialize();
-  }
-
-  // Handle loading through datain.js - only initialize if fashion module is loaded
-  document.addEventListener('data-in-loaded', function(e) {
-    const moduleType = e.detail?.moduleType;
-    if (moduleType === 'fashion') {
-      initialize();
-    }
-  });
+  // Listen for image upload changes to update button state
+  document.addEventListener('imageUploadChanged', updateButtonState);
+  
+  // Initial button state check
+  updateButtonState();
 
   // Export functions for external access
   window.fashionIq = { 

@@ -263,14 +263,8 @@ Need accommodations for 3 wheelchair users"></textarea>
         }
     }
 
-    // Initialization
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    // Initialization - simplified to match calorie module pattern
     document.getElementById('generate-event-btn').addEventListener('click', handleGenerateEventIq);
-
-    // Guided forms integration
-    if (typeof GuidedForms !== 'undefined' && GuidedForms.eventiq) {
-        new GuidedForms.eventiq();
-    }
 })();
 </script>
 </div>

@@ -143,14 +143,8 @@ Accepting things I cannot change"></textarea>
         }
     }
 
-    // Initialization
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    // Initialization - simplified to match calorie module pattern
     document.getElementById('generate-philosophy-btn').addEventListener('click', handleGeneratePhilosophyIq);
-
-    // Guided forms integration
-    if (typeof GuidedForms !== 'undefined' && GuidedForms.philosophyiq) {
-        new GuidedForms.philosophyiq();
-    }
   })();
   </script>
 </div> <!-- Close mobile-container -->

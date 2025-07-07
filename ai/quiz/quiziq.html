@@ -231,14 +231,8 @@ Key Battles"></textarea>
         }
     }
 
-    // Initialization
-    document.addEventListener('grid-item-toggled', handleGridItemToggled);
+    // Initialization - simplified to match calorie module pattern
     document.getElementById('generate-quiz-btn').addEventListener('click', handleGenerateQuizIq);
-
-    // Guided forms integration
-    if (typeof GuidedForms !== 'undefined' && GuidedForms.quiziq) {
-        new GuidedForms.quiziq();
-    }
 })();
 </script>
 </div> <!-- Close mobile-container -->
