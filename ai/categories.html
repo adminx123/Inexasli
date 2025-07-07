@@ -189,8 +189,8 @@
 
 <script type="module">
 // Execute immediately instead of waiting for DOMContentLoaded since this is dynamically loaded
-import { getJSON } from '/utility/getJSON.js';
-import { setJSON } from '/utility/setJSON.js';
+// Utility functions are now available via window from datain.js
+// No direct imports needed
 
 console.log('[Categories] Script executing immediately');
 
@@ -200,12 +200,12 @@ const deviceContainer = document.querySelector('.device-container');
 
 function getFavorites() {
     // Use the imported function directly
-    return getJSON('favoriteProducts', []);
+    return window.getJSON('favoriteProducts', []);
 }
 
 function saveFavorites(favorites) {
     // Use the imported function directly
-    setJSON('favoriteProducts', favorites);
+    window.setJSON('favoriteProducts', favorites);
 }
 
 function renderFavorites() {

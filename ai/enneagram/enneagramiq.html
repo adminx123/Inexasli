@@ -242,10 +242,9 @@ I prefer working alone on complex problems"></textarea>
 
   // Initialize form persistence when DOM is ready
   function initializeEnneagramIQ() {
-    // Import and initialize form persistence
-    import('../../utility/formPersistence.js').then(module => {
-      const FormPersistence = module.FormPersistence;
-      const persistence = FormPersistence.getInstance('enneagram', {
+    // Use FormPersistence from window (exposed by datain.js)
+    if (window.FormPersistence) {
+      const persistence = window.FormPersistence.getInstance('enneagram', {
         singleSelection: [], // No single selection containers in enneagram
         multiSelection: ['enneagram-traits', 'enneagram-behaviors'] // Multi selection containers
       });
@@ -258,9 +257,10 @@ I prefer working alone on complex problems"></textarea>
       
       // Initialize the rest of the functionality after form persistence is set up
       runInitialization();
-    }).catch(error => {
-      console.error("Failed to initialize Enneagram IQ form persistence:", error);
-    });
+    } else {
+      console.warn("FormPersistence not available from window, skipping persistence setup");
+      runInitialization();
+    }
   }
 
   // Initialize immediately if DOM is ready

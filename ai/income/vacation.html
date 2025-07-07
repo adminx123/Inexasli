@@ -302,10 +302,8 @@
  
      <!-- Merged JavaScript from vacation.js with getJSON and setJSON implementation -->
      <script type="module">
-     import { setLocal } from '/utility/setlocal.js';
-     import { getLocal } from '/utility/getLocal.js';
-     import { setJSON } from '/utility/setJSON.js';
-     import { getJSON } from '/utility/getJSON.js';
+     // Utility functions are now available via window from datain.js
+     // No direct imports needed
 
      // Define expenseCategories and totalOnlyCategories FIRST
      const expenseCategories = [
@@ -360,7 +358,7 @@
          console.log('Starting loadLocalStorage with JSON...');
          
          // Get all input values from JSON storage
-         const savedInputs = getJSON(TRIP_INPUTS_KEY, {});
+         const savedInputs = window.getJSON(TRIP_INPUTS_KEY, {});
          formElementIds.forEach(id => {
              const element = document.getElementById(id);
              if (element) {
@@ -374,7 +372,7 @@
          });
          
          // Get all frequency selections from JSON storage
-         const savedFrequencies = getJSON(TRIP_FREQUENCIES_KEY, {});
+         const savedFrequencies = window.getJSON(TRIP_FREQUENCIES_KEY, {});
          document.querySelectorAll('.checkbox-button-group').forEach(group => {
              const groupId = group.id;
              const savedFrequency = savedFrequencies[groupId] || 'total';
@@ -444,7 +442,7 @@
          if (checkedCheckbox) {
              frequency = checkedCheckbox.value;
          } else {
-             const savedFrequencies = getJSON(TRIP_FREQUENCIES_KEY, {});
+             const savedFrequencies = window.getJSON(TRIP_FREQUENCIES_KEY, {});
              frequency = savedFrequencies[`trip_${category}_frequency`] || 'total';
          }
          
@@ -555,7 +553,7 @@
          });
          
          // Save all input values as a single JSON object
-         setJSON(TRIP_INPUTS_KEY, inputValues);
+         window.setJSON(TRIP_INPUTS_KEY, inputValues);
          
          // Collect all frequency selections into a single object
          const frequencyValues = {};
@@ -568,7 +566,7 @@
          });
          
          // Save all frequency selections as a single JSON object
-         setJSON(TRIP_FREQUENCIES_KEY, frequencyValues);
+         window.setJSON(TRIP_FREQUENCIES_KEY, frequencyValues);
          
          console.log('All data saved as JSON objects');
      };
@@ -584,7 +582,7 @@
              const element = document.getElementById(id);
              if (element) element.value = '';
          });
-         setJSON(TRIP_INPUTS_KEY, emptyInputs);
+         window.setJSON(TRIP_INPUTS_KEY, emptyInputs);
          
          // Reset all frequency selections to 'total' and save as JSON
          const defaultFrequencies = {};
@@ -598,7 +596,7 @@
                  cb.checked = cb.value === 'total';
              });
          });
-         setJSON(TRIP_FREQUENCIES_KEY, defaultFrequencies);
+         window.setJSON(TRIP_FREQUENCIES_KEY, defaultFrequencies);
          
          console.log("All Vacation Worksheet data has been cleared");
      };
@@ -657,11 +655,11 @@
                          });
                          
                          // Get current frequencies from storage
-                         const savedFrequencies = getJSON(TRIP_FREQUENCIES_KEY, {});
+                         const savedFrequencies = window.getJSON(TRIP_FREQUENCIES_KEY, {});
                          savedFrequencies[group.id] = this.value;
                          
                          // Update the frequencies object and save
-                         setJSON(TRIP_FREQUENCIES_KEY, savedFrequencies);
+                         window.setJSON(TRIP_FREQUENCIES_KEY, savedFrequencies);
                          
                          console.log(`Saved ${this.value} to JSON for ${group.id}`);
                          

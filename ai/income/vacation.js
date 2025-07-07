@@ -7,8 +7,8 @@
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
  */
-import { setLocal } from '/utility/setlocal.js';
-import { getLocal } from '/utility/getLocal.js';
+// Utility functions are now available via window from datain.js
+// No direct imports needed
 
 // Define expenseCategories and totalOnlyCategories FIRST
 const expenseCategories = [
@@ -52,7 +52,7 @@ window.loadLocalStorage = function() {
     formElementIds.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            const storedValue = getLocal(id);
+            const storedValue = window.getLocal(id);
             element.value = storedValue || '';
             console.log(`Set ${id} to ${element.value}`);
         } else {
@@ -109,7 +109,7 @@ function calculateTotalForCategory(category) {
 
     const amount = parseFloat(amountInput.value) || 0;
     const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
-    const frequency = checkedCheckbox ? checkedCheckbox.value : getLocal(`trip_${category}_frequency`) || 'total';
+    const frequency = checkedCheckbox ? checkedCheckbox.value : window.getLocal(`trip_${category}_frequency`) || 'total';
     let total = 0;
 
     if (totalOnlyCategories.includes(category)) {
@@ -208,7 +208,7 @@ window.createCookies = function() {
         const element = document.getElementById(id);
         if (element) {
             const value = element.value || '0';
-            setLocal(id, value, 365);
+            window.setLocal(id, value, 365);
             console.log(`Saved ${id}: ${value}`);
         }
     });
@@ -216,8 +216,8 @@ window.createCookies = function() {
     expenseCategories.forEach(category => {
         const frequencyGroup = document.getElementById(`trip_${category}_frequency`);
         const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
-        const value = checkedCheckbox ? checkedCheckbox.value : getLocal(`trip_${category}_frequency`) || 'total';
-        setLocal(`trip_${category}_frequency`, value, 365);
+        const value = checkedCheckbox ? checkedCheckbox.value : window.getLocal(`trip_${category}_frequency`) || 'total';
+        window.setLocal(`trip_${category}_frequency`, value, 365);
         console.log(`Saved trip_${category}_frequency: ${value}`);
     });
     console.log('Cookies created for all form elements');
@@ -226,13 +226,13 @@ window.createCookies = function() {
 window.overwriteCookies1 = function() {
     console.log('Overwriting cookies...');
     formElementIds.forEach(id => {
-        setLocal(id, '', 365);
+        window.setLocal(id, '', 365);
         const element = document.getElementById(id);
         if (element) element.value = '';
     });
 
     expenseCategories.forEach(category => {
-        setLocal(`trip_${category}_frequency`, 'total', 365);
+        window.setLocal(`trip_${category}_frequency`, 'total', 365);
         const frequencyGroup = document.getElementById(`trip_${category}_frequency`);
         const checkboxes = frequencyGroup.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
@@ -276,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     checkboxes.forEach(cb => {
                         if (cb !== this) cb.checked = false;
                     });
-                    setLocal(group.id, this.value, 365);
+                    window.setLocal(group.id, this.value, 365);
                     console.log(`Saved ${this.value} to cookie for ${group.id}`);
                     const category = group.id.replace('trip_', '').replace('_frequency', '');
                     updateFrequency(category);
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        const savedFrequency = getLocal(group.id) || 'total';
+        const savedFrequency = window.getLocal(group.id) || 'total';
         const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`);
         if (checkboxToCheck) {
             checkboxToCheck.checked = true;

@@ -7,8 +7,8 @@
  */
 
 // Import required modules
-import { getLocal } from '/utility/getlocal.js';
-import { setLocal } from '/utility/setlocal.js';
+// Utility functions are now available via window from datain.js
+// No direct imports needed
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -145,7 +145,7 @@ function initFrequencyButtons() {
                 window.updateFreeContent();
                 
                 // If premium, update that too
-                if (typeof window.updatePremiumContent === 'function' && getLocal('authenticated') === 'paid') {
+                if (typeof window.updatePremiumContent === 'function' && window.getLocal('authenticated') === 'paid') {
                     console.log('Calling global updatePremiumContent()');
                     window.updatePremiumContent();
                 }
@@ -188,7 +188,7 @@ function directlyUpdateElements(frequency) {
     elementsToUpdate.forEach(item => {
         const element = document.getElementById(item.id);
         if (element) {
-            const value = parseFloat(getLocal(item.key)) || 0;
+            const value = parseFloat(window.getLocal(item.key)) || 0;
             element.textContent = '$' + (value * multiplier).toFixed(2);
             console.log(`Updated ${item.id} to $${(value * multiplier).toFixed(2)}`);
         }
@@ -199,7 +199,7 @@ function directlyUpdateElements(frequency) {
         { id: 'ASSETS', key: 'ASSETS' },
         { id: 'LIABILITIES', key: 'LIABILITIES' },
         { id: 'NETWORTH', key: null, calcFunc: () => 
-            (parseFloat(getLocal('ASSETS')) || 0) - (parseFloat(getLocal('LIABILITIES')) || 0) 
+            (parseFloat(window.getLocal('ASSETS')) || 0) - (parseFloat(window.getLocal('LIABILITIES')) || 0) 
         }
     ];
     
@@ -207,21 +207,21 @@ function directlyUpdateElements(frequency) {
     staticElements.forEach(item => {
         const element = document.getElementById(item.id);
         if (element) {
-            const value = item.calcFunc ? item.calcFunc() : (parseFloat(getLocal(item.key)) || 0);
+            const value = item.calcFunc ? item.calcFunc() : (parseFloat(window.getLocal(item.key)) || 0);
             element.textContent = '$' + value.toFixed(2);
             console.log(`Updated static element ${item.id} to $${value.toFixed(2)}`);
         }
     });
     
     // If premium, update DISPOSABLEINCOME too
-    if (getLocal('authenticated') === 'paid') {
+    if (window.getLocal('authenticated') === 'paid') {
         const disposableElement = document.getElementById('DISPOSABLEINCOME');
         if (disposableElement) {
-            const income = parseFloat(getLocal('ANNUALINCOME')) || 0;
-            const expenses = parseFloat(getLocal('ANNUALEXPENSESUM')) || 0;
-            const regionalTax = parseFloat(getLocal('REGIONALTAXANNUAL')) || 0;
-            const subregionalTax = parseFloat(getLocal('SUBREGIONTAXANNUAL')) || 0;
-            const obligations = parseFloat(getLocal('OTHEROBLIGATIONANNUAL')) || 0;
+            const income = parseFloat(window.getLocal('ANNUALINCOME')) || 0;
+            const expenses = parseFloat(window.getLocal('ANNUALEXPENSESUM')) || 0;
+            const regionalTax = parseFloat(window.getLocal('REGIONALTAXANNUAL')) || 0;
+            const subregionalTax = parseFloat(window.getLocal('SUBREGIONTAXANNUAL')) || 0;
+            const obligations = parseFloat(window.getLocal('OTHEROBLIGATIONANNUAL')) || 0;
             
             const disposableIncome = income - expenses - regionalTax - subregionalTax - obligations;
             disposableElement.textContent = '$' + (disposableIncome * multiplier).toFixed(2);

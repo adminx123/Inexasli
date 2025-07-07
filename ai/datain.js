@@ -16,6 +16,12 @@ import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
 import '/ai/faq.js'; // Add FAQ modal script
 
+// Import additional utility functions for centralized exposure
+import { getJSON } from '/utility/getJSON.js';
+import { setJSON } from '/utility/setJSON.js';
+import { getCookie } from '/utility/getcookie.js';
+import { setCookie } from '/utility/setcookie.js';
+
 // Import validation utilities
 import { 
     validateModuleData, 
@@ -25,6 +31,43 @@ import {
 
 // Import rate limiting utilities centrally
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+
+// Expose all utility functions to window for centralized access by input modules
+window.utilityFunctions = {
+    getLocal,
+    setLocal,
+    getJSON,
+    setJSON,
+    getCookie,
+    setCookie,
+    FormPersistence,
+    validateModuleData,
+    ValidationError,
+    displayValidationErrors,
+    initializeBidirectionalSwipe,
+    initializeSimpleVerticalSwipe,
+    initAutoExpandTextareas,
+    createSplitTextarea,
+    createSplitCalendarText,
+    deleteEntry,
+    handleConditionalInput,
+    addEntryButton,
+    getFingerprintForWorker,
+    incrementRequestCount,
+    isRateLimited,
+    handleRateLimitResponse
+};
+
+// Also expose individual functions directly to window for easier access
+window.getLocal = getLocal;
+window.setLocal = setLocal;
+window.getJSON = getJSON;
+window.setJSON = setJSON;
+window.getCookie = getCookie;
+window.setCookie = setCookie;
+window.FormPersistence = FormPersistence;
+
+console.log('[DataIn] Utility functions exposed to window object');
 
 // Universal validation function for all modules
 function validateFormDataForModule(moduleName, formData) {
