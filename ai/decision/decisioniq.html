@@ -103,337 +103,94 @@ Option 3: Build custom solution in-house"></textarea>
 (function() {
   console.log("Decision IQ script initializing");
 
-  // Generate button handler - matches income module pattern
+  // Generate button handler - simplified to match calorie module pattern
   async function handleGenerateDecisionIq() {
+    const formData = window.decisionFormPersistence.getSavedFormData();
+    if (!formData) {
+      console.error('[DecisionIQ] No input data found in localStorage.');
+      alert('Please complete the form before generating a decision analysis.');
+      return;
+    }
+
+    // Check rate limiting before proceeding
+    if (window.rateLimiter.isRateLimited('decision', 10, 60 * 60 * 1000)) { // 10 requests per hour
+      alert('You have exceeded the request limit for decision analysis. Please try again later.');
+      return;
+    }
+
+    // Get fingerprint data for rate limiting
+    const fingerprintData = window.rateLimiter.getFingerprintForWorker();
+    
+    // Create combined payload with both form data and fingerprint
+    const workerPayload = {
+      module: 'decision',
+      formData: formData,
+      fingerprint: fingerprintData
+    };
+    
+    const dataContainer = document.querySelector('.data-container-in');
+    let backendResponse = null;
     try {
-      // Get form data using FormPersistence (with fallback)
-      let formData = null;
-      if (window.decisionFormPersistence && typeof window.decisionFormPersistence.getSavedFormData === 'function') {
-        formData = window.decisionFormPersistence.getSavedFormData();
-      } else {
-        console.warn("[DecisionIQ] FormPersistence not available, trying to collect form data manually");
-        // Fallback: try to collect basic form data manually
-        formData = collectFormDataManually();
-      }
-      
-      if (!formData || Object.keys(formData).length === 0) {
-        console.error("[DecisionIQ] No form data available");
-        alert('Please fill out the form before generating your decision analysis.');
-        return;
-      }
-
-      // Check rate limiting before proceeding
-      if (window.rateLimiter && window.rateLimiter.isRateLimited('decision', 10, 60 * 60 * 1000)) { // 10 requests per hour
-        alert('You have exceeded the request limit for decision analysis. Please try again later.');
-        return;
-      }
-
-      console.log("[DecisionIQ] Form data collected:", formData);
-
-      // Get fingerprint data for rate limiting
-      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-      
-      // Create combined payload with both form data and fingerprint
-      const workerPayload = {
-        module: 'decision',
-        formData: formData,
-        fingerprint: fingerprintData
-      };
-      
-      // DEBUG: Log the final payload (hide sensitive fingerprint details)
-      console.log("[DecisionIQ] Final payload being sent to worker:", JSON.stringify({
-        formData: formData,
-        fingerprint: { 
-          deviceId: fingerprintData.deviceId.slice(0, 8) + '...', 
-          sessionId: fingerprintData.sessionId.slice(0, 8) + '...',
-          requestCount: Object.keys(fingerprintData.requestCounts).length 
-        }
-      }, null, 2));
-
-      // Use enhanced loading with educational facts
-      const dataContainer = document.querySelector('.device-container') || document.body;
-      let backendResponse = null;
-      
-      try {
-        const result = await window.enhancedLoading(
-          'generate-decision-btn',
-          'decision',
-          async () => {
-            // Use the proper Cloudflare-secured API endpoint
-            const apiUrl = 'https://inexasli.com/api/generate';
-            const response = await fetch(apiUrl, {
-              method: 'POST',
-              headers: { 
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(workerPayload)
-            });
-
-            let responseData;
-            try {
-              responseData = await response.json();
-            } catch (e) {
-              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-            }
-            
-            // Store backend response for error handling
-            backendResponse = responseData;
-            
-            // Always call handleRateLimitResponse with backend response
-            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'DecisionIQ');
-
-            if (!response.ok) {
-              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-            }
-
-            if (responseData.message !== 'Success') {
-              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-
-            return responseData;
+      backendResponse = await window.enhancedLoading(
+        'generate-decision-btn',
+        'decision',
+        async () => {
+          // Send data to worker
+          const apiUrl = 'https://inexasli.com/api/generate';
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workerPayload)
+          });
+          let responseData;
+          try {
+            responseData = await response.json();
+          } catch (e) {
+            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
           }
-        );
-        
-        // Increment request count after successful response
-        window.rateLimiter.incrementRequestCount('decision');
-
-        // Store the response using centralized system
-        if (window.decisionFormPersistence) {
-          window.decisionFormPersistence.saveResponseData(result);
-        }
-
-        // Dispatch an event to notify dataout.js that a response was received
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'decisioniq',
-            type: 'worker-response',
-            timestamp: Date.now()
+          // Always call handleRateLimitResponse with backend response
+          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
+          if (!response.ok) {
+            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
           }
-        });
-        document.dispatchEvent(event);
-        console.log('[DecisionIQ] Dispatched api-response-received event');
-        
-        console.log('[DecisionIQ] Decision analysis generated successfully');
-      } catch (error) {
-        // If backendResponse is available, update rate limit display and show error
-        if (backendResponse && dataContainer) {
-          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'DecisionIQ');
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          // Store the response
+          window.decisionFormPersistence.saveResponseData(responseData);
+          
+          // Dispatch an event to notify dataout.js that a response was received
+          const event = new CustomEvent('api-response-received', {
+            detail: {
+              module: 'decisioniq',
+              type: 'worker-response',
+              timestamp: Date.now()
+            }
+          });
+          document.dispatchEvent(event);
+          
+          return responseData;
         }
-        console.error('[DecisionIQ] Error generating decision analysis:', error);
-        throw error; // Re-throw to handle in outer catch
-      }
+      );
+      window.rateLimiter.incrementRequestCount('decision');
     } catch (error) {
-      console.error('[DecisionIQ] Error generating decision analysis:', error);
-      alert('An error occurred while generating your decision analysis. Please try again later.');
-    }
-  }
-
-  // Initialize form functionality to match income module pattern
-  function initDecisionForm() {
-    console.log("[DecisionIQ] Initializing form functionality");
-    
-    // Use FormPersistence from window (exposed by datain.js)
-    if (!window.decisionFormPersistence && window.FormPersistence) {
-      console.log("[DecisionIQ] Creating FormPersistence instance using window.FormPersistence");
-      window.decisionFormPersistence = window.FormPersistence.getInstance('decision', {
-        singleSelection: ['decision-analysis-type', 'decision-priority'],
-        multiSelection: ['decision-criteria', 'decision-constraint-types', 'decision-stakeholders']
-      });
-      
-      window.decisionFormPersistence.init({
-        moduleName: 'decision',
-        singleSelection: ['decision-analysis-type', 'decision-priority'],
-        multiSelection: ['decision-criteria', 'decision-constraint-types', 'decision-stakeholders']
-      });
-      
-      console.log("[DecisionIQ] FormPersistence instance created and initialized");
-    }
-    
-    console.log("[DecisionIQ] Using FormPersistence instance:", window.decisionFormPersistence);
-    
-    // Setup the rest of the functionality
-    setupDecisionFormHandlers();
-  }
-
-  // Separate function to setup form handlers
-  function setupDecisionFormHandlers() {
-    // Setup generate button
-    const generateBtn = document.getElementById('generate-decision-btn');
-    if (generateBtn) {
-      generateBtn.removeEventListener('click', handleGenerateDecisionIq);
-      generateBtn.addEventListener('click', handleGenerateDecisionIq);
-      console.log("[DecisionIQ] Generate button event listener set up");
-    } else {
-      console.error("[DecisionIQ] Generate button not found!");
-    }
-    
-    // Set up guided forms toggle button
-    const guidedToggleBtn = document.getElementById('guided-forms-toggle');
-    if (guidedToggleBtn) {
-      guidedToggleBtn.removeEventListener('click', toggleGuidedForms);
-      guidedToggleBtn.addEventListener('click', toggleGuidedForms);
-    }
-
-    // Export the FormPersistence instance for external access
-    console.log("[DecisionIQ] Form handlers setup complete");
-  }
-
-  // Legacy function for backward compatibility
-  function saveFormData() {
-    if (window.decisionFormPersistence) {
-      console.log("[DecisionIQ] Saving form data via FormPersistence");
-      window.decisionFormPersistence.saveFormData();
-    }
-  }
-
-  // Legacy function for backward compatibility
-  function loadSavedData() {
-    if (window.decisionFormPersistence) {
-      console.log("[DecisionIQ] Loading saved data via FormPersistence");
-      const savedData = window.decisionFormPersistence.getSavedFormData();
-      if (savedData) {
-        window.decisionFormPersistence.repopulateForm(savedData);
+      // If backendResponse is available, update rate limit display and show error
+      if (backendResponse && dataContainer) {
+        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
       }
+      // Optionally, show a toast/modal here for generic errors
+      console.error('[DecisionIQ] Error:', error);
     }
   }
 
-  // Toggle guided forms functionality
-  let guidedFormsInstance = null;
-  
-  function toggleGuidedForms() {
-    console.log('[DecisionIQ] Toggling guided forms');
-    const toggleBtn = document.getElementById('guided-forms-toggle');
-    
-    if (guidedFormsInstance) {
-      // Disable guided forms
-      guidedFormsInstance.destroy();
-      guidedFormsInstance = null;
-      toggleBtn.textContent = '🚀 Enable Guided Form';
-      toggleBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-      console.log('[DecisionIQ] Guided forms disabled');
-    } else {
-      // Enable guided forms
-      if (window.GuidedFormSystem) {
-        guidedFormsInstance = new window.GuidedFormSystem({
-          autoAdvance: true,
-          showProgressIndicator: true,
-          smoothTransitions: true,
-          transitionDuration: 300,
-          autoAdvanceDelay: 800,
-          enableSkipping: true
-        });
-        
-        guidedFormsInstance.init('device-container');
-        
-        toggleBtn.textContent = '⏹️ Disable Guided Form';
-        toggleBtn.style.background = 'linear-gradient(135deg, #ea667e 0%, #a24b76 100%)';
-        console.log('[DecisionIQ] Guided forms enabled');
-      } else {
-        console.error('[DecisionIQ] GuidedFormSystem not available');
-        alert('Guided forms system is not loaded. Please refresh the page.');
-      }
-    }
-  }
-
-  // Initialize with multiple triggers to ensure reliability
-  function runInitialization() {
-    // Use a small delay to ensure DOM is ready
-    setTimeout(initDecisionForm, 50);
-  }
-
-  // Initialize form persistence when DOM is ready
-  function initializeDecisionIQ() {
-    console.log("Decision IQ DOM ready, initializing form persistence");
-    
-    // Use FormPersistence from window (exposed by datain.js)
-    if (window.FormPersistence) {
-      const persistence = window.FormPersistence.getInstance('decision', {
-        singleSelection: ['decision-analysis-type', 'decision-priority'], // Single selection containers  
-        multiSelection: ['decision-criteria', 'decision-constraint-types', 'decision-stakeholders'] // Multi selection containers
-      });
-      
-      persistence.init({
-        moduleName: 'decision',
-        singleSelection: ['decision-analysis-type', 'decision-priority'],
-        multiSelection: ['decision-criteria', 'decision-constraint-types', 'decision-stakeholders']
-      });
-      
-      console.log("Decision IQ form persistence initialized");
-      
-      // Initialize the rest of the functionality after form persistence is set up
-      runInitialization();
-    } else {
-      console.warn("FormPersistence not available from window, skipping persistence setup");
-      runInitialization();
-    }
-  }
-
-  // Initialize immediately if DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeDecisionIQ);
-  } else {
-    initializeDecisionIQ();
-  }
-
-  // Handle loading through datain.js - only initialize if decision module is loaded
-  document.addEventListener('data-in-loaded', function(e) {
-    const moduleType = e.detail?.moduleType;
-    if (moduleType === 'decision') {
-      console.log("[DecisionIQ] Decision module loaded through datain.js, reinitializing");
-      initDecisionForm();
-    }
-  });
-
-  // Additional safety net - try again after a short delay
-  setTimeout(() => {
-    const generateBtn = document.getElementById('generate-decision-btn');
-    if (generateBtn && !generateBtn.onclick) {
-      console.log("[DecisionIQ] Generate button found but no handler, trying initialization again");
-      initDecisionForm();
-    }
-  }, 200);
-  
-  // Export functions for external access
-  window.decisionIq = { 
-    getFormData: () => window.decisionFormPersistence ? window.decisionFormPersistence.getSavedFormData() : null,
-    saveFormData: () => saveFormData(),
-    loadSavedData: () => loadSavedData()
-  };
-
-  // Fallback function to collect form data manually when FormPersistence is not available
-  function collectFormDataManually() {
-    console.log("[DecisionIQ] Collecting form data manually as fallback");
-    
-    const formData = {};
-    
-    // Collect text inputs and textareas
-    const inputs = document.querySelectorAll('input[type="text"], textarea');
-    inputs.forEach(input => {
-      if (input.id && input.value.trim()) {
-        formData[input.id] = input.value.trim();
-      }
-    });
-    
-    // Collect selected grid items
-    const selectedItems = document.querySelectorAll('.grid-item.active, .grid-item.selected');
-    selectedItems.forEach(item => {
-      const container = item.closest('[id]');
-      if (container && container.id) {
-        if (!formData[container.id]) {
-          formData[container.id] = [];
-        }
-        const value = item.getAttribute('data-value') || item.textContent.trim();
-        if (value && !formData[container.id].includes(value)) {
-          formData[container.id].push(value);
-        }
-      }
-    });
-    
-    console.log("[DecisionIQ] Manually collected form data:", formData);
-    return formData;
-  }
+  // Initialization - simplified to match calorie module pattern
+  document.getElementById('generate-decision-btn').addEventListener('click', handleGenerateDecisionIq);
 
 })();
+
 </script>
 </div>
 </div>
