@@ -138,9 +138,12 @@
         return;
       }
 
+      // Convert images to data URLs (backend expects data URL format: data:image/jpeg;base64,...)
+      const dataUrls = images.map(img => img.dataUrl);
+
       // Check rate limits before proceeding
-      if (window.rateLimiter.isRateLimited()) {
-        alert('Rate limit exceeded. Please wait before making another request.');
+      if (window.rateLimiter.isRateLimited('fashion', 5, 60 * 60 * 1000)) {
+        alert('You have exceeded the request limit for fashion analysis. Please try again later.');
         return;
       }
 
@@ -150,7 +153,7 @@
       // Fashion module needs special payload structure with images
       const fashionFormData = {
         ...formData,
-        images: images // Add images to the form data
+        images: dataUrls // Send data URLs (data:image/jpeg;base64,...)
       };
 
       // Create combined payload with both form data and fingerprint
@@ -202,7 +205,7 @@
         );
 
         // Increment request count after successful response
-        window.rateLimiter.incrementRequestCount();
+        window.rateLimiter.incrementRequestCount('fashion');
 
         // Store the response using centralized system
         window.fashionFormPersistence.saveResponseData(result);
