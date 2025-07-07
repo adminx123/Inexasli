@@ -222,12 +222,15 @@ export const MODULE_VALIDATION_RULES = {
   },
   
   decision: {
-    'decision-situation': { type: 'text', required: false, maxLength: 5000 },
-    'situation': { type: 'text', required: false, maxLength: 5000 },
+    'decision-goal': { type: 'text', required: false, maxLength: 5000 },
+    'decision-analysis-type': { type: 'text', required: false, maxLength: 100 },
     'decision-options': { type: 'text', required: false, maxLength: 2000 },
-    'options': { type: 'text', required: false, maxLength: 2000 },
-    'decision-criteria': { type: 'text', required: false, maxLength: 2000 },
-    'criteria': { type: 'text', required: false, maxLength: 2000 }
+    'decision-priorities': { type: 'text', required: false, maxLength: 1000 },
+    'decision-constraints': { type: 'text', required: false, maxLength: 1000 },
+    'decision-timeline': { type: 'text', required: false, maxLength: 500 },
+    'decision-technical': { type: 'text', required: false, maxLength: 1000 },
+    'decision-stakeholders': { type: 'text', required: false, maxLength: 1000 },
+    'decision-compliance': { type: 'text', required: false, maxLength: 1000 }
   },
   
   fashion: {
