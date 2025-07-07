@@ -48,6 +48,33 @@
       margin: 20px 0;
     }
     
+    /* Timeframe button styles */
+    .timeframe-btn {
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+    
+    .timeframe-btn:hover {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    
+    .timeframe-btn.active {
+      background: #4f46e5;
+      color: white;
+    }
+    
+    .timeframe-btn.active:hover {
+      background: #4338ca;
+    }
+    
     .chart-container {
       background: #fff;
       border-radius: 12px;
@@ -527,6 +554,14 @@
         } catch (error) {
             console.error('Error accessing localStorage:', error);
             return null;
+        }
+    }
+
+    function setLocal(key, value) {
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            console.error('Error setting localStorage:', error);
         }
     }
 
@@ -1171,20 +1206,52 @@
       const contributionsCalculated = totalContributions;
       const adjustedNetCashFlow = netCashFlow; // netCashFlow already has taxes and contributions subtracted
       
+      // Add timeframe selector before metrics
+      const timeframeSelector = document.createElement('div');
+      timeframeSelector.innerHTML = `
+        <div style="margin: 20px 0 30px 0; text-align: center;">
+          <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.2em;">
+            <i class="fas fa-calendar-alt" style="margin-right: 8px; color: #4f46e5;"></i>
+            View Timeframe
+          </h3>
+          <div id="timeframeButtons" style="display: inline-flex; background: #f3f4f6; padding: 4px; border-radius: 8px; gap: 2px;">
+            <button class="timeframe-btn active" data-timeframe="annual">Annual</button>
+            <button class="timeframe-btn" data-timeframe="monthly">Monthly</button>
+            <button class="timeframe-btn" data-timeframe="weekly">Weekly</button>
+            <button class="timeframe-btn" data-timeframe="daily">Daily</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(timeframeSelector);
+      
+      // Get current timeframe from localStorage or default to annual
+      const currentTimeframe = getLocal('incomeDisplayTimeframe') || 'annual';
+      
+      // Update active button
+      setTimeout(() => {
+        const buttons = document.querySelectorAll('.timeframe-btn');
+        buttons.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.timeframe === currentTimeframe) {
+            btn.classList.add('active');
+          }
+        });
+      }, 100);
+      
       metricsGrid.innerHTML = `
         <div class="dashboard-card">
-          <h3><i class="fas fa-dollar-sign"></i>Annual Income</h3>
+          <h3><i class="fas fa-dollar-sign"></i><span id="incomeLabel">Annual Income</span></h3>
           <div class="metric-card positive">
             <div class="metric-label">Gross Income</div>
-            <div class="metric-value">${currencySymbol}${financialMetrics.annualIncome.toLocaleString()}</div>
+            <div class="metric-value" id="incomeValue">${currencySymbol}${financialMetrics.annualIncome.toLocaleString()}</div>
           </div>
         </div>
         
         <div class="dashboard-card">
           <h3><i class="fas fa-receipt"></i>Calculated Taxes</h3>
           <div class="metric-card ${taxesCalculated > 0 ? 'negative' : 'warning'}">
-            <div class="metric-label">AI Estimated Taxes</div>
-            <div class="metric-value">${currencySymbol}${taxesCalculated.toLocaleString()}</div>
+            <div class="metric-label">AI Estimated Taxes (<span id="taxesTimeframe">Annual</span>)</div>
+            <div class="metric-value" id="taxesValue">${currencySymbol}${taxesCalculated.toLocaleString()}</div>
             <div class="metric-description">Educational estimate only</div>
           </div>
         </div>
@@ -1192,25 +1259,25 @@
         <div class="dashboard-card">
           <h3><i class="fas fa-hands-helping"></i>Contributions</h3>
           <div class="metric-card ${contributionsCalculated > 0 ? 'warning' : 'positive'}">
-            <div class="metric-label">Social Security & Benefits</div>
-            <div class="metric-value">${currencySymbol}${contributionsCalculated.toLocaleString()}</div>
+            <div class="metric-label">Social Security & Benefits (<span id="contributionsTimeframe">Annual</span>)</div>
+            <div class="metric-value" id="contributionsValue">${currencySymbol}${contributionsCalculated.toLocaleString()}</div>
             <div class="metric-description">Mandatory contributions</div>
           </div>
         </div>
         
         <div class="dashboard-card">
-          <h3><i class="fas fa-shopping-cart"></i>Annual Expenses</h3>
+          <h3><i class="fas fa-shopping-cart"></i><span id="expensesLabel">Annual Expenses</span></h3>
           <div class="metric-card negative">
             <div class="metric-label">Total Expenses</div>
-            <div class="metric-value">${currencySymbol}${financialMetrics.annualExpenses.toLocaleString()}</div>
+            <div class="metric-value" id="expensesValue">${currencySymbol}${financialMetrics.annualExpenses.toLocaleString()}</div>
           </div>
         </div>
         
         <div class="dashboard-card">
           <h3><i class="fas fa-chart-line"></i>Net Cash Flow</h3>
           <div class="metric-card ${adjustedNetCashFlow >= 0 ? 'positive' : 'negative'}">
-            <div class="metric-label">After taxes & expenses</div>
-            <div class="metric-value">${currencySymbol}${adjustedNetCashFlow.toLocaleString()}</div>
+            <div class="metric-label">After taxes & expenses (<span id="netCashFlowTimeframe">Annual</span>)</div>
+            <div class="metric-value" id="netCashFlowValue">${currencySymbol}${adjustedNetCashFlow.toLocaleString()}</div>
             <div class="metric-description">${adjustedNetCashFlow >= 0 ? 'Surplus' : 'Deficit'}</div>
           </div>
         </div>
@@ -1547,7 +1614,102 @@
         const expenseData = getExpenseBreakdown();
         initializeFinancialCharts(financialMetrics, expenseData, currencySymbol);
         setupInteractiveControls(financialMetrics, currencySymbol);
+        setupTimeframeControls(financialMetrics, totalTaxes, totalContributions, netCashFlow, currencySymbol);
       }, 100);
+    }
+
+    // Timeframe conversion functions
+    function convertAnnualValue(annualValue, timeframe) {
+      const conversions = {
+        'annual': 1,
+        'monthly': 1/12,
+        'weekly': 1/52,
+        'daily': 1/365
+      };
+      return annualValue * (conversions[timeframe] || 1);
+    }
+
+    function getTimeframeLabel(timeframe) {
+      const labels = {
+        'annual': 'Annual',
+        'monthly': 'Monthly', 
+        'weekly': 'Weekly',
+        'daily': 'Daily'
+      };
+      return labels[timeframe] || 'Annual';
+    }
+
+    function setupTimeframeControls(financialMetrics, totalTaxes, totalContributions, netCashFlow, currencySymbol) {
+      const buttons = document.querySelectorAll('.timeframe-btn');
+      
+      buttons.forEach(button => {
+        button.addEventListener('click', function() {
+          const selectedTimeframe = this.dataset.timeframe;
+          
+          // Update active button
+          buttons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Save timeframe preference
+          setLocal('incomeDisplayTimeframe', selectedTimeframe);
+          
+          // Update all values
+          updateTimeframeDisplay(selectedTimeframe, financialMetrics, totalTaxes, totalContributions, netCashFlow, currencySymbol);
+        });
+      });
+      
+      // Initialize display with current timeframe
+      const currentTimeframe = getLocal('incomeDisplayTimeframe') || 'annual';
+      updateTimeframeDisplay(currentTimeframe, financialMetrics, totalTaxes, totalContributions, netCashFlow, currencySymbol);
+    }
+
+    function updateTimeframeDisplay(timeframe, financialMetrics, totalTaxes, totalContributions, netCashFlow, currencySymbol) {
+      const timeframeLabel = getTimeframeLabel(timeframe);
+      
+      // Update labels
+      const incomeLabel = document.getElementById('incomeLabel');
+      const expensesLabel = document.getElementById('expensesLabel');
+      const taxesTimeframe = document.getElementById('taxesTimeframe');
+      const contributionsTimeframe = document.getElementById('contributionsTimeframe');
+      const netCashFlowTimeframe = document.getElementById('netCashFlowTimeframe');
+      
+      if (incomeLabel) incomeLabel.textContent = `${timeframeLabel} Income`;
+      if (expensesLabel) expensesLabel.textContent = `${timeframeLabel} Expenses`;
+      if (taxesTimeframe) taxesTimeframe.textContent = timeframeLabel;
+      if (contributionsTimeframe) contributionsTimeframe.textContent = timeframeLabel;
+      if (netCashFlowTimeframe) netCashFlowTimeframe.textContent = timeframeLabel;
+      
+      // Update values with proper rounding
+      const incomeValue = document.getElementById('incomeValue');
+      const taxesValue = document.getElementById('taxesValue');
+      const contributionsValue = document.getElementById('contributionsValue');
+      const expensesValue = document.getElementById('expensesValue');
+      const netCashFlowValue = document.getElementById('netCashFlowValue');
+      
+      if (incomeValue) {
+        const convertedIncome = Math.round(convertAnnualValue(financialMetrics.annualIncome, timeframe) * 100) / 100;
+        incomeValue.textContent = `${currencySymbol}${convertedIncome.toLocaleString()}`;
+      }
+      
+      if (taxesValue) {
+        const convertedTaxes = Math.round(convertAnnualValue(totalTaxes, timeframe) * 100) / 100;
+        taxesValue.textContent = `${currencySymbol}${convertedTaxes.toLocaleString()}`;
+      }
+      
+      if (contributionsValue) {
+        const convertedContributions = Math.round(convertAnnualValue(totalContributions, timeframe) * 100) / 100;
+        contributionsValue.textContent = `${currencySymbol}${convertedContributions.toLocaleString()}`;
+      }
+      
+      if (expensesValue) {
+        const convertedExpenses = Math.round(convertAnnualValue(financialMetrics.annualExpenses, timeframe) * 100) / 100;
+        expensesValue.textContent = `${currencySymbol}${convertedExpenses.toLocaleString()}`;
+      }
+      
+      if (netCashFlowValue) {
+        const convertedNetCashFlow = Math.round(convertAnnualValue(netCashFlow, timeframe) * 100) / 100;
+        netCashFlowValue.textContent = `${currencySymbol}${convertedNetCashFlow.toLocaleString()}`;
+      }
     }
 
     // Listen for dashboard update events from the form
