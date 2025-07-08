@@ -847,6 +847,52 @@ class ImageUploadUtility {
         return this.images.map(img => img.base64);
     }
 
+    // New method: Get images formatted for backend submission
+    getImagesForBackend() {
+        return this.images.map((img, index) => {
+            let dataUrl;
+            
+            if (img.dataUrl && img.dataUrl.startsWith('data:')) {
+                // Already a full data URL
+                dataUrl = img.dataUrl;
+            } else if (img.base64) {
+                // Create data URL from base64 (use detected type or default to JPEG)
+                const mimeType = img.type || 'image/jpeg';
+                dataUrl = `data:${mimeType};base64,${img.base64}`;
+            } else if (img.dataUrl && img.dataUrl.includes(',')) {
+                // Extract and recreate data URL with proper type
+                const base64Part = img.dataUrl.split(',')[1];
+                const mimeType = img.type || 'image/jpeg';
+                dataUrl = `data:${mimeType};base64,${base64Part}`;
+            } else {
+                console.error(`[ImageUpload] Image ${index} - no valid data found!`, img);
+                dataUrl = '';
+            }
+            
+            return dataUrl;
+        }).filter(img => img.length > 0); // Remove empty images
+    }
+
+    // New method: Get validated data URLs
+    getValidatedDataUrls() {
+        const dataUrls = this.getImagesForBackend();
+        
+        // Validate each data URL
+        const validatedUrls = dataUrls.filter(dataUrl => {
+            if (!dataUrl.startsWith('data:image/')) {
+                console.warn('[ImageUpload] Invalid data URL format:', dataUrl.substring(0, 50));
+                return false;
+            }
+            if (!dataUrl.includes('base64,')) {
+                console.warn('[ImageUpload] Data URL missing base64 encoding:', dataUrl.substring(0, 50));
+                return false;
+            }
+            return true;
+        });
+        
+        return validatedUrls;
+    }
+
     clear() {
         this.images = [];
         this.closeCamera();
@@ -861,6 +907,60 @@ class ImageUploadUtility {
         } else {
             console.error('[ImageUpload] addImage expects a File object');
         }
+    }
+
+    /**
+     * Restore images from an array of data URLs (for FormPersistence integration)
+     * @param {Array} dataUrls - Array of data URL strings
+     */
+    restoreFromDataUrls(dataUrls) {
+        if (!Array.isArray(dataUrls)) {
+            console.error('[ImageUpload] restoreFromDataUrls expects an array');
+            return;
+        }
+
+        console.log(`[ImageUpload] Restoring ${dataUrls.length} images from data URLs`);
+
+        // Clear existing images first
+        this.images = [];
+
+        // Convert each data URL back to image object
+        dataUrls.forEach((dataUrl, index) => {
+            try {
+                if (!dataUrl || !dataUrl.startsWith('data:image/')) {
+                    console.warn(`[ImageUpload] Invalid data URL at index ${index}:`, dataUrl?.substring(0, 50));
+                    return;
+                }
+
+                // Extract MIME type and base64 data
+                const [header, base64Data] = dataUrl.split(',');
+                const mimeMatch = header.match(/data:([^;]+)/);
+                const mimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+
+                // Create image object in expected format
+                const imageObj = {
+                    dataUrl: dataUrl,
+                    base64: base64Data,
+                    type: mimeType,
+                    name: `restored_image_${index + 1}.${mimeType.split('/')[1]}`,
+                    size: Math.round(base64Data.length * 0.75), // Approximate file size
+                    timestamp: Date.now(),
+                    width: null, // Will be determined when displayed
+                    height: null
+                };
+
+                this.images.push(imageObj);
+                console.log(`[ImageUpload] Restored image ${index + 1}:`, imageObj.name);
+            } catch (error) {
+                console.error(`[ImageUpload] Error restoring image at index ${index}:`, error);
+            }
+        });
+
+        // Update preview to show restored images
+        this.updatePreview();
+        this.triggerChangeEvent();
+
+        console.log(`[ImageUpload] Successfully restored ${this.images.length} images`);
     }
 
     destroy() {
@@ -988,6 +1088,41 @@ window.addImageToUpload = function(file) {
         if (firstInstance) {
             firstInstance.addImage(file);
         }
+    }
+};
+
+// New global functions for backend integration
+window.getImagesForBackend = function() {
+    const instances = window.imageUploadInstances;
+    if (!instances || instances.size === 0) return [];
+    
+    const firstInstance = Array.from(instances.values())[0];
+    return firstInstance ? firstInstance.getImagesForBackend() : [];
+};
+
+window.getValidatedDataUrls = function() {
+    const instances = window.imageUploadInstances;
+    if (!instances || instances.size === 0) return [];
+    
+    const firstInstance = Array.from(instances.values())[0];
+    return firstInstance ? firstInstance.getValidatedDataUrls() : [];
+};
+
+window.hasValidImages = function() {
+    const images = window.getImagesForBackend();
+    return images.length > 0;
+};
+
+window.restoreImagesFromData = function(dataUrls) {
+    const instances = window.imageUploadInstances;
+    if (!instances || instances.size === 0) {
+        console.warn('[ImageUpload] No instances available for restoration');
+        return;
+    }
+    
+    const firstInstance = Array.from(instances.values())[0];
+    if (firstInstance) {
+        firstInstance.restoreFromDataUrls(dataUrls);
     }
 };
 

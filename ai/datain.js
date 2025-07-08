@@ -32,6 +32,9 @@ import {
 // Import rate limiting utilities centrally
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
+// Import image upload utility
+import '/utility/imageUpload.js';
+
 // Expose all utility functions to window for centralized access by input modules
 window.utilityFunctions = {
     getLocal,
@@ -66,6 +69,15 @@ window.setJSON = setJSON;
 window.getCookie = getCookie;
 window.setCookie = setCookie;
 window.FormPersistence = FormPersistence;
+
+// Image upload functions are exposed globally by imageUpload.js
+// But let's ensure they're available after import
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('[DataIn] Image upload utility status:');
+    console.log('[DataIn] getImageUploadImages:', typeof window.getImageUploadImages);
+    console.log('[DataIn] clearImageUpload:', typeof window.clearImageUpload);
+    console.log('[DataIn] initializeImageUpload:', typeof window.initializeImageUpload);
+});
 
 console.log('[DataIn] Utility functions exposed to window object');
 

@@ -104,11 +104,6 @@
 
 </div>
 
-<!-- Load the centralized image upload system -->
-<script src="../../utility/imageUpload.js"></script>
-<script src="../../utility/toolTip.js" type="module"></script>
-<script src="../../payment/paymentform.js"></script>
-
 <script type="module">
 /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
@@ -125,21 +120,36 @@
 (function() {
   async function handleGenerateFashionIq() {
     try {
+      // Debug: Check if image upload utility is available
+      console.log('[FashionIQ DEBUG] Image upload utility availability check:');
+      console.log('[FashionIQ DEBUG] window.getImageUploadImages:', typeof window.getImageUploadImages);
+      console.log('[FashionIQ DEBUG] window.imageUploadInstances:', window.imageUploadInstances);
+      console.log('[FashionIQ DEBUG] window.initializeImageUpload:', typeof window.initializeImageUpload);
+      
+      // Force re-initialization if needed
+      if (typeof window.initializeImageUpload === 'function') {
+        console.log('[FashionIQ DEBUG] Re-initializing image upload...');
+        window.initializeImageUpload();
+        // Wait a moment for initialization
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      
       const formData = window.fashionFormPersistence.getSavedFormData();
       if (!formData) {
         alert('Please complete the form before generating a fashion analysis.');
         return;
       }
 
-      // Check if images are uploaded
-      const images = window.getImageUploadImages ? window.getImageUploadImages() : [];
-      if (!images || images.length === 0) {
+      // Get images from saved form data (stored in KV via FormPersistence)
+      const dataUrlImages = formData.images || [];
+      
+      console.log('[FashionIQ DEBUG] Images from FormPersistence:', dataUrlImages.length);
+      
+      if (dataUrlImages.length === 0) {
+        console.log('[FashionIQ DEBUG] No images found in saved data - showing alert');
         alert('Please upload at least one outfit photo before generating analysis.');
         return;
       }
-
-      // Convert images to data URLs (backend expects data URL format: data:image/jpeg;base64,...)
-      const dataUrls = images.map(img => img.dataUrl);
 
       // Check rate limits before proceeding
       if (window.rateLimiter.isRateLimited('fashion', 5, 60 * 60 * 1000)) {
@@ -153,7 +163,7 @@
       // Fashion module needs special payload structure with images
       const fashionFormData = {
         ...formData,
-        images: dataUrls // Send data URLs (data:image/jpeg;base64,...)
+        images: dataUrlImages // Send full data URLs
       };
 
       // Create combined payload with both form data and fingerprint
@@ -240,7 +250,9 @@
     const generateBtn = document.getElementById('generate-fashion-btn');
     if (!generateBtn) return;
     
-    const hasImages = window.getImageUploadImages && window.getImageUploadImages().length > 0;
+    // Check for images in saved form data (FormPersistence)
+    const formData = window.fashionFormPersistence ? window.fashionFormPersistence.getSavedFormData() : null;
+    const hasImages = formData && formData.images && Array.isArray(formData.images) && formData.images.length > 0;
     
     if (hasImages) {
       generateBtn.disabled = false;
@@ -254,6 +266,13 @@
 
   // Listen for image upload changes to update button state
   document.addEventListener('imageUploadChanged', updateButtonState);
+  
+  // Listen for form persistence events (when data is saved/loaded)
+  document.addEventListener('formpersistence:repopulated', updateButtonState);
+  
+  // Listen for any changes that might affect form data
+  document.addEventListener('input', updateButtonState);
+  document.addEventListener('change', updateButtonState);
   
   // Initial button state check
   updateButtonState();
