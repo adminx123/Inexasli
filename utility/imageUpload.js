@@ -289,6 +289,88 @@ class ImageUploadUtility {
                         display: none;
                     }
                     
+                    /* Fashion-specific preview styles */
+                    .fashion-preview {
+                        min-height: 200px;
+                    }
+                    
+                    .fashion-frame {
+                        position: relative;
+                        aspect-ratio: 3/4; /* Portrait fashion ratio */
+                        overflow: hidden;
+                        border: 2px solid #4a7c59;
+                        border-radius: 8px;
+                        background: #f8f9fa;
+                    }
+                    
+                    .fashion-frame .preview-img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: center;
+                    }
+                    
+                    .fashion-overlay {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        pointer-events: none;
+                        opacity: 0.7;
+                    }
+                    
+                    .crop-indicator {
+                        position: absolute;
+                        top: 10px;
+                        left: 10px;
+                        right: 10px;
+                        bottom: 10px;
+                        border: 1px dashed rgba(255, 255, 255, 0.8);
+                        border-radius: 4px;
+                    }
+                    
+                    .center-guide {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 20px;
+                        height: 20px;
+                        border: 2px solid rgba(255, 255, 255, 0.9);
+                        border-radius: 50%;
+                        background: rgba(74, 124, 89, 0.7);
+                    }
+                    
+                    .preview-info {
+                        font-size: 11px;
+                        color: #2d5a3d;
+                        margin-top: 4px;
+                        line-height: 1.3;
+                    }
+                    
+                    .image-dimensions {
+                        font-weight: 500;
+                    }
+                    
+                    .file-size {
+                        margin-top: 2px;
+                    }
+                    
+                    .file-size.good {
+                        color: #198754;
+                    }
+                    
+                    .file-size.warning {
+                        color: #fd7e14;
+                        font-weight: 500;
+                    }
+                    
+                    .compression-info {
+                        margin-top: 2px;
+                        opacity: 0.8;
+                    }
+                    
                     /* Mobile optimizations */
                     @media (max-width: 480px) {
                         .upload-buttons {
@@ -689,6 +771,16 @@ class ImageUploadUtility {
     }
 
     async compressImage(file) {
+        // Check if this is for fashion module (can be set via options or detected)
+        const isFashionMode = this.options.fashionMode || 
+                             window.location.pathname.includes('fashion') ||
+                             document.querySelector('[data-module="fashion"]');
+        
+        if (isFashionMode) {
+            return this.compressFashionImage(file);
+        }
+        
+        // Original compression logic for other modules
         return new Promise((resolve, reject) => {
             const img = new Image();
             const canvas = document.createElement('canvas');
@@ -717,13 +809,124 @@ class ImageUploadUtility {
                     dataUrl,
                     base64,
                     width,
-                    height
+                    height,
+                    fileSize: this.getBase64Size(dataUrl)
                 });
             };
             
             img.onerror = () => reject(new Error('Failed to load image'));
             img.src = URL.createObjectURL(file);
         });
+    }
+
+    // Fashion-specific image processing methods
+    async compressFashionImage(file) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            img.onload = () => {
+                // Fashion-specific settings for aggressive compression
+                const maxHeight = 800; // Tall/narrow format
+                const maxWidth = 600;  // Narrower width for portrait
+                const quality = 0.6;   // More aggressive compression
+                const maxFileSize = 300 * 1024; // 300KB target
+                
+                // Calculate crop dimensions for 3:4 aspect ratio (portrait fashion)
+                const targetAspectRatio = 3 / 4; // width/height
+                let cropData = this.calculateFashionCrop(img.width, img.height, targetAspectRatio);
+                
+                // Set canvas to final dimensions
+                let finalWidth = Math.min(cropData.width, maxWidth);
+                let finalHeight = Math.min(cropData.height, maxHeight);
+                
+                // Maintain aspect ratio during final resize
+                const finalRatio = Math.min(maxWidth / cropData.width, maxHeight / cropData.height);
+                finalWidth = cropData.width * finalRatio;
+                finalHeight = cropData.height * finalRatio;
+                
+                canvas.width = finalWidth;
+                canvas.height = finalHeight;
+                
+                // Draw cropped and resized image
+                ctx.drawImage(img, 
+                    cropData.x, cropData.y, cropData.width, cropData.height, // source
+                    0, 0, finalWidth, finalHeight // destination
+                );
+                
+                // Try different quality levels to meet file size target
+                let currentQuality = quality;
+                let dataUrl = canvas.toDataURL('image/jpeg', currentQuality);
+                let iterations = 0;
+                
+                // Reduce quality until under target size (max 5 iterations)
+                while (this.getBase64Size(dataUrl) > maxFileSize && currentQuality > 0.3 && iterations < 5) {
+                    currentQuality -= 0.1;
+                    dataUrl = canvas.toDataURL('image/jpeg', currentQuality);
+                    iterations++;
+                }
+                
+                const base64 = dataUrl.split(',')[1];
+                const finalSize = this.getBase64Size(dataUrl);
+                
+                resolve({
+                    dataUrl,
+                    base64,
+                    width: Math.round(finalWidth),
+                    height: Math.round(finalHeight),
+                    originalWidth: img.width,
+                    originalHeight: img.height,
+                    cropData,
+                    quality: currentQuality,
+                    fileSize: finalSize,
+                    isFashionOptimized: true
+                });
+            };
+            
+            img.onerror = () => reject(new Error('Failed to load image'));
+            img.src = URL.createObjectURL(file);
+        });
+    }
+    
+    calculateFashionCrop(imgWidth, imgHeight, targetAspectRatio) {
+        // Simple center crop to target aspect ratio
+        let cropWidth, cropHeight, x, y;
+        
+        const currentAspectRatio = imgWidth / imgHeight;
+        
+        if (currentAspectRatio > targetAspectRatio) {
+            // Image is too wide, crop horizontally
+            cropHeight = imgHeight;
+            cropWidth = imgHeight * targetAspectRatio;
+            x = (imgWidth - cropWidth) / 2;
+            y = 0;
+        } else {
+            // Image is too tall, crop vertically
+            cropWidth = imgWidth;
+            cropHeight = imgWidth / targetAspectRatio;
+            x = 0;
+            y = (imgHeight - cropHeight) / 2;
+        }
+        
+        return {
+            x: Math.round(x),
+            y: Math.round(y),
+            width: Math.round(cropWidth),
+            height: Math.round(cropHeight)
+        };
+    }
+    
+    getBase64Size(dataUrl) {
+        // Calculate approximate file size from base64 data URL
+        const base64 = dataUrl.split(',')[1];
+        return Math.round((base64.length * 3) / 4);
+    }
+    
+    formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+        return Math.round(bytes / (1024 * 1024)) + ' MB';
     }
 
     // Preview Methods
@@ -743,12 +946,40 @@ class ImageUploadUtility {
 
     createPreviewElement(image, index) {
         const div = document.createElement('div');
-        div.className = 'image-preview';
+        const isFashionOptimized = image.isFashionOptimized;
+        
+        div.className = `image-preview ${isFashionOptimized ? 'fashion-preview' : ''}`;
         div.setAttribute('role', 'gridcell');
         div.setAttribute('aria-label', `Image ${index + 1}: ${image.name}`);
         
+        // Calculate file size info
+        const currentSize = image.fileSize || this.getBase64Size(image.dataUrl);
+        const maxSize = 300 * 1024; // 300KB target for fashion
+        const sizeStatus = currentSize > maxSize ? 'warning' : 'good';
+        
         div.innerHTML = `
-            <img src="${image.dataUrl}" alt="${image.name}" class="preview-img" loading="lazy">
+            <div class="preview-container ${isFashionOptimized ? 'fashion-frame' : ''}">
+                <img src="${image.dataUrl}" alt="${image.name}" class="preview-img" loading="lazy">
+                ${isFashionOptimized ? `
+                    <div class="fashion-overlay">
+                        <div class="crop-indicator"></div>
+                        <div class="center-guide"></div>
+                    </div>
+                ` : ''}
+            </div>
+            <div class="preview-info">
+                <div class="image-dimensions">
+                    ${image.width} × ${image.height}px
+                </div>
+                <div class="file-size ${sizeStatus}">
+                    ${this.formatFileSize(currentSize)}${isFashionOptimized ? ` / ${this.formatFileSize(maxSize)}` : ''}
+                </div>
+                ${isFashionOptimized && image.quality ? `
+                    <div class="compression-info">
+                        Quality: ${Math.round(image.quality * 100)}%
+                    </div>
+                ` : ''}
+            </div>
             <div class="preview-controls">
                 <button type="button" class="preview-btn remove-btn" aria-label="Remove image" title="Remove">
                     ✕
@@ -1018,7 +1249,23 @@ function initializeImageUploadContainers() {
         
         const options = {};
         
-        // Read options from data attributes
+        // Detect fashion mode
+        const isFashionMode = container.id?.includes('fashion') || 
+                             container.className?.includes('fashion') ||
+                             window.location.pathname.includes('fashion') ||
+                             document.querySelector('[data-module="fashion"]') ||
+                             container.dataset.fashionMode === 'true';
+        
+        if (isFashionMode) {
+            options.fashionMode = true;
+            options.maxFiles = 3; // Limit for fashion analysis
+            options.quality = 0.6; // More aggressive compression
+            options.maxWidth = 600;
+            options.maxHeight = 800;
+            console.log('[ImageUpload] Fashion mode detected - using optimized settings');
+        }
+        
+        // Read options from data attributes (can override fashion defaults)
         if (container.dataset.maxFiles) options.maxFiles = parseInt(container.dataset.maxFiles);
         if (container.dataset.maxFileSize) options.maxFileSize = parseInt(container.dataset.maxFileSize);
         if (container.dataset.enableCamera !== undefined) options.enableCamera = container.dataset.enableCamera !== 'false';
