@@ -36,6 +36,9 @@ import { getLocal } from './getlocal.js';
  * Main FormPersistence class
  */
 class FormPersistence {
+    // Image-enabled modules whitelist - only these modules can handle images
+    static IMAGE_ENABLED_MODULES = ['fashion'];
+    
     static _instances = {};
     static getInstance(moduleName, options = {}) {
         if (!moduleName) throw new Error('Module name required for FormPersistence instance');
@@ -66,6 +69,14 @@ class FormPersistence {
         if (options.customFormDataCollector) this.customFormDataCollector = options.customFormDataCollector;
         if (options.customFormRepopulator) this.customFormRepopulator = options.customFormRepopulator;
         console.log('[FormPersistence] Instance created for', this.moduleName);
+    }
+
+    /**
+     * Check if the current module supports images
+     * @returns {boolean} True if module supports images
+     */
+    supportsImages() {
+        return FormPersistence.IMAGE_ENABLED_MODULES.includes(this.moduleName);
     }
 
     /**
@@ -357,6 +368,12 @@ class FormPersistence {
             return;
         }
         
+        // Only save images for modules that support them
+        if (!this.supportsImages()) {
+            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, skipping image save`);
+            return;
+        }
+        
         const images = this.collectImages();
         setJSON(this.storageKeys.images, images);
         console.log(`[FormPersistence] Saved ${images.length} images to separate storage: ${this.storageKeys.images}`);
@@ -368,6 +385,13 @@ class FormPersistence {
      */
     getSavedImages() {
         if (!this.storageKeys.images) return [];
+        
+        // Only return images for modules that support them
+        if (!this.supportsImages()) {
+            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, returning empty array`);
+            return [];
+        }
+        
         return getJSON(this.storageKeys.images, []);
     }
 
@@ -375,6 +399,12 @@ class FormPersistence {
      * Restore images from separate storage
      */
     restoreImagesFromSeparateStorage() {
+        // Only restore images for modules that support them
+        if (!this.supportsImages()) {
+            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, skipping image restore`);
+            return;
+        }
+        
         const images = this.getSavedImages();
         if (images && images.length > 0) {
             this.restoreImages(images);
@@ -691,8 +721,8 @@ class FormPersistence {
         if (!gridKey) return null;
         const formData = getJSON(gridKey, null);
         
-        // Merge with separately stored images for backward compatibility
-        if (formData) {
+        // Only merge images for modules that support them
+        if (formData && this.supportsImages()) {
             const images = this.getSavedImages();
             if (images && images.length > 0) {
                 formData.images = images;
@@ -853,6 +883,12 @@ class FormPersistence {
      * @returns {Array} Array of image data URLs
      */
     collectImages() {
+        // Only collect images for modules that support them
+        if (!this.supportsImages()) {
+            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, returning empty array`);
+            return [];
+        }
+        
         try {
             // Try to get images from global helper function first
             if (typeof window.getImagesForBackend === 'function') {
