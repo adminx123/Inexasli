@@ -8,6 +8,35 @@
  * jurisdictions worldwide.
  */
 
+// piexifjs library for EXIF metadata removal
+// ✅ AUTOMATICALLY LOADED by datain.js for all modules
+// Library location: /utility/piexif.js (included in repository)
+// Manual loading (if needed): <script src="utility/piexif.js"></script>
+
+/**
+ * Strip EXIF and other metadata from image data URL
+ * @param {string} dataUrl - Base64 data URL of the image
+ * @returns {string} - Clean data URL with metadata removed
+ */
+function stripImageMetadata(dataUrl) {
+    try {
+        // Check if piexif is available
+        if (typeof piexif === 'undefined') {
+            console.warn('[ImageUpload] piexif library not loaded, metadata stripping disabled');
+            return dataUrl;
+        }
+        
+        // Remove EXIF data
+        const cleanDataUrl = piexif.remove(dataUrl);
+        console.log('[ImageUpload] EXIF metadata stripped successfully');
+        return cleanDataUrl;
+    } catch (error) {
+        console.warn('[ImageUpload] Failed to strip metadata:', error.message);
+        // Return original data URL if stripping fails
+        return dataUrl;
+    }
+}
+
 /**
  * Comprehensive Image Upload Utility
  * Supports camera capture, file uploads, drag & drop on mobile and desktop
@@ -18,6 +47,7 @@
  * - Base64 encoding for API submissions
  * - Mobile-first responsive design
  * - Accessibility features
+ * - EXIF/metadata stripping for privacy
  */
 
 class ImageUploadUtility {
@@ -785,8 +815,7 @@ class ImageUploadUtility {
         if (isFashionMode) {
             return this.compressFashionImage(file);
         }
-        
-        // Original compression logic for other modules
+         // Original compression logic for other modules
         return new Promise((resolve, reject) => {
             const img = new Image();
             const canvas = document.createElement('canvas');
@@ -809,19 +838,25 @@ class ImageUploadUtility {
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 const dataUrl = canvas.toDataURL('image/jpeg', this.options.quality);
-                const base64 = dataUrl.split(',')[1];
+                
+                // Strip EXIF metadata from the compressed image
+                const cleanDataUrl = stripImageMetadata(dataUrl);
+                const base64 = cleanDataUrl.split(',')[1];
                 
                 resolve({
-                    dataUrl,
+                    dataUrl: cleanDataUrl,
                     base64,
                     width,
                     height,
-                    fileSize: this.getBase64Size(dataUrl)
+                    fileSize: this.getBase64Size(cleanDataUrl)
                 });
             };
-            
+
             img.onerror = () => reject(new Error('Failed to load image'));
-            img.src = URL.createObjectURL(file);
+            
+            // Strip metadata from source before loading into image element
+            const cleanSource = stripImageMetadata(URL.createObjectURL(file));
+            img.src = cleanSource;
         });
     }
 
@@ -873,11 +908,13 @@ class ImageUploadUtility {
                     iterations++;
                 }
                 
-                const base64 = dataUrl.split(',')[1];
-                const finalSize = this.getBase64Size(dataUrl);
+                // Strip EXIF metadata from the fashion-optimized image
+                const cleanDataUrl = stripImageMetadata(dataUrl);
+                const base64 = cleanDataUrl.split(',')[1];
+                const finalSize = this.getBase64Size(cleanDataUrl);
                 
                 resolve({
-                    dataUrl,
+                    dataUrl: cleanDataUrl,
                     base64,
                     width: Math.round(finalWidth),
                     height: Math.round(finalHeight),
@@ -891,7 +928,10 @@ class ImageUploadUtility {
             };
             
             img.onerror = () => reject(new Error('Failed to load image'));
-            img.src = URL.createObjectURL(file);
+            
+            // Strip metadata from source before loading into image element
+            const cleanSource = stripImageMetadata(URL.createObjectURL(file));
+            img.src = cleanSource;
         });
     }
     
