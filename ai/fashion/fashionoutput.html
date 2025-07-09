@@ -146,37 +146,29 @@
         
         if (data) {
           // For the new master worker response format, data contains the fashion analysis directly
-          if (data.fashionAnalysis || data.overallRating || data.analysisScores) {
+          if (data.overallRating || data.analysisScores || data.outfitBreakdown) {
             try {
-              // If we have the main fashion data fields at the root, use them directly
-              let fashionData = data.fashionAnalysis || data;
-              
-              // Handle both string and object formats
-              if (typeof fashionData === 'string') {
-                displayFashionAnalysis(fashionData, outputSpan);
-              } else if (typeof fashionData === 'object' && fashionData !== null) {
-                displayFashionAnalysis(JSON.stringify(fashionData, null, 2), outputSpan);
-              } else {
-                throw new Error('Invalid fashionAnalysis format');
-              }
+              // Render structured fashion data using the enhanced renderer
+              displayStructuredFashionAnalysis(data, outputSpan);
               
             } catch (parseError) {
-              console.error('Error processing fashionAnalysis:', parseError);
+              console.error('Error processing fashion analysis:', parseError);
               
               // Enhanced error display
-              const dataPreview = typeof data.fashionAnalysis === 'string' ? 
-                data.fashionAnalysis.substring(0, 500) : 
-                JSON.stringify(data.fashionAnalysis, null, 2).substring(0, 500);
+              const dataPreview = JSON.stringify(data, null, 2).substring(0, 500);
               
               outputSpan.innerHTML = `<div style="color: red; padding: 20px;">
                 <h3>Error processing fashion analysis:</h3>
                 <p><strong>Error:</strong> ${parseError.message}</p>
                 <h4>Data Type:</h4>
-                <p>${typeof data.fashionAnalysis}</p>
+                <p>${typeof data}</p>
                 <h4>Data Preview (first 500 characters):</h4>
                 <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-height: 200px;">${dataPreview}</pre>
               </div>`;
             }
+          } else if (typeof data === 'string') {
+            // Handle string response (legacy format)
+            displayFashionAnalysis(data, outputSpan);
           } else if (typeof data === 'object' && data !== null) {
             // Use pretty formatting for other complex objects
             displayFashionAnalysis(JSON.stringify(data, null, 2), outputSpan);
@@ -214,6 +206,340 @@
       // Initialize enhanced UI system after content loads
       initEnhancedUISystem();
     })();
+
+    function displayStructuredFashionAnalysis(fashionData, outputElement) {
+      outputElement.innerHTML = '';
+      outputElement.classList.add('fashion-display');
+      
+      const container = document.createElement('div');
+      
+      // Header
+      const header = document.createElement('div');
+      header.className = 'fashion-header';
+      header.innerHTML = `
+        <h2 style="margin: 0; color: #333; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-tshirt" style="margin-right: 12px; color: #6c757d;"></i>
+          Fashion Analysis
+        </h2>
+        <div style="background: #6c757d; color: white; padding: 15px; border-radius: 5px; border: 1px solid #6c757d; margin: 15px 0 20px 0;">
+          <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <i class="fas fa-magic" style="margin-right: 8px; color: #f8f9fa;"></i>
+            <strong>AI-Powered Fashion Insights</strong>
+          </div>
+          <div style="margin: 0; font-size: 14px; line-height: 1.5; text-align: center;">
+            Personalized style recommendations and fashion guidance tailored to your preferences
+          </div>
+        </div>
+      `;
+      container.appendChild(header);
+      
+      // Overall Rating Section
+      if (fashionData.overallRating) {
+        const overallSection = document.createElement('div');
+        overallSection.className = 'fashion-section';
+        overallSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-star" style="margin-right: 8px; color: #f39c12;"></i>
+            Overall Rating
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+              <span style="font-size: 24px; font-weight: bold; color: #2c3e50; margin-right: 10px;">
+                ${fashionData.overallRating.score}/10
+              </span>
+              <div style="flex: 1;">
+                <div style="background: #ecf0f1; height: 8px; border-radius: 4px; overflow: hidden;">
+                  <div style="background: #3498db; height: 100%; width: ${(fashionData.overallRating.score / 10) * 100}%; transition: width 0.3s ease;"></div>
+                </div>
+              </div>
+            </div>
+            <p style="margin: 0; color: #555; line-height: 1.5;">
+              ${fashionData.overallRating.explanation || 'No explanation provided'}
+            </p>
+          </div>
+        `;
+        container.appendChild(overallSection);
+      }
+      
+      // Analysis Scores Section
+      if (fashionData.analysisScores && Array.isArray(fashionData.analysisScores)) {
+        const scoresSection = document.createElement('div');
+        scoresSection.className = 'fashion-section';
+        scoresSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-chart-bar" style="margin-right: 8px; color: #27ae60;"></i>
+            Analysis Breakdown
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.analysisScores.map(score => `
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f8f9fa;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <strong style="color: #2c3e50;">${score.category}</strong>
+                  <span style="font-weight: bold; color: #3498db;">${score.score}/10</span>
+                </div>
+                <div style="background: #ecf0f1; height: 6px; border-radius: 3px; margin-bottom: 8px; overflow: hidden;">
+                  <div style="background: #3498db; height: 100%; width: ${(score.score / 10) * 100}%; transition: width 0.3s ease;"></div>
+                </div>
+                <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.4;">
+                  ${score.feedback || 'No feedback provided'}
+                </p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(scoresSection);
+      }
+      
+      // Outfit Breakdown Section
+      if (fashionData.outfitBreakdown && Array.isArray(fashionData.outfitBreakdown)) {
+        const outfitSection = document.createElement('div');
+        outfitSection.className = 'fashion-section';
+        outfitSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-tshirt" style="margin-right: 8px; color: #e74c3c;"></i>
+            Outfit Analysis
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.outfitBreakdown.map((outfit, index) => `
+              <div style="margin-bottom: 20px; ${index < fashionData.outfitBreakdown.length - 1 ? 'padding-bottom: 20px; border-bottom: 1px solid #f8f9fa;' : ''}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                  <h4 style="margin: 0; color: #2c3e50;">Outfit ${outfit.outfitNumber || index + 1}</h4>
+                  <span style="background: #3498db; color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">
+                    ${outfit.rating}/10
+                  </span>
+                </div>
+                
+                ${outfit.garments && outfit.garments.length > 0 ? `
+                  <div style="margin-bottom: 12px;">
+                    <strong style="color: #2c3e50; font-size: 14px;">Garments:</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                      ${outfit.garments.map(garment => `<li style="margin-bottom: 2px; font-size: 14px;">${garment}</li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                ${outfit.strengths && outfit.strengths.length > 0 ? `
+                  <div style="margin-bottom: 12px;">
+                    <strong style="color: #27ae60; font-size: 14px;">✓ Strengths:</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                      ${outfit.strengths.map(strength => `<li style="margin-bottom: 2px; font-size: 14px;">${strength}</li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+                
+                ${outfit.improvements && outfit.improvements.length > 0 ? `
+                  <div style="margin-bottom: 12px;">
+                    <strong style="color: #e67e22; font-size: 14px;">⚡ Improvements:</strong>
+                    <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                      ${outfit.improvements.map(improvement => `<li style="margin-bottom: 2px; font-size: 14px;">${improvement}</li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(outfitSection);
+      }
+      
+      // Body Type Analysis Section
+      if (fashionData.bodyTypeAnalysis) {
+        const bodyTypeSection = document.createElement('div');
+        bodyTypeSection.className = 'fashion-section';
+        bodyTypeSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-user" style="margin-right: 8px; color: #9b59b6;"></i>
+            Body Type Analysis
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.bodyTypeAnalysis.estimatedBodyType ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #2c3e50;">Estimated Body Type:</strong>
+                <span style="color: #555; margin-left: 8px;">${fashionData.bodyTypeAnalysis.estimatedBodyType}</span>
+              </div>
+            ` : ''}
+            
+            ${fashionData.bodyTypeAnalysis.strengths && fashionData.bodyTypeAnalysis.strengths.length > 0 ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #27ae60; font-size: 14px;">Natural Strengths:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.bodyTypeAnalysis.strengths.map(strength => `<li style="margin-bottom: 2px; font-size: 14px;">${strength}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            
+            ${fashionData.bodyTypeAnalysis.recommendedStyles && fashionData.bodyTypeAnalysis.recommendedStyles.length > 0 ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #3498db; font-size: 14px;">Recommended Styles:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.bodyTypeAnalysis.recommendedStyles.map(style => `<li style="margin-bottom: 2px; font-size: 14px;">${style}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            
+            ${fashionData.bodyTypeAnalysis.avoidStyles && fashionData.bodyTypeAnalysis.avoidStyles.length > 0 ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #e74c3c; font-size: 14px;">Styles to Avoid:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.bodyTypeAnalysis.avoidStyles.map(style => `<li style="margin-bottom: 2px; font-size: 14px;">${style}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(bodyTypeSection);
+      }
+      
+      // Color Analysis Section
+      if (fashionData.colorAnalysis) {
+        const colorSection = document.createElement('div');
+        colorSection.className = 'fashion-section';
+        colorSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-palette" style="margin-right: 8px; color: #f39c12;"></i>
+            Color Analysis
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.colorAnalysis.skinTone ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #2c3e50;">Skin Tone:</strong>
+                <span style="color: #555; margin-left: 8px;">${fashionData.colorAnalysis.skinTone}</span>
+              </div>
+            ` : ''}
+            
+            ${fashionData.colorAnalysis.seasonalPalette ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #2c3e50;">Seasonal Palette:</strong>
+                <span style="color: #555; margin-left: 8px;">${fashionData.colorAnalysis.seasonalPalette}</span>
+              </div>
+            ` : ''}
+            
+            ${fashionData.colorAnalysis.bestColors && fashionData.colorAnalysis.bestColors.length > 0 ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #27ae60; font-size: 14px;">Best Colors:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.colorAnalysis.bestColors.map(color => `<li style="margin-bottom: 2px; font-size: 14px;">${color}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            
+            ${fashionData.colorAnalysis.avoidColors && fashionData.colorAnalysis.avoidColors.length > 0 ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #e74c3c; font-size: 14px;">Colors to Avoid:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.colorAnalysis.avoidColors.map(color => `<li style="margin-bottom: 2px; font-size: 14px;">${color}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(colorSection);
+      }
+      
+      // Specific Recommendations Section
+      if (fashionData.specificRecommendations && Array.isArray(fashionData.specificRecommendations)) {
+        const recommendationsSection = document.createElement('div');
+        recommendationsSection.className = 'fashion-section';
+        recommendationsSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-lightbulb" style="margin-right: 8px; color: #f1c40f;"></i>
+            Specific Recommendations
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.specificRecommendations.map((rec, index) => `
+              <div style="margin-bottom: 15px; ${index < fashionData.specificRecommendations.length - 1 ? 'padding-bottom: 15px; border-bottom: 1px solid #f8f9fa;' : ''}">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <strong style="color: #2c3e50; font-size: 16px;">${rec.item}</strong>
+                  <div style="display: flex; gap: 8px;">
+                    <span style="background: ${rec.priority === 'High' ? '#e74c3c' : rec.priority === 'Medium' ? '#f39c12' : '#95a5a6'}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 11px; font-weight: bold;">
+                      ${rec.priority} Priority
+                    </span>
+                    <span style="background: #ecf0f1; color: #2c3e50; padding: 2px 6px; border-radius: 8px; font-size: 11px; font-weight: bold;">
+                      ${rec.cost} Cost
+                    </span>
+                  </div>
+                </div>
+                <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.4;">
+                  ${rec.reason}
+                </p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(recommendationsSection);
+      }
+      
+      // Shopping List Section
+      if (fashionData.shoppingList && Array.isArray(fashionData.shoppingList)) {
+        const shoppingSection = document.createElement('div');
+        shoppingSection.className = 'fashion-section';
+        shoppingSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-shopping-bag" style="margin-right: 8px; color: #2ecc71;"></i>
+            Shopping List
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.shoppingList.map((item, index) => `
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; ${index < fashionData.shoppingList.length - 1 ? 'border-bottom: 1px solid #f8f9fa;' : ''}">
+                <div style="flex: 1;">
+                  <strong style="color: #2c3e50; font-size: 14px;">${item.item}</strong>
+                  <div style="margin-top: 4px;">
+                    <span style="background: ${item.priority === 'High' ? '#e74c3c' : item.priority === 'Medium' ? '#f39c12' : '#95a5a6'}; color: white; padding: 2px 6px; border-radius: 8px; font-size: 11px; font-weight: bold;">
+                      ${item.priority} Priority
+                    </span>
+                  </div>
+                </div>
+                <div style="text-align: right;">
+                  <span style="color: #27ae60; font-weight: bold; font-size: 14px;">${item.priceRange}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(shoppingSection);
+      }
+      
+      // Style Evolution Section
+      if (fashionData.styleEvolution) {
+        const evolutionSection = document.createElement('div');
+        evolutionSection.className = 'fashion-section';
+        evolutionSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-arrow-up" style="margin-right: 8px; color: #8e44ad;"></i>
+            Style Evolution
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
+            ${fashionData.styleEvolution.currentLevel ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #2c3e50;">Current Level:</strong>
+                <p style="margin: 5px 0 0; color: #555; font-size: 14px;">${fashionData.styleEvolution.currentLevel}</p>
+              </div>
+            ` : ''}
+            
+            ${fashionData.styleEvolution.nextSteps && fashionData.styleEvolution.nextSteps.length > 0 ? `
+              <div style="margin-bottom: 15px;">
+                <strong style="color: #3498db; font-size: 14px;">Next Steps:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.styleEvolution.nextSteps.map(step => `<li style="margin-bottom: 2px; font-size: 14px;">${step}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+            
+            ${fashionData.styleEvolution.longTermGoals && fashionData.styleEvolution.longTermGoals.length > 0 ? `
+              <div style="margin-bottom: 0;">
+                <strong style="color: #8e44ad; font-size: 14px;">Long-term Goals:</strong>
+                <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
+                  ${fashionData.styleEvolution.longTermGoals.map(goal => `<li style="margin-bottom: 2px; font-size: 14px;">${goal}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(evolutionSection);
+      }
+      
+      outputElement.appendChild(container);
+    }
 
     function displayFashionAnalysis(fashionData, outputElement) {
       outputElement.innerHTML = '';
