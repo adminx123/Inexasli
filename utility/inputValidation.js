@@ -86,7 +86,7 @@ export function validateEmail(email, field = 'email') {
 }
 
 // File size validation (client-side)
-export function validateFileSize(file, maxSizeMB = 10) {
+export function validateFileSize(file, maxSizeMB = 5) {
   if (!file) return null;
   
   const maxBytes = maxSizeMB * 1024 * 1024;
@@ -97,7 +97,80 @@ export function validateFileSize(file, maxSizeMB = 10) {
   return file;
 }
 
-// Image validation (client-side)
+// Magic number validation for image files (client-side)
+export async function validateImageMagicNumbers(file, field = 'image') {
+  if (!file) return null;
+  
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      try {
+        const arr = new Uint8Array(e.target.result);
+        const header = Array.from(arr.subarray(0, 8))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .join('');
+        
+        const validMagicNumbers = {
+          'ffd8ffe0': 'image/jpeg',  // JPEG/JFIF
+          'ffd8ffe1': 'image/jpeg',  // JPEG/EXIF
+          'ffd8ffe2': 'image/jpeg',  // JPEG/EXIF
+          'ffd8ffe3': 'image/jpeg',  // JPEG/EXIF
+          'ffd8ffe8': 'image/jpeg',  // JPEG/SPIFF
+          'ffd8ffdb': 'image/jpeg',  // JPEG/quantization
+          '89504e47': 'image/png',   // PNG
+          '47494638': 'image/gif',   // GIF87a/89a
+          '52494646': 'image/webp'   // WebP (RIFF)
+        };
+        
+        // Check first 8 bytes for full match
+        let detectedType = validMagicNumbers[header];
+        
+        // If no match, check first 6 bytes (for some JPEG variants)
+        if (!detectedType) {
+          const header6 = header.substring(0, 12);
+          detectedType = validMagicNumbers[header6];
+        }
+        
+        // If no match, check first 4 bytes
+        if (!detectedType) {
+          const header4 = header.substring(0, 8);
+          detectedType = validMagicNumbers[header4];
+        }
+        
+        if (!detectedType) {
+          reject(new ValidationError(`${field} file signature is not a valid image format`, field));
+          return;
+        }
+        
+        // Verify detected type matches file MIME type if available
+        if (file.type && file.type !== detectedType) {
+          reject(new ValidationError(`${field} file type mismatch: detected ${detectedType} but file claims ${file.type}`, field));
+          return;
+        }
+        
+        resolve({
+          file,
+          detectedType,
+          magicNumber: header
+        });
+        
+      } catch (error) {
+        reject(new ValidationError(`${field} could not be validated`, field));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new ValidationError(`${field} could not be read`, field));
+    };
+    
+    // Read first 8 bytes for magic number check
+    reader.readAsArrayBuffer(file.slice(0, 8));
+  });
+}
+
+// Image validation (client-side) - for base64 data URLs
+// Note: For File objects, use validateImageWithMagicNumbers() for enhanced security
 export function validateImage(imageData, field = 'image') {
   if (!imageData) return null;
   
@@ -118,6 +191,66 @@ export function validateImage(imageData, field = 'image') {
   }
   
   return imageData;
+}
+
+// Enhanced image validation with magic number check (client-side)
+export async function validateImageWithMagicNumbers(file, field = 'image') {
+  if (!file) return null;
+  
+  // First validate file size
+  validateFileSize(file, 5); // 5MB max for raw uploads
+  
+  // Validate magic numbers
+  const magicValidation = await validateImageMagicNumbers(file, field);
+  
+  // Convert to data URL for further validation
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      try {
+        const dataUrl = e.target.result;
+        
+        // Validate the data URL format
+        const dataUrlMatch = dataUrl.match(/^data:(.+);base64,(.+)$/);
+        if (!dataUrlMatch) {
+          reject(new ValidationError(`${field} must be a valid image`, field));
+          return;
+        }
+        
+        const mimeType = dataUrlMatch[1];
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        
+        if (!allowedTypes.includes(mimeType)) {
+          reject(new ValidationError(`${field} must be JPEG, PNG, GIF, or WebP`, field));
+          return;
+        }
+        
+        // Verify consistency between magic number detection and data URL
+        if (magicValidation.detectedType !== mimeType) {
+          reject(new ValidationError(`${field} type inconsistency detected`, field));
+          return;
+        }
+        
+        resolve({
+          dataUrl,
+          file,
+          detectedType: magicValidation.detectedType,
+          magicNumber: magicValidation.magicNumber,
+          validated: true
+        });
+        
+      } catch (error) {
+        reject(new ValidationError(`${field} validation failed: ${error.message}`, field));
+      }
+    };
+    
+    reader.onerror = () => {
+      reject(new ValidationError(`${field} could not be processed`, field));
+    };
+    
+    reader.readAsDataURL(file);
+  });
 }
 
 // Form validation helper
