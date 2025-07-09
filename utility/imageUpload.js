@@ -720,9 +720,15 @@ class ImageUploadUtility {
         const fileArray = Array.from(files);
         console.log(`[ImageUpload] Processing ${fileArray.length} files from ${source}`);
         
+        // For single image mode (like fashion), clear existing images first
+        if (this.options.maxFiles === 1 && this.images.length > 0) {
+            console.log('[ImageUpload] Single image mode - clearing existing images');
+            this.images = [];
+        }
+        
         // Check total files limit
         if (this.images.length + fileArray.length > this.options.maxFiles) {
-            this.showError(`Maximum ${this.options.maxFiles} files allowed`);
+            this.showError(`Maximum ${this.options.maxFiles} ${this.options.maxFiles === 1 ? 'image' : 'files'} allowed`);
             return;
         }
         
@@ -1230,6 +1236,84 @@ class ImageUploadUtility {
     }
 }
 
+// Image restoration configuration and utilities
+class ImageRestoration {
+    static config = {
+        // Modules where image restoration should be disabled on input pages
+        disableRestorationForInput: ['fashion'],
+        // Pages where restoration should be enabled regardless of module
+        enableRestorationForPages: ['output', 'result'],
+        // Default restoration behavior
+        defaultRestoration: true
+    };
+
+    static shouldRestoreImages(moduleName, pageType = 'input') {
+        // Check if this is an output/result page
+        if (pageType === 'output' || window.location.pathname.includes('output') || window.location.pathname.includes('result')) {
+            return true; // Always restore for output pages
+        }
+
+        // Check if restoration is disabled for this module on input pages
+        if (this.config.disableRestorationForInput.includes(moduleName)) {
+            console.log(`[ImageRestoration] Restoration disabled for ${moduleName} input pages`);
+            return false;
+        }
+
+        return this.config.defaultRestoration;
+    }
+
+    static getStorageKey(moduleName) {
+        return `${moduleName}IqInput`;
+    }
+
+    static getSavedImages(moduleName) {
+        try {
+            const storageKey = this.getStorageKey(moduleName);
+            const formData = JSON.parse(localStorage.getItem(storageKey) || 'null');
+            return formData && formData.images ? formData.images : [];
+        } catch (error) {
+            console.error('[ImageRestoration] Error getting saved images:', error);
+            return [];
+        }
+    }
+
+    static async restoreImagesIfNeeded(containerId, moduleName) {
+        const pageType = window.location.pathname.includes('output') ? 'output' : 'input';
+        
+        if (!this.shouldRestoreImages(moduleName, pageType)) {
+            console.log(`[ImageRestoration] Skipping restoration for ${moduleName} on ${pageType} page`);
+            return;
+        }
+
+        const savedImages = this.getSavedImages(moduleName);
+        if (savedImages.length === 0) {
+            console.log(`[ImageRestoration] No saved images found for ${moduleName}`);
+            return;
+        }
+
+        console.log(`[ImageRestoration] Restoring ${savedImages.length} images for ${moduleName}`);
+        
+        // Wait for instances to be available
+        setTimeout(() => {
+            const instances = window.imageUploadInstances;
+            if (instances && instances.size > 0) {
+                const instance = Array.from(instances.values()).find(inst => 
+                    inst.container && (inst.container.id === containerId || inst.container.closest(`#${containerId}`))
+                );
+                
+                if (instance) {
+                    instance.restoreFromDataUrls(savedImages);
+                    console.log(`[ImageRestoration] Successfully restored images to ${containerId}`);
+                } else {
+                    console.warn(`[ImageRestoration] No matching instance found for container ${containerId}`);
+                }
+            } else {
+                console.warn('[ImageRestoration] No image upload instances available');
+            }
+        }, 100);
+    }
+}
+
 // Auto-initialization function
 function initializeImageUploadContainers() {
     console.log('[ImageUpload] Looking for containers to initialize...');
@@ -1258,11 +1342,11 @@ function initializeImageUploadContainers() {
         
         if (isFashionMode) {
             options.fashionMode = true;
-            options.maxFiles = 3; // Limit for fashion analysis
+            options.maxFiles = 1; // Single image for fashion analysis
             options.quality = 0.6; // More aggressive compression
             options.maxWidth = 600;
             options.maxHeight = 800;
-            console.log('[ImageUpload] Fashion mode detected - using optimized settings');
+            console.log('[ImageUpload] Fashion mode detected - using single image mode');
         }
         
         // Read options from data attributes (can override fashion defaults)
@@ -1371,6 +1455,21 @@ window.restoreImagesFromData = function(dataUrls) {
     if (firstInstance) {
         firstInstance.restoreFromDataUrls(dataUrls);
     }
+};
+
+// Auto-restore images based on module and page configuration
+window.autoRestoreImages = function(containerId, moduleName) {
+    if (typeof ImageRestoration !== 'undefined') {
+        ImageRestoration.restoreImagesIfNeeded(containerId, moduleName);
+    }
+};
+
+// Get images for output display (doesn't require restoration)
+window.getImagesForDisplay = function(moduleName) {
+    if (typeof ImageRestoration !== 'undefined') {
+        return ImageRestoration.getSavedImages(moduleName);
+    }
+    return [];
 };
 
 // Export for module systems

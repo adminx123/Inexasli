@@ -8,6 +8,8 @@ rotected under Canadian and international copyright laws.
 
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
+// Import imageUpload to make centralized image utilities available to all output pages
+import '/utility/imageUpload.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Additional logging for debugging

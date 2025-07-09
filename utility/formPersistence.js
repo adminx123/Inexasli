@@ -358,7 +358,7 @@ class FormPersistence {
     }
 
     /**
-     * Save images to separate KV storage
+     * Save images (now handled directly in saveFormData)
      */
     saveImages() {
         console.log(`[FormPersistence] saveImages() called but now using unified storage in saveFormData() for ${this.moduleName}`);
@@ -382,31 +382,6 @@ class FormPersistence {
         if (!gridKey) return [];
         const formData = getJSON(gridKey, null);
         return formData && formData.images ? formData.images : [];
-    }
-
-    /**
-     * Restore images from unified storage
-     */
-    restoreImagesFromSeparateStorage() {
-        // Only restore images for modules that support them
-        if (!this.supportsImages()) {
-            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, skipping image restore`);
-            return;
-        }
-        
-        const images = this.getSavedImages();
-        if (images && images.length > 0) {
-            this.restoreImages(images);
-            console.log(`[FormPersistence] Restored ${images.length} images from unified storage`);
-        }
-    }
-
-    /**
-     * Clear images from unified storage
-     */
-    clearSavedImages() {
-        console.log(`[FormPersistence] Images are now cleared as part of clearLocalStorage() for ${this.moduleName}`);
-        // Images are now part of unified storage, cleared with main form data
     }
 
     /**
@@ -451,8 +426,11 @@ class FormPersistence {
         console.log('[FormPersistence][DEBUG] repopulateForm: loaded data =', data);
         if (!data) return;
         
-        // Load images from unified storage and restore them
-        this.restoreImagesFromSeparateStorage();
+        // Use imageUpload.js auto-restoration instead of local restoration
+        if (this.supportsImages() && typeof window.autoRestoreImages === 'function') {
+            const containerId = 'image-upload-container'; // Standard container ID
+            window.autoRestoreImages(containerId, this.moduleName);
+        }
         
         // Auto-detect and recreate dynamic inputs before repopulation
         this.recreateDynamicInputs(data);
@@ -885,40 +863,6 @@ class FormPersistence {
         } catch (error) {
             console.error('[FormPersistence] Error collecting images:', error);
             return [];
-        }
-    }
-
-    /**
-     * Restore images to ImageUploadUtility
-     * @param {Array} images - Array of image data URLs to restore
-     */
-    restoreImages(images) {
-        if (!images || !Array.isArray(images) || images.length === 0) {
-            console.log('[FormPersistence] No images to restore');
-            return;
-        }
-
-        try {
-            // Try to restore via global helper function first
-            if (typeof window.restoreImagesFromData === 'function') {
-                window.restoreImagesFromData(images);
-                console.log(`[FormPersistence] Restored ${images.length} images via global function`);
-                return;
-            }
-            
-            // Fallback: Look for ImageUploadUtility instances directly
-            if (window.ImageUploadUtility && window.ImageUploadUtility.instances) {
-                const instances = Object.values(window.ImageUploadUtility.instances);
-                if (instances.length > 0) {
-                    instances[0].restoreFromDataUrls(images);
-                    console.log(`[FormPersistence] Restored ${images.length} images to first instance`);
-                    return;
-                }
-            }
-            
-            console.warn('[FormPersistence] No ImageUploadUtility instances found, could not restore images');
-        } catch (error) {
-            console.error('[FormPersistence] Error restoring images:', error);
         }
     }
 

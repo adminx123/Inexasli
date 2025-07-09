@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="device-width, initial-scale=1.0">
   <title>Fashion Analysis Output</title>
   
   <!-- Preconnect and font links -->
@@ -81,6 +81,8 @@
   <!-- include centralized copy utility -->
   <script src="../../utility/copy.js"></script>
   <script src="../../utility/enhancedUI.js"></script>
+  <!-- Include dataout.js for centralized utilities including image handling -->
+  <script type="module" src="../dataout.js"></script>
 </head>
 <body>
   <!-- Main content container with ID for accessibility -->
@@ -538,6 +540,23 @@
         container.appendChild(evolutionSection);
       }
       
+      // Display uploaded image if available (using centralized utility)
+      const uploadedImages = window.getImagesForDisplay ? window.getImagesForDisplay('fashion') : [];
+      if (uploadedImages && uploadedImages.length > 0) {
+        const imageSection = document.createElement('div');
+        imageSection.className = 'fashion-section';
+        imageSection.innerHTML = `
+          <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
+            <i class="fas fa-camera" style="margin-right: 8px; color: #6c757d;"></i>
+            Your Uploaded Image
+          </h3>
+          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef; text-align: center;">
+            <img src="${uploadedImages[0]}" style="max-width: 100%; max-height: 300px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" alt="Your uploaded fashion image">
+          </div>
+        `;
+        container.appendChild(imageSection);
+      }
+
       outputElement.appendChild(container);
     }
 
