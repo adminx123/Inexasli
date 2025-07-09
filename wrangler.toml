@@ -51,6 +51,9 @@ routes = [
   { pattern = "*inexasli.com/api/*", zone_name = "inexasli.com" }
 ]
 
+# Variables for VirusTotal integration (API key set as secret in Cloudflare dashboard)
+# VT_API_KEY is configured as a secret environment variable
+
 # KV namespace for storing analysis facts and data
 [[env.master.kv_namespaces]]
 binding = "FACT_STORE"
