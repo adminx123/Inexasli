@@ -193,71 +193,26 @@
         }
         
         if (data) {
-          // Check if we have individual foods (new API format) or calorieAnalysis (legacy format)
-          if (data.individualFoods || data.bmi || data.calorieAnalysis) {
+          // Use data directly - standardized with other modules
+          if (data.individualFoods || data.bmi || data.dailyTotals) {
             try {
-              // Use data directly if it has the right structure, otherwise use calorieAnalysis
-              let calorieAnalysis = data.individualFoods || data.bmi ? data : data.calorieAnalysis;
+              // Use data directly since it now has the clean structure
+              let calorieAnalysis = data;
               
-              // Handle both old (string) and new (object) formats for backward compatibility
-              if (typeof calorieAnalysis === 'string') {
-                console.log('Legacy format detected - parsing JSON string');
-                console.log('Raw calorieAnalysis string length:', calorieAnalysis.length);
-                console.log('Raw calorieAnalysis string (first 500 chars):', calorieAnalysis.substring(0, 500));
-                
-                // Check if the string appears to be truncated
-                if (!calorieAnalysis.endsWith('}')) {
-                  console.warn('JSON appears to be truncated - attempting to fix...');
-                  
-                  // Try to find the last complete object and truncate there
-                  let lastCompleteObject = calorieAnalysis.lastIndexOf('}}');
-                  if (lastCompleteObject > 0) {
-                    calorieAnalysis = calorieAnalysis.substring(0, lastCompleteObject + 2);
-                    console.log('Truncated to last complete object');
-                  } else {
-                    // If that doesn't work, try to close with a basic structure
-                    if (calorieAnalysis.includes('"individualFoods"')) {
-                      calorieAnalysis = calorieAnalysis.split('"individualFoods"')[0] + '"individualFoods": []}';
-                    } else if (calorieAnalysis.includes('"mealTotals"')) {
-                      calorieAnalysis = calorieAnalysis.split('"mealTotals"')[0] + '"mealTotals": []}';
-                    } else {
-                      calorieAnalysis += '}';
-                    }
-                    console.log('Applied basic JSON closure');
-                  }
-                }
-                
-                calorieAnalysis = JSON.parse(calorieAnalysis);
-              } else if (typeof calorieAnalysis === 'object' && calorieAnalysis !== null) {
-                console.log('New format detected - using parsed object directly');
-              } else {
-                throw new Error('Invalid calorieAnalysis format - expected object or JSON string');
-              }
-              
-              console.log('Final calorie analysis object:', calorieAnalysis);
+              console.log('Calorie analysis object:', calorieAnalysis);
               displayEnhancedCalorieAnalysis(calorieAnalysis, outputSpan);
               
             } catch (parseError) {
-              console.error('Error processing calorieAnalysis:', parseError);
+              console.error('Error processing calorie data:', parseError);
               
-              // Enhanced error display with better diagnostics
-              const isString = typeof data.calorieAnalysis === 'string';
-              const dataPreview = isString ? 
-                data.calorieAnalysis.substring(0, 500) : 
-                JSON.stringify(data.calorieAnalysis, null, 2).substring(0, 500);
+              // Standardized error display
+              const dataPreview = JSON.stringify(data, null, 2).substring(0, 500);
               
               outputSpan.innerHTML = `<div style="color: red; padding: 20px;">
                 <h3>Error processing nutrition data:</h3>
                 <p><strong>Error:</strong> ${parseError.message}</p>
-                <h4>Data Type:</h4>
-                <p>${typeof data.calorieAnalysis} ${isString ? `(${data.calorieAnalysis.length} characters)` : ''}</p>
-                <h4>Data Preview (first 500 characters):</h4>
+                <h4>Data Preview:</h4>
                 <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-height: 200px;">${dataPreview}</pre>
-                ${isString ? `<h4>Last 200 characters:</h4>
-                <pre style="background: #f5f5f5; padding: 10px; border-radius: 5px; overflow-x: auto; max-height: 200px;">${data.calorieAnalysis.substring(data.calorieAnalysis.length - 200)}</pre>` : ''}
-                <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px;">
-                  <strong>💡 Status:</strong> The worker now returns parsed objects instead of JSON strings. 
-                  ${isString ? 'This appears to be an old format response.' : 'This should be a parsed object but processing failed.'}
                 </p>
               </div>`;
             }

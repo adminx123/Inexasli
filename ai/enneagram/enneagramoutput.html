@@ -775,11 +775,11 @@
       
       // Format the Enneagram analysis content
       function formatEnneagramAnalysis(data) {
-        if (!data || !data.enneagramAnalysis) {
+        if (!data) {
           return '<p>Invalid Enneagram analysis data.</p>';
         }
         
-        const analysis = data.enneagramAnalysis;
+        const analysis = data;
         const mainEl = document.createElement('div');
         mainEl.className = 'enneagram-content';
         
@@ -1039,10 +1039,6 @@
           }
           
           if (data) {
-            // Validate data structure - checking for enneagramAnalysis
-            if (!data.enneagramAnalysis) {
-              throw new Error('Invalid data structure: missing enneagramAnalysis');
-            }
             // Format the data directly since it now has the clean structure
             const formattedContent = formatEnneagramAnalysis(data);
             outputSpan.innerHTML = '';
