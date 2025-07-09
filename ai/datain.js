@@ -33,6 +33,7 @@ import {
 import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
 
 // Import image upload utility
+import '/utility/piexif.js';
 import '/utility/imageUpload.js';
 
 // Expose all utility functions to window for centralized access by input modules
