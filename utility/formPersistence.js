@@ -52,8 +52,7 @@ class FormPersistence {
         this.moduleName = moduleName || options.moduleName || null;
         this.storageKeys = {
             input: this.moduleName ? `${this.moduleName}IqInput` : null,
-            response: this.moduleName ? `${this.moduleName}IqResponse` : null,
-            images: this.moduleName ? `${this.moduleName}IqInputPhoto` : null
+            response: this.moduleName ? `${this.moduleName}IqResponse` : null
         };
         this.initialized = false;
         this.singleSelectionContainers = new Set();
@@ -94,8 +93,7 @@ class FormPersistence {
             this.moduleName = options.moduleName || this.getModuleNameFromLastGridItemUrl();
             this.storageKeys = {
                 input: this.moduleName ? `${this.moduleName}IqInput` : null,
-                response: this.moduleName ? `${this.moduleName}IqResponse` : null,
-                images: this.moduleName ? `${this.moduleName}IqInputPhoto` : null
+                response: this.moduleName ? `${this.moduleName}IqResponse` : null
             };
 
             // Always reset selection containers
@@ -245,8 +243,8 @@ class FormPersistence {
 
         // Listen for image upload changes to auto-save form data
         document.addEventListener('imageUploadChanged', (event) => {
-            console.log(`[FormPersistence] Image upload changed, saving images separately for ${this.moduleName}`);
-            this.saveImages();
+            console.log(`[FormPersistence] Image upload changed, saving form data for ${this.moduleName}`);
+            this.saveFormData();
         });
 
         // Listen for entry deletion to auto-save form data
@@ -363,40 +361,31 @@ class FormPersistence {
      * Save images to separate KV storage
      */
     saveImages() {
-        if (!this.storageKeys.images) {
-            console.warn('[FormPersistence] No image storage key available');
-            return;
-        }
-        
-        // Only save images for modules that support them
-        if (!this.supportsImages()) {
-            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, skipping image save`);
-            return;
-        }
-        
-        const images = this.collectImages();
-        setJSON(this.storageKeys.images, images);
-        console.log(`[FormPersistence] Saved ${images.length} images to separate storage: ${this.storageKeys.images}`);
+        console.log(`[FormPersistence] saveImages() called but now using unified storage in saveFormData() for ${this.moduleName}`);
+        // Images are now saved as part of the main form data, no separate storage needed
+        this.saveFormData();
     }
 
     /**
-     * Get saved images from separate storage
+     * Get saved images from unified storage
      * @returns {Array} Array of image data URLs
      */
     getSavedImages() {
-        if (!this.storageKeys.images) return [];
-        
         // Only return images for modules that support them
         if (!this.supportsImages()) {
             console.log(`[FormPersistence] Module ${this.moduleName} does not support images, returning empty array`);
             return [];
         }
         
-        return getJSON(this.storageKeys.images, []);
+        // Get images directly from unified form data storage
+        const gridKey = this.getCurrentGridItemKey();
+        if (!gridKey) return [];
+        const formData = getJSON(gridKey, null);
+        return formData && formData.images ? formData.images : [];
     }
 
     /**
-     * Restore images from separate storage
+     * Restore images from unified storage
      */
     restoreImagesFromSeparateStorage() {
         // Only restore images for modules that support them
@@ -408,18 +397,16 @@ class FormPersistence {
         const images = this.getSavedImages();
         if (images && images.length > 0) {
             this.restoreImages(images);
-            console.log(`[FormPersistence] Restored ${images.length} images from separate storage`);
+            console.log(`[FormPersistence] Restored ${images.length} images from unified storage`);
         }
     }
 
     /**
-     * Clear images from separate storage
+     * Clear images from unified storage
      */
     clearSavedImages() {
-        if (this.storageKeys.images) {
-            setJSON(this.storageKeys.images, undefined);
-            console.log(`[FormPersistence] Cleared images from separate storage: ${this.storageKeys.images}`);
-        }
+        console.log(`[FormPersistence] Images are now cleared as part of clearLocalStorage() for ${this.moduleName}`);
+        // Images are now part of unified storage, cleared with main form data
     }
 
     /**
@@ -464,7 +451,7 @@ class FormPersistence {
         console.log('[FormPersistence][DEBUG] repopulateForm: loaded data =', data);
         if (!data) return;
         
-        // Load images from separate storage and restore them
+        // Load images from unified storage and restore them
         this.restoreImagesFromSeparateStorage();
         
         // Auto-detect and recreate dynamic inputs before repopulation
@@ -691,8 +678,7 @@ class FormPersistence {
             setJSON(gridKey, undefined);
         }
         
-        // Also clear separate image storage
-        this.clearSavedImages();
+        // Images are now part of unified storage, no separate clearing needed
         
         // Clear UI elements
         document.querySelectorAll('.grid-container .grid-item').forEach(item => {
@@ -719,17 +705,7 @@ class FormPersistence {
     getSavedFormData() {
         const gridKey = this.getCurrentGridItemKey();
         if (!gridKey) return null;
-        const formData = getJSON(gridKey, null);
-        
-        // Only merge images for modules that support them
-        if (formData && this.supportsImages()) {
-            const images = this.getSavedImages();
-            if (images && images.length > 0) {
-                formData.images = images;
-            }
-        }
-        
-        return formData;
+        return getJSON(gridKey, null);
     }
 
     /**
@@ -761,7 +737,7 @@ class FormPersistence {
 
     /**
      * Get the storage keys for this module
-     * @returns {Object} Object containing input, response, and image storage keys
+     * @returns {Object} Object containing input and response storage keys
      */
     getStorageKeys() {
         return { ...this.storageKeys };
@@ -819,13 +795,11 @@ class FormPersistence {
         });
         
         // Collect images from ImageUploadUtility if available
-        // NOTE: Images are now stored separately, but we still collect them here 
-        // for backward compatibility with getSavedFormData()
         const images = this.collectImages();
         if (images && images.length > 0) {
             formData.images = images;
             foundRelevantField = true;
-            console.log(`[FormPersistence] Collected ${images.length} images from ImageUploadUtility (for compatibility)`);
+            console.log(`[FormPersistence] Collected ${images.length} images from ImageUploadUtility`);
         }
         
         // If no relevant fields found, return empty object
@@ -841,8 +815,7 @@ class FormPersistence {
         if (!data) return;
         console.log('[FormPersistence][DEBUG] repopulateGenericForm: data =', data);
         
-        // NOTE: Images are now restored separately in repopulateForm()
-        // No need to handle them here anymore
+        // Images are now restored directly from the same data object
         
         // Repopulate text inputs, textareas, and selects
         Object.entries(data).forEach(([fieldName, value]) => {
