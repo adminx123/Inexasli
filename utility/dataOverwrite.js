@@ -16,61 +16,65 @@
  * specific local storage data while preserving navigation state
  */
 function openDataOverwriteModal() {
-    // Check for stored data
-    const lastGridUrl = localStorage.getItem('lastgridurl');
-
     const htmlContent = `
-        <div style="text-align: center; font-family: 'Inter', sans-serif; width: 100%;">
-            <div style="text-align: center; margin-bottom: 8px; font-size: 13px; color: #666; font-family: 'Inter', sans-serif;">
+        <div style="text-align: center; font-family: 'Inter', sans-serif;">
+            <div style="margin-bottom: 1.5em; font-size: 14px; color: #555; line-height: 1.4;">
                 Delete all stored data? This can't be undone.
             </div>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 1.5em;">
                 <button onclick="clearCurrentFormData()" style="
-                    padding: 14px 20px;
-                    background: rgba(45, 90, 61, 0.9);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
+                    padding: 12px 20px;
+                    background: #4a7c59;
                     color: #fff;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 12px;
+                    border: none;
+                    border-radius: 8px;
                     font-size: 14px;
                     cursor: pointer;
-                    font-family: 'Geist', sans-serif;
-                    font-weight: bold;
-                    transition: all 0.3s ease;
+                    font-family: 'Inter', sans-serif;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
-                ">
-                    <i class="bx bx-trash-alt" style="margin-right: 8px; font-size: 14px;"></i>Clear current form
+                    gap: 8px;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    <i class="bx bx-trash-alt"></i>Clear current form
                 </button>
                 <button onclick="confirmDataOverwrite()" style="
-                    padding: 14px 20px;
-                    background: rgba(45, 90, 61, 0.9);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
+                    padding: 12px 20px;
+                    background: #dc2626;
                     color: #fff;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 12px;
+                    border: none;
+                    border-radius: 8px;
                     font-size: 14px;
                     cursor: pointer;
-                    font-family: 'Geist', sans-serif;
-                    font-weight: bold;
-                    transition: all 0.3s ease;
+                    font-family: 'Inter', sans-serif;
+                    font-weight: 500;
+                    transition: all 0.2s ease;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
-                ">
-                    <i class="bx bx-trash" style="margin-right: 8px; font-size: 14px;"></i>Clear all data
+                    gap: 8px;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    <i class="bx bx-trash"></i>Clear all data
                 </button>
             </div>
+            <button onclick="window.closeModal()" style="
+                background: #6b7280;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                font-family: 'Inter', sans-serif;
+            ">Cancel</button>
         </div>
     `;
 
     window.openCustomModal(htmlContent, {
-        maxWidth: '300px'
+        maxWidth: '350px'
     });
 }
 
@@ -145,6 +149,7 @@ function confirmDataOverwrite() {
 
         // Show success message and close modal
         showDataOverwriteSuccess();
+        window.closeModal();
         
     } catch (error) {
         console.error('Error deleting local storage data:', error);
@@ -256,6 +261,7 @@ function clearCurrentFormData() {
 
         console.log(`Clear current form completed: removed ${removedCount} items for ${moduleName} module`);
         showClearFormSuccess(moduleName, removedCount);
+        window.closeModal();
         
     } catch (error) {
         console.error('Error clearing current form data:', error);

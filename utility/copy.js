@@ -138,185 +138,98 @@ function createCopyButton(containerId, getContentCallback) {
  * @param {Function} getContentCallback - Optional callback to get specific formatted content
  */
 function openShareModal(containerId, getContentCallback) {
-    // Create modal backdrop
-    const modalBackdrop = document.createElement('div');
-    modalBackdrop.className = 'share-modal-backdrop';
-    modalBackdrop.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 20000;
-        font-family: "Inter", sans-serif;
-    `;
-
-    // Create modal content
-    const modalContent = document.createElement('div');
-    modalContent.className = 'share-modal-content';
-    modalContent.style.cssText = `
-        background-color: rgba(242, 249, 243, 0.95);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        padding: 20px;
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 8px 32px rgba(74, 124, 89, 0.12), 0 4px 16px rgba(74, 124, 89, 0.08), 0 1px 4px rgba(74, 124, 89, 0.04);
-        max-width: 300px;
-        width: 90%;
-        text-align: center;
-        font-family: "Inter", sans-serif;
-        transform: scale(0.95);
-        transition: all 0.3s ease;
-    `;
-
-    // Ensure Font Awesome is loaded before creating modal content
-    window.enhancedUI.ensureFontAwesome(() => {
-        modalContent.innerHTML = `
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-                <!--
-                <button class="share-action-btn" data-action="share" style="
-                    padding: 14px 20px;
-                    background-color: #f2f9f3;
-                    color: #2d5a3d;
-                    border: 1px solid #4a7c59;
+    const htmlContent = `
+        <div style="text-align: center; font-family: 'Inter', sans-serif;">
+            <h2 style="margin: 0 0 1.5em 0; color: #1a1a1a; font-size: 18px; font-weight: 500;">Share Options</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 1.5em;">
+                <button class="share-action-btn" data-action="copy" style="
+                    background: rgba(242, 249, 243, 0.9);
+                    color: #4a7c59;
+                    border: 1px solid rgba(74, 124, 89, 0.2);
+                    padding: 12px 20px;
                     border-radius: 8px;
                     font-size: 14px;
+                    font-weight: 500;
                     cursor: pointer;
-                    font-family: 'Geist', sans-serif;
-                    font-weight: bold;
                     transition: all 0.2s ease;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                ">
-                    <i class="fas fa-share-alt" style="margin-right: 8px; font-size: 14px;"></i>Share as PDF
+                    gap: 8px;
+                    font-family: 'Inter', sans-serif;
+                " onmouseover="this.style.backgroundColor='rgba(238, 247, 240, 0.95)'; this.style.transform='translateY(-2px)'" 
+                   onmouseout="this.style.backgroundColor='rgba(242, 249, 243, 0.9)'; this.style.transform='translateY(0)'">
+                    <i class="fas fa-copy"></i> Copy to Clipboard
                 </button>
-                -->
+                
+                <button class="share-action-btn" data-action="email" style="
+                    background: rgba(242, 249, 243, 0.9);
+                    color: #4a7c59;
+                    border: 1px solid rgba(74, 124, 89, 0.2);
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    font-family: 'Inter', sans-serif;
+                " onmouseover="this.style.backgroundColor='rgba(238, 247, 240, 0.95)'; this.style.transform='translateY(-2px)'" 
+                   onmouseout="this.style.backgroundColor='rgba(242, 249, 243, 0.9)'; this.style.transform='translateY(0)'">
+                    <i class="fas fa-envelope"></i> Share via Email
+                </button>
+                
                 <button class="share-action-btn" data-action="print" style="
-                    padding: 14px 20px;
-                    background-color: rgba(242, 249, 243, 0.9);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
-                    color: #2d5a3d;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 12px;
+                    background: rgba(242, 249, 243, 0.9);
+                    color: #4a7c59;
+                    border: 1px solid rgba(74, 124, 89, 0.2);
+                    padding: 12px 20px;
+                    border-radius: 8px;
                     font-size: 14px;
+                    font-weight: 500;
                     cursor: pointer;
-                    font-family: 'Geist', sans-serif;
-                    font-weight: bold;
-                    transition: all 0.3s ease;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    box-shadow: 0 4px 16px rgba(74, 124, 89, 0.08);
-                ">
-                    <i class="fas fa-print" style="margin-right: 8px; font-size: 14px;"></i>Print
-                </button>
-                <button class="share-action-btn" data-action="pdf" style="
-                    padding: 14px 20px;
-                    background-color: rgba(242, 249, 243, 0.9);
-                    backdrop-filter: blur(8px);
-                    -webkit-backdrop-filter: blur(8px);
-                    color: #2d5a3d;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    border-radius: 12px;
-                    font-size: 14px;
-                    cursor: pointer;
-                    font-family: 'Geist', sans-serif;
-                    font-weight: bold;
                     transition: all 0.2s ease;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 2px 4px rgba(74, 124, 89, 0.2);
-                ">
-                    <i class="fas fa-download" style="margin-right: 8px; font-size: 14px;"></i>Save as PDF
+                    gap: 8px;
+                    font-family: 'Inter', sans-serif;
+                " onmouseover="this.style.backgroundColor='rgba(238, 247, 240, 0.95)'; this.style.transform='translateY(-2px)'" 
+                   onmouseout="this.style.backgroundColor='rgba(242, 249, 243, 0.9)'; this.style.transform='translateY(0)'">
+                    <i class="fas fa-print"></i> Print Results
                 </button>
             </div>
-        `;
-        
-        // Add hover effects after content is created
-        addButtonHoverEffects();
-        
-        // Add click handlers after content is created
-        addButtonClickHandlers();
-    });
-
-    modalBackdrop.appendChild(modalContent);
-    document.body.appendChild(modalBackdrop);
-
-    // Helper function to add hover effects
-    function addButtonHoverEffects() {
-        modalContent.querySelectorAll('.share-action-btn').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = 'rgba(238, 247, 240, 0.95)';
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 6px 20px rgba(74, 124, 89, 0.12)';
-            });
             
-            btn.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = 'rgba(242, 249, 243, 0.9)';
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = '0 4px 16px rgba(74, 124, 89, 0.08)';
+            <button onclick="window.closeModal()" style="
+                background: #6b7280;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                font-family: 'Inter', sans-serif;
+            ">Cancel</button>
+        </div>
+    `;
+    
+    window.openCustomModal(htmlContent, {
+        maxWidth: '400px',
+        onOpen: function(modal, modalContent) {
+            modalContent.addEventListener('click', function(event) {
+                const action = event.target.closest('.share-action-btn')?.dataset.action;
+                if (action) {
+                    handleShareAction(action, containerId, getContentCallback);
+                    window.closeModal();
+                }
             });
-            
-            btn.addEventListener('mousedown', function() {
-                this.style.transform = 'translateY(-1px)';
-                this.style.boxShadow = '0 2px 8px rgba(74, 124, 89, 0.1)';
-            });
-            
-            btn.addEventListener('mouseup', function() {
-                this.style.transform = 'translateY(-1px)';
-                this.style.boxShadow = '0 3px 8px rgba(74, 124, 89, 0.3)';
-            });
-        });
-    }
-
-    // Helper function to add click handlers
-    function addButtonClickHandlers() {
-        modalContent.addEventListener('click', function(event) {
-            const action = event.target.closest('.share-action-btn')?.dataset.action;
-            
-            if (action) {
-                handleShareAction(action, containerId, getContentCallback);
-                closeShareModal(modalBackdrop);
-            }
-        });
-    }
-
-    // Close on backdrop click
-    modalBackdrop.addEventListener('click', function(event) {
-        if (event.target === modalBackdrop) {
-            closeShareModal(modalBackdrop);
         }
     });
-
-    // Close on Escape key
-    const escapeHandler = function(event) {
-        if (event.key === 'Escape') {
-            closeShareModal(modalBackdrop);
-            document.removeEventListener('keydown', escapeHandler);
-        }
-    };
-    document.addEventListener('keydown', escapeHandler);
-}
-
-/**
- * Close the share modal
- * @param {HTMLElement} modalBackdrop - The modal backdrop element to remove
- */
-function closeShareModal(modalBackdrop) {
-    if (modalBackdrop && modalBackdrop.parentNode) {
-        modalBackdrop.parentNode.removeChild(modalBackdrop);
-    }
 }
 
 /**
