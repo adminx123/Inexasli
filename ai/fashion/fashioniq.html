@@ -262,7 +262,12 @@
   }
 
   // Initialization - simplified to match calorie module pattern
-  document.getElementById('generate-fashion-btn').addEventListener('click', handleGenerateFashionIq);
+  const generateFashionBtn = document.getElementById('generate-fashion-btn');
+  if (generateFashionBtn) {
+    generateFashionBtn.addEventListener('click', handleGenerateFashionIq);
+    // Set flag to prevent duplicate handler attachment
+    generateFashionBtn.dataset.handlerAttached = 'true';
+  }
 
   // Listen for image upload changes to update button state
   document.addEventListener('imageUploadChanged', updateButtonState);

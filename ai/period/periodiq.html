@@ -204,7 +204,12 @@
   }
 
   // Initialization - simplified to match calorie module pattern
-  document.getElementById('generate-period-btn').addEventListener('click', handleGeneratePeriodIq);
+  const generatePeriodBtn = document.getElementById('generate-period-btn');
+  if (generatePeriodBtn) {
+    generatePeriodBtn.addEventListener('click', handleGeneratePeriodIq);
+    // Set flag to prevent duplicate handler attachment
+    generatePeriodBtn.dataset.handlerAttached = 'true';
+  }
 
 })();
 </script>

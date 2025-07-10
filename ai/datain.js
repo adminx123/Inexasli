@@ -112,120 +112,17 @@ function validateFormDataForModule(moduleName, formData) {
     }
 }
 
-// Enhanced generate button handler that adds validation
-function wrapGenerateHandler(originalHandler, moduleName) {
-    return async function(event) {
-        console.log(`[DataIn] Enhanced generate handler called for module: ${moduleName}`);
-        
-        try {
-            // Get form persistence instance for this module
-            const formPersistenceInstance = window[`${moduleName}FormPersistence`];
-            if (!formPersistenceInstance) {
-                console.warn(`[DataIn] No FormPersistence instance found for module: ${moduleName}`);
-                return originalHandler.call(this, event);
-            }
-            
-            // Get current form data
-            const formData = formPersistenceInstance.getSavedFormData();
-            if (!formData) {
-                console.warn(`[DataIn] No form data found for module: ${moduleName}`);
-                alert('Please complete the form before generating results.');
-                return;
-            }
-            
-            // Validate form data
-            const validationResult = validateFormDataForModule(moduleName, formData);
-            
-            if (!validationResult.valid) {
-                // Show validation errors to user
-                console.warn(`[DataIn] Validation failed:`, validationResult.error);
-                
-                // Find form element to show errors
-                const formElement = document.querySelector('.device-container') || document.body;
-                
-                if (validationResult.errors && validationResult.errors.length > 0) {
-                    // Multiple field errors
-                    displayValidationErrors(validationResult.errors, formElement);
-                    alert(`Please fix the following errors:\n${validationResult.errors.map(e => `• ${e.message}`).join('\n')}`);
-                } else {
-                    // Single error
-                    alert(`Validation Error: ${validationResult.error}`);
-                }
-                return;
-            }
-            
-            console.log(`[DataIn] Validation passed, proceeding with generation for module: ${moduleName}`);
-            
-            // Call original handler with validated data
-            return originalHandler.call(this, event);
-            
-        } catch (error) {
-            console.error(`[DataIn] Error in enhanced generate handler for module ${moduleName}:`, error);
-            // Fall back to original handler if validation fails unexpectedly
-            return originalHandler.call(this, event);
-        }
-    };
-}
+// REMOVED: Enhanced generate button handler that adds validation - was part of duplicate handler system
+// function wrapGenerateHandler(originalHandler, moduleName) { ... }
+console.log('[DataIn] *** DEBUG: wrapGenerateHandler function has been completely removed - was part of duplicate handler system ***');
 
-// Function to enhance generate buttons with validation
-function enhanceGenerateButtons() {
-    console.log('[DataIn] Enhancing generate buttons with validation');
-    
-    // List of known generate button patterns
-    const generateButtonSelectors = [
-        '#generate-calorie-btn',
-        '#generate-decision-btn', 
-        '#generate-enneagram-btn',
-        '#generate-event-btn',
-        '#generate-fashion-btn',
-        '#generate-income-btn',
-        '#generate-philosophy-btn',
-        '#generate-quiz-btn',
-        '#generate-period-btn'
-    ];
-    
-    generateButtonSelectors.forEach(selector => {
-        const button = document.querySelector(selector);
-        if (button) {
-            // Extract module name from button ID
-            const moduleName = selector.replace('#generate-', '').replace('-btn', '');
-            console.log(`[DataIn] Found generate button for module: ${moduleName}`);
-            
-            // Store original onclick handler if it exists
-            const originalOnClick = button.onclick;
-            if (originalOnClick) {
-                console.log(`[DataIn] Wrapping existing onclick handler for ${moduleName}`);
-                button.onclick = wrapGenerateHandler(originalOnClick, moduleName);
-            }
-            
-            // Also wrap any addEventListener handlers by storing reference to the button
-            // This is a bit more complex but ensures we catch all handlers
-            button.setAttribute('data-validation-enhanced', 'true');
-            button.setAttribute('data-module-name', moduleName);
-        }
-    });
-}
+// REMOVED: Function to enhance generate buttons with validation - was causing duplicate event handlers
+// function enhanceGenerateButtons() { ... }
+console.log('[DataIn] *** DEBUG: enhanceGenerateButtons function has been completely removed ***');
 
-// Override addEventListener for generate buttons to ensure validation
-function enhanceEventListeners() {
-    // Store original addEventListener
-    const originalAddEventListener = EventTarget.prototype.addEventListener;
-    
-    EventTarget.prototype.addEventListener = function(type, listener, options) {
-        if (type === 'click' && this.id && this.id.includes('generate') && this.id.includes('btn')) {
-            const moduleName = this.getAttribute('data-module-name') || 
-                              this.id.replace('generate-', '').replace('-btn', '');
-            
-            if (moduleName && typeof listener === 'function') {
-                console.log(`[DataIn] Enhancing addEventListener for generate button: ${moduleName}`);
-                const enhancedListener = wrapGenerateHandler(listener, moduleName);
-                return originalAddEventListener.call(this, type, enhancedListener, options);
-            }
-        }
-        
-        return originalAddEventListener.call(this, type, listener, options);
-    };
-}
+// REMOVED: Override addEventListener for generate buttons - was causing global event handler conflicts  
+// function enhanceEventListeners() { ... }
+console.log('[DataIn] *** DEBUG: enhanceEventListeners function has been completely removed ***');
 
 // Prevent zoom/pinch on content containers
 function preventZoom() {
@@ -242,7 +139,8 @@ function preventZoom() {
 }
 
 function initializeFormPersistence(url) {
-    console.log('[DataIn] Initializing FormPersistence for URL:', url);
+    console.log('[DataIn] *** CRITICAL DEBUG: initializeFormPersistence called for URL:', url);
+    console.log('[DataIn] *** DEBUG: Call stack:', new Error().stack);
     
     // Prevent zoom on load
     preventZoom();
@@ -491,6 +389,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function loadStoredContent(url) {
+        console.log('[DataIn] *** CRITICAL DEBUG: loadStoredContent called for URL:', url);
+        console.log('[DataIn] *** DEBUG: Call stack:', new Error().stack);
+        
         try {
             // Load appropriate CSS based on the URL being loaded
             loadCSSForUrl(url);
@@ -943,7 +844,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (lastState === 'visible' && hasAcceptedTerms) {
             toggleDataContainer();
         } else {
-            // Show hint animation for new users or those who haven't accepted terms
+            // Show hint animation on categories button for new users
             showCategoriesButtonHint();
         }
     }
@@ -1328,34 +1229,45 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // After content load, rebind grid item events using FormPersistence
     document.addEventListener('data-in-loaded', function() {
+        console.log('[DataIn] *** CRITICAL DEBUG: data-in-loaded event fired - checking for duplicate event bindings ***');
+        
         // Try to get the current FormPersistence instance and rebind events
         if (window.calorieFormPersistence && typeof window.calorieFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling calorieFormPersistence.rebindGridItemEvents ***');
             window.calorieFormPersistence.rebindGridItemEvents();
         }
         if (window.fitnessFormPersistence && typeof window.fitnessFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling fitnessFormPersistence.rebindGridItemEvents ***');
             window.fitnessFormPersistence.rebindGridItemEvents();
         }
         if (window.quizFormPersistence && typeof window.quizFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling quizFormPersistence.rebindGridItemEvents ***');
             window.quizFormPersistence.rebindGridItemEvents();
         }
         if (window.decisionFormPersistence && typeof window.decisionFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling decisionFormPersistence.rebindGridItemEvents ***');
             window.decisionFormPersistence.rebindGridItemEvents();
         }
         if (window.enneagramFormPersistence && typeof window.enneagramFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling enneagramFormPersistence.rebindGridItemEvents ***');
             window.enneagramFormPersistence.rebindGridItemEvents();
         }
         if (window.eventFormPersistence && typeof window.eventFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling eventFormPersistence.rebindGridItemEvents ***');
             window.eventFormPersistence.rebindGridItemEvents();
         }
         if (window.philosophyFormPersistence && typeof window.philosophyFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling philosophyFormPersistence.rebindGridItemEvents ***');
             window.philosophyFormPersistence.rebindGridItemEvents();
         }
         if (window.categoriesFormPersistence && typeof window.categoriesFormPersistence.rebindGridItemEvents === 'function') {
+            console.log('[DataIn] *** DEBUG: Calling categoriesFormPersistence.rebindGridItemEvents ***');
             window.categoriesFormPersistence.rebindGridItemEvents();
         }
         
         // Update guided forms button states after content loads
         setTimeout(() => {
+            console.log('[DataIn] *** CRITICAL DEBUG: setTimeout callback executing - this could be causing duplicate handlers ***');
             updateGuidedButtonStates();
             
             // Set up periodic button state updates for guided forms
@@ -1367,9 +1279,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 updateGuidedButtonStates();
             }, 500); // Update every 500ms when guided forms are active
             
-            // Re-enhance generate buttons after content loads
-            enhanceGenerateButtons();
-            console.log('[DataIn] Re-enhanced generate buttons after content load');
+            // REMOVED: Re-enhance generate buttons after content loads - THIS WAS CAUSING DUPLICATE HANDLERS
+            // enhanceGenerateButtons();
+            console.log('[DataIn] *** REMOVED enhanceGenerateButtons() call - this was causing duplicate event handlers ***');
         }, 200);
     });
     
@@ -1627,6 +1539,8 @@ window.dataInContainerManager = {
 // On page load, show localStorage value first, then update from backend using centralized handler
 // (Assume dataContainer is available after initializeDataContainer)
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('[DataIn] *** CRITICAL DEBUG: DOMContentLoaded event fired - checking for duplicate initialization ***');
+    
     setTimeout(() => {
         const dataContainer = document.querySelector('.data-container-in');
         if (dataContainer) {
@@ -1635,15 +1549,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
     
-    // Initialize validation enhancements
-    console.log('[DataIn] Initializing validation enhancements');
-    enhanceEventListeners();
+    // REMOVED: Initialize validation enhancements - this was causing duplicate event handlers
+    // console.log('[DataIn] Initializing validation enhancements');
+    // enhanceEventListeners();
+    console.log('[DataIn] *** REMOVED enhanceEventListeners() call - this was likely causing duplicate handlers ***');
     
-    // Add a slight delay to ensure all modules are loaded before enhancing buttons
-    setTimeout(() => {
-        enhanceGenerateButtons();
-        console.log('[DataIn] Validation enhancements complete');
-    }, 1000);
+    // REMOVED: Add a slight delay to ensure all modules are loaded before enhancing buttons - this was causing duplicates
+    // setTimeout(() => {
+    //     enhanceGenerateButtons();
+    //     console.log('[DataIn] Validation enhancements complete');
+    // }, 1000);
+    console.log('[DataIn] *** REMOVED enhanceGenerateButtons() call from DOMContentLoaded - this was causing duplicate handlers ***');
 });    // Show simulated hover hint on categories button for new users
     function showCategoriesButtonHint() {
         const categoryBtn = document.getElementById('datain-category-btn');
@@ -1683,3 +1599,39 @@ document.addEventListener('DOMContentLoaded', function() {
         categoryBtn.addEventListener('click', stopHint, { once: true });
         setTimeout(stopHint, 10000); // Stop after 10 seconds
     }
+
+    // DEBUG: Add global click listener to detect generate button clicks and potential duplicates
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id && e.target.id.includes('generate') && e.target.id.includes('btn')) {
+        console.log('[DataIn] *** CRITICAL DEBUG: Generate button clicked ***', {
+            buttonId: e.target.id,
+            timestamp: Date.now(),
+            target: e.target,
+            eventPhase: e.eventPhase,
+            bubbles: e.bubbles,
+            cancelable: e.cancelable
+        });
+        
+        // Check if button has multiple event listeners
+        const listeners = getEventListeners ? getEventListeners(e.target) : null;
+        if (listeners) {
+            console.log('[DataIn] *** DEBUG: Event listeners attached to button ***', listeners);
+        }
+    }
+}, true); // Use capture phase to catch early
+
+// DEBUG: Override addEventListener globally to track when event handlers are added to generate buttons
+const originalAddEventListener = EventTarget.prototype.addEventListener;
+EventTarget.prototype.addEventListener = function(type, listener, options) {
+    if (type === 'click' && this.id && this.id.includes('generate') && this.id.includes('btn')) {
+        console.log('[DataIn] *** CRITICAL DEBUG: addEventListener called on generate button ***', {
+            buttonId: this.id,
+            eventType: type,
+            listenerType: typeof listener,
+            timestamp: Date.now(),
+            stackTrace: new Error().stack
+        });
+    }
+    
+    return originalAddEventListener.call(this, type, listener, options);
+};

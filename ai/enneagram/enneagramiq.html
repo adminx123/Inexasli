@@ -181,7 +181,12 @@ I prefer working alone on complex problems"></textarea>
   }
 
   // Initialization - simplified to match calorie module pattern
-  document.getElementById('generate-enneagram-btn').addEventListener('click', handleGenerateEnneagramIq);
+  const generateEnneagramBtn = document.getElementById('generate-enneagram-btn');
+  if (generateEnneagramBtn) {
+    generateEnneagramBtn.addEventListener('click', handleGenerateEnneagramIq);
+    // Set flag to prevent duplicate handler attachment
+    generateEnneagramBtn.dataset.handlerAttached = 'true';
+  }
 
 })();
 </script>

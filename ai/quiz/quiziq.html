@@ -232,7 +232,12 @@ Key Battles"></textarea>
     }
 
     // Initialization - simplified to match calorie module pattern
-    document.getElementById('generate-quiz-btn').addEventListener('click', handleGenerateQuizIq);
+    const generateQuizBtn = document.getElementById('generate-quiz-btn');
+    if (generateQuizBtn) {
+        generateQuizBtn.addEventListener('click', handleGenerateQuizIq);
+        // Set flag to prevent duplicate handler attachment
+        generateQuizBtn.dataset.handlerAttached = 'true';
+    }
 })();
 </script>
 </div> <!-- Close mobile-container -->

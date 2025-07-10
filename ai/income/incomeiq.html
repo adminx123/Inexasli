@@ -1598,6 +1598,8 @@
             generateBtn.addEventListener('click', function() {
                 handleGenerateIncomeIq();
             });
+            // Set flag to prevent duplicate handler attachment
+            generateBtn.dataset.handlerAttached = 'true';
         }
         
         // Listen for regenerateIncomeCalculations event from modal
@@ -2055,12 +2057,14 @@
         }
     });
 
-    // Additional safety net - try again after a short delay
+    // Additional safety net - try again after a short delay, but prevent duplicate handlers
     setTimeout(() => {
         const generateBtn = document.getElementById('generate-income-btn');
-        if (generateBtn && !generateBtn.onclick) {
+        if (generateBtn && !generateBtn.onclick && !generateBtn.dataset.handlerAttached) {
             console.log("[IncomeIQ] Generate button found but no handler, trying initialization again");
             initIncomeForm();
+        } else if (generateBtn && generateBtn.dataset.handlerAttached) {
+            console.log("[IncomeIQ] Generate button already has handler attached, skipping retry initialization");
         }
     }, 200);
 

@@ -187,7 +187,12 @@ Option 3: Build custom solution in-house"></textarea>
   }
 
   // Initialization - simplified to match calorie module pattern
-  document.getElementById('generate-decision-btn').addEventListener('click', handleGenerateDecisionIq);
+  const generateDecisionBtn = document.getElementById('generate-decision-btn');
+  if (generateDecisionBtn) {
+    generateDecisionBtn.addEventListener('click', handleGenerateDecisionIq);
+    // Set flag to prevent duplicate handler attachment
+    generateDecisionBtn.dataset.handlerAttached = 'true';
+  }
 
 })();
 

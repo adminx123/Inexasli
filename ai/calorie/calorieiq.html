@@ -190,7 +190,12 @@
   }
 
   // Initialization
-  document.getElementById('generate-calorie-btn').addEventListener('click', handleGenerateCalorieIq);
+  const generateCalorieBtn = document.getElementById('generate-calorie-btn');
+  if (generateCalorieBtn) {
+    generateCalorieBtn.addEventListener('click', handleGenerateCalorieIq);
+    // Set flag to prevent duplicate handler attachment
+    generateCalorieBtn.dataset.handlerAttached = 'true';
+  }
 
   // Guided forms integration
   if (typeof GuidedForms !== 'undefined' && GuidedForms.calorieiq) {

@@ -144,7 +144,12 @@ Accepting things I cannot change"></textarea>
     }
 
     // Initialization - simplified to match calorie module pattern
-    document.getElementById('generate-philosophy-btn').addEventListener('click', handleGeneratePhilosophyIq);
+    const generatePhilosophyBtn = document.getElementById('generate-philosophy-btn');
+    if (generatePhilosophyBtn) {
+        generatePhilosophyBtn.addEventListener('click', handleGeneratePhilosophyIq);
+        // Set flag to prevent duplicate handler attachment
+        generatePhilosophyBtn.dataset.handlerAttached = 'true';
+    }
   })();
   </script>
 </div> <!-- Close mobile-container -->
