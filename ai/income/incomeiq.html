@@ -61,6 +61,11 @@
      - Clean separation of concerns for maintainability
 -->
 <div class="row1" data-step-label="Tax Residency">
+    <!-- Warning banner for stale AI response when tax-affecting data changes -->
+    <div id="intro-section-warning" class="tax-recalc-notification" style="display: none; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-bottom: 15px; color: #856404; font-size: 14px; animation: slideIn 0.3s ease;">
+        <strong>⚠️ Note:</strong> Changes to tax residency or personal details will clear your AI tax estimates. You'll need to regenerate them after making changes.
+    </div>
+    
     <h3 class="tooltip1" data-tooltip="Where you're legally considered to live for tax purposes, based on factors like time spent or ties to the country.">
         Select Tax Residency<span class="tooltip1-content"></span>
     </h3>
@@ -138,6 +143,11 @@
 
 <!-- Stage 2: Income Information -->
 <div class="row1" data-step-label="Income Sources">
+    <!-- Warning banner for stale AI response when tax-affecting data changes -->
+    <div id="income-section-warning" class="tax-recalc-notification" style="display: none; background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 12px; margin-bottom: 15px; color: #856404; font-size: 14px; animation: slideIn 0.3s ease;">
+        <strong>⚠️ Note:</strong> Changes to income data will clear your AI tax estimates. You'll need to regenerate them after making changes.
+    </div>
+    
     <h3 class="tooltip1" data-tooltip="Employment involves working under a contract for an employer, receiving a regular salary or wage, and generally includes benefits like health insurance. Self-employment means working for oneself, where income might fluctuate based on work volume, with the individual handling their own taxes, benefits, and business expenses.">
         Input Employment - Self Employment Income<span class="tooltip1-content"></span>
     </h3>
@@ -2358,6 +2368,7 @@
 <!-- Load frequency.js module for frequency dropdown functionality -->
 <script src="/ai/income/frequency.js" type="module"></script>
 <script src="/utility/toolTip.js" type="module"></script>
+
 
 
 <!-- Initialize frequency dropdowns and tooltips -->

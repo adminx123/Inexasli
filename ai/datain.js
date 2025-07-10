@@ -36,6 +36,9 @@ import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRa
 import '/utility/piexif.js';
 import '/utility/imageUpload.js';
 
+// Import makeChanges utility for response invalidation monitoring
+import '/utility/makeChanges.js';
+
 // Expose all utility functions to window for centralized access by input modules
 window.utilityFunctions = {
     getLocal,
