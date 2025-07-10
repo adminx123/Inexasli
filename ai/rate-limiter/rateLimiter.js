@@ -13,8 +13,8 @@ const RATE_LIMIT_CONFIG = {
 };
 
 /**
- * Generate a device fingerprint based on browser characteristics
- * @returns {string} A unique device fingerprint
+ * Generate an enhanced device fingerprint with IP component
+ * @returns {string} A unique composite fingerprint
  */
 function generateDeviceFingerprint() {
     const canvas = document.createElement('canvas');
@@ -24,7 +24,8 @@ function generateDeviceFingerprint() {
     ctx.fillText('Fingerprint test', 2, 2);
     const canvasFingerprint = canvas.toDataURL();
     
-    const fingerprint = [
+    // Enhanced fingerprint components
+    const components = [
         navigator.userAgent,
         navigator.language,
         screen.width + 'x' + screen.height,
@@ -32,8 +33,14 @@ function generateDeviceFingerprint() {
         new Date().getTimezoneOffset(),
         navigator.platform,
         navigator.cookieEnabled,
-        canvasFingerprint.slice(-50) // Last 50 chars of canvas fingerprint
-    ].join('|');
+        canvasFingerprint.slice(-50), // Last 50 chars of canvas fingerprint
+        // Additional stability indicators
+        navigator.hardwareConcurrency || 'unknown',
+        navigator.deviceMemory || 'unknown',
+        window.screen.availWidth + 'x' + window.screen.availHeight
+    ];
+    
+    const fingerprint = components.join('|');
     
     // Simple hash function
     let hash = 0;
