@@ -75,15 +75,8 @@ Accepting things I cannot change"></textarea>
             return;
         }
 
-        // Get fingerprint data for rate limiting
-        const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-        
-        // Create combined payload with both form data and fingerprint
-        const workerPayload = {
-            module: 'philosophy',
-            formData: formData,
-            fingerprint: fingerprintData
-        };
+        // Create worker payload with email for paid users (DRY function)
+        const workerPayload = window.rateLimiter.createWorkerPayload('philosophy', formData);
         
         const dataContainer = document.querySelector('.data-container-in');
         let backendResponse = null;

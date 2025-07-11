@@ -118,15 +118,8 @@ Option 3: Build custom solution in-house"></textarea>
       return;
     }
 
-    // Get fingerprint data for rate limiting
-    const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-    
-    // Create combined payload with both form data and fingerprint
-    const workerPayload = {
-      module: 'decision',
-      formData: formData,
-      fingerprint: fingerprintData
-    };
+    // Create worker payload with email for paid users (DRY function)
+    const workerPayload = window.rateLimiter.createWorkerPayload('decision', formData);
     
     const dataContainer = document.querySelector('.data-container-in');
     let backendResponse = null;

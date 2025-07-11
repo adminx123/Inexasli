@@ -1918,23 +1918,18 @@
                 return;
             }
 
-            // Get fingerprint data for rate limiting
-            const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-            
-            // Create combined payload with both form data and fingerprint
-            const workerPayload = {
-                module: 'income',
-                formData: payloadToSend,
-                fingerprint: fingerprintData
-            };
+            // Create worker payload with email for paid users (DRY function)
+            const workerPayload = window.rateLimiter.createWorkerPayload('income', payloadToSend);
             
             // DEBUG: Log the final payload (hide sensitive fingerprint details)
             console.log("[IncomeIQ] Final payload being sent to worker:", JSON.stringify({
+                module: workerPayload.module,
+                email: workerPayload.email || 'not provided',
                 formData: payloadToSend,
                 fingerprint: { 
-                    deviceId: fingerprintData.deviceId.slice(0, 8) + '...', 
-                    sessionId: fingerprintData.sessionId.slice(0, 8) + '...',
-                    requestCount: Object.keys(fingerprintData.requestCounts).length 
+                    deviceId: workerPayload.fingerprint.deviceId.slice(0, 8) + '...', 
+                    sessionId: workerPayload.fingerprint.sessionId.slice(0, 8) + '...',
+                    requestCount: Object.keys(workerPayload.fingerprint.requestCounts).length 
                 }
             }, null, 2));
 

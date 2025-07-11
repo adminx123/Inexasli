@@ -182,15 +182,8 @@ Need accommodations for 3 wheelchair users"></textarea>
             return;
         }
 
-        // Get fingerprint data for rate limiting
-        const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-        
-        // Create combined payload with both form data and fingerprint
-        const workerPayload = {
-            module: 'event',
-            formData: formData,
-            fingerprint: fingerprintData
-        };
+        // Create worker payload with email for paid users (DRY function)
+        const workerPayload = window.rateLimiter.createWorkerPayload('event', formData);
         
         const dataContainer = document.querySelector('.device-container') || document.body;
         let backendResponse = null;

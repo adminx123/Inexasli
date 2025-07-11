@@ -394,3 +394,64 @@ export function ensureRateLimitStatusForPaidUser() {
         return null;
     }
 }
+
+/**
+ * Create a standardized worker payload with email for paid users
+ * This eliminates duplicate code across all AI modules
+ * @param {string} module - The module name (e.g., 'income', 'philosophy', etc.)
+ * @param {Object} formData - The form data to send
+ * @returns {Object} Complete payload ready for API call
+ */
+export function createWorkerPayload(module, formData) {
+    // Get fingerprint data for rate limiting
+    const fingerprintData = getFingerprintForWorker();
+    
+    // Create base payload
+    const payload = {
+        module,
+        formData,
+        fingerprint: fingerprintData
+    };
+    
+    // Get email ONLY from localStorage.rateLimitStatus
+    let userEmail = null;
+    
+    try {
+        const rateLimitStatus = localStorage.getItem('rateLimitStatus');
+        if (rateLimitStatus) {
+            const status = JSON.parse(rateLimitStatus);
+            if (status.email) {
+                userEmail = status.email;
+                console.log(`[RateLimit] Found email in rateLimitStatus: ${userEmail}`);
+            }
+        }
+    } catch (error) {
+        console.error(`[RateLimit] Error parsing rateLimitStatus:`, error);
+    }
+    
+    // Add email to payload if found
+    if (userEmail) {
+        payload.email = userEmail;
+        console.log(`[RateLimit] ✅ Email added to payload: ${userEmail}`);
+    } else {
+        console.log(`[RateLimit] ⚠️ No email in rateLimitStatus - using fingerprint-based limits`);
+    }
+    
+    return payload;
+}
+
+// Export functions to global window object for module access
+if (typeof window !== 'undefined') {
+    window.rateLimiter = {
+        getFingerprint,
+        getFingerprintForWorker,
+        isRateLimited,
+        incrementRequestCount,
+        handleRateLimitResponse,
+        canSendRequest,
+        renderRateLimitDisplay,
+        updateRateLimitStatus,
+        ensureRateLimitStatusForPaidUser,
+        createWorkerPayload
+    };
+}

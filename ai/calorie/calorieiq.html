@@ -121,15 +121,8 @@
       return;
     }
 
-    // Get fingerprint data for rate limiting
-    const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-    
-    // Create combined payload with both form data and fingerprint
-    const workerPayload = {
-      module: 'calorie',
-      formData: formData,
-      fingerprint: fingerprintData
-    };
+    // Create worker payload with email for paid users (DRY function)
+    const workerPayload = window.rateLimiter.createWorkerPayload('calorie', formData);
     
     const dataContainer = document.querySelector('.data-container-in');
     let backendResponse = null;

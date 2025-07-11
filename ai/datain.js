@@ -30,7 +30,7 @@ import {
 } from '/utility/inputValidation.js';
 
 // Import rate limiting utilities centrally
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse } from '/ai/rate-limiter/rateLimiter.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse, createWorkerPayload } from '/ai/rate-limiter/rateLimiter.js';
 
 // Import image upload utility
 import '/utility/piexif.js';
@@ -62,7 +62,8 @@ window.utilityFunctions = {
     getFingerprintForWorker,
     incrementRequestCount,
     isRateLimited,
-    handleRateLimitResponse
+    handleRateLimitResponse,
+    createWorkerPayload
 };
 
 // Also expose individual functions directly to window for easier access
@@ -222,7 +223,8 @@ function initializeFormPersistence(url) {
             getFingerprintForWorker,
             incrementRequestCount,
             isRateLimited,
-            handleRateLimitResponse
+            handleRateLimitResponse,
+            createWorkerPayload
         };
         
         console.log('[DataIn] FormPersistence instance initialized for module:', moduleType);

@@ -157,21 +157,14 @@
         return;
       }
 
-      // Get fingerprint for the request
-      const fingerprint = window.rateLimiter.getFingerprintForWorker();
-
       // Fashion module needs special payload structure with images
       const fashionFormData = {
         ...formData,
         images: dataUrlImages // Send full data URLs
       };
 
-      // Create combined payload with both form data and fingerprint
-      const workerPayload = {
-        module: 'fashion',
-        formData: fashionFormData,
-        fingerprint: fingerprint
-      };
+      // Create worker payload with email for paid users (DRY function)
+      const workerPayload = window.rateLimiter.createWorkerPayload('fashion', fashionFormData);
 
       // Use enhanced loading with educational facts
       const dataContainer = document.querySelector('.device-container') || document.body;

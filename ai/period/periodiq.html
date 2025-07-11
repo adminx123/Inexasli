@@ -104,13 +104,8 @@
         return;
       }
 
-      const fingerprintData = window.rateLimiter.getFingerprintForWorker();
-      
-      const workerPayload = {
-        module: "period",
-        formData: formData,
-        fingerprint: fingerprintData
-      };
+      // Create worker payload with email for paid users (DRY function)
+      const workerPayload = window.rateLimiter.createWorkerPayload('period', formData);
 
       const dataContainer = document.querySelector('.device-container');
       let backendResponse = null;
