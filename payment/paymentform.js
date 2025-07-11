@@ -858,7 +858,7 @@ async function initializePaymentProcessing() {
         if (recoverButton && recoveryEmailInput) {
             recoverButton.addEventListener("click", async function(e) {
                 e.preventDefault();
-                console.log("Recover access button clicked");
+                console.log("[PaymentForm] STAGE 3: Recover access button clicked - email-only recovery");
                 
                 const email = recoveryEmailInput.value.trim();
                 const payStatus = document.querySelector("#status");
@@ -868,17 +868,19 @@ async function initializePaymentProcessing() {
                     return;
                 }
                 
+                // Basic email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    payStatus.innerHTML = "Please enter a valid email address";
+                    return;
+                }
+                
                 payStatus.innerHTML = "Verifying email...";
                 recoverButton.disabled = true;
                 
                 try {
-                    // Get fingerprint data
-                    const fingerprintData = localStorage.getItem("fingerprintData");
-                    if (!fingerprintData) {
-                        throw new Error("Unable to get device fingerprint");
-                    }
-                    
-                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
+                    // STAGE 3: Email-only recovery - no fingerprint dependency
+                    console.log("[PaymentForm] STAGE 3: Attempting email-only recovery for:", email);
                     
                     // Call the email recovery endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
@@ -890,9 +892,9 @@ async function initializePaymentProcessing() {
                             "Accept": "application/json"
                         },
                         body: JSON.stringify({
-                            task: "recoverByEmail",
-                            email: email,
-                            fingerprint: fingerprint
+                            task: "recoverByEmailOnly", // STAGE 3: New task for email-only recovery
+                            email: email
+                            // No fingerprint required for Stage 3
                         }),
                         mode: "cors"
                     });
@@ -900,11 +902,35 @@ async function initializePaymentProcessing() {
                     const data = await response.json();
                     
                     if (data.success) {
+                        console.log("[PaymentForm] STAGE 3: Email recovery successful", {
+                            email: email,
+                            tier: data.tier,
+                            isPaid: data.isPaid,
+                            crossDevice: data.crossDevice
+                        });
+                        
                         // Store authentication locally
                         localStorage.setItem("authenticated", encodeURIComponent("paid"));
                         localStorage.setItem("userEmail", encodeURIComponent(email));
                         
-                        // OPERATION RATEPAY: Update rateLimitStatus after successful email recovery
+                        // STAGE 3: Generate new fingerprint for this device if needed
+                        let currentFingerprint;
+                        try {
+                            const fingerprintData = localStorage.getItem("fingerprintData");
+                            if (fingerprintData) {
+                                currentFingerprint = JSON.parse(decodeURIComponent(fingerprintData));
+                            } else {
+                                // Generate new fingerprint for cross-device recovery
+                                const { generateFingerprint } = await import('../utility/utils.js');
+                                currentFingerprint = await generateFingerprint();
+                                localStorage.setItem("fingerprintData", encodeURIComponent(JSON.stringify(currentFingerprint)));
+                                console.log("[PaymentForm] STAGE 3: Generated new fingerprint for cross-device recovery");
+                            }
+                        } catch (fingerprintError) {
+                            console.warn("[PaymentForm] STAGE 3: Fingerprint generation failed, continuing without:", fingerprintError);
+                        }
+                        
+                        // STAGE 3: Update rate limit status with email-based lookup
                         try {
                             const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
                             const rateLimitResponse = await fetch(rateLimitEndpoint, {
@@ -915,9 +941,9 @@ async function initializePaymentProcessing() {
                                 },
                                 body: JSON.stringify({
                                     task: "checkPaymentAndLimits",
-                                    fingerprint: fingerprint,
-                                    email: email,
-                                    module: "payment" // Generic module for status check
+                                    fingerprint: currentFingerprint,
+                                    email: email, // Email-first lookup
+                                    module: "payment"
                                 }),
                                 mode: "cors"
                             });
@@ -932,37 +958,41 @@ async function initializePaymentProcessing() {
                                     limits: rateLimitData.limits,
                                     remaining: rateLimitData.remaining,
                                     email: rateLimitData.email,
-                                    lastUpdated: Date.now()
+                                    tier: rateLimitData.tier,
+                                    lastUpdated: Date.now(),
+                                    recoveredViaEmail: true // Track email recovery
                                 };
                                 
                                 localStorage.setItem("rateLimitStatus", JSON.stringify(rateLimitStatus));
-                                console.log("Rate limit status updated after email recovery:", rateLimitStatus);
+                                console.log("[PaymentForm] STAGE 3: Rate limit status updated after email recovery:", rateLimitStatus);
                                 
-                                // Update success message with new limits
+                                // Enhanced success message with cross-device info
                                 const limitsText = rateLimitData.isPaid ? `${rateLimitData.limits?.perDay || 'premium'} per day` : `${rateLimitData.remaining?.perDay || 0} remaining today`;
-                                payStatus.innerHTML = `Access recovered successfully! You now have ${limitsText} generations. Redirecting...`;
+                                const crossDeviceText = data.crossDevice ? " (cross-device recovery)" : "";
+                                payStatus.innerHTML = `Access recovered successfully${crossDeviceText}! You now have ${limitsText} generations. Redirecting...`;
                             } else {
-                                console.warn("Failed to refresh rate limit status after email recovery");
+                                console.warn("[PaymentForm] STAGE 3: Failed to refresh rate limit status after email recovery");
                                 payStatus.innerHTML = "Access recovered successfully! Redirecting...";
                             }
                         } catch (rateLimitError) {
-                            console.warn("Error refreshing rate limit status:", rateLimitError);
+                            console.warn("[PaymentForm] STAGE 3: Error refreshing rate limit status:", rateLimitError);
                             payStatus.innerHTML = "Access recovered successfully! Redirecting...";
                         }
                         
                         // Close modal and redirect after delay
                         setTimeout(() => {
                             closePaymentModal();
-                            // Reload or redirect to refresh premium features
+                            // Reload to refresh premium features
                             window.location.reload();
                         }, 2000);
                         
                     } else {
+                        console.log("[PaymentForm] STAGE 3: Email recovery failed:", data.error);
                         payStatus.innerHTML = sanitizeErrorMessage(data.error) || "Email verification failed. Please check your email or contact support.";
                     }
                     
                 } catch (error) {
-                    console.error("Recovery error:", error);
+                    console.error("[PaymentForm] STAGE 3: Recovery error:", error);
                     payStatus.innerHTML = "Error occurred during recovery. Please try again or contact support.";
                 } finally {
                     recoverButton.disabled = false;
