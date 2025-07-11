@@ -237,12 +237,24 @@ export function handleRateLimitResponse(container, response, showError = true, m
     badge.style.verticalAlign = 'middle';
     
     if (status && status.remaining && status.limits) {
+        // Get existing rateLimitStatus to preserve email if it exists
+        let existingEmail = null;
+        try {
+            const existingStatus = localStorage.getItem('rateLimitStatus');
+            if (existingStatus) {
+                const parsed = JSON.parse(existingStatus);
+                existingEmail = parsed.email;
+            }
+        } catch (e) {
+            // Ignore parsing errors
+        }
+        
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay },
             isPaid: status.isPaid || isPaidUser,
             allowed: status.allowed,
-            email: status.email,
+            email: status.email || response.email || existingEmail || null, // Preserve existing email if backend doesn't provide one
             lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));

@@ -246,7 +246,12 @@
                 log('Updated localStorage.authenticated to "paid"');
 
                 // Create rateLimitStatus from linkData response (no additional API call needed)
-                if (linkData.limits && linkData.remaining) {
+                if (linkData.rateLimitStatus) {
+                    // Use the rateLimitStatus from the backend response (includes email)
+                    localStorage.setItem('rateLimitStatus', JSON.stringify(linkData.rateLimitStatus));
+                    log('Rate limit status created from backend rateLimitStatus: ' + JSON.stringify(linkData.rateLimitStatus));
+                } else if (linkData.limits && linkData.remaining) {
+                    // Fallback: create rateLimitStatus manually
                     const rateLimitStatus = {
                         allowed: linkData.allowed,
                         isPaid: linkData.isPaid,
@@ -257,7 +262,7 @@
                     };
                     
                     localStorage.setItem('rateLimitStatus', JSON.stringify(rateLimitStatus));
-                    log('Rate limit status created in localStorage: ' + JSON.stringify(rateLimitStatus));
+                    log('Rate limit status created manually (fallback): ' + JSON.stringify(rateLimitStatus));
                 } else {
                     log('No rate limit data in linkData response - will be set on first AI generation');
                 }
