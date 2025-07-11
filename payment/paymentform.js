@@ -880,7 +880,7 @@ async function initializePaymentProcessing() {
                     
                     const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
                     
-                    // Call the new addDeviceToAccount endpoint
+                    // Call the email recovery endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
                     
                     const response = await fetch(paymentEndpoint, {
@@ -890,7 +890,7 @@ async function initializePaymentProcessing() {
                             "Accept": "application/json"
                         },
                         body: JSON.stringify({
-                            task: "addDeviceToAccount",
+                            task: "recoverByEmail",
                             email: email,
                             fingerprint: fingerprint
                         }),
@@ -939,7 +939,7 @@ async function initializePaymentProcessing() {
                                 console.log("Rate limit status updated after email recovery:", rateLimitStatus);
                                 
                                 // Update success message with new limits
-                                const limitsText = rateLimitData.isPaid ? "unlimited" : `${rateLimitData.remaining?.perDay || 0} remaining today`;
+                                const limitsText = rateLimitData.isPaid ? `${rateLimitData.limits?.perDay || 'premium'} per day` : `${rateLimitData.remaining?.perDay || 0} remaining today`;
                                 payStatus.innerHTML = `Access recovered successfully! You now have ${limitsText} generations. Redirecting...`;
                             } else {
                                 console.warn("Failed to refresh rate limit status after email recovery");
