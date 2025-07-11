@@ -76,7 +76,7 @@ main = "./payment/stripeintegration.js"
 
 # Variables for Stripe integration
 [env.stripeintegration.vars]
-DOMAIN_URL = "http://127.0.0.1:5501"  # Temporarily set to local for testing
+DOMAIN_URL = "https://inexasli.com"  # Updated for production deployment
 PRICE_ID_PREMIUM = "price_1R9egnILSdrwu9bgKFghOlih"
 
 # KV namespace for payment data storage  
