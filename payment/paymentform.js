@@ -709,7 +709,12 @@ function removePaymentModalEventListeners(modal) {
 
 
 // --- PREMIUM ACCESS LOGIC ---
+let premiumFeaturesEnabled = false;
+
 function enablePremiumFeatures() {
+    // Prevent repeated execution
+    if (premiumFeaturesEnabled) return;
+    
     const auth = localStorage.getItem('authenticated');
     console.log('[Premium][Debug] localStorage.authenticated =', auth);
     const premiumElements = document.querySelectorAll('.premium-blur');
@@ -730,6 +735,7 @@ function enablePremiumFeatures() {
         const stillBlurred = document.querySelectorAll('.premium-blur');
         console.log('[Premium][Debug] After unblur, still blurred:', stillBlurred.length, stillBlurred);
         console.log('[Premium] Premium features enabled for paid user.');
+        premiumFeaturesEnabled = true;
     } else {
         console.log('[Premium][Debug] User is not paid, premium features remain blurred.');
     }
@@ -740,9 +746,22 @@ if (document.readyState === 'loading') {
 } else {
     enablePremiumFeatures();
 }
-// Observe DOM for dynamically added premium-blur elements
-if (!window.premiumPaymentObserver) {
-    window.premiumPaymentObserver = new MutationObserver(() => enablePremiumFeatures());
+// Only observe for new premium-blur elements if not already enabled
+if (!window.premiumPaymentObserver && !premiumFeaturesEnabled) {
+    window.premiumPaymentObserver = new MutationObserver((mutations) => {
+        // Only check if new elements with premium-blur are added
+        const hasNewPremiumElements = mutations.some(mutation => 
+            Array.from(mutation.addedNodes).some(node => 
+                node.nodeType === 1 && (
+                    node.classList?.contains('premium-blur') || 
+                    node.querySelector?.('.premium-blur')
+                )
+            )
+        );
+        if (hasNewPremiumElements && !premiumFeaturesEnabled) {
+            enablePremiumFeatures();
+        }
+    });
     window.premiumPaymentObserver.observe(document.body, { childList: true, subtree: true });
 }
 // Expose for other scripts
