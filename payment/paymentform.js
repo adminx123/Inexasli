@@ -913,69 +913,38 @@ async function initializePaymentProcessing() {
                         localStorage.setItem("authenticated", encodeURIComponent("paid"));
                         localStorage.setItem("userEmail", encodeURIComponent(email));
                         
-                        // STAGE 3: Generate new fingerprint for this device if needed
-                        let currentFingerprint;
-                        try {
-                            const fingerprintData = localStorage.getItem("fingerprintData");
-                            if (fingerprintData) {
-                                currentFingerprint = JSON.parse(decodeURIComponent(fingerprintData));
-                            } else {
-                                // Generate new fingerprint for cross-device recovery
-                                const { generateFingerprint } = await import('../utility/utils.js');
-                                currentFingerprint = await generateFingerprint();
-                                localStorage.setItem("fingerprintData", encodeURIComponent(JSON.stringify(currentFingerprint)));
-                                console.log("[PaymentForm] STAGE 3: Generated new fingerprint for cross-device recovery");
+                        // STAGE 1 ENHANCEMENT: Use fingerprint from recovery response if provided
+                        if (data.fingerprint) {
+                            localStorage.setItem("fingerprintData", encodeURIComponent(JSON.stringify(data.fingerprint)));
+                            console.log("[PaymentForm] STAGE 1: Using fingerprint from recovery response:", data.fingerprint);
+                        } else {
+                            // Fallback: Generate new fingerprint for this device if needed
+                            let currentFingerprint;
+                            try {
+                                const fingerprintData = localStorage.getItem("fingerprintData");
+                                if (!fingerprintData) {
+                                    const { generateFingerprint } = await import('../utility/utils.js');
+                                    currentFingerprint = await generateFingerprint();
+                                    localStorage.setItem("fingerprintData", encodeURIComponent(JSON.stringify(currentFingerprint)));
+                                    console.log("[PaymentForm] STAGE 3: Generated new fingerprint for cross-device recovery");
+                                }
+                            } catch (fingerprintError) {
+                                console.warn("[PaymentForm] STAGE 3: Fingerprint generation failed, continuing without:", fingerprintError);
                             }
-                        } catch (fingerprintError) {
-                            console.warn("[PaymentForm] STAGE 3: Fingerprint generation failed, continuing without:", fingerprintError);
                         }
                         
-                        // STAGE 3: Update rate limit status with email-based lookup
-                        try {
-                            const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
-                            const rateLimitResponse = await fetch(rateLimitEndpoint, {
-                                method: "POST",
-                                headers: { 
-                                    "Content-Type": "application/json",
-                                    "Accept": "application/json"
-                                },
-                                body: JSON.stringify({
-                                    task: "checkPaymentAndLimits",
-                                    fingerprint: currentFingerprint,
-                                    email: email, // Email-first lookup
-                                    module: "payment"
-                                }),
-                                mode: "cors"
-                            });
+                        // STAGE 1 ENHANCEMENT: Use rateLimitStatus from recovery response (no additional API call needed)
+                        if (data.rateLimitStatus) {
+                            // Use the rateLimitStatus from the backend response (includes email)
+                            localStorage.setItem('rateLimitStatus', JSON.stringify(data.rateLimitStatus));
+                            console.log('[PaymentForm] STAGE 1: Rate limit status created from recovery response:', data.rateLimitStatus);
                             
-                            if (rateLimitResponse.ok) {
-                                const rateLimitData = await rateLimitResponse.json();
-                                
-                                // Update rateLimitStatus in localStorage immediately
-                                const rateLimitStatus = {
-                                    allowed: rateLimitData.allowed,
-                                    isPaid: rateLimitData.isPaid,
-                                    limits: rateLimitData.limits,
-                                    remaining: rateLimitData.remaining,
-                                    email: rateLimitData.email,
-                                    tier: rateLimitData.tier,
-                                    lastUpdated: Date.now(),
-                                    recoveredViaEmail: true // Track email recovery
-                                };
-                                
-                                localStorage.setItem("rateLimitStatus", JSON.stringify(rateLimitStatus));
-                                console.log("[PaymentForm] STAGE 3: Rate limit status updated after email recovery:", rateLimitStatus);
-                                
-                                // Enhanced success message with cross-device info
-                                const limitsText = rateLimitData.isPaid ? `${rateLimitData.limits?.perDay || 'premium'} per day` : `${rateLimitData.remaining?.perDay || 0} remaining today`;
-                                const crossDeviceText = data.crossDevice ? " (cross-device recovery)" : "";
-                                payStatus.innerHTML = `Access recovered successfully${crossDeviceText}! You now have ${limitsText} generations. Redirecting...`;
-                            } else {
-                                console.warn("[PaymentForm] STAGE 3: Failed to refresh rate limit status after email recovery");
-                                payStatus.innerHTML = "Access recovered successfully! Redirecting...";
-                            }
-                        } catch (rateLimitError) {
-                            console.warn("[PaymentForm] STAGE 3: Error refreshing rate limit status:", rateLimitError);
+                            // Enhanced success message with cross-device info
+                            const limitsText = data.rateLimitStatus.isPaid ? `${data.rateLimitStatus.limits?.perDay || 'premium'} per day` : `${data.rateLimitStatus.remaining?.perDay || 0} remaining today`;
+                            const crossDeviceText = data.crossDevice ? " (cross-device recovery)" : "";
+                            payStatus.innerHTML = `Access recovered successfully${crossDeviceText}! You now have ${limitsText} generations. Redirecting...`;
+                        } else {
+                            console.warn("[PaymentForm] STAGE 1: No rateLimitStatus in recovery response - using fallback");
                             payStatus.innerHTML = "Access recovered successfully! Redirecting...";
                         }
                         
