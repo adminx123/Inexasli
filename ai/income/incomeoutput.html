@@ -1014,8 +1014,6 @@
                 
                 // Create a mock incomeAnalysis object from the worker response data
                 const incomeAnalysis = {
-                    summary: responseData.calculation_summary || "Financial analysis completed",
-                    financial_summary: responseData.calculation_summary,
                     total_taxes_calculated: responseData.total_taxes || 0,
                     total_contributions_calculated: responseData.total_contributions || 0,
                     tax_treatment_details: responseData.tax_treatment_details || {},
@@ -1452,23 +1450,6 @@
       `;
       container.appendChild(ratiosSection);
 
-      // AI Analysis Sections
-      if (incomeData.summary || incomeData.financial_summary) {
-        const summarySection = document.createElement('div');
-        summarySection.className = 'dashboard-card';
-        summarySection.style.cssText = 'margin: 30px 0; background: linear-gradient(135deg, #ecfdf5, #f0fdf4);';
-        
-        summarySection.innerHTML = `
-          <h3><i class="fas fa-robot"></i>AI Financial Summary</h3>
-          <div style="padding: 20px; background: white; border-radius: 8px; border-left: 4px solid #10b981;">
-            <p style="margin: 0; line-height: 1.8; font-size: 1.05em; color: #374151;">
-              ${incomeData.summary || incomeData.financial_summary}
-            </p>
-          </div>
-        `;
-        container.appendChild(summarySection);
-      }
-
       // Tax Treatment Transparency Section
       if (incomeData.tax_treatment_details || incomeData.assumptions_made || incomeData.taxable_income_total) {
         const transparencySection = document.createElement('div');
@@ -1739,8 +1720,6 @@
                     
                     // Create analysis object
                     const incomeAnalysis = {
-                        summary: responseData.calculation_summary || "Financial analysis completed",
-                        financial_summary: responseData.calculation_summary,
                         total_taxes_calculated: responseData.total_taxes || 0,
                         total_contributions_calculated: responseData.total_contributions || 0,
                         tax_treatment_details: responseData.tax_treatment_details || {},
