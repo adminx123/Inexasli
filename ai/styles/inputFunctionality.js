@@ -37,39 +37,85 @@ function autoExpandTextarea(textarea) {
  * Initializes auto-expanding functionality for all textareas
  */
 function initAutoExpandTextareas() {
+    // Helper function to check textarea visibility
+    function isTextareaVisible(element) {
+        let current = element;
+        while (current && current !== document.body) {
+            const computedStyle = window.getComputedStyle(current);
+            if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden') {
+                console.log(`[Text Functionality] Skipping hidden textarea: ${element.id || 'unnamed'} (hidden by: ${current.className || current.tagName})`);
+                return false;
+            }
+            current = current.parentElement;
+        }
+        return true;
+    }
+    
     const textareas = document.querySelectorAll('textarea');
     console.log('[Text Functionality] Found textareas:', textareas.length);
     textareas.forEach((textarea, index) => {
         console.log(`[Text Functionality] Processing textarea ${index + 1}:`, textarea.id || 'unnamed');
+        
+        // Only process visible textareas
+        if (!isTextareaVisible(textarea)) {
+            return;
+        }
+        
         // Set initial height
         autoExpandTextarea(textarea);
         
-        // Add event listeners
+        // Add event listeners with visibility check
         textarea.addEventListener('input', () => {
             console.log('[Text Functionality] Input event on:', textarea.id || 'unnamed');
-            autoExpandTextarea(textarea);
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
         });
         textarea.addEventListener('paste', () => {
-            setTimeout(() => autoExpandTextarea(textarea), 0);
+            setTimeout(() => {
+                if (isTextareaVisible(textarea)) {
+                    autoExpandTextarea(textarea);
+                }
+            }, 0);
         });
     });
     
-    // Ensure all textareas are expanded after DOM and possible repopulation
+    // Ensure all textareas are expanded after DOM and possible repopulation (with visibility check)
     window.addEventListener('load', () => {
-        document.querySelectorAll('textarea').forEach(autoExpandTextarea);
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
     });
     setTimeout(() => {
-        document.querySelectorAll('textarea').forEach(autoExpandTextarea);
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
     }, 100);
     setTimeout(() => {
-        document.querySelectorAll('textarea').forEach(autoExpandTextarea);
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
     }, 500);
     setTimeout(() => {
-        document.querySelectorAll('textarea').forEach(autoExpandTextarea);
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
     }, 1000);
-    // Also expand after formPersistence repopulates
+    // Also expand after formPersistence repopulates (with visibility check)
     document.addEventListener('formpersistence:repopulated', () => {
-        document.querySelectorAll('textarea').forEach(autoExpandTextarea);
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
     });
 }
 
