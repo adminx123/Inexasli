@@ -140,10 +140,10 @@ function createCopyButton(containerId, getContentCallback) {
 function openShareModal(containerId, getContentCallback) {
     const htmlContent = `
         <div style="text-align: center; font-family: 'Inter', sans-serif;">
-            <h2 style="margin: 0 0 1.5em 0; color: #1a1a1a; font-size: 18px; font-weight: 500;">Share Options</h2>
+            <h2 style="margin: 0 0 1.5em 0; color: #1a1a1a; font-size: 18px; font-weight: 500;">Export Options</h2>
             
             <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 1.5em;">
-                <button class="share-action-btn" data-action="copy" style="
+                <button class="share-action-btn" data-action="pdf" style="
                     background: rgba(242, 249, 243, 0.9);
                     color: #4a7c59;
                     border: 1px solid rgba(74, 124, 89, 0.2);
@@ -160,47 +160,7 @@ function openShareModal(containerId, getContentCallback) {
                     font-family: 'Inter', sans-serif;
                 " onmouseover="this.style.backgroundColor='rgba(238, 247, 240, 0.95)'; this.style.transform='translateY(-2px)'" 
                    onmouseout="this.style.backgroundColor='rgba(242, 249, 243, 0.9)'; this.style.transform='translateY(0)'">
-                    <i class="fas fa-copy"></i> Copy to Clipboard
-                </button>
-                
-                <button class="share-action-btn" data-action="email" style="
-                    background: rgba(242, 249, 243, 0.9);
-                    color: #4a7c59;
-                    border: 1px solid rgba(74, 124, 89, 0.2);
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    font-family: 'Inter', sans-serif;
-                " onmouseover="this.style.backgroundColor='rgba(238, 247, 240, 0.95)'; this.style.transform='translateY(-2px)'" 
-                   onmouseout="this.style.backgroundColor='rgba(242, 249, 243, 0.9)'; this.style.transform='translateY(0)'">
-                    <i class="fas fa-envelope"></i> Share via Email
-                </button>
-                
-                <button class="share-action-btn" data-action="print" style="
-                    background: rgba(242, 249, 243, 0.9);
-                    color: #4a7c59;
-                    border: 1px solid rgba(74, 124, 89, 0.2);
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    font-size: 14px;
-                    font-weight: 500;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                    font-family: 'Inter', sans-serif;
-                " onmouseover="this.style.backgroundColor='rgba(238, 247, 240, 0.95)'; this.style.transform='translateY(-2px)'" 
-                   onmouseout="this.style.backgroundColor='rgba(242, 249, 243, 0.9)'; this.style.transform='translateY(0)'">
-                    <i class="fas fa-print"></i> Print Results
+                    <i class="fas fa-download"></i> Save as PDF
                 </button>
             </div>
             
@@ -234,18 +194,12 @@ function openShareModal(containerId, getContentCallback) {
 
 /**
  * Handle different share actions
- * @param {string} action - The action to perform (share, print, pdf, copy)
+ * @param {string} action - The action to perform (pdf)
  * @param {string} containerId - ID of the container element
  * @param {Function} getContentCallback - Optional callback to get specific formatted content
  */
 function handleShareAction(action, containerId, getContentCallback) {
     switch (action) {
-        case 'share':
-            shareContent(containerId, getContentCallback);
-            break;
-        case 'print':
-            printContent();
-            break;
         case 'pdf':
             downloadAsPDF(containerId, getContentCallback);
             break;
