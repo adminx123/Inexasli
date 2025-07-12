@@ -8,6 +8,7 @@
         // Default configuration for income module
         watchKey: 'incomeIqinput1',
         responseKey: 'incomeIqResponse',
+        eventName: 'income-response-deleted',
         warningText: 'Changes to this section will invalidate your AI calculations',
         affectedSections: ['Tax Residency', 'Income Sources']
     };
@@ -77,9 +78,10 @@
             }
         }
 
-        // Add warnings to both sections
-        addWarningToSection("Tax Residency");
-        addWarningToSection("Income Sources");
+        // Add warnings to configured sections
+        config.affectedSections.forEach(sectionLabel => {
+            addWarningToSection(sectionLabel);
+        });
     }
 
     function hideWarningElements() {
@@ -91,15 +93,13 @@
     function handleDataChange() {
         const hasResponse = !!localStorage.getItem(config.responseKey);
         if (hasResponse) {
-            console.log('[makeChanges.js] AI response invalidated, removing response data');
+            console.log(`[makeChanges.js] AI response invalidated, removing response data for ${config.responseKey}`);
             localStorage.removeItem(config.responseKey);
-            localStorage.setItem('taxCalculationsStale', 'true');
-            localStorage.setItem('taxCalculationsStaleTimestamp', Date.now().toString());
             hideWarningElements();
             
-            // Trigger refresh for incomeoutput.html in the same tab
-            console.log('[makeChanges.js] Dispatching income-response-deleted event');
-            const event = new CustomEvent('income-response-deleted', {
+            // Trigger refresh for output modules in the same tab
+            console.log(`[makeChanges.js] Dispatching ${config.eventName} event`);
+            const event = new CustomEvent(config.eventName, {
                 detail: {
                     responseKey: config.responseKey,
                     timestamp: Date.now()
