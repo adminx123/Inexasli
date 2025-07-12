@@ -96,6 +96,16 @@
             localStorage.setItem('taxCalculationsStale', 'true');
             localStorage.setItem('taxCalculationsStaleTimestamp', Date.now().toString());
             hideWarningElements();
+            
+            // Trigger refresh for incomeoutput.html in the same tab
+            console.log('[makeChanges.js] Dispatching income-response-deleted event');
+            const event = new CustomEvent('income-response-deleted', {
+                detail: {
+                    responseKey: config.responseKey,
+                    timestamp: Date.now()
+                }
+            });
+            document.dispatchEvent(event);
         }
     }
 

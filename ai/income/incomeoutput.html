@@ -1038,6 +1038,77 @@
         }
     }
 
+    // localStorage refresh functionality for makeChanges.js integration
+    function checkAndRefreshResponse() {
+        console.log('[IncomeOutput] Checking for incomeIqResponse...');
+        const responseKey = 'incomeIqResponse';
+        const storedResponse = getLocal(responseKey);
+        const outputSpan = document.getElementById('output-span');
+        
+        if (!storedResponse) {
+            console.log('[IncomeOutput] incomeIqResponse deleted, clearing output display');
+            if (outputSpan) {
+                outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #6c757d; font-style: italic;">No analysis data available. Please generate a new analysis.</div>';
+            }
+            // Also destroy any active charts
+            destroyAllCharts();
+        } else {
+            console.log('[IncomeOutput] incomeIqResponse found, refreshing display');
+            // Refresh the display with current data
+            try {
+                let responseData = JSON.parse(storedResponse);
+                
+                // Handle the worker response format
+                if (responseData && responseData.message === 'Success' && responseData.data) {
+                    responseData = responseData.data;
+                }
+                
+                const incomeAnalysis = {
+                    total_taxes_calculated: responseData.total_taxes || 0,
+                    total_contributions_calculated: responseData.total_contributions || 0,
+                    tax_treatment_details: responseData.tax_treatment_details || {},
+                    assumptions_made: responseData.assumptions_made || [],
+                    taxable_income_total: responseData.taxable_income_total || 0,
+                    recommendations: "Based on your income and tax situation, consider consulting with a financial advisor for personalized recommendations.",
+                    insights: "Your tax calculations have been completed. Review the financial metrics below for a comprehensive overview of your financial health."
+                };
+                
+                if (outputSpan) {
+                    outputSpan.innerHTML = '';
+                    displayEnhancedIncomeAnalysis(incomeAnalysis, outputSpan);
+                }
+            } catch (error) {
+                console.error('[IncomeOutput] Error refreshing display:', error);
+                if (outputSpan) {
+                    outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #dc3545;">Error loading analysis data. Please try again.</div>';
+                }
+            }
+        }
+    }
+
+    // Listen for custom event from makeChanges.js (same-tab deletion)
+    document.addEventListener('income-response-deleted', function(e) {
+        console.log('[IncomeOutput] Income response deleted event received:', e.detail);
+        checkAndRefreshResponse();
+    });
+
+    // Listen for localStorage changes (works across tabs/windows)
+    window.addEventListener('storage', function(e) {
+        console.log('[IncomeOutput] Storage event detected:', e.key, e.newValue);
+        if (e.key === 'incomeIqResponse') {
+            console.log('[IncomeOutput] incomeIqResponse changed, refreshing display');
+            checkAndRefreshResponse();
+        }
+    });
+
+    // Listen for page visibility changes (when user returns to tab)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            console.log('[IncomeOutput] Page became visible, checking for data changes');
+            setTimeout(checkAndRefreshResponse, 100); // Small delay to ensure localStorage is updated
+        }
+    });
+
     function displayEnhancedIncomeAnalysis(incomeData, outputElement) {
       outputElement.innerHTML = '';
       outputElement.classList.add('income-display');
