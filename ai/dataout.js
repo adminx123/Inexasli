@@ -145,6 +145,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log(`Received promptGridItemSelected event with URL: ${url} (dataout.js)`);
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
+                '/ai/period/periodiq.html': '/ai/period/periodoutput.html',
                 '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
                 '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
                 '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
@@ -177,6 +178,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const moduleName = e.detail.module;
             const moduleOutputMap = {
                 'calorieiq': '/ai/calorie/calorieoutput.html',
+                'period': '/ai/period/periodoutput.html',
                 'symptomiq': '/ai/symptom/symptomoutput.html',
                 'adventureiq': '/ai/adventure/adventureoutput.html',
                 'decisioniq': '/ai/decision/decisionoutput.html',
