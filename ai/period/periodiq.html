@@ -1,8 +1,7 @@
 <!-- /*
  * Copyright (c) 2025 INEXASLI. All rights reserved.
  * This code is protected under Canadian and international copyright laws.
- * Unauthorized use, reproduction, distribution, or modification of this code 
- * without explicit written permission via email from info@inexasli.com 
+ * Unauthorized use, reproduction, distribution, or modification without explicit written permission via email from info@inexasli.com 
  * is strictly prohibited. Violators will be pursued and prosecuted to the 
  * fullest extent of the law in British Columbia, Canada, and applicable 
  * jurisdictions worldwide.
@@ -214,6 +213,62 @@
         }
       }
     });
+    
+    // Expose addPeriodEntry globally for FormPersistence recreation
+    window.addPeriodEntry = function(whenValue = '', whatValue = '') {
+      // Get the container
+      const container = document.querySelector('#period-entries-container');
+      if (!container) return;
+      
+      // Find existing entries to determine counter
+      const existingEntries = container.querySelectorAll('[data-entry-id^="period-entry"]');
+      const entryCounter = existingEntries.length + 1;
+      
+      // Default "when" value if not provided
+      if (!whenValue) {
+        const now = new Date();
+        whenValue = `Today ${now.toLocaleTimeString('en-US', { 
+          hour: 'numeric', 
+          minute: '2-digit',
+          hour12: true 
+        })}`;
+      }
+      
+      // Create the entry using inputFunctionality's createSplitTextarea
+      if (window.createSplitTextarea) {
+        const entryDiv = window.createSplitTextarea({
+          id: `period-entry-${entryCounter}`,
+          whenPlaceholder: 'When did this happen? (e.g., "June 17th", "Today 3pm")',
+          whatPlaceholder: 'What happened? (e.g., "Period started", "Heavy cramping", "Period ended")',
+          whenValue: whenValue,
+          whatValue: whatValue,
+          entryNumber: entryCounter
+        });
+
+        container.appendChild(entryDiv);
+        
+        // Initialize auto-expand for textareas
+        const textareas = entryDiv.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+          if (window.autoExpandTextarea) {
+            window.autoExpandTextarea(textarea);
+            textarea.addEventListener('input', () => window.autoExpandTextarea(textarea));
+            textarea.addEventListener('paste', () => {
+              setTimeout(() => window.autoExpandTextarea(textarea), 0);
+            });
+          }
+        });
+        
+        // Trigger save immediately after creation
+        if (window.periodFormPersistence) {
+          setTimeout(() => {
+            window.periodFormPersistence.saveFormData();
+          }, 100); // Small delay to ensure DOM is ready
+        }
+      }
+    };
+    
+    console.log('[PeriodIQ] addPeriodEntry function exposed globally');
   }
 
   // Initialize form persistence for period module

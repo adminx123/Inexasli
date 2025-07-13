@@ -455,13 +455,57 @@ class FormPersistence {
         
         console.log('[FormPersistence] Auto-detecting dynamic inputs from saved data:', data);
         
-        // Detect dynamic patterns in field names
+        // Special handling for period module entries
+        if (this.moduleName === 'period') {
+            this.recreatePeriodEntries(data);
+            return;
+        }
+        
+        // Detect dynamic patterns in field names for other modules
         const dynamicPatterns = this.detectDynamicPatterns(data);
         
         for (const pattern of dynamicPatterns) {
             console.log('[FormPersistence] Found dynamic pattern:', pattern);
             this.recreatePatternInputs(pattern);
         }
+    }
+
+    /**
+     * Recreate period entries from saved data
+     * @param {Object} data - The saved form data
+     */
+    recreatePeriodEntries(data) {
+        if (!data || typeof data !== 'object') return;
+        
+        // Look for period entry patterns like "entry-1-when", "entry-1-what"
+        const entryNumbers = new Set();
+        Object.keys(data).forEach(key => {
+            const match = key.match(/^entry-(\d+)-(when|what)$/);
+            if (match) {
+                entryNumbers.add(parseInt(match[1]));
+            }
+        });
+        
+        if (entryNumbers.size === 0) return;
+        
+        console.log('[FormPersistence] Found period entries to recreate:', Array.from(entryNumbers));
+        
+        // Recreate each entry
+        entryNumbers.forEach(entryNum => {
+            const whenKey = `entry-${entryNum}-when`;
+            const whatKey = `entry-${entryNum}-what`;
+            const whenValue = data[whenKey] || '';
+            const whatValue = data[whatKey] || '';
+            
+            if (window.addPeriodEntry && typeof window.addPeriodEntry === 'function') {
+                console.log(`[FormPersistence] Recreating period entry ${entryNum} with values:`, { whenValue, whatValue });
+                setTimeout(() => {
+                    window.addPeriodEntry(whenValue, whatValue);
+                }, 50 * entryNum); // Stagger creation to avoid conflicts
+            } else {
+                console.warn('[FormPersistence] addPeriodEntry function not available');
+            }
+        });
     }
 
     /**
