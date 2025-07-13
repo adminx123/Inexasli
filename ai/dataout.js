@@ -8,8 +8,12 @@
 
 import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
+import { getJSON } from '/utility/getJSON.js';
 // Import imageUpload to make centralized image utilities available to all output pages
 import '/utility/imageUpload.js';
+
+// Make getJSON available globally for loaded content
+window.getJSON = getJSON;
 
 document.addEventListener('DOMContentLoaded', async function () {
     // Additional logging for debugging

@@ -795,7 +795,7 @@
       header.innerHTML = `
         <h2 style="margin: 0; color: #333; display: flex; align-items: center; justify-content: center;">
           <i class="fas fa-calendar-day" style="margin-right: 12px; color: #ff6b9d;"></i>
-          Period Tracker
+          Period Tracker ${periodData.frontendCalculated ? '(Quick Analysis)' : ''}
         </h2>
       `;
       container.appendChild(header);
@@ -826,6 +826,43 @@
         container.appendChild(analyticsContainer);
       }
       
+      // Quick Frontend Analysis Display
+      if (periodData.frontendCalculated) {
+        const quickAnalysisSection = document.createElement('div');
+        quickAnalysisSection.className = 'cycle-section';
+        quickAnalysisSection.style.background = '#e8f5e8';
+        quickAnalysisSection.style.borderColor = '#4CAF50';
+        quickAnalysisSection.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; text-align: center;">
+            <div>
+              <div style="font-size: 24px; font-weight: bold; color: #ff6b9d;">Day ${periodData.currentCycleDay}</div>
+              <div style="font-size: 14px; color: #666;">Current Cycle Day</div>
+            </div>
+            <div>
+              <div style="font-size: 18px; font-weight: bold; color: #333;">${periodData.currentPhase}</div>
+              <div style="font-size: 14px; color: #666;">Current Phase</div>
+            </div>
+            <div>
+              <div style="font-size: 18px; font-weight: bold; color: #ff6b9d;">${periodData.daysUntilNextPeriod} days</div>
+              <div style="font-size: 14px; color: #666;">Until Next Period</div>
+            </div>
+            <div>
+              <div style="font-size: 18px; font-weight: bold; color: #FF9800;">${periodData.daysUntilOvulation} days</div>
+              <div style="font-size: 14px; color: #666;">Until Ovulation</div>
+            </div>
+          </div>
+          ${periodData.periodLength ? `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+              <strong>Last Period Length:</strong> ${periodData.periodLength} days
+            </div>
+          ` : ''}
+        `;
+        container.appendChild(quickAnalysisSection);
+        
+        outputElement.appendChild(container);
+        return;
+      }
+
       // Timeline Display
       if (periodData.phaseCalendar) {
         const timelineContainer = createVerticalTimeline(periodData);
@@ -1016,7 +1053,8 @@
                 const ovulationStart = new Date(periodData.phaseCalendar.ovulation.start);
                 const fertileStart = new Date(ovulationStart);
                 fertileStart.setDate(fertileStart.getDate() - 5);
-                const fertileEnd = new Date(periodData.phaseCalendar.ovulation.end);
+                const fertileEnd = new Date(ovulationStart);
+                fertileEnd.setDate(fertileEnd.getDate() + 1);
                 
                 const currentDateObj = new Date(dateStr);
                 isFertile = currentDateObj >= fertileStart && currentDateObj <= fertileEnd;
@@ -1139,6 +1177,142 @@
       if (day >= 17 && day <= 28) return "Luteal Phase";
       return "Cycle Phase";
     }
+
+    // Frontend period results display (from localStorage input)
+    function displayFrontendPeriodResults(inputData) {
+      console.log('[PeriodOutput] Displaying frontend period results from localStorage:', inputData);
+      
+      const outputElement = document.querySelector('.api-output');
+      if (!outputElement) return;
+      
+      outputElement.innerHTML = '';
+      
+      const container = document.createElement('div');
+      container.className = 'period-display';
+      
+      // Header
+      const header = document.createElement('div');
+      header.className = 'period-header';
+      header.innerHTML = `
+        <h2 style="margin: 0; color: #333; display: flex; align-items: center; justify-content: center;">
+          <i class="fas fa-calendar-day" style="margin-right: 12px; color: #ff6b9d;"></i>
+          Period Tracker
+        </h2>
+      `;
+      container.appendChild(header);
+      
+      // Calculate frontend data from input
+      const periodStartDate = inputData['start-date'];
+      const periodEndDate = inputData['end-date'];
+      const cycleLength = parseInt(inputData['cycle-length']) || 28;
+      
+      if (periodStartDate) {
+        const startDate = new Date(periodStartDate);
+        const endDate = periodEndDate ? new Date(periodEndDate) : null;
+        const today = new Date();
+        
+        const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+        const currentCycleDay = daysSinceStart >= 0 ? daysSinceStart + 1 : 1;
+        
+        // Calculate next period and ovulation
+        const nextPeriodDate = new Date(startDate);
+        nextPeriodDate.setDate(nextPeriodDate.getDate() + cycleLength);
+        const daysUntilNextPeriod = Math.floor((nextPeriodDate - today) / (1000 * 60 * 60 * 24));
+        
+        const ovulationDate = new Date(startDate);
+        ovulationDate.setDate(ovulationDate.getDate() + Math.floor(cycleLength / 2));
+        const daysUntilOvulation = Math.floor((ovulationDate - today) / (1000 * 60 * 60 * 24));
+        
+        // Determine current phase
+        let currentPhase = 'Unknown';
+        if (endDate && daysSinceStart <= Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24))) {
+          currentPhase = 'Menstrual';
+        } else if (daysSinceStart < Math.floor(cycleLength / 2) - 2) {
+          currentPhase = 'Follicular';
+        } else if (Math.abs(daysSinceStart - Math.floor(cycleLength / 2)) <= 1) {
+          currentPhase = 'Ovulation';
+        } else if (daysSinceStart < cycleLength) {
+          currentPhase = 'Luteal';
+        }
+        
+        // Quick Analysis Display
+        const quickAnalysisSection = document.createElement('div');
+        quickAnalysisSection.className = 'cycle-section';
+        quickAnalysisSection.style.background = '#e8f5e8';
+        quickAnalysisSection.style.borderColor = '#4CAF50';
+        quickAnalysisSection.innerHTML = `
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; text-align: center;">
+            <div>
+              <div style="font-size: 24px; font-weight: bold; color: #ff6b9d;">Day ${currentCycleDay}</div>
+              <div style="font-size: 14px; color: #666;">Current Cycle Day</div>
+            </div>
+            <div>
+              <div style="font-size: 18px; font-weight: bold; color: #333;">${currentPhase}</div>
+              <div style="font-size: 14px; color: #666;">Current Phase</div>
+            </div>
+            <div>
+              <div style="font-size: 18px; font-weight: bold; color: #ff6b9d;">${daysUntilNextPeriod} days</div>
+              <div style="font-size: 14px; color: #666;">Until Next Period</div>
+            </div>
+            <div>
+              <div style="font-size: 18px; font-weight: bold; color: #FF9800;">${daysUntilOvulation} days</div>
+              <div style="font-size: 14px; color: #666;">Until Ovulation</div>
+            </div>
+          </div>
+          ${endDate ? `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+              <strong>Last Period Length:</strong> ${Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1} days
+            </div>
+          ` : ''}
+          <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center;">
+            <a href="./periodiq.html" style="color: #9C27B0; text-decoration: none; font-weight: bold;">
+              <i class="fas fa-chart-line" style="margin-right: 5px;"></i>
+              Add Symptoms for Enhanced AI Analysis
+            </a>
+          </div>
+        `;
+        container.appendChild(quickAnalysisSection);
+      } else {
+        // No period start date
+        const noDataSection = document.createElement('div');
+        noDataSection.className = 'cycle-section';
+        noDataSection.style.background = '#fff3cd';
+        noDataSection.style.borderColor = '#ffeaa7';
+        noDataSection.innerHTML = `
+          <p style="margin: 0; text-align: center;">
+            <strong>No period data found.</strong><br>
+            <a href="./periodiq.html" style="color: #ff6b9d; text-decoration: none;">
+              Enter your period dates to get started
+            </a>
+          </p>
+        `;
+        container.appendChild(noDataSection);
+      }
+      
+      outputElement.appendChild(container);
+    }
+
+    // Check for form data first, then fallback to API response
+    window.addEventListener('DOMContentLoaded', function() {
+      console.log('[PeriodOutput] DOM loaded, checking for data');
+      
+      // First check for period form data using getJSON
+      const inputData = window.getJSON ? window.getJSON('period') : null;
+      if (inputData && Object.keys(inputData).length > 0) {
+        console.log('[PeriodOutput] Found period form data:', inputData);
+        displayFrontendPeriodResults(inputData);
+        return;
+      }
+      
+      // Fallback to API response if no form data
+      const periodData = getLocal('periodIqResponse');
+      if (periodData) {
+        displayPeriodResults(periodData);
+      } else {
+        console.log('[PeriodOutput] No period data found - showing empty state');
+        displayFrontendPeriodResults({});
+      }
+    });
   </script>
 </body>
 </html>

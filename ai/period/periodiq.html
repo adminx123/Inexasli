@@ -42,6 +42,12 @@
     </select>
     <input id="period-birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
 
+    <label for="start-date">Last Period Start Date:</label>
+    <input id="start-date" type="date" name="start-date">
+    
+    <label for="end-date">Last Period End Date:</label>
+    <input id="end-date" type="date" name="end-date">
+
     <input id="period-age" type="text" placeholder="Age">
     <input id="period-weight" type="text" placeholder="Weight (e.g. 140 lbs, 64 kg)">
     <input id="period-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
@@ -49,14 +55,20 @@
   </div>
 
   <div class="row1" data-step-label="Period Events Log">
-    <h3 class="tooltip1" data-tooltip="Log period events as they happen using natural language. Add new entries anytime.">
-      Period Events Log<span class="tooltip1-content"></span>
+    <h3 class="tooltip1" data-tooltip="Optional: Log additional period events, symptoms, or circumstances that may need AI analysis.">
+      Additional Period Events (Optional)<span class="tooltip1-content"></span>
     </h3>
+    <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+      Use the date fields above for basic tracking. Add entries below only for symptoms, irregularities, or notes requiring analysis.
+    </p>
     <div id="period-entries-container">
       <!-- Split calendar-text entries will be added here dynamically -->
     </div>
-    <!-- Add entry button created directly by periodiq.html -->
-    <button class="generate-btn" id="generate-period-btn">Analyze My Patterns!</button>
+    <!-- View tracker button -->
+    <button class="generate-btn" id="generate-period-btn">View My Period Tracker</button>
+    
+    <!-- Enhanced analysis button (only shows if additional entries exist) -->
+    <button class="generate-btn" id="enhanced-analysis-btn" style="display: none; background: #9C27B0; margin-top: 10px;">Get Enhanced AI Analysis</button>
   </div>
 </div>
 
@@ -87,13 +99,50 @@
   // Handle generate button click
   async function handleGeneratePeriodIq() {
     try {
+      // Force save current form data first
+      if (window.periodFormPersistence) {
+        window.periodFormPersistence.saveFormData();
+      }
+      
+      const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
+      console.log('[PeriodIQ] Form data for validation:', formData);
+      
+      // Check if we have basic period dates
+      const hasBasicData = formData['start-date'] || formData['end-date'];
+      console.log('[PeriodIQ] Has basic data:', hasBasicData);
+      
+      if (!hasBasicData) { 
+        alert('Please enter your last period dates to view your tracker.'); 
+        return;
+      }
+      
+      // Trigger dataout.js navigation like other modules
+      const event = new CustomEvent('api-response-received', {
+        detail: {
+          module: 'period',
+          type: 'frontend-response',
+          timestamp: Date.now()
+        }
+      });
+      document.dispatchEvent(event);
+      console.log('[PeriodIQ] Dispatched api-response-received event for dataout.js');
+      
+    } catch (error) {
+      console.error('[PeriodIQ] Error:', error);
+      alert('An error occurred. Please try again.');
+    }
+  }
+
+  // Handle enhanced analysis (AI generation)
+  async function handleEnhancedAnalysis() {
+    try {
       const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
       
-      // Check if we have any period entries
+      // Check if we have additional entries for analysis
       const hasEntries = Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
       
       if (!hasEntries) { 
-        alert('Please add at least one period event before generating analysis.'); 
+        alert('Please add period events/symptoms for enhanced AI analysis.'); 
         return;
       }
 
@@ -157,12 +206,43 @@
         if (backendResponse && dataContainer) {
           window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'PeriodIQ');
         }
-        console.error('[PeriodIQ] Error generating period analysis:', error);
+        console.error('[PeriodIQ] Error generating enhanced analysis:', error);
       }
     } catch (error) {
-      console.error('[PeriodIQ] Error generating period analysis:', error);
-      alert('An error occurred while generating your period analysis. Please try again later.');
+      console.error('[PeriodIQ] Error generating enhanced analysis:', error);
+      alert('An error occurred while generating your enhanced analysis. Please try again later.');
     }
+  }
+
+  // Show/hide enhanced analysis button based on entries
+  function updateEnhancedAnalysisButton() {
+    const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
+    const hasEntries = Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
+    const enhancedBtn = document.getElementById('enhanced-analysis-btn');
+    
+    if (enhancedBtn) {
+      enhancedBtn.style.display = hasEntries ? 'block' : 'none';
+    }
+  }
+
+  // Save input data to localStorage for periodoutput.html to read
+  function saveInputToLocalStorage() {
+    const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
+    
+    // Save to localStorage as periodIqInput for output page to read
+    localStorage.setItem('periodIqInput', JSON.stringify(formData));
+    console.log('[PeriodIQ] Saved input data to localStorage');
+    
+    // Trigger dataout.js navigation like other modules
+    const event = new CustomEvent('api-response-received', {
+      detail: {
+        module: 'period',
+        type: 'frontend-response',
+        timestamp: Date.now()
+      }
+    });
+    document.dispatchEvent(event);
+    console.log('[PeriodIQ] Dispatched api-response-received event for dataout.js');
   }
 
   // Handle birth control type change
@@ -288,6 +368,17 @@
     // Set flag to prevent duplicate handler attachment
     generatePeriodBtn.dataset.handlerAttached = 'true';
   }
+
+  const enhancedAnalysisBtn = document.getElementById('enhanced-analysis-btn');
+  if (enhancedAnalysisBtn) {
+    enhancedAnalysisBtn.addEventListener('click', handleEnhancedAnalysis);
+  }
+
+  // Update enhanced analysis button visibility on form changes
+  document.addEventListener('textarea:changed', updateEnhancedAnalysisButton);
+  
+  // Initial button state check
+  setTimeout(updateEnhancedAnalysisButton, 100);
 
 })();
 </script>
