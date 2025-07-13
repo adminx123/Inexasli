@@ -198,6 +198,34 @@
     }
   }
 
+  // Initialize period entries functionality
+  if (window.addEntryButton) {
+    window.addEntryButton({
+      containerSelector: '#period-entries-container',
+      buttonId: 'add-period-entry-btn',
+      buttonText: 'Add Entry',
+      entryIdPrefix: 'period-entry',
+      whenPlaceholder: 'When did this happen? (e.g., "June 17th", "Today 3pm")',
+      whatPlaceholder: 'What happened? (e.g., "Period started", "Heavy cramping", "Period ended")',
+      useCalendar: false,
+      onAdd: () => {
+        if (window.periodFormPersistence) {
+          window.periodFormPersistence.saveFormData();
+        }
+      }
+    });
+  }
+
+  // Initialize form persistence for period module
+  if (window.FormPersistence) {
+    window.periodFormPersistence = window.FormPersistence.getInstance('period');
+    if (!window.periodFormPersistence.initialized) {
+      window.periodFormPersistence.init({
+        moduleName: 'period'
+      });
+    }
+  }
+
   // Initialization - simplified to match calorie module pattern
   const generatePeriodBtn = document.getElementById('generate-period-btn');
   if (generatePeriodBtn) {

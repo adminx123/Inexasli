@@ -185,7 +185,130 @@
       border-radius: 3px;
       margin-right: 8px;
     }
-   
+    
+    /* Frontend Period Analytics Styles */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    .analytics-card {
+      background: white;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .analytics-header {
+      font-weight: 600;
+      color: #ff6b9d;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      padding: 4px 0;
+      border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .metric-label {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .metric-value {
+      font-weight: 500;
+      color: #333;
+    }
+    
+    .prediction-list {
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    
+    .prediction-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+      font-size: 14px;
+    }
+    
+    .cycle-chart {
+      height: 60px;
+      background: linear-gradient(90deg, #ff6b9d 0%, #ffc107 25%, #28a745 50%, #6f42c1 100%);
+      border-radius: 4px;
+      position: relative;
+      margin: 10px 0;
+    }
+    
+    .current-position {
+      position: absolute;
+      top: -5px;
+      width: 2px;
+      height: 70px;
+      background: #333;
+      transform: translateX(-1px);
+    }
+
+    /* Visual Analytics Styles */
+    .visual-analytics {
+      margin: 20px 0;
+    }
+    
+    .mini-calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      border-radius: 3px;
+      position: relative;
+    }
+    
+    .calendar-day.period { background: #dc3545; color: white; }
+    .calendar-day.fertile { background: #28a745; color: white; }
+    .calendar-day.ovulation { background: #ff9800; color: white; }
+    .calendar-day.predicted { background: #ff6b9d; color: white; opacity: 0.7; }
+    .calendar-day.today { border: 2px solid #333; }
+    
+    .trend-graph {
+      height: 80px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      position: relative;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+    
+    .trend-line {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent 0%, #ff6b9d 50%, transparent 100%);
+      opacity: 0.3;
+    }
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <!-- include centralized copy utility -->
@@ -193,6 +316,318 @@
   <script src="../../utility/enhancedUI.js"></script>
   <!-- Define utility functions directly -->
   <script>
+    // Frontend Period Analytics Functions
+    window.PeriodAnalytics = {
+      
+      // Basic Cycle Math
+      calculateCycleDays: function(formData, periodData) {
+        const today = new Date();
+        const results = {};
+        
+        // Find last period start from user entries
+        let lastPeriodStart = null;
+        if (formData) {
+          for (let i = 1; i <= 6; i++) {
+            const whenField = formData[`entry${i}-when`];
+            const whatField = formData[`entry${i}-what`];
+            if (whenField && whatField && whatField.toLowerCase().includes('period start')) {
+              lastPeriodStart = new Date(whenField);
+              break;
+            }
+          }
+        }
+        
+        if (lastPeriodStart) {
+          results.daysSinceLastPeriod = Math.floor((today - lastPeriodStart) / (1000 * 60 * 60 * 24));
+          results.currentCycleDay = results.daysSinceLastPeriod + 1;
+          
+          const cycleLength = parseInt(formData['period-cycle-length']) || 28;
+          const nextPeriodDate = new Date(lastPeriodStart);
+          nextPeriodDate.setDate(nextPeriodDate.getDate() + cycleLength);
+          results.nextPeriodDate = nextPeriodDate.toISOString().split('T')[0];
+          results.daysUntilNextPeriod = Math.floor((nextPeriodDate - today) / (1000 * 60 * 60 * 24));
+          
+          const ovulationDate = new Date(lastPeriodStart);
+          ovulationDate.setDate(ovulationDate.getDate() + Math.floor(cycleLength / 2));
+          results.daysUntilOvulation = Math.floor((ovulationDate - today) / (1000 * 60 * 60 * 24));
+          results.ovulationDate = ovulationDate.toISOString().split('T')[0];
+        }
+        
+        return results;
+      },
+      
+      // Pattern Analysis
+      analyzePatterns: function(formData) {
+        const patterns = {
+          cycleLengths: [],
+          symptoms: {},
+          irregularityScore: 0
+        };
+        
+        // Extract cycle information from entries
+        const periodStarts = [];
+        if (formData) {
+          for (let i = 1; i <= 6; i++) {
+            const whenField = formData[`entry${i}-when`];
+            const whatField = formData[`entry${i}-what`];
+            if (whenField && whatField) {
+              if (whatField.toLowerCase().includes('period start')) {
+                periodStarts.push(new Date(whenField));
+              }
+              // Track symptoms
+              const symptoms = ['cramps', 'headache', 'mood', 'bloating', 'fatigue'];
+              symptoms.forEach(symptom => {
+                if (whatField.toLowerCase().includes(symptom)) {
+                  patterns.symptoms[symptom] = (patterns.symptoms[symptom] || 0) + 1;
+                }
+              });
+            }
+          }
+        }
+        
+        // Calculate cycle lengths if we have multiple period starts
+        if (periodStarts.length > 1) {
+          periodStarts.sort((a, b) => a - b);
+          for (let i = 1; i < periodStarts.length; i++) {
+            const cycleLength = Math.floor((periodStarts[i] - periodStarts[i-1]) / (1000 * 60 * 60 * 24));
+            patterns.cycleLengths.push(cycleLength);
+          }
+          
+          // Calculate irregularity score
+          if (patterns.cycleLengths.length > 0) {
+            const avgLength = patterns.cycleLengths.reduce((a, b) => a + b, 0) / patterns.cycleLengths.length;
+            const variance = patterns.cycleLengths.reduce((sum, length) => sum + Math.pow(length - avgLength, 2), 0) / patterns.cycleLengths.length;
+            patterns.irregularityScore = Math.sqrt(variance);
+          }
+        }
+        
+        return patterns;
+      },
+      
+      // Health Metrics
+      calculateHealthMetrics: function(formData) {
+        const metrics = {};
+        
+        if (formData) {
+          const age = parseInt(formData['period-age']) || 0;
+          const weightStr = formData['period-weight'] || '';
+          
+          // Extract weight in kg
+          let weightKg = 0;
+          if (weightStr.includes('kg')) {
+            weightKg = parseFloat(weightStr);
+          } else if (weightStr.includes('lbs')) {
+            weightKg = parseFloat(weightStr) * 0.453592;
+          }
+          
+          // Calculate BMI (need height, but can estimate health category)
+          if (weightKg > 0) {
+            metrics.weight = weightKg;
+            // For now, just note weight is available for BMI calculation
+            metrics.hasWeight = true;
+          }
+          
+          metrics.age = age;
+          metrics.birthControl = formData['period-birth-control-type'] || 'none';
+        }
+        
+        return metrics;
+      },
+      
+      // Predictions
+      generatePredictions: function(formData, cycleData) {
+        const predictions = {
+          nextPeriods: [],
+          fertilityWindows: [],
+          symptomTiming: []
+        };
+        
+        const cycleLength = parseInt(formData['period-cycle-length']) || 28;
+        const today = new Date();
+        
+        // Find last period start
+        let lastPeriodStart = null;
+        if (formData) {
+          for (let i = 1; i <= 6; i++) {
+            const whenField = formData[`entry${i}-when`];
+            const whatField = formData[`entry${i}-what`];
+            if (whenField && whatField && whatField.toLowerCase().includes('period start')) {
+              lastPeriodStart = new Date(whenField);
+              break;
+            }
+          }
+        }
+        
+        if (lastPeriodStart) {
+          // Predict next 6 periods
+          for (let i = 1; i <= 6; i++) {
+            const nextPeriod = new Date(lastPeriodStart);
+            nextPeriod.setDate(nextPeriod.getDate() + (cycleLength * i));
+            predictions.nextPeriods.push({
+              date: nextPeriod.toISOString().split('T')[0],
+              confidence: i <= 3 ? 'High' : 'Medium'
+            });
+            
+            // Predict fertility window (5 days before to 1 day after ovulation)
+            const ovulationDate = new Date(nextPeriod);
+            ovulationDate.setDate(ovulationDate.getDate() - Math.floor(cycleLength / 2));
+            const fertilityStart = new Date(ovulationDate);
+            fertilityStart.setDate(fertilityStart.getDate() - 5);
+            const fertilityEnd = new Date(ovulationDate);
+            fertilityEnd.setDate(fertilityEnd.getDate() + 1);
+            
+            predictions.fertilityWindows.push({
+              start: fertilityStart.toISOString().split('T')[0],
+              end: fertilityEnd.toISOString().split('T')[0],
+              ovulation: ovulationDate.toISOString().split('T')[0]
+            });
+          }
+        }
+        
+        return predictions;
+      },
+      
+      // Visual Analytics Generation
+      createMiniCalendar: function(predictions) {
+        const calendar = document.createElement('div');
+        calendar.className = 'mini-calendar';
+        
+        const today = new Date();
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+        
+        // Add day headers
+        ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(day => {
+          const header = document.createElement('div');
+          header.textContent = day;
+          header.style.fontWeight = 'bold';
+          header.style.textAlign = 'center';
+          calendar.appendChild(header);
+        });
+        
+        // Add days
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayElement = document.createElement('div');
+          dayElement.className = 'calendar-day';
+          dayElement.textContent = day;
+          
+          const dayDate = new Date(today.getFullYear(), today.getMonth(), day);
+          const dayStr = dayDate.toISOString().split('T')[0];
+          
+          // Mark special days
+          if (day === today.getDate()) {
+            dayElement.classList.add('today');
+          }
+          
+          if (predictions.nextPeriods) {
+            predictions.nextPeriods.forEach(period => {
+              if (period.date === dayStr) {
+                dayElement.classList.add('predicted');
+              }
+            });
+          }
+          
+          calendar.appendChild(dayElement);
+        }
+        
+        return calendar;
+      },
+      
+      // Create analytics dashboard
+      createAnalyticsDashboard: function(formData, periodData) {
+        const container = document.createElement('div');
+        container.className = 'analytics-grid';
+        
+        const cycleData = this.calculateCycleDays(formData, periodData);
+        const patterns = this.analyzePatterns(formData);
+        const healthMetrics = this.calculateHealthMetrics(formData);
+        const predictions = this.generatePredictions(formData, cycleData);
+        
+        // Basic Cycle Info Card
+        const cycleCard = document.createElement('div');
+        cycleCard.className = 'analytics-card';
+        cycleCard.innerHTML = `
+          <div class="analytics-header">
+            <i class="fas fa-calendar-day"></i>
+            Current Cycle
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Current Day:</span>
+            <span class="metric-value">${cycleData.currentCycleDay || 'Unknown'}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Days Until Next Period:</span>
+            <span class="metric-value">${cycleData.daysUntilNextPeriod || 'Unknown'}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Days Until Ovulation:</span>
+            <span class="metric-value">${cycleData.daysUntilOvulation || 'Unknown'}</span>
+          </div>
+        `;
+        container.appendChild(cycleCard);
+        
+        // Pattern Analysis Card
+        const patternCard = document.createElement('div');
+        patternCard.className = 'analytics-card';
+        const avgCycleLength = patterns.cycleLengths.length > 0 ? 
+          Math.round(patterns.cycleLengths.reduce((a, b) => a + b, 0) / patterns.cycleLengths.length) : 
+          'Insufficient data';
+        
+        patternCard.innerHTML = `
+          <div class="analytics-header">
+            <i class="fas fa-chart-line"></i>
+            Pattern Analysis
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Average Cycle Length:</span>
+            <span class="metric-value">${avgCycleLength} days</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Regularity Score:</span>
+            <span class="metric-value">${patterns.irregularityScore < 3 ? 'Regular' : 'Irregular'}</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Most Common Symptom:</span>
+            <span class="metric-value">${Object.keys(patterns.symptoms)[0] || 'None tracked'}</span>
+          </div>
+        `;
+        container.appendChild(patternCard);
+        
+        // Predictions Card
+        const predictionCard = document.createElement('div');
+        predictionCard.className = 'analytics-card';
+        predictionCard.innerHTML = `
+          <div class="analytics-header">
+            <i class="fas fa-crystal-ball"></i>
+            Predictions
+          </div>
+          <div class="prediction-list">
+            ${predictions.nextPeriods.slice(0, 3).map(period => `
+              <div class="prediction-item">
+                <span>Next Period:</span>
+                <span>${period.date}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        container.appendChild(predictionCard);
+        
+        // Mini Calendar
+        const calendarCard = document.createElement('div');
+        calendarCard.className = 'analytics-card';
+        calendarCard.innerHTML = `
+          <div class="analytics-header">
+            <i class="fas fa-calendar-alt"></i>
+            This Month
+          </div>
+        `;
+        calendarCard.appendChild(this.createMiniCalendar(predictions));
+        container.appendChild(calendarCard);
+        
+        return container;
+      }
+    };
+
     window.getLocal = function(key) {
       try {
         const value = localStorage.getItem(key);
@@ -384,6 +819,12 @@
         ${profileInfo.length > 0 ? profileInfo.join(' | ') : 'No profile data available'}
       `;
       container.appendChild(profileSection);
+      
+      // Frontend Analytics Dashboard
+      if (window.PeriodAnalytics) {
+        const analyticsContainer = window.PeriodAnalytics.createAnalyticsDashboard(userFormData, periodData);
+        container.appendChild(analyticsContainer);
+      }
       
       // Timeline Display
       if (periodData.phaseCalendar) {
