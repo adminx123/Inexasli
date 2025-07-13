@@ -438,7 +438,7 @@ function addPaymentModalStyles() {
             text-decoration: none !important;
         }
         
-        /* Premium Section Styling */
+        /* Premium Section Styling
         .premium-blur {
             filter: blur(3px);
             color: #888;
@@ -446,6 +446,8 @@ function addPaymentModalStyles() {
             transition: filter 0.3s ease, color 0.3s ease;
             font-family: "Inter", sans-serif;
         }
+
+ */
 
         /* Section1 Styling (Premium-specific) */
         .section1 {
