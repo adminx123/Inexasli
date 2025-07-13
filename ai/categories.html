@@ -19,27 +19,91 @@
 }
 
 /* Product layout styling */
-.grid-item .product-name {
+.category-item .product-name {
     font-weight: 600;
     margin-right: 8px;
 }
 
-.grid-item .product-description {
+.category-item .product-description {
     font-size: 12px;
     color: #666;
     font-weight: normal;
     flex: 1;
 }
 
-/* Ensure grid items display as flex for proper layout */
-.grid-item[data-category] {
+/* Base styling for category items */
+.category-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 12px 16px;
+    margin: 4px 0;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    box-sizing: border-box;
 }
 
-/* Target grid containers within data-container-in to ensure higher specificity */
-.data-container-in .device-container .grid-container {
+.category-item:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.category-item.active {
+    background: #dee2e6;
+    border-color: #adb5bd;
+}
+
+/* Category selection items (2 columns) */
+.category-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 8px;
+    margin: 4px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-weight: 500;
+}
+
+.category-selector:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.category-selector.active {
+    background: #dee2e6;
+    border-color: #adb5bd;
+}
+
+/* Grid containers */
+.category-grid {
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+/* Category selection grid - 2 columns */
+.category-selection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+/* Products grid - 1 column */
+.products-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 8px;
@@ -48,57 +112,56 @@
     margin: 0 auto;
 }
 
-/* Category selection grid - 2 per row */
-.data-container-in .device-container #category-selection {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+/* Favorites grid - 1 column */
+.favorites-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
 }
 
-/* Mobile-specific override for data-container-in context */
+/* Mobile responsive */
 @media (max-width: 480px) {
-    .data-container-in .device-container .grid-container {
-        grid-template-columns: 1fr;
+    .category-grid, .products-grid, .favorites-grid {
         gap: 6px;
         max-width: 360px;
     }
     
-    /* Category selection grid - 2 per row on mobile */
-    .data-container-in .device-container #category-selection {
+    .category-selection-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 8px;
+        max-width: 360px;
     }
     
-    .data-container-in .device-container .grid-item {
+    .category-item, .category-selector {
         min-height: 40px;
-        padding: 0.5rem;
+        padding: 8px 12px;
         font-size: 14px;
     }
 }
 
 @media (max-width: 375px) {
-    .data-container-in .device-container .grid-container {
-        grid-template-columns: 1fr;
+    .category-grid, .products-grid, .favorites-grid {
         gap: 5px;
         max-width: 340px;
     }
     
-    /* Category selection grid - 2 per row on smaller screens */
-    .data-container-in .device-container #category-selection {
-        grid-template-columns: repeat(2, 1fr);
+    .category-selection-grid {
         gap: 6px;
+        max-width: 340px;
     }
 }
 
 @media (max-width: 320px) {
-    .data-container-in .device-container .grid-container {
-        grid-template-columns: 1fr;
+    .category-grid, .products-grid, .favorites-grid {
         max-width: 280px;
     }
     
-    /* Category selection grid - 2 per row even on smallest screens */
-    .data-container-in .device-container #category-selection {
-        grid-template-columns: repeat(2, 1fr);
+    .category-selection-grid {
         gap: 5px;
+        max-width: 280px;
     }
 }
 
@@ -115,52 +178,43 @@
     color: gold;
 }
 
-.grid-item {
-    position: relative;
-}
-
 /* Add space for the favorite icon on product items */
-.grid-item[data-category] {
-    /* Using padding on the right pushes the text away from the icon */
+.category-item[data-category] {
     padding-right: 35px;
-    /* This ensures the padding doesn't break the grid layout */
-    box-sizing: border-box;
 }
 
 /* Mobile-specific adjustments for favorite star and premium tag spacing */
 @media (max-width: 480px) {
-    .grid-item[data-category] {
-        padding-right: 40px; /* More space needed on mobile */
+    .category-item[data-category] {
+        padding-right: 40px;
     }
     
-    /* Target favorites grid items specifically */
-    #favorites-grid .grid-item[data-category] {
-        padding-right: 40px; /* More space needed on mobile */
+    .favorites-grid .category-item[data-category] {
+        padding-right: 40px;
     }
     
     .favorite-icon {
         top: 4px;
         right: 6px;
-        font-size: 18px; /* Slightly smaller on mobile */
+        font-size: 18px;
     }
     
     .premium-tag {
-        margin-right: 25px !important; /* Push $ symbol away from favorite star */
+        margin-right: 25px;
     }
 }
 
 @media (max-width: 375px) {
-    .grid-item[data-category] {
-        padding-right: 42px; /* Even more space on smaller screens */
+    .category-item[data-category] {
+        padding-right: 42px;
     }
     
-    /* Target favorites grid items specifically */
-    #favorites-grid .grid-item[data-category] {
-        padding-right: 42px; /* Even more space on smaller screens */
+    .favorites-grid .category-item[data-category] {
+        padding-right: 42px;
     }
     
     .premium-tag {
-        margin-right: 28px !important;
+        margin-right: 28px;
     }
     
     .favorite-icon {
@@ -176,10 +230,6 @@
     font-size: 1.2em;
     color: #333;
 }
-
-#favorites-grid {
-    margin-bottom: 20px;
-}
 </style>
 
 <div class="device-container">
@@ -189,74 +239,66 @@
 
 
 <div id="favorites-container">
-    
-    <div class="grid-container" id="favorites-grid"></div>
+    <div class="favorites-grid" id="favorites-grid"></div>
 </div>
 
-
-        <div class="grid-container" id="category-selection">
-
-        <div class="grid-item" data-value="all" style="font-weight: bold;">ALL PRODUCTS</div>
-
-
-
-
-        <div class="grid-item" data-value="health">HEALTH</div>
-        <div class="grid-item" data-value="business">BUSINESS</div>
-        <div class="grid-item" data-value="finance">FINANCE</div>
-        <div class="grid-item" data-value="lifestyle">LIFESTYLE</div>
-        <div class="grid-item" data-value="learning">LEARNING</div>
-        <div class="grid-item" data-value="productivity">PRODUCTIVITY</div>
-    </div>
+<div class="category-selection-grid" id="category-selection">
+    <div class="category-selector" data-value="all" style="font-weight: bold;">ALL PRODUCTS</div>
+    <div class="category-selector" data-value="health">HEALTH</div>
+    <div class="category-selector" data-value="business">BUSINESS</div>
+    <div class="category-selector" data-value="finance">FINANCE</div>
+    <div class="category-selector" data-value="lifestyle">LIFESTYLE</div>
+    <div class="category-selector" data-value="learning">LEARNING</div>
+    <div class="category-selector" data-value="productivity">PRODUCTIVITY</div>
+</div>
 </div>
 
 
 <div class="row1" data-step-label="Products">
-    <div class="grid-container">
+    <div class="products-grid">
         <!-- Health Products -->
-        <div class="grid-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
+        <div class="category-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
             <span class="product-name">CalorieIQ™</span>
             <span class="product-description">Track calories & nutrition</span>
         </div>
 
-             <div class="grid-item" data-category="health" data-value="/ai/period/periodiq.html">
+        <div class="category-item" data-category="health" data-value="/ai/period/periodiq.html">
             <span class="product-name">PeriodIQ™</span>
             <span class="product-description">Period tracking & insights</span>
         </div>
-    <!-- <div class="grid-item" data-category="health" data-value="/ai/period/periodiq.html">PeriodIQ™</div> -->
         
         <!-- Business Products -->
-        <div class="grid-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
+        <div class="category-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
             <span class="product-name">DecisionIQ™</span>
             <span class="product-description">Smart decision making</span>
         </div>
         
         <!-- Finance Products -->
-        <div class="grid-item" data-category="finance" data-value="/ai/income/incomeiq.html">
+        <div class="category-item" data-category="finance" data-value="/ai/income/incomeiq.html">
             <span class="product-name">IncomeIQ™</span>
             <span class="product-description">Income optimization</span>
         </div>
         
         <!-- Lifestyle Products -->
-        <div class="grid-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
+        <div class="category-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
             <span class="product-name">EventIQ™</span>
             <span class="product-description">Event planning assistant</span>
         </div>
-        <div class="grid-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
+        <div class="category-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
             <span class="product-name">FashionIQ™</span>
             <span class="product-description">Style & outfit advisor</span>
         </div>
-        <div class="grid-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
+        <div class="category-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
             <span class="product-name">PhilosophyIQ™</span>
             <span class="product-description">Explore philosophical ideas</span>
         </div>
-        <div class="grid-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
+        <div class="category-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
             <span class="product-name">EnneagramIQ™</span>
             <span class="product-description">Personality insights</span>
         </div>
         
         <!-- Learning Products -->
-        <div class="grid-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
+        <div class="category-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
             <span class="product-name">QuizIQ™</span>
             <span class="product-description">Interactive learning quizzes</span>
         </div>
@@ -273,7 +315,7 @@
 console.log('[Categories] Script executing immediately');
 
 const favoritesGrid = document.getElementById('favorites-grid');
-const productsGrid = document.querySelector('.row1[data-step-label="Products"] .grid-container');
+const productsGrid = document.querySelector('.row1[data-step-label="Products"] .products-grid');
 const deviceContainer = document.querySelector('.device-container');
 
 function getFavorites() {
@@ -327,7 +369,7 @@ function toggleFavorite(url) {
 function updateFavoriteIcons() {
     const favorites = getFavorites();
     // This will update icons in both the main grid and the favorites grid
-    document.querySelectorAll('.grid-item[data-value]').forEach(item => {
+    document.querySelectorAll('.category-item[data-value]').forEach(item => {
         const icon = item.querySelector('.favorite-icon');
         if (icon) {
             if (favorites.includes(item.dataset.value)) {
@@ -340,7 +382,7 @@ function updateFavoriteIcons() {
 }
 
 function addFavoriteIcons() {
-    document.querySelectorAll('.grid-item[data-category]').forEach(product => {
+    document.querySelectorAll('.category-item[data-category]').forEach(product => {
         if (product.querySelector('.favorite-icon')) return; // Don't add twice
         const icon = document.createElement('span');
         icon.className = 'favorite-icon';
@@ -352,7 +394,7 @@ function addFavoriteIcons() {
 
 // Function to filter products using DIRECT INLINE STYLES (bypasses all CSS)
 function filterProducts(selectedCategory) {
-    const products = document.querySelectorAll('.grid-item[data-category]');
+    const products = document.querySelectorAll('.category-item[data-category]');
     console.log('[Categories] filterProducts called with:', selectedCategory, 'Found products:', products.length);
     
     products.forEach(product => {
@@ -378,11 +420,11 @@ setTimeout(function() {
     const categoryContainer = document.getElementById('category-selection');
     if (categoryContainer) {
         categoryContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('grid-item')) {
+            if (e.target.classList.contains('category-selector')) {
                 const selectedCategory = e.target.getAttribute('data-value');
                 e.stopPropagation();
                 
-                document.querySelectorAll('#category-selection .grid-item').forEach(item => {
+                document.querySelectorAll('#category-selection .category-selector').forEach(item => {
                     item.classList.remove('active');
                 });
                 e.target.classList.add('active');
@@ -396,13 +438,13 @@ setTimeout(function() {
         });
         
         console.log('[Categories] Initializing - hiding all products first');
-        document.querySelectorAll('.grid-item[data-category]').forEach(product => {
+        document.querySelectorAll('.category-item[data-category]').forEach(product => {
             product.style.display = 'none';
         });
     
         setTimeout(() => {
             filterProducts('all');
-            const allCategoriesItem = document.querySelector('#category-selection .grid-item[data-value="all"]');
+            const allCategoriesItem = document.querySelector('#category-selection .category-selector[data-value="all"]');
             if (allCategoriesItem) {
                 allCategoriesItem.classList.add('active');
             }
@@ -413,27 +455,27 @@ setTimeout(function() {
 // Consolidated event listener for both product selection and favorite toggling
 if (deviceContainer) {
     deviceContainer.addEventListener('click', function(e) {
-        const gridItem = e.target.closest('.grid-item');
-        if (!gridItem || !gridItem.dataset.value) return;
+        const categoryItem = e.target.closest('.category-item');
+        if (!categoryItem || !categoryItem.dataset.value) return;
 
         // Handle favorite icon clicks
         if (e.target.classList.contains('favorite-icon')) {
             e.stopPropagation(); // Prevent product selection from firing
-            toggleFavorite(gridItem.dataset.value);
+            toggleFavorite(categoryItem.dataset.value);
             return;
         }
 
         // Handle product selection clicks (if it's a product URL)
-        if (gridItem.dataset.value.startsWith('/ai/')) {
+        if (categoryItem.dataset.value.startsWith('/ai/')) {
             e.stopPropagation(); // Stop the event from bubbling up to datain.js modal handlers
             
             // Set lastGridItemUrl so datain.js can remember the selection
-            localStorage.setItem('lastGridItemUrl', gridItem.dataset.value);
+            localStorage.setItem('lastGridItemUrl', categoryItem.dataset.value);
 
             // NEW: Check if we are inside the datain.js container
-            const datainContainer = gridItem.closest('#data-in-container');
+            const datainContainer = categoryItem.closest('#data-in-container');
             
-            const eventDetail = { detail: { url: gridItem.dataset.value } };
+            const eventDetail = { detail: { url: categoryItem.dataset.value } };
             
             if (datainContainer) {
                 // If inside datain, dispatch the event directly on the container
