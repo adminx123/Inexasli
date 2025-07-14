@@ -392,6 +392,7 @@
 </div>
 
 <script>
+
 (function() {
   // Reference utility functions
   const getLocal = window.getLocal || function(key) {
@@ -412,6 +413,32 @@
       return null;
     }
   };
+
+  // Helper functions
+  function generateStars(rating) {
+    if (!rating || rating < 0 || rating > 10) return '';
+    
+    const fullStars = Math.floor(rating / 2);
+    const halfStar = (rating % 2) >= 1;
+    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+    
+    let stars = '';
+    for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+    if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+    for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+    
+    return stars;
+  }
+
+  function getVerdictClass(verdict) {
+    if (!verdict) return '';
+    
+    const v = verdict.toLowerCase();
+    if (v.includes('buy') && !v.includes('avoid')) return 'buy';
+    if (v.includes('avoid')) return 'avoid';
+    if (v.includes('consider')) return 'consider';
+    return '';
+  }
 
   function updateOutput() {
     const responseData = getJSON('shopIqResponse');
@@ -457,287 +484,50 @@
 
     let html = '';
 
-    // Product Information
-    if (data.productInfo) {
-      html += `
-        <div class="analysis-card product-info">
-          <h3><i class="fas fa-box"></i> Product Information</h3>
-          <div class="product-details">
-            <p><strong>Product:</strong> ${data.productInfo.name || 'Unknown'}</p>
-            <p><strong>Brand:</strong> ${data.productInfo.brand || 'Unknown'}</p>
-            <p><strong>Category:</strong> ${data.productInfo.category || 'Unknown'}</p>
-            <p><strong>Type:</strong> ${data.productInfo.productType || 'Unknown'}</p>
-          </div>
-        </div>
-      `;
-    }
+    // Analysis type header
+    const analysisType = data.analysisType || 'product';
+    const typeHeaders = {
+      'product': '🛒 Product Analysis Results',
+      'business': '🏪 Business Analysis Results', 
+      'app': '📱 App Analysis Results',
+      'service': '⚙️ Service Analysis Results',
+      'comparison': '⚖️ Comparison Analysis Results'
+    };
+    
+    html += `
+      <div class="analysis-card product-info">
+        <h3><i class="fas fa-info-circle"></i> ${typeHeaders[analysisType] || 'Analysis Results'}</h3>
+        <p><strong>Analysis Type:</strong> ${analysisType.charAt(0).toUpperCase() + analysisType.slice(1)}</p>
+      </div>
+    `;
 
-    // Safety Analysis
-    if (data.safetyAnalysis) {
-      const isCritical = data.safetyAnalysis.overallSafetyRating <= 3 || 
-                        (data.safetyAnalysis.criticalWarnings && data.safetyAnalysis.criticalWarnings.length > 0);
-      
-      html += `
-        <div class="analysis-card safety-analysis ${isCritical ? 'critical' : ''}">
-          <h3><i class="fas fa-shield-alt"></i> Safety Analysis</h3>
-          ${data.safetyAnalysis.overallSafetyRating ? `
-            <div class="rating-display">
-              <span>Safety Rating:</span>
-              <div class="rating-stars">${generateStars(data.safetyAnalysis.overallSafetyRating)}</div>
-              <span class="rating-number">${data.safetyAnalysis.overallSafetyRating}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.safetyAnalysis.criticalWarnings && data.safetyAnalysis.criticalWarnings.length > 0 ? `
-            <h4>⚠️ Critical Warnings</h4>
-            <ul class="warning-list">
-              ${data.safetyAnalysis.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
-            </ul>
-          ` : ''}
-          
-          ${data.safetyAnalysis.harmfulIngredients && data.safetyAnalysis.harmfulIngredients.length > 0 ? `
-            <h4>🧪 Harmful Ingredients</h4>
-            ${data.safetyAnalysis.harmfulIngredients.map(ingredient => `
-              <div class="ingredient-warning">
-                <div class="ingredient-name">${ingredient.ingredient}</div>
-                <div class="ingredient-risk">${ingredient.risk}</div>
-                <span class="severity-badge severity-${ingredient.severity.toLowerCase()}">${ingredient.severity}</span>
-              </div>
-            `).join('')}
-          ` : ''}
-          
-          ${data.safetyAnalysis.regulatoryIssues && data.safetyAnalysis.regulatoryIssues.length > 0 ? `
-            <h4>📋 Regulatory Issues</h4>
-            <ul class="warning-list">
-              ${data.safetyAnalysis.regulatoryIssues.map(issue => `<li>${issue}</li>`).join('')}
-            </ul>
-          ` : ''}
-          
-          ${data.safetyAnalysis.safetyRecommendations && data.safetyAnalysis.safetyRecommendations.length > 0 ? `
-            <h4>💡 Safety Recommendations</h4>
-            <ul>
-              ${data.safetyAnalysis.safetyRecommendations.map(rec => `<li>${rec}</li>`).join('')}
-            </ul>
-          ` : ''}
-        </div>
-      `;
-    }
-
-    // Quality Assessment
-    if (data.qualityAssessment) {
-      html += `
-        <div class="analysis-card quality-assessment">
-          <h3><i class="fas fa-star"></i> Quality Assessment</h3>
-          ${data.qualityAssessment.overallQualityRating ? `
-            <div class="rating-display">
-              <span>Quality Rating:</span>
-              <div class="rating-stars">${generateStars(data.qualityAssessment.overallQualityRating)}</div>
-              <span class="rating-number">${data.qualityAssessment.overallQualityRating}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.qualityAssessment.materials ? `<p><strong>Materials:</strong> ${data.qualityAssessment.materials}</p>` : ''}
-          ${data.qualityAssessment.durability ? `<p><strong>Durability:</strong> ${data.qualityAssessment.durability}</p>` : ''}
-          ${data.qualityAssessment.manufacturing ? `<p><strong>Manufacturing:</strong> ${data.qualityAssessment.manufacturing}</p>` : ''}
-          ${data.qualityAssessment.userExperience ? `<p><strong>User Experience:</strong> ${data.qualityAssessment.userExperience}</p>` : ''}
-        </div>
-      `;
-    }
-
-    // Price Analysis
-    if (data.priceAnalysis) {
-      html += `
-        <div class="analysis-card price-analysis">
-          <h3><i class="fas fa-dollar-sign"></i> Price Analysis</h3>
-          ${data.priceAnalysis.valueRating ? `
-            <div class="rating-display">
-              <span>Value Rating:</span>
-              <div class="rating-stars">${generateStars(data.priceAnalysis.valueRating)}</div>
-              <span class="rating-number">${data.priceAnalysis.valueRating}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.priceAnalysis.averageMarketPrice || data.priceAnalysis.userPriceAssessment ? `
-            <div class="price-comparison">
-              ${data.priceAnalysis.averageMarketPrice ? `
-                <div class="price-item">
-                  <div class="price-label">Market Average</div>
-                  <div class="price-value">${data.priceAnalysis.averageMarketPrice}</div>
-                </div>
-              ` : ''}
-              ${data.priceAnalysis.userPriceAssessment ? `
-                <div class="price-item">
-                  <div class="price-label">Your Price Assessment</div>
-                  <div class="price-value">${data.priceAnalysis.userPriceAssessment}</div>
-                </div>
-              ` : ''}
-            </div>
-          ` : ''}
-          
-          ${data.priceAnalysis.priceWarnings && data.priceAnalysis.priceWarnings.length > 0 ? `
-            <h4>💰 Price Warnings</h4>
-            <ul class="warning-list">
-              ${data.priceAnalysis.priceWarnings.map(warning => `<li>${warning}</li>`).join('')}
-            </ul>
-          ` : ''}
-        </div>
-      `;
-    }
-
-    // Brand Reputation
-    if (data.brandReputation) {
-      html += `
-        <div class="analysis-card brand-reputation">
-          <h3><i class="fas fa-building"></i> Brand Reputation</h3>
-          ${data.brandReputation.reputationScore ? `
-            <div class="rating-display">
-              <span>Reputation Score:</span>
-              <div class="rating-stars">${generateStars(data.brandReputation.reputationScore)}</div>
-              <span class="rating-number">${data.brandReputation.reputationScore}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.brandReputation.ethicsRating ? `
-            <div class="rating-display">
-              <span>Ethics Rating:</span>
-              <div class="rating-stars">${generateStars(data.brandReputation.ethicsRating)}</div>
-              <span class="rating-number">${data.brandReputation.ethicsRating}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.brandReputation.trustworthiness ? `<p><strong>Trustworthiness:</strong> ${data.brandReputation.trustworthiness}</p>` : ''}
-          ${data.brandReputation.customerSatisfaction ? `<p><strong>Customer Satisfaction:</strong> ${data.brandReputation.customerSatisfaction}</p>` : ''}
-          
-          ${data.brandReputation.historyHighlights && data.brandReputation.historyHighlights.length > 0 ? `
-            <h4>📚 Brand History Highlights</h4>
-            <ul>
-              ${data.brandReputation.historyHighlights.map(highlight => `<li>${highlight}</li>`).join('')}
-            </ul>
-          ` : ''}
-        </div>
-      `;
-    }
-
-    // Misleading Claims
-    if (data.misleadingClaims && (data.misleadingClaims.deceptivePractices?.length > 0 || data.misleadingClaims.truthfulnessRating || data.misleadingClaims.industryComparison)) {
-      html += `
-        <div class="analysis-card misleading-claims">
-          <h3><i class="fas fa-exclamation-circle"></i> Claims Analysis</h3>
-          ${data.misleadingClaims.truthfulnessRating ? `
-            <div class="rating-display">
-              <span>Truthfulness Rating:</span>
-              <div class="rating-stars">${generateStars(data.misleadingClaims.truthfulnessRating)}</div>
-              <span class="rating-number">${data.misleadingClaims.truthfulnessRating}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.misleadingClaims.deceptivePractices && data.misleadingClaims.deceptivePractices.length > 0 ? `
-            <h4>🚫 Deceptive Practices</h4>
-            <ul class="warning-list">
-              ${data.misleadingClaims.deceptivePractices.map(practice => `<li>${practice}</li>`).join('')}
-            </ul>
-          ` : ''}
-          
-          ${data.misleadingClaims.industryComparison ? `<p><strong>Industry Comparison:</strong> ${data.misleadingClaims.industryComparison}</p>` : ''}
-        </div>
-      `;
-    }
-
-    // Alternative Products
-    if (data.alternatives && data.alternatives.length > 0) {
-      html += `
-        <div class="analysis-card alternatives">
-          <h3><i class="fas fa-lightbulb"></i> Better Alternatives</h3>
-          <div class="alternatives-grid">
-            ${data.alternatives.map(alt => `
-              <div class="alternative-item">
-                <div class="alternative-name">${alt.name}</div>
-                <div class="alternative-brand">${alt.brand}</div>
-                ${alt.priceRange ? `<div class="alternative-price">${alt.priceRange}</div>` : ''}
-                ${alt.advantages ? `<p><strong>Why it's better:</strong> ${alt.advantages}</p>` : ''}
-                ${alt.availability ? `<p><strong>Where to find it:</strong> ${alt.availability}</p>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // Final Recommendation
-    if (data.recommendation) {
-      const verdictClass = data.recommendation.verdict ? data.recommendation.verdict.toLowerCase().replace(/\s+/g, '-') : '';
-      
-      html += `
-        <div class="analysis-card recommendation">
-          <h3><i class="fas fa-thumbs-up"></i> Final Recommendation</h3>
-          ${data.recommendation.overallRating ? `
-            <div class="rating-display">
-              <span>Overall Rating:</span>
-              <div class="rating-stars">${generateStars(data.recommendation.overallRating)}</div>
-              <span class="rating-number">${data.recommendation.overallRating}/10</span>
-            </div>
-          ` : ''}
-          
-          ${data.recommendation.verdict ? `
-            <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">
-              ${data.recommendation.verdict}
-            </div>
-          ` : ''}
-          
-          ${data.recommendation.primaryReasons && data.recommendation.primaryReasons.length > 0 ? `
-            <h4>Key Reasons</h4>
-            <ul>
-              ${data.recommendation.primaryReasons.map(reason => `<li>${reason}</li>`).join('')}
-            </ul>
-          ` : ''}
-          
-          ${data.recommendation.bottomLine ? `
-            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
-              <strong>Bottom Line:</strong> ${data.recommendation.bottomLine}
-            </div>
-          ` : ''}
-        </div>
-      `;
+    // Adaptive display based on analysis type
+    if (analysisType === 'comparison') {
+      html += generateComparisonDisplay(data);
+    } else if (analysisType === 'business') {
+      html += generateBusinessDisplay(data);
+    } else if (analysisType === 'app') {
+      html += generateAppDisplay(data);
+    } else if (analysisType === 'service') {
+      html += generateServiceDisplay(data);
+    } else {
+      html += generateProductDisplay(data);
     }
 
     container.innerHTML = html;
   }
 
-  function generateStars(rating) {
-    if (!rating || rating < 0 || rating > 10) return '';
-    
-    const fullStars = Math.floor(rating / 2);
-    const halfStar = (rating % 2) >= 1;
-    const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-    
-    let stars = '';
-    for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
-    if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
-    for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
-    
-    return stars;
-  }
-
-  function getVerdictClass(verdict) {
-    if (!verdict) return '';
-    
-    const v = verdict.toLowerCase();
-    if (v.includes('buy') && !v.includes('avoid')) return 'buy';
-    if (v.includes('avoid')) return 'avoid';
-    if (v.includes('consider')) return 'consider';
-    return '';
-  }
+  // Safety Analysis
+  // ...existing code...
 
   // Initialize on page load
   document.addEventListener('DOMContentLoaded', updateOutput);
-  
   // Update when storage changes (for real-time updates)
   window.addEventListener('storage', function(e) {
     if (e.key === 'shopIqResponse') {
       updateOutput();
     }
   });
-
 })();
 </script>
 
