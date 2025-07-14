@@ -519,7 +519,7 @@
       timelineContainer.className = 'timeline-container';
       
       // Calculate current cycle day from frontend data
-      const today = new Date('2025-07-02'); // Force correct date for demo
+      const today = new Date();
       const lastPeriodStart = new Date(getLocal('lastPeriodStart') || today);
       const daysDiff = Math.floor((today - lastPeriodStart) / (1000 * 60 * 60 * 24));
       const currentDay = daysDiff >= 0 ? daysDiff + 1 : 1;
@@ -573,7 +573,7 @@
             let currentDay = 1;
             
             // Use current date properly - July 2, 2025
-            const today = new Date('2025-07-02'); // Force correct date
+            const today = new Date();
             const todayStr = today.toISOString().split('T')[0];
             
             if (periodData.phaseCalendar) {
@@ -647,7 +647,7 @@
               endDate.setDate(endDate.getDate() + (cycleLength * 2));
             } else {
               // Fallback to today if no data
-              const today = new Date('2025-07-02');
+              const today = new Date();
               startDate = new Date(today);
               endDate = new Date(today);
               endDate.setDate(endDate.getDate() + (cycleLength * 2));
@@ -656,7 +656,7 @@
             // Generate daily timeline entries
             const timelineRows = [];
             const currentDate = new Date(startDate);
-            const today = new Date('2025-07-02').toISOString().split('T')[0]; // Force correct date for demo
+            const today = new Date().toISOString().split('T')[0];
             
             while (currentDate <= endDate) {
               const dateStr = currentDate.toISOString().split('T')[0];
@@ -753,7 +753,7 @@
 
     function createEventsFromFormData(formData) {
       const events = [];
-      const currentYear = new Date('2025-07-02').getFullYear(); // Force correct date for demo
+      const currentYear = new Date().getFullYear();
       
       // Process entries 1-7
       for (let i = 1; i <= 7; i++) {
