@@ -392,7 +392,6 @@
 </div>
 
 <script>
-
 (function() {
   // Reference utility functions
   const getLocal = window.getLocal || function(key) {
@@ -494,12 +493,8 @@
       'comparison': '⚖️ Comparison Analysis Results'
     };
     
-    html += `
-      <div class="analysis-card product-info">
-        <h3><i class="fas fa-info-circle"></i> ${typeHeaders[analysisType] || 'Analysis Results'}</h3>
-        <p><strong>Analysis Type:</strong> ${analysisType.charAt(0).toUpperCase() + analysisType.slice(1)}</p>
-      </div>
-    `;
+    const headerTitle = typeHeaders[analysisType] || 'Analysis Results';
+    document.querySelector('.shop-header h2').textContent = headerTitle;
 
     // Adaptive display based on analysis type
     if (analysisType === 'comparison') {
@@ -517,17 +512,588 @@
     container.innerHTML = html;
   }
 
-  // Safety Analysis
-  // ...existing code...
+  function generateProductDisplay(data) {
+    let html = '';
+    
+    // Product Information
+    if (data.productInfo) {
+      html += `
+        <div class="analysis-card product-info">
+          <h3><i class="fas fa-box"></i> Product Information</h3>
+          <div class="product-details">
+            <p><strong>Product:</strong> ${data.productInfo.name || 'Unknown'}</p>
+            <p><strong>Brand:</strong> ${data.productInfo.brand || 'Unknown'}</p>
+            <p><strong>Category:</strong> ${data.productInfo.category || 'Unknown'}</p>
+            <p><strong>Type:</strong> ${data.productInfo.productType || 'Unknown'}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // Safety Analysis
+    if (data.safetyAnalysis) {
+      const isCritical = data.safetyAnalysis.overallSafetyRating <= 3 || 
+                        (data.safetyAnalysis.criticalWarnings && data.safetyAnalysis.criticalWarnings.length > 0);
+      
+      html += `
+        <div class="analysis-card safety-analysis ${isCritical ? 'critical' : ''}">
+          <h3><i class="fas fa-shield-alt"></i> Safety Analysis</h3>
+          ${data.safetyAnalysis.overallSafetyRating ? `
+            <div class="rating-display">
+              <span>Safety Rating:</span>
+              <div class="rating-stars">${generateStars(data.safetyAnalysis.overallSafetyRating)}</div>
+              <span class="rating-number">${data.safetyAnalysis.overallSafetyRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.safetyAnalysis.criticalWarnings && data.safetyAnalysis.criticalWarnings.length > 0 ? `
+            <h4>⚠️ Critical Warnings</h4>
+            <ul class="warning-list">
+              ${data.safetyAnalysis.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.safetyAnalysis.harmfulIngredients && data.safetyAnalysis.harmfulIngredients.length > 0 ? `
+            <h4>🧪 Harmful Ingredients</h4>
+            ${data.safetyAnalysis.harmfulIngredients.map(ingredient => `
+              <div class="ingredient-warning">
+                <div class="ingredient-name">${ingredient.ingredient}</div>
+                <p>${ingredient.risk}</p>
+                <span class="severity-badge severity-${ingredient.severity.toLowerCase()}">${ingredient.severity}</span>
+              </div>
+            `).join('')}
+          ` : ''}
+          
+          ${data.safetyAnalysis.regulatoryIssues && data.safetyAnalysis.regulatoryIssues.length > 0 ? `
+            <h4>📋 Regulatory Issues</h4>
+            <ul class="warning-list">
+              ${data.safetyAnalysis.regulatoryIssues.map(issue => `<li>${issue}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.safetyAnalysis.safetyRecommendations && data.safetyAnalysis.safetyRecommendations.length > 0 ? `
+            <h4>💡 Safety Recommendations</h4>
+            <ul>
+              ${data.safetyAnalysis.safetyRecommendations.map(rec => `<li>${rec}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Quality Assessment
+    if (data.qualityAssessment) {
+      html += `
+        <div class="analysis-card quality-assessment">
+          <h3><i class="fas fa-star"></i> Quality Assessment</h3>
+          ${data.qualityAssessment.overallQualityRating ? `
+            <div class="rating-display">
+              <span>Quality Rating:</span>
+              <div class="rating-stars">${generateStars(data.qualityAssessment.overallQualityRating)}</div>
+              <span class="rating-number">${data.qualityAssessment.overallQualityRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.qualityAssessment.materials ? `<p><strong>Materials:</strong> ${data.qualityAssessment.materials}</p>` : ''}
+          ${data.qualityAssessment.durability ? `<p><strong>Durability:</strong> ${data.qualityAssessment.durability}</p>` : ''}
+          ${data.qualityAssessment.manufacturing ? `<p><strong>Manufacturing:</strong> ${data.qualityAssessment.manufacturing}</p>` : ''}
+          ${data.qualityAssessment.userExperience ? `<p><strong>User Experience:</strong> ${data.qualityAssessment.userExperience}</p>` : ''}
+        </div>
+      `;
+    }
+
+    // Price Analysis
+    if (data.priceAnalysis) {
+      html += `
+        <div class="analysis-card price-analysis">
+          <h3><i class="fas fa-dollar-sign"></i> Price Analysis</h3>
+          ${data.priceAnalysis.valueRating ? `
+            <div class="rating-display">
+              <span>Value Rating:</span>
+              <div class="rating-stars">${generateStars(data.priceAnalysis.valueRating)}</div>
+              <span class="rating-number">${data.priceAnalysis.valueRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.priceAnalysis.averageMarketPrice || data.priceAnalysis.userPriceAssessment ? `
+            <div class="price-comparison">
+              ${data.priceAnalysis.averageMarketPrice ? `
+                <div class="price-item">
+                  <div class="price-label">Market Average</div>
+                  <div class="price-value">${data.priceAnalysis.averageMarketPrice}</div>
+                </div>
+              ` : ''}
+              ${data.priceAnalysis.userPriceAssessment ? `
+                <div class="price-item">
+                  <div class="price-label">Your Price Assessment</div>
+                  <div class="price-value">${data.priceAnalysis.userPriceAssessment}</div>
+                </div>
+              ` : ''}
+            </div>
+          ` : ''}
+          
+          ${data.priceAnalysis.priceWarnings && data.priceAnalysis.priceWarnings.length > 0 ? `
+            <h4>💰 Price Warnings</h4>
+            <ul class="warning-list">
+              ${data.priceAnalysis.priceWarnings.map(warning => `<li>${warning}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Brand Reputation
+    if (data.brandReputation) {
+      html += `
+        <div class="analysis-card brand-reputation">
+          <h3><i class="fas fa-building"></i> Brand Reputation</h3>
+          ${data.brandReputation.reputationScore ? `
+            <div class="rating-display">
+              <span>Reputation Score:</span>
+              <div class="rating-stars">${generateStars(data.brandReputation.reputationScore)}</div>
+              <span class="rating-number">${data.brandReputation.reputationScore}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.brandReputation.ethicsRating ? `
+            <div class="rating-display">
+              <span>Ethics Rating:</span>
+              <div class="rating-stars">${generateStars(data.brandReputation.ethicsRating)}</div>
+              <span class="rating-number">${data.brandReputation.ethicsRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.brandReputation.trustworthiness ? `<p><strong>Trustworthiness:</strong> ${data.brandReputation.trustworthiness}</p>` : ''}
+          ${data.brandReputation.customerSatisfaction ? `<p><strong>Customer Satisfaction:</strong> ${data.brandReputation.customerSatisfaction}</p>` : ''}
+          
+          ${data.brandReputation.historyHighlights && data.brandReputation.historyHighlights.length > 0 ? `
+            <h4>📚 Brand History Highlights</h4>
+            <ul>
+              ${data.brandReputation.historyHighlights.map(highlight => `<li>${highlight}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Misleading Claims
+    if (data.misleadingClaims && (data.misleadingClaims.deceptivePractices?.length > 0 || data.misleadingClaims.truthfulnessRating || data.misleadingClaims.industryComparison)) {
+      html += `
+        <div class="analysis-card misleading-claims">
+          <h3><i class="fas fa-exclamation-circle"></i> Claims Analysis</h3>
+          ${data.misleadingClaims.truthfulnessRating ? `
+            <div class="rating-display">
+              <span>Truthfulness Rating:</span>
+              <div class="rating-stars">${generateStars(data.misleadingClaims.truthfulnessRating)}</div>
+              <span class="rating-number">${data.misleadingClaims.truthfulnessRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.misleadingClaims.deceptivePractices && data.misleadingClaims.deceptivePractices.length > 0 ? `
+            <h4>🚫 Deceptive Practices</h4>
+            <ul class="warning-list">
+              ${data.misleadingClaims.deceptivePractices.map(practice => `<li>${practice}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.misleadingClaims.industryComparison ? `<p><strong>Industry Comparison:</strong> ${data.misleadingClaims.industryComparison}</p>` : ''}
+        </div>
+      `;
+    }
+
+    // Alternative Products
+    if (data.alternatives && data.alternatives.length > 0) {
+      html += `
+        <div class="analysis-card alternatives">
+          <h3><i class="fas fa-lightbulb"></i> Better Alternatives</h3>
+          <div class="alternatives-grid">
+            ${data.alternatives.map(alt => `
+              <div class="alternative-item">
+                <div class="alternative-name">${alt.name}</div>
+                <div class="alternative-brand">${alt.brand}</div>
+                ${alt.priceRange ? `<div class="alternative-price">${alt.priceRange}</div>` : ''}
+                ${alt.advantages ? `<p><strong>Why it's better:</strong> ${alt.advantages}</p>` : ''}
+                ${alt.availability ? `<p><strong>Where to find it:</strong> ${alt.availability}</p>` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Final Recommendation
+    if (data.recommendation) {
+      html += `
+        <div class="analysis-card recommendation">
+          <h3><i class="fas fa-thumbs-up"></i> Final Recommendation</h3>
+          ${data.recommendation.overallRating ? `
+            <div class="rating-display">
+              <span>Overall Rating:</span>
+              <div class="rating-stars">${generateStars(data.recommendation.overallRating)}</div>
+              <span class="rating-number">${data.recommendation.overallRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.recommendation.verdict ? `
+            <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">
+              ${data.recommendation.verdict}
+            </div>
+          ` : ''}
+          
+          ${data.recommendation.primaryReasons && data.recommendation.primaryReasons.length > 0 ? `
+            <h4>Key Reasons</h4>
+            <ul>
+              ${data.recommendation.primaryReasons.map(reason => `<li>${reason}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.recommendation.bottomLine ? `
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+              <strong>Bottom Line:</strong> ${data.recommendation.bottomLine}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    return html;
+  }
+
+  function generateComparisonDisplay(data) {
+    let html = '';
+
+    // Items Compared
+    if (data.itemsCompared && data.itemsCompared.length > 0) {
+      html += `
+        <div class="analysis-card">
+          <h3><i class="fas fa-balance-scale"></i> Items in Comparison</h3>
+          <div class="alternatives-grid">
+            ${data.itemsCompared.map(item => `
+              <div class="alternative-item">
+                <div class="alternative-name">${item.name}</div>
+                <div class="alternative-brand">Category: ${item.category}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Comparison Matrix
+    if (data.comparisonMatrix) {
+      html += `
+        <div class="analysis-card">
+          <h3><i class="fas fa-table"></i> Comparison Matrix</h3>
+          <div class="comparison-grid">
+            ${data.itemsCompared.map(item => `
+              <div class="comparison-item">
+                <h4>${item.name}</h4>
+                ${data.comparisonMatrix.safety?.find(s => s.itemId === item.id) ? `
+                  <div class="rating-display">
+                    <span>Safety:</span>
+                    <div class="rating-stars">${generateStars(data.comparisonMatrix.safety.find(s => s.itemId === item.id).rating)}</div>
+                    <span class="rating-number">${data.comparisonMatrix.safety.find(s => s.itemId === item.id).rating}/10</span>
+                  </div>
+                ` : ''}
+                ${data.comparisonMatrix.quality?.find(q => q.itemId === item.id) ? `
+                  <div class="rating-display">
+                    <span>Quality:</span>
+                    <div class="rating-stars">${generateStars(data.comparisonMatrix.quality.find(q => q.itemId === item.id).rating)}</div>
+                    <span class="rating-number">${data.comparisonMatrix.quality.find(q => q.itemId === item.id).rating}/10</span>
+                  </div>
+                ` : ''}
+                ${data.comparisonMatrix.value?.find(v => v.itemId === item.id) ? `
+                  <div class="rating-display">
+                    <span>Value:</span>
+                    <div class="rating-stars">${generateStars(data.comparisonMatrix.value.find(v => v.itemId === item.id).rating)}</div>
+                    <span class="rating-number">${data.comparisonMatrix.value.find(v => v.itemId === item.id).rating}/10</span>
+                  </div>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // Item Analysis
+    if (data.itemAnalysis && data.itemAnalysis.length > 0) {
+        html += `
+            <div class="analysis-card">
+                <h3><i class="fas fa-tasks"></i> Detailed Analysis</h3>
+                ${data.itemAnalysis.map(item => {
+                    const itemInfo = data.itemsCompared.find(i => i.id === item.itemId);
+                    return `
+                        <div class="analysis-card" style="margin-top: 15px;">
+                            <h4>${itemInfo ? itemInfo.name : `Item ${item.itemId}`}</h4>
+                            <p><strong>Best For:</strong> ${item.bestFor || 'N/A'}</p>
+                            ${item.strengths?.length > 0 ? `<h5>Strengths:</h5><ul>${item.strengths.map(s => `<li>${s}</li>`).join('')}</ul>` : ''}
+                            ${item.weaknesses?.length > 0 ? `<h5>Weaknesses:</h5><ul>${item.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+                            ${item.warnings?.length > 0 ? `<h5>Warnings:</h5><ul class="warning-list">${item.warnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+    }
+
+
+    // Recommendations
+    if (data.recommendations) {
+        const winnerId = data.recommendations.overallWinner;
+        const winnerInfo = data.itemsCompared.find(i => i.id === winnerId);
+        html += `
+            <div class="analysis-card recommendation">
+                <h3><i class="fas fa-trophy"></i> Recommendations</h3>
+                ${winnerInfo ? `<div class="verdict buy">Overall Winner: ${winnerInfo.name}</div>` : ''}
+                
+                ${data.recommendations.rankings?.length > 0 ? `
+                    <h4>Rankings:</h4>
+                    <ol>${data.recommendations.rankings.map(r => {
+                        const itemInfo = data.itemsCompared.find(i => i.id === r.itemId);
+                        return `<li><strong>${itemInfo ? itemInfo.name : `Item ${r.itemId}`}:</strong> ${r.reason}</li>`;
+                    }).join('')}</ol>
+                ` : ''}
+
+                ${data.recommendations.specificRecommendations?.length > 0 ? `
+                    <h4>Specific Recommendations:</h4>
+                    ${data.recommendations.specificRecommendations.map(rec => {
+                        const itemInfo = data.itemsCompared.find(i => i.id === rec.recommendedItem);
+                        return `<p><strong>For ${rec.scenario}:</strong> Recommend ${itemInfo ? itemInfo.name : `Item ${rec.recommendedItem}`} because ${rec.reason}</p>`;
+                    }).join('')}
+                ` : ''}
+
+                ${data.recommendations.bottomLine ? `<p><strong>Bottom Line:</strong> ${data.recommendations.bottomLine}</p>` : ''}
+            </div>
+        `;
+    }
+
+    return html;
+  }
+
+  function generateBusinessDisplay(data) {
+    let html = '';
+
+    // Business Info
+    if (data.businessInfo) {
+        html += `
+            <div class="analysis-card">
+                <h3><i class="fas fa-info-circle"></i> Business Information</h3>
+                <p><strong>Name:</strong> ${data.businessInfo.name || 'N/A'}</p>
+                <p><strong>Type:</strong> ${data.businessInfo.type || 'N/A'}</p>
+                <p><strong>Location:</strong> ${data.businessInfo.location || 'N/A'}</p>
+                <p><strong>Chain Status:</strong> ${data.businessInfo.chainStatus || 'N/A'}</p>
+            </div>
+        `;
+    }
+
+    // Health & Safety
+    if (data.healthSafety) {
+        html += `
+            <div class="analysis-card safety-analysis">
+                <h3><i class="fas fa-heartbeat"></i> Health & Safety</h3>
+                <div class="rating-display">
+                    <span>Health Rating:</span>
+                    <div class="rating-stars">${generateStars(data.healthSafety.healthRating)}</div>
+                    <span class="rating-number">${data.healthSafety.healthRating}/10</span>
+                </div>
+                <p><strong>Inspection Score:</strong> ${data.healthSafety.inspectionScore || 'N/A'}</p>
+                ${data.healthSafety.violations?.length > 0 ? `<h4>Violations:</h4><ul class="warning-list">${data.healthSafety.violations.map(v => `<li>${v}</li>`).join('')}</ul>` : ''}
+                ${data.healthSafety.safetyWarnings?.length > 0 ? `<h4>Warnings:</h4><ul class="warning-list">${data.healthSafety.safetyWarnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+            </div>
+        `;
+    }
+
+    // Business Practices
+    if (data.businessPractices) {
+        html += `
+            <div class="analysis-card brand-reputation">
+                <h3><i class="fas fa-users"></i> Business Practices</h3>
+                <div class="rating-display">
+                    <span>Ethics Rating:</span>
+                    <div class="rating-stars">${generateStars(data.businessPractices.ethicsRating)}</div>
+                    <span class="rating-number">${data.businessPractices.ethicsRating}/10</span>
+                </div>
+                <p><strong>Labor Practices:</strong> ${data.businessPractices.laborPractices || 'N/A'}</p>
+                <p><strong>Sustainability:</strong> ${data.businessPractices.sustainability || 'N/A'}</p>
+                <p><strong>Transparency:</strong> ${data.businessPractices.transparency || 'N/A'}</p>
+            </div>
+        `;
+    }
+    
+    // Final Recommendation
+    if (data.recommendation) {
+        html += `
+            <div class="analysis-card recommendation">
+                <h3><i class="fas fa-thumbs-up"></i> Recommendation</h3>
+                <div class="rating-display">
+                    <span>Overall Rating:</span>
+                    <div class="rating-stars">${generateStars(data.recommendation.overallRating)}</div>
+                    <span class="rating-number">${data.recommendation.overallRating}/10</span>
+                </div>
+                <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">${data.recommendation.verdict}</div>
+                ${data.recommendation.primaryReasons?.length > 0 ? `<h4>Reasons:</h4><ul>${data.recommendation.primaryReasons.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+                <p><strong>Bottom Line:</strong> ${data.recommendation.bottomLine || 'N/A'}</p>
+            </div>
+        `;
+    }
+
+    return html;
+  }
+
+  function generateAppDisplay(data) {
+    let html = '';
+
+    // App Info
+    if (data.appInfo) {
+        html += `
+            <div class="analysis-card">
+                <h3><i class="fas fa-mobile-alt"></i> App Information</h3>
+                <p><strong>Name:</strong> ${data.appInfo.name || 'N/A'}</p>
+                <p><strong>Developer:</strong> ${data.appInfo.developer || 'N/A'}</p>
+                <p><strong>Platform:</strong> ${data.appInfo.platform || 'N/A'}</p>
+                <p><strong>Category:</strong> ${data.appInfo.category || 'N/A'}</p>
+            </div>
+        `;
+    }
+
+    // Privacy & Security
+    if (data.privacySecurity) {
+        html += `
+            <div class="analysis-card safety-analysis">
+                <h3><i class="fas fa-user-secret"></i> Privacy & Security</h3>
+                <div class="rating-display">
+                    <span>Privacy Rating:</span>
+                    <div class="rating-stars">${generateStars(data.privacySecurity.privacyRating)}</div>
+                    <span class="rating-number">${data.privacySecurity.privacyRating}/10</span>
+                </div>
+                <div class="rating-display">
+                    <span>Security Rating:</span>
+                    <div class="rating-stars">${generateStars(data.privacySecurity.securityRating)}</div>
+                    <span class="rating-number">${data.privacySecurity.securityRating}/10</span>
+                </div>
+                ${data.privacySecurity.dataCollection?.length > 0 ? `<h4>Data Collected:</h4><ul>${data.privacySecurity.dataCollection.map(d => `<li>${d}</li>`).join('')}</ul>` : ''}
+                ${data.privacySecurity.securityConcerns?.length > 0 ? `<h4>Security Concerns:</h4><ul class="warning-list">${data.privacySecurity.securityConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+            </div>
+        `;
+    }
+
+    // Financial Transparency
+    if (data.financialTransparency) {
+        html += `
+            <div class="analysis-card price-analysis">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Financial Transparency</h3>
+                <div class="rating-display">
+                    <span>Cost Transparency:</span>
+                    <div class="rating-stars">${generateStars(data.financialTransparency.costTransparency)}</div>
+                    <span class="rating-number">${data.financialTransparency.costTransparency}/10</span>
+                </div>
+                <p><strong>Refund Policy:</strong> ${data.financialTransparency.refundPolicy || 'N/A'}</p>
+                ${data.financialTransparency.hiddenCosts?.length > 0 ? `<h4>Hidden Costs:</h4><ul class="warning-list">${data.financialTransparency.hiddenCosts.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+                ${data.financialTransparency.subscriptionTraps?.length > 0 ? `<h4>Subscription Traps:</h4><ul class="warning-list">${data.financialTransparency.subscriptionTraps.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
+            </div>
+        `;
+    }
+
+    // Recommendation
+    if (data.recommendation) {
+        html += `
+            <div class="analysis-card recommendation">
+                <h3><i class="fas fa-thumbs-up"></i> Recommendation</h3>
+                <div class="rating-display">
+                    <span>Overall Rating:</span>
+                    <div class="rating-stars">${generateStars(data.recommendation.overallRating)}</div>
+                    <span class="rating-number">${data.recommendation.overallRating}/10</span>
+                </div>
+                <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">${data.recommendation.verdict}</div>
+                ${data.recommendation.primaryConcerns?.length > 0 ? `<h4>Primary Concerns:</h4><ul class="warning-list">${data.recommendation.primaryConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+                <p><strong>Bottom Line:</strong> ${data.recommendation.bottomLine || 'N/A'}</p>
+            </div>
+        `;
+    }
+
+    return html;
+  }
+
+  function generateServiceDisplay(data) {
+    let html = '';
+
+    // Service Info
+    if (data.serviceInfo) {
+        html += `
+            <div class="analysis-card">
+                <h3><i class="fas fa-concierge-bell"></i> Service Information</h3>
+                <p><strong>Name:</strong> ${data.serviceInfo.name || 'N/A'}</p>
+                <p><strong>Provider:</strong> ${data.serviceInfo.provider || 'N/A'}</p>
+                <p><strong>Type:</strong> ${data.serviceInfo.type || 'N/A'}</p>
+                <p><strong>Scope:</strong> ${data.serviceInfo.scope || 'N/A'}</p>
+            </div>
+        `;
+    }
+
+    // Contract Terms
+    if (data.contractTerms) {
+        html += `
+            <div class="analysis-card misleading-claims">
+                <h3><i class="fas fa-file-signature"></i> Contract & Terms</h3>
+                <div class="rating-display">
+                    <span>Transparency Rating:</span>
+                    <div class="rating-stars">${generateStars(data.contractTerms.transparencyRating)}</div>
+                    <span class="rating-number">${data.contractTerms.transparencyRating}/10</span>
+                </div>
+                <p><strong>Cancellation Policy:</strong> ${data.contractTerms.cancellationPolicy || 'N/A'}</p>
+                <p><strong>Commitment Terms:</strong> ${data.contractTerms.commitmentTerms || 'N/A'}</p>
+                ${data.contractTerms.hiddenClauses?.length > 0 ? `<h4>Hidden Clauses:</h4><ul class="warning-list">${data.contractTerms.hiddenClauses.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+            </div>
+        `;
+    }
+
+    // Pricing Analysis
+    if (data.pricingAnalysis) {
+        html += `
+            <div class="analysis-card price-analysis">
+                <h3><i class="fas fa-dollar-sign"></i> Pricing Analysis</h3>
+                <div class="rating-display">
+                    <span>Transparency Rating:</span>
+                    <div class="rating-stars">${generateStars(data.pricingAnalysis.transparencyRating)}</div>
+                    <span class="rating-number">${data.pricingAnalysis.transparencyRating}/10</span>
+                </div>
+                <p><strong>Price Stability:</strong> ${data.pricingAnalysis.priceStability || 'N/A'}</p>
+                ${data.pricingAnalysis.hiddenFees?.length > 0 ? `<h4>Hidden Fees:</h4><ul class="warning-list">${data.pricingAnalysis.hiddenFees.map(f => `<li>${f}</li>`).join('')}</ul>` : ''}
+            </div>
+        `;
+    }
+
+    // Recommendation
+    if (data.recommendation) {
+        html += `
+            <div class="analysis-card recommendation">
+                <h3><i class="fas fa-thumbs-up"></i> Recommendation</h3>
+                <div class="rating-display">
+                    <span>Overall Rating:</span>
+                    <div class="rating-stars">${generateStars(data.recommendation.overallRating)}</div>
+                    <span class="rating-number">${data.recommendation.overallRating}/10</span>
+                </div>
+                <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">${data.recommendation.verdict}</div>
+                ${data.recommendation.keyWarnings?.length > 0 ? `<h4>Key Warnings:</h4><ul class="warning-list">${data.recommendation.keyWarnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+                <p><strong>Bottom Line:</strong> ${data.recommendation.bottomLine || 'N/A'}</p>
+            </div>
+        `;
+    }
+
+    return html;
+  }
 
   // Initialize on page load
   document.addEventListener('DOMContentLoaded', updateOutput);
+  
   // Update when storage changes (for real-time updates)
   window.addEventListener('storage', function(e) {
     if (e.key === 'shopIqResponse') {
       updateOutput();
     }
   });
+
 })();
 </script>
 
