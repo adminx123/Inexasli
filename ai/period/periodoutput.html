@@ -612,18 +612,6 @@
         `;
         container.appendChild(predictionCard);
         
-        // Mini Calendar
-        const calendarCard = document.createElement('div');
-        calendarCard.className = 'analytics-card';
-        calendarCard.innerHTML = `
-          <div class="analytics-header">
-            <i class="fas fa-calendar-alt"></i>
-            This Month
-          </div>
-        `;
-        calendarCard.appendChild(this.createMiniCalendar(predictions));
-        container.appendChild(calendarCard);
-        
         return container;
       }
     };
@@ -843,44 +831,13 @@
         container.appendChild(analyticsContainer);
       }
       
-      // Quick Frontend Analysis Display
-      if (periodData.frontendCalculated) {
-        const quickAnalysisSection = document.createElement('div');
-        quickAnalysisSection.className = 'cycle-section';
-        quickAnalysisSection.style.background = '#e8f5e8';
-        quickAnalysisSection.style.borderColor = '#4CAF50';
-        quickAnalysisSection.innerHTML = `
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; text-align: center;">
-            <div>
-              <div style="font-size: 24px; font-weight: bold; color: #ff6b9d;">Day ${periodData.currentCycleDay}</div>
-              <div style="font-size: 14px; color: #666;">Current Cycle Day</div>
-            </div>
-            <div>
-              <div style="font-size: 18px; font-weight: bold; color: #333;">${periodData.currentPhase}</div>
-              <div style="font-size: 14px; color: #666;">Current Phase</div>
-            </div>
-            <div>
-              <div style="font-size: 18px; font-weight: bold; color: #ff6b9d;">${periodData.daysUntilNextPeriod} days</div>
-              <div style="font-size: 14px; color: #666;">Until Next Period</div>
-            </div>
-            <div>
-              <div style="font-size: 18px; font-weight: bold; color: #FF9800;">${periodData.daysUntilOvulation} days</div>
-              <div style="font-size: 14px; color: #666;">Until Ovulation</div>
-            </div>
-          </div>
-          ${periodData.periodLength ? `
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
-              <strong>Last Period Length:</strong> ${periodData.periodLength} days
-            </div>
-          ` : ''}
-        `;
-        container.appendChild(quickAnalysisSection);
-        
-        outputElement.appendChild(container);
-        return;
+      // Frontend Analytics Dashboard
+      if (window.PeriodAnalytics) {
+        const analyticsContainer = window.PeriodAnalytics.createAnalyticsDashboard(userFormData, periodData);
+        container.appendChild(analyticsContainer);
       }
 
-      // Timeline Display
+      // Timeline Display - ALWAYS show the vertical timeline
       if (periodData.phaseCalendar) {
         const timelineContainer = createVerticalTimeline(periodData);
         container.appendChild(timelineContainer);
@@ -1252,43 +1209,44 @@
           currentPhase = 'Luteal';
         }
         
-        // Quick Analysis Display
-        const quickAnalysisSection = document.createElement('div');
-        quickAnalysisSection.className = 'cycle-section';
-        quickAnalysisSection.style.background = '#e8f5e8';
-        quickAnalysisSection.style.borderColor = '#4CAF50';
-        quickAnalysisSection.innerHTML = `
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; text-align: center;">
-            <div>
-              <div style="font-size: 24px; font-weight: bold; color: #ff6b9d;">Day ${currentCycleDay}</div>
-              <div style="font-size: 14px; color: #666;">Current Cycle Day</div>
-            </div>
-            <div>
-              <div style="font-size: 18px; font-weight: bold; color: #333;">${currentPhase}</div>
-              <div style="font-size: 14px; color: #666;">Current Phase</div>
-            </div>
-            <div>
-              <div style="font-size: 18px; font-weight: bold; color: #ff6b9d;">${daysUntilNextPeriod} days</div>
-              <div style="font-size: 14px; color: #666;">Until Next Period</div>
-            </div>
-            <div>
-              <div style="font-size: 18px; font-weight: bold; color: #FF9800;">${daysUntilOvulation} days</div>
-              <div style="font-size: 14px; color: #666;">Until Ovulation</div>
-            </div>
-          </div>
-          ${endDate ? `
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
-              <strong>Last Period Length:</strong> ${Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1} days
-            </div>
-          ` : ''}
-          <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd; text-align: center;">
-            <a href="./periodiq.html" style="color: #9C27B0; text-decoration: none; font-weight: bold;">
-              <i class="fas fa-chart-line" style="margin-right: 5px;"></i>
-              Add Symptoms for Enhanced AI Analysis
-            </a>
-          </div>
-        `;
-        container.appendChild(quickAnalysisSection);
+        // Create phase calendar data from frontend calculations
+        const phaseCalendar = {
+          menstrual: {
+            start: periodStartDate,
+            end: endDate ? periodEndDate : new Date(startDate.getTime() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            confidence: 'High'
+          },
+          follicular: {
+            start: endDate ? new Date(endDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] : new Date(startDate.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            end: new Date(startDate.getTime() + (Math.floor(cycleLength / 2) - 2) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            confidence: 'High'
+          },
+          ovulation: {
+            start: ovulationDate.toISOString().split('T')[0],
+            end: new Date(ovulationDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            confidence: 'Medium'
+          },
+          luteal: {
+            start: new Date(ovulationDate.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            end: new Date(nextPeriodDate.getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            confidence: 'High'
+          }
+        };
+        
+        // Create period data object for your vertical timeline
+        const periodData = {
+          phaseCalendar: phaseCalendar,
+          frontendCalculated: true,
+          currentCycleDay: currentCycleDay,
+          currentPhase: currentPhase,
+          daysUntilNextPeriod: daysUntilNextPeriod,
+          daysUntilOvulation: daysUntilOvulation,
+          periodLength: endDate ? Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1 : null
+        };
+        
+        // Use your existing displayPeriodData function with the vertical timeline
+        displayPeriodData(periodData, outputElement);
+        return;
       } else {
         // No period start date
         const noDataSection = document.createElement('div');
