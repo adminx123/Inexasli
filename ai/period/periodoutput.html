@@ -691,9 +691,26 @@
           return;
         }
 
-        // Specifically look for periodIqResponse data
+        // For period module: First check for INPUT data to show frontend calculations
+        const inputKey = 'periodIqInput';
+        console.log('Checking for period input data with key:', inputKey);
+        
+        // Try to get input data first (period module unique workflow)
+        let inputData;
+        try {
+          inputData = getJSON(inputKey);
+          if (inputData && Object.keys(inputData).length > 0) {
+            console.log('Found period input data, displaying frontend results:', inputData);
+            displayFrontendPeriodResults(inputData);
+            return;
+          }
+        } catch (err) {
+          console.error('Error getting input data:', err);
+        }
+        
+        // Fallback: Look for periodIqResponse data (enhanced AI analysis)
         const responseKey = 'periodIqResponse';
-        console.log('Looking for data with key:', responseKey);
+        console.log('No input data found, checking for response data with key:', responseKey);
         
         // Try several approaches to get the data
         let data;
@@ -1296,15 +1313,15 @@
     window.addEventListener('DOMContentLoaded', function() {
       console.log('[PeriodOutput] DOM loaded, checking for data');
       
-      // First check for period form data using getJSON
-      const inputData = window.getJSON ? window.getJSON('period') : null;
+      // First check for period form INPUT data using getJSON - this is the key difference for period module
+      const inputData = window.getJSON ? window.getJSON('periodIqInput') : null;
       if (inputData && Object.keys(inputData).length > 0) {
-        console.log('[PeriodOutput] Found period form data:', inputData);
+        console.log('[PeriodOutput] Found period form INPUT data:', inputData);
         displayFrontendPeriodResults(inputData);
         return;
       }
       
-      // Fallback to API response if no form data
+      // Fallback to API response if no form data (for enhanced AI analysis)
       const periodData = getLocal('periodIqResponse');
       if (periodData) {
         displayPeriodResults(periodData);
