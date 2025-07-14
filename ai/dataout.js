@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const outputMap = {
                 '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
                 '/ai/period/periodiq.html': '/ai/period/periodoutput.html',
+                '/ai/shop/shopiq.html': '/ai/shop/shopoutput.html',
                 '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
                 '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
                 '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
@@ -183,6 +184,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const moduleOutputMap = {
                 'calorieiq': '/ai/calorie/calorieoutput.html',
                 'period': '/ai/period/periodoutput.html',
+                'shop': '/ai/shop/shopoutput.html',
                 'symptomiq': '/ai/symptom/symptomoutput.html',
                 'adventureiq': '/ai/adventure/adventureoutput.html',
                 'decisioniq': '/ai/decision/decisionoutput.html',

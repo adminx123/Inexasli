@@ -165,6 +165,8 @@ function initializeFormPersistence(url) {
         };
     } else if (url.includes('/decision/')) {
         moduleType = 'decision';
+    } else if (url.includes('/shop/')) {
+        moduleType = 'shop';
     } else if (url.includes('/enneagram/')) {
         moduleType = 'enneagram';
     } else if (url.includes('/event/')) {
@@ -319,6 +321,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const inputFiles = [
         '/ai/calorie/calorieiq.html',
         '/ai/decision/decisioniq.html',
+        '/ai/shop/shopiq.html',
         '/ai/enneagram/enneagramiq.html',
         '/ai/event/eventiq.html',
         '/ai/fashion/fashioniq.html',
