@@ -316,306 +316,6 @@
   <script src="../../utility/enhancedUI.js"></script>
   <!-- Define utility functions directly -->
   <script>
-    // Frontend Period Analytics Functions
-    window.PeriodAnalytics = {
-      
-      // Basic Cycle Math
-      calculateCycleDays: function(formData, periodData) {
-        const today = new Date();
-        const results = {};
-        
-        // Find last period start from user entries
-        let lastPeriodStart = null;
-        if (formData) {
-          for (let i = 1; i <= 6; i++) {
-            const whenField = formData[`entry${i}-when`];
-            const whatField = formData[`entry${i}-what`];
-            if (whenField && whatField && whatField.toLowerCase().includes('period start')) {
-              lastPeriodStart = new Date(whenField);
-              break;
-            }
-          }
-        }
-        
-        if (lastPeriodStart) {
-          results.daysSinceLastPeriod = Math.floor((today - lastPeriodStart) / (1000 * 60 * 60 * 24));
-          results.currentCycleDay = results.daysSinceLastPeriod + 1;
-          
-          const cycleLength = parseInt(formData['period-cycle-length']) || 28;
-          const nextPeriodDate = new Date(lastPeriodStart);
-          nextPeriodDate.setDate(nextPeriodDate.getDate() + cycleLength);
-          results.nextPeriodDate = nextPeriodDate.toISOString().split('T')[0];
-          results.daysUntilNextPeriod = Math.floor((nextPeriodDate - today) / (1000 * 60 * 60 * 24));
-          
-          const ovulationDate = new Date(lastPeriodStart);
-          ovulationDate.setDate(ovulationDate.getDate() + Math.floor(cycleLength / 2));
-          results.daysUntilOvulation = Math.floor((ovulationDate - today) / (1000 * 60 * 60 * 24));
-          results.ovulationDate = ovulationDate.toISOString().split('T')[0];
-        }
-        
-        return results;
-      },
-      
-      // Pattern Analysis
-      analyzePatterns: function(formData) {
-        const patterns = {
-          cycleLengths: [],
-          symptoms: {},
-          irregularityScore: 0
-        };
-        
-        // Extract cycle information from entries
-        const periodStarts = [];
-        if (formData) {
-          for (let i = 1; i <= 6; i++) {
-            const whenField = formData[`entry${i}-when`];
-            const whatField = formData[`entry${i}-what`];
-            if (whenField && whatField) {
-              if (whatField.toLowerCase().includes('period start')) {
-                periodStarts.push(new Date(whenField));
-              }
-              // Track symptoms
-              const symptoms = ['cramps', 'headache', 'mood', 'bloating', 'fatigue'];
-              symptoms.forEach(symptom => {
-                if (whatField.toLowerCase().includes(symptom)) {
-                  patterns.symptoms[symptom] = (patterns.symptoms[symptom] || 0) + 1;
-                }
-              });
-            }
-          }
-        }
-        
-        // Calculate cycle lengths if we have multiple period starts
-        if (periodStarts.length > 1) {
-          periodStarts.sort((a, b) => a - b);
-          for (let i = 1; i < periodStarts.length; i++) {
-            const cycleLength = Math.floor((periodStarts[i] - periodStarts[i-1]) / (1000 * 60 * 60 * 24));
-            patterns.cycleLengths.push(cycleLength);
-          }
-          
-          // Calculate irregularity score
-          if (patterns.cycleLengths.length > 0) {
-            const avgLength = patterns.cycleLengths.reduce((a, b) => a + b, 0) / patterns.cycleLengths.length;
-            const variance = patterns.cycleLengths.reduce((sum, length) => sum + Math.pow(length - avgLength, 2), 0) / patterns.cycleLengths.length;
-            patterns.irregularityScore = Math.sqrt(variance);
-          }
-        }
-        
-        return patterns;
-      },
-      
-      // Health Metrics
-      calculateHealthMetrics: function(formData) {
-        const metrics = {};
-        
-        if (formData) {
-          const age = parseInt(formData['period-age']) || 0;
-          const weightStr = formData['period-weight'] || '';
-          
-          // Extract weight in kg
-          let weightKg = 0;
-          if (weightStr.includes('kg')) {
-            weightKg = parseFloat(weightStr);
-          } else if (weightStr.includes('lbs')) {
-            weightKg = parseFloat(weightStr) * 0.453592;
-          }
-          
-          // Calculate BMI (need height, but can estimate health category)
-          if (weightKg > 0) {
-            metrics.weight = weightKg;
-            // For now, just note weight is available for BMI calculation
-            metrics.hasWeight = true;
-          }
-          
-          metrics.age = age;
-          metrics.birthControl = formData['period-birth-control-type'] || 'none';
-        }
-        
-        return metrics;
-      },
-      
-      // Predictions
-      generatePredictions: function(formData, cycleData) {
-        const predictions = {
-          nextPeriods: [],
-          fertilityWindows: [],
-          symptomTiming: []
-        };
-        
-        const cycleLength = parseInt(formData['period-cycle-length']) || 28;
-        const today = new Date();
-        
-        // Find last period start
-        let lastPeriodStart = null;
-        if (formData) {
-          for (let i = 1; i <= 6; i++) {
-            const whenField = formData[`entry${i}-when`];
-            const whatField = formData[`entry${i}-what`];
-            if (whenField && whatField && whatField.toLowerCase().includes('period start')) {
-              lastPeriodStart = new Date(whenField);
-              break;
-            }
-          }
-        }
-        
-        if (lastPeriodStart) {
-          // Predict next 6 periods
-          for (let i = 1; i <= 6; i++) {
-            const nextPeriod = new Date(lastPeriodStart);
-            nextPeriod.setDate(nextPeriod.getDate() + (cycleLength * i));
-            predictions.nextPeriods.push({
-              date: nextPeriod.toISOString().split('T')[0],
-              confidence: i <= 3 ? 'High' : 'Medium'
-            });
-            
-            // Predict fertility window (5 days before to 1 day after ovulation)
-            const ovulationDate = new Date(nextPeriod);
-            ovulationDate.setDate(ovulationDate.getDate() - Math.floor(cycleLength / 2));
-            const fertilityStart = new Date(ovulationDate);
-            fertilityStart.setDate(fertilityStart.getDate() - 5);
-            const fertilityEnd = new Date(ovulationDate);
-            fertilityEnd.setDate(fertilityEnd.getDate() + 1);
-            
-            predictions.fertilityWindows.push({
-              start: fertilityStart.toISOString().split('T')[0],
-              end: fertilityEnd.toISOString().split('T')[0],
-              ovulation: ovulationDate.toISOString().split('T')[0]
-            });
-          }
-        }
-        
-        return predictions;
-      },
-      
-      // Visual Analytics Generation
-      createMiniCalendar: function(predictions) {
-        const calendar = document.createElement('div');
-        calendar.className = 'mini-calendar';
-        
-        const today = new Date();
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-        
-        // Add day headers
-        ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(day => {
-          const header = document.createElement('div');
-          header.textContent = day;
-          header.style.fontWeight = 'bold';
-          header.style.textAlign = 'center';
-          calendar.appendChild(header);
-        });
-        
-        // Add days
-        for (let day = 1; day <= daysInMonth; day++) {
-          const dayElement = document.createElement('div');
-          dayElement.className = 'calendar-day';
-          dayElement.textContent = day;
-          
-          const dayDate = new Date(today.getFullYear(), today.getMonth(), day);
-          const dayStr = dayDate.toISOString().split('T')[0];
-          
-          // Mark special days
-          if (day === today.getDate()) {
-            dayElement.classList.add('today');
-          }
-          
-          if (predictions.nextPeriods) {
-            predictions.nextPeriods.forEach(period => {
-              if (period.date === dayStr) {
-                dayElement.classList.add('predicted');
-              }
-            });
-          }
-          
-          calendar.appendChild(dayElement);
-        }
-        
-        return calendar;
-      },
-      
-      // Create analytics dashboard
-      createAnalyticsDashboard: function(formData, periodData) {
-        const container = document.createElement('div');
-        container.className = 'analytics-grid';
-        
-        const cycleData = this.calculateCycleDays(formData, periodData);
-        const patterns = this.analyzePatterns(formData);
-        const healthMetrics = this.calculateHealthMetrics(formData);
-        const predictions = this.generatePredictions(formData, cycleData);
-        
-        // Basic Cycle Info Card
-        const cycleCard = document.createElement('div');
-        cycleCard.className = 'analytics-card';
-        cycleCard.innerHTML = `
-          <div class="analytics-header">
-            <i class="fas fa-calendar-day"></i>
-            Current Cycle
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Current Day:</span>
-            <span class="metric-value">${cycleData.currentCycleDay || 'Unknown'}</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Days Until Next Period:</span>
-            <span class="metric-value">${cycleData.daysUntilNextPeriod || 'Unknown'}</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Days Until Ovulation:</span>
-            <span class="metric-value">${cycleData.daysUntilOvulation || 'Unknown'}</span>
-          </div>
-        `;
-        container.appendChild(cycleCard);
-        
-        // Pattern Analysis Card
-        const patternCard = document.createElement('div');
-        patternCard.className = 'analytics-card';
-        const avgCycleLength = patterns.cycleLengths.length > 0 ? 
-          Math.round(patterns.cycleLengths.reduce((a, b) => a + b, 0) / patterns.cycleLengths.length) : 
-          'Insufficient data';
-        
-        patternCard.innerHTML = `
-          <div class="analytics-header">
-            <i class="fas fa-chart-line"></i>
-            Pattern Analysis
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Average Cycle Length:</span>
-            <span class="metric-value">${avgCycleLength} days</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Regularity Score:</span>
-            <span class="metric-value">${patterns.irregularityScore < 3 ? 'Regular' : 'Irregular'}</span>
-          </div>
-          <div class="metric-row">
-            <span class="metric-label">Most Common Symptom:</span>
-            <span class="metric-value">${Object.keys(patterns.symptoms)[0] || 'None tracked'}</span>
-          </div>
-        `;
-        container.appendChild(patternCard);
-        
-        // Predictions Card
-        const predictionCard = document.createElement('div');
-        predictionCard.className = 'analytics-card';
-        predictionCard.innerHTML = `
-          <div class="analytics-header">
-            <i class="fas fa-crystal-ball"></i>
-            Predictions
-          </div>
-          <div class="prediction-list">
-            ${predictions.nextPeriods.slice(0, 3).map(period => `
-              <div class="prediction-item">
-                <span>Next Period:</span>
-                <span>${period.date}</span>
-              </div>
-            `).join('')}
-          </div>
-        `;
-        container.appendChild(predictionCard);
-        
-        return container;
-      }
-    };
-
     window.getLocal = function(key) {
       try {
         const value = localStorage.getItem(key);
@@ -800,43 +500,11 @@
       header.innerHTML = `
         <h2 style="margin: 0; color: #333; display: flex; align-items: center; justify-content: center;">
           <i class="fas fa-calendar-day" style="margin-right: 12px; color: #ff6b9d;"></i>
-          Period Tracker ${periodData.frontendCalculated ? '(Quick Analysis)' : ''}
+          Period Timeline
         </h2>
       `;
       container.appendChild(header);
       
-      // User Profile Section (moved to top)
-      const periodFormPersistence = window.FormPersistence?.getInstance('period');
-      const userFormData = periodFormPersistence ? periodFormPersistence.getSavedFormData() : {};
-      
-      const profileSection = document.createElement('div');
-      profileSection.className = 'cycle-section';
-      
-      const profileInfo = [];
-      if (userFormData['birth-control-type']) profileInfo.push(`Birth Control: ${userFormData['birth-control-type']}`);
-      if (userFormData['birth-control-detail']) profileInfo.push(`Brand: ${userFormData['birth-control-detail']}`);
-      if (userFormData['age']) profileInfo.push(`Age: ${userFormData['age']}`);
-      if (userFormData['weight']) profileInfo.push(`Weight: ${userFormData['weight']}`);
-      if (userFormData['cycle-length']) profileInfo.push(`Cycle: ${userFormData['cycle-length']} days`);
-      
-      profileSection.innerHTML = `
-        <i class="fas fa-user"></i> 
-        ${profileInfo.length > 0 ? profileInfo.join(' | ') : 'No profile data available'}
-      `;
-      container.appendChild(profileSection);
-      
-      // Frontend Analytics Dashboard
-      if (window.PeriodAnalytics) {
-        const analyticsContainer = window.PeriodAnalytics.createAnalyticsDashboard(userFormData, periodData);
-        container.appendChild(analyticsContainer);
-      }
-      
-      // Frontend Analytics Dashboard
-      if (window.PeriodAnalytics) {
-        const analyticsContainer = window.PeriodAnalytics.createAnalyticsDashboard(userFormData, periodData);
-        container.appendChild(analyticsContainer);
-      }
-
       // Timeline Display - ALWAYS show the vertical timeline
       if (periodData.phaseCalendar) {
         const timelineContainer = createVerticalTimeline(periodData);
@@ -895,40 +563,6 @@
         </div>
         
         ${(() => {
-          // Add phase confidence legend at top
-          if (periodData.phaseCalendar) {
-            const confidenceEntries = [];
-            Object.entries(periodData.phaseCalendar).forEach(([phase, data]) => {
-              if (data.confidence) {
-                const phaseColors = {
-                  'menstrual': '#ff6b9d',
-                  'follicular': '#4CAF50', 
-                  'ovulation': '#FF9800',
-                  'luteal': '#9C27B0'
-                };
-                const color = phaseColors[phase] || '#666';
-                confidenceEntries.push(`
-                  <div class="confidence-item" style="display: flex; align-items: center; gap: 6px;">
-                    <span class="phase-dot" style="width: 8px; height: 8px; border-radius: 50%; background: ${color};"></span>
-                    <span class="phase-name" style="font-weight: 500; color: ${color};">${phase.charAt(0).toUpperCase() + phase.slice(1)}</span>
-                    <span class="confidence-level" style="font-size: 11px; padding: 2px 6px; background: ${color}20; color: ${color}; border-radius: 10px;">${data.confidence}</span>
-                  </div>
-                `);
-              }
-            });
-            
-            if (confidenceEntries.length > 0) {
-              return `<div class="confidence-legend" style="margin-bottom: 15px; padding: 12px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-radius: 8px; border-left: 4px solid #ff6b9d;">
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-                  <i class="fas fa-brain" style="color: #ff6b9d; font-size: 14px;"></i>
-                  <span style="font-weight: 600; color: #495057; font-size: 13px;">AI Phase Detection Confidence</span>
-                </div>
-                <div class="confidence-grid" style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;">
-                  ${confidenceEntries.join('')}
-                </div>
-              </div>`;
-            }
-          }
           return '';
         })()}
         
@@ -995,21 +629,28 @@
               });
             }
             
-            // Calculate timeline range
-            if (userEntryDates.length > 0) {
+            // Calculate timeline range - start from last period, extend to show 3 future cycles
+            const periodFormPersistence = window.FormPersistence?.getInstance('period');
+            const savedFormData = periodFormPersistence ? periodFormPersistence.getSavedFormData() : {};
+            const cycleLength = parseInt(savedFormData['cycle-length'] || '28');
+            
+            if (savedFormData['start-date']) {
+              // Start from last period start date
+              startDate = new Date(savedFormData['start-date']);
+              // Show 3 future cycles for predictions
+              endDate = new Date(startDate);
+              endDate.setDate(endDate.getDate() + (cycleLength * 4)); // Current + 3 future cycles
+            } else if (userEntryDates.length > 0) {
               userEntryDates.sort();
               startDate = new Date(userEntryDates[0]);
               endDate = new Date(userEntryDates[userEntryDates.length - 1]);
-              
-              // Extend end date by one cycle (28 days default)
-              const cycleLength = parseInt(getLocal('cycleLength') || '28');
-              endDate.setDate(endDate.getDate() + cycleLength);
+              endDate.setDate(endDate.getDate() + (cycleLength * 2));
             } else {
-              // Fallback to today if no user entries
-              const today = new Date('2025-07-02'); // Force correct date for demo
+              // Fallback to today if no data
+              const today = new Date('2025-07-02');
               startDate = new Date(today);
               endDate = new Date(today);
-              endDate.setDate(endDate.getDate() + 28);
+              endDate.setDate(endDate.getDate() + (cycleLength * 2));
             }
             
             // Generate daily timeline entries
@@ -1040,10 +681,26 @@
               // Check if user has entry for this date
               const userEvent = userEvents.find(event => event.date === dateStr);
               
+              // Check for predicted future periods
+              let isPredictedPeriod = false;
+              if (savedFormData['start-date']) {
+                const lastPeriodStart = new Date(savedFormData['start-date']);
+                const daysSinceLastPeriod = Math.floor((new Date(dateStr) - lastPeriodStart) / (1000 * 60 * 60 * 24));
+                
+                // Check if this date falls on a future period start (multiples of cycle length)
+                if (daysSinceLastPeriod > 0 && daysSinceLastPeriod % cycleLength === 0) {
+                  isPredictedPeriod = true;
+                }
+              }
+              
               // Create timeline row
               let eventDisplay = '';
               if (userEvent) {
                 eventDisplay = `<div class="user-event">${userEvent.text}</div>`;
+              }
+              
+              if (isPredictedPeriod) {
+                eventDisplay += `<div class="ai-prediction">Estimated Period Start</div>`;
               }
               
               // Only show phase name without confidence to reduce repetition
@@ -1082,20 +739,12 @@
     function getPhaseForDate(date, phaseCalendar) {
       if (!phaseCalendar) return 'unknown';
       
-      // Check ovulation first to handle overlaps (ovulation takes priority)
-      if (phaseCalendar.ovulation && 
-          date >= phaseCalendar.ovulation.start && 
-          date <= phaseCalendar.ovulation.end) {
-        return 'ovulation';
-      }
-      
-      // Check other phases in priority order
-      const phaseOrder = ['menstrual', 'follicular', 'luteal'];
-      for (const phase of phaseOrder) {
-        if (phaseCalendar[phase] && 
-            date >= phaseCalendar[phase].start && 
-            date <= phaseCalendar[phase].end) {
-          return phase;
+      // Check all phase entries (including cycle-specific ones)
+      for (const [phaseKey, dates] of Object.entries(phaseCalendar)) {
+        if (date >= dates.start && date <= dates.end) {
+          // Extract base phase name (remove cycle suffix)
+          const basePhaseName = phaseKey.replace(/_cycle\d+$/, '');
+          return basePhaseName;
         }
       }
       
@@ -1209,29 +858,67 @@
           currentPhase = 'Luteal';
         }
         
-        // Create phase calendar data from frontend calculations
-        const phaseCalendar = {
-          menstrual: {
-            start: periodStartDate,
-            end: endDate ? periodEndDate : new Date(startDate.getTime() + 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            confidence: 'High'
-          },
-          follicular: {
-            start: endDate ? new Date(endDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0] : new Date(startDate.getTime() + 5 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            end: new Date(startDate.getTime() + (Math.floor(cycleLength / 2) - 2) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            confidence: 'High'
-          },
-          ovulation: {
-            start: ovulationDate.toISOString().split('T')[0],
-            end: new Date(ovulationDate.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            confidence: 'Medium'
-          },
-          luteal: {
-            start: new Date(ovulationDate.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            end: new Date(nextPeriodDate.getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            confidence: 'High'
+        // Create phase calendar data for ALL cycles in timeline (not just current)
+        const phaseCalendar = {};
+        
+        // Generate phases for 4 cycles to cover entire timeline
+        for (let cycleNum = 0; cycleNum < 4; cycleNum++) {
+          const cycleStartDate = new Date(startDate);
+          cycleStartDate.setDate(cycleStartDate.getDate() + (cycleLength * cycleNum));
+          
+          const cycleEndDate = endDate ? new Date(endDate) : new Date(cycleStartDate);
+          if (!endDate) {
+            cycleEndDate.setDate(cycleEndDate.getDate() + 4); // Default 5-day period
           }
-        };
+          
+          // Menstrual phase (period days)
+          const menstrualStart = cycleStartDate.toISOString().split('T')[0];
+          const menstrualEnd = new Date(cycleStartDate);
+          menstrualEnd.setDate(menstrualEnd.getDate() + 4); // 5 days
+          
+          // Follicular phase (after period until ovulation)
+          const follicularStart = new Date(menstrualEnd);
+          follicularStart.setDate(follicularStart.getDate() + 1);
+          const follicularEnd = new Date(cycleStartDate);
+          follicularEnd.setDate(follicularEnd.getDate() + 12); // Day 13
+          
+          // Ovulation phase (single day - day 14)
+          const ovulationDay = new Date(cycleStartDate);
+          ovulationDay.setDate(ovulationDay.getDate() + 13); // Day 14 (0-indexed)
+          
+          // Luteal phase (after ovulation until next period)
+          const lutealStart = new Date(ovulationDay);
+          lutealStart.setDate(lutealStart.getDate() + 1); // Day 15
+          const lutealEnd = new Date(cycleStartDate);
+          lutealEnd.setDate(lutealEnd.getDate() + 27); // Day 28
+          
+          // Add to phase calendar with cycle-specific keys
+          const cyclePrefix = cycleNum === 0 ? '' : `_cycle${cycleNum}`;
+          
+          phaseCalendar[`menstrual${cyclePrefix}`] = {
+            start: menstrualStart,
+            end: menstrualEnd.toISOString().split('T')[0],
+            confidence: cycleNum === 0 ? 'High' : 'Predicted'
+          };
+          
+          phaseCalendar[`follicular${cyclePrefix}`] = {
+            start: follicularStart.toISOString().split('T')[0],
+            end: follicularEnd.toISOString().split('T')[0],
+            confidence: cycleNum === 0 ? 'High' : 'Predicted'
+          };
+          
+          phaseCalendar[`ovulation${cyclePrefix}`] = {
+            start: ovulationDay.toISOString().split('T')[0],
+            end: ovulationDay.toISOString().split('T')[0], // Single day only
+            confidence: cycleNum === 0 ? 'Medium' : 'Predicted'
+          };
+          
+          phaseCalendar[`luteal${cyclePrefix}`] = {
+            start: lutealStart.toISOString().split('T')[0],
+            end: lutealEnd.toISOString().split('T')[0],
+            confidence: cycleNum === 0 ? 'High' : 'Predicted'
+          };
+        }
         
         // Create period data object for your vertical timeline
         const periodData = {
