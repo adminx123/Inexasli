@@ -8,8 +8,6 @@
  * jurisdictions worldwide.
 -->
 
-<script src="../../payment/paymentform.js"></script>
-
 <div class="device-container">
 
 <div class="row1 product-description-container">
@@ -60,73 +58,120 @@ Tide Liquid Laundry Detergent, Original Scent"></textarea>
 </div>
 
 <script type="module">
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
 
+(function() {
+  // FormPersistence is initialized by datain.js and available as window.shopFormPersistence
+  // MixedScanner is available via window.initializeMixedScanner
 
-// Form persistence
-setupFormPersistence('shop', [
-  'product-name', 'user-price'
-]);
-
-// Initialize the mixed scanner
-let mixedScanner;
-document.addEventListener('DOMContentLoaded', function() {
-  mixedScanner = initializeMixedScanner('mixed-scanner-container', {
-    maxItems: 3,
-    scanTypes: 'both',
-    simulationDelay: 3000
-  });
-});
-
-// Generate button handler
-async function handleGenerateShopIq() {
-  const productName = document.getElementById('product-name').value.trim();
-  const userPrice = document.getElementById('user-price').value.trim();
-  const scannedItems = mixedScanner ? mixedScanner.getScannedItems() : [];
-
-  // Validate that we have either product name or scanned items
-  if (!productName && scannedItems.length === 0) {
-    alert('Please either scan items or enter a product name.');
-    return;
+  let mixedScanner;
+  
+  // Initialize the mixed scanner when DOM is ready
+  function initScanner() {
+    if (typeof window.initializeMixedScanner === 'function') {
+      mixedScanner = window.initializeMixedScanner('mixed-scanner-container', {
+        maxItems: 3,
+        scanTypes: 'both',
+        simulationDelay: 3000
+      });
+      console.log('[ShopIQ] Mixed scanner initialized successfully');
+    } else {
+      console.log('[ShopIQ] Waiting for initializeMixedScanner...');
+      setTimeout(initScanner, 100);
+    }
   }
+  
+  // Start scanner initialization
+  initScanner();
 
-  // Prepare form data
-  const formData = {
-    'product-name': productName,
-    'scanned-items': scannedItems,
-    'user-price': userPrice
-  };
+  // Handle the generate button click
+  async function handleGenerateShopIq() {
+    const productName = document.getElementById('product-name').value.trim();
+    const userPrice = document.getElementById('user-price').value.trim();
+    const scannedItems = mixedScanner ? mixedScanner.getScannedItems() : [];
 
-  // Use the payment form handler
-  if (window.handlePayment) {
+    // Validate that we have either product name or scanned items
+    if (!productName && scannedItems.length === 0) {
+      alert('Please either scan items or enter a product name.');
+      return;
+    }
+
+    // Prepare form data
+    const formData = {
+      'product-name': productName,
+      'scanned-items': scannedItems,
+      'user-price': userPrice
+    };
+
+    // Check rate limiting before proceeding
+    if (window.rateLimiter && window.rateLimiter.isRateLimited('shop', 6, 60 * 60 * 1000)) {
+      alert('You have exceeded the request limit for shop analysis. Please try again later.');
+      return;
+    }
+
+    // Create worker payload with email for paid users
+    const workerPayload = window.rateLimiter ? window.rateLimiter.createWorkerPayload('shop', formData) : { module: 'shop', ...formData };
+    
     try {
-      await window.handlePayment(
-        'shop',
+      const backendResponse = await window.enhancedLoading(
         'generate-shop-btn',
-        'ai/shop/shopoutput.html',
-        formData,
-        {
-          apiUrl: 'https://inexasli.com/api/generate',
-          module: 'shop'
+        'shop',
+        async () => {
+          // Send data to worker
+          const apiUrl = 'https://inexasli.com/api/generate';
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workerPayload)
+          });
+          
+          let responseData;
+          try {
+            responseData = await response.json();
+          } catch (e) {
+            console.error('[ShopIQ] Failed to parse JSON response:', e);
+            throw new Error('Invalid response format');
+          }
+
+          if (!response.ok) {
+            if (window.rateLimiter) {
+              window.rateLimiter.handleRateLimitResponse(responseData, 'shop');
+            }
+            throw new Error(responseData.error || 'Request failed');
+          }
+
+          return responseData;
         }
       );
+
+      if (backendResponse && backendResponse.output) {
+        // Load output page with response
+        window.loadWithResponse('ai/shop/shopoutput.html', backendResponse.output);
+      }
+
     } catch (error) {
-      console.error('Shop analysis error:', error);
+      console.error('[ShopIQ] Shop analysis error:', error);
       alert('An error occurred while analyzing the items. Please try again.');
     }
-  } else {
-    console.error('Payment handler not available');
-    alert('Payment system not loaded. Please refresh the page and try again.');
   }
-}
 
-// Set up event listener
-document.addEventListener('DOMContentLoaded', function() {
+  // Set up event listener
   const generateShopBtn = document.getElementById('generate-shop-btn');
   if (generateShopBtn && !generateShopBtn.dataset.handlerAttached) {
     generateShopBtn.addEventListener('click', handleGenerateShopIq);
     generateShopBtn.dataset.handlerAttached = 'true';
   }
-});
+})();
 </script>
 
 <style>

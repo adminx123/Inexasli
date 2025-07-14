@@ -21,7 +21,7 @@ import { getJSON } from '/utility/getJSON.js';
 import { setJSON } from '/utility/setJSON.js';
 import { getCookie } from '/utility/getcookie.js';
 import { setCookie } from '/utility/setcookie.js';
-import { MixedScanner } from '/utility/mixedScanner.js';
+import { MixedScanner, initializeMixedScanner } from '/utility/mixedScanner.js';
 
 // Import validation utilities
 import { 
@@ -65,7 +65,8 @@ window.utilityFunctions = {
     isRateLimited,
     handleRateLimitResponse,
     createWorkerPayload,
-    MixedScanner
+    MixedScanner,
+    initializeMixedScanner
 };
 
 // Also expose individual functions directly to window for easier access
@@ -77,6 +78,7 @@ window.getCookie = getCookie;
 window.setCookie = setCookie;
 window.FormPersistence = FormPersistence;
 window.MixedScanner = MixedScanner;
+window.initializeMixedScanner = initializeMixedScanner;
 
 // Image upload functions are exposed globally by imageUpload.js
 // But let's ensure they're available after import
