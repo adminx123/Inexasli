@@ -28,9 +28,9 @@
     }
     
     .cycle-section {
-      background: white;
-      color: #ff6b9d;
-      border: 1px solid #ff6b9d;
+      background: transparent;
+      color: #333333;
+      border: none;
       padding: 15px;
       border-radius: 5px;
       margin-bottom: 20px;
@@ -43,127 +43,196 @@
     .timeline-container {
       margin: 20px 0;
       padding: 20px;
-      background: #fef2f7;
+      background: transparent;
       border-radius: 10px;
-      border: 1px solid #ff6b9d;
+      border: none;
     }
 
-    .timeline-header {
+    /* Clean floating elements over dataout.js background - NO containers */
+    .device-container.period-container {
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    
+    .api-output.period-output {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+    
+    .period-display {
+      background: transparent;
+      padding: 20px 0;
+    }
+    
+    /* Minimal floating header */
+    .period-header h2 {
+      color: rgba(255, 255, 255, 0.9);
       text-align: center;
-      margin-bottom: 20px;
-      color: #333;
+      margin: 0 0 30px 0;
+      font-size: 24px;
+      font-weight: 300;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      background: transparent;
     }
 
-    .cycle-info {
-      background: #ff6b9d;
-      color: white;
-      padding: 10px 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
+    /* NO timeline container - direct rows floating over background */
     .vertical-timeline {
-      position: relative;
-      width: 100%;
-      background: #f8f9fa;
-      border-radius: 10px;
-      border: 1px solid #dee2e6;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .timeline-container {
+      background: transparent;
+      padding: 0;
+      margin: 0;
     }
 
+    /* Individual timeline rows float over background */
     .timeline-row {
       display: flex;
       align-items: center;
-      height: 40px;
-      border-bottom: 1px solid #e9ecef;
-      position: relative;
+      height: 45px;
+      margin-bottom: 2px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .timeline-row.fertile-window {
-      background: linear-gradient(90deg, rgba(40, 167, 69, 0.1), rgba(40, 167, 69, 0.2));
-      border-left: 4px solid #28a745;
-    }
-
-    .fertile-indicator {
-      background: #28a745;
-      color: white;
-      margin-left: 5px;
-      font-size: 9px;
-      padding: 1px 4px;
-      border-radius: 8px;
-      font-weight: bold;
+      background: rgba(40, 167, 69, 0.15);
+      border-color: rgba(40, 167, 69, 0.3);
     }
 
     .timeline-row.current-day {
-      background: rgba(255, 107, 157, 0.1);
-      border: 2px solid #ff6b9d;
+      background: rgba(255, 107, 157, 0.2);
+      border-color: rgba(255, 107, 157, 0.5);
+      box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
     }
 
+    /* Clean date labels */
     .date-label {
-      width: 120px;
-      padding: 10px;
-      font-size: 10px;
-      color: #666;
-      border-right: 1px solid #e9ecef;
-      background: #f8f9fa;
-      font-weight: bold;
-      text-align: center;
-      line-height: 1.2;
+      width: 140px;
+      padding: 0 15px;
+      font-size: 12px;
+      color: #333333;
+      background: transparent;
+      border: none;
+      font-weight: 500;
+      text-align: left;
     }
 
     .date-label.current {
-      background: #ff6b9d;
-      color: white;
+      color: #222222;
+      font-weight: 600;
     }
 
+    /* Date markers - black text for readability */
+    .date-display {
+      width: 80px;
+      text-align: center;
+      font-size: 11px;
+      color: #333333;
+      padding: 8px 0;
+      font-weight: 400;
+    }
+
+    /* Today highlight - minimal but noticeable */
+    .today-row {
+      background: rgba(120, 140, 180, 0.1);
+      border-left: 2px solid rgba(120, 140, 180, 0.7);
+    }
+
+    .today-row .date-display {
+      color: rgba(80, 100, 140, 0.9);
+      font-weight: 600;
+    }
+
+    /* Row hover - minimal interaction feedback */
+    .timeline-row:hover {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Ensure all timeline text is black */
+    .timeline-row {
+      color: #333333;
+    }
+
+    .timeline-row * {
+      color: inherit;
+    }
+    
+    /* Bold, visible information elements only */
     .phase-bar-container {
       flex: 1;
-      position: relative;
-      height: 100%;
       display: flex;
       align-items: center;
+      padding: 0 15px;
     }
 
+    /* Phase bars - key information, bold and visible */
     .phase-bar {
-      height: 30px;
-      border-radius: 3px;
+      height: 32px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      padding: 0 8px;
-      color: white;
-      font-size: 11px;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-      margin: 5px;
-      min-width: 80px;
+      padding: 0 16px;
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 12px;
+      font-weight: 600;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      min-width: 100px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
+    /* User events - important information, bold */
     .user-event {
-      background: #007bff;
+      background: rgba(0, 123, 255, 0.9);
       color: white;
-      margin-left: 5px;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 12px;
+      margin-left: 12px;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    /* Period predictions - important information, bold */
     .ai-prediction {
-      background: #6c757d;
+      background: rgba(120, 90, 140, 0.9);
       color: white;
-      margin-left: 5px;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 12px;
-      opacity: 0.8;
-      font-style: italic;
+      margin-left: 12px;
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .menstrual-bar { background: #dc3545; }
-    .follicular-bar { background: #ffc107; color: #333; text-shadow: none; }
-    .ovulation-bar { background: #28a745; }
-    .luteal-bar { background: #6f42c1; }
-    .predicted-bar { background: #ff6b9d; opacity: 0.7; }
+    /* Phase colors - complementing gray-white-gray dataout.js gradient */
+    .menstrual-bar { 
+      background: linear-gradient(135deg, rgba(180, 60, 60, 0.9), rgba(160, 50, 50, 0.8));
+      color: white;
+    }
+    .follicular-bar { 
+      background: linear-gradient(135deg, rgba(120, 140, 180, 0.9), rgba(100, 120, 160, 0.8));
+      color: white;
+    }
+    .ovulation-bar { 
+      background: linear-gradient(135deg, rgba(80, 140, 100, 0.9), rgba(70, 120, 90, 0.8));
+      color: white;
+    }
+    .luteal-bar { 
+      background: linear-gradient(135deg, rgba(120, 90, 140, 0.9), rgba(100, 80, 120, 0.8));
+      color: white;
+    }
 
     .phase-legend {
       margin-top: 20px;
@@ -338,11 +407,9 @@
   </script>
 </head>
 <body>
-  <!-- Main content container with ID for accessibility -->
+  <!-- Glassmorphism - minimal container structure for dataout.js background bleed-through -->
   <div id="main-content" class="device-container period-container">
-    <div class="output-wrapper">
-      <div id="output-span" class="api-output period-output"></div>
-    </div>
+    <div id="output-span" class="api-output period-output"></div>
   </div>
 
   <script>
@@ -558,10 +625,6 @@
       console.log('Frontend events:', periodData.frontendEvents);
       
       timelineContainer.innerHTML = `
-        <div class="timeline-header">
-          <h3><i class="fas fa-calendar-alt" style="margin-right: 8px; color: #ff6b9d;"></i>Period Timeline</h3>
-        </div>
-        
         ${(() => {
           return '';
         })()}
