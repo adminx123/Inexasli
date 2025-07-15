@@ -104,10 +104,52 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
         scanTypes: 'both',
         simulationDelay: 3000
       });
+      
+      // Listen for scanner events and save to localStorage
+      document.addEventListener('scanner-item-scanned', (event) => {
+        console.log('[ShopIQ] Item scanned:', event.detail);
+        saveFormData(); // Save to shopIqInput localStorage
+      });
+      
+      document.addEventListener('scanner-item-removed', (event) => {
+        console.log('[ShopIQ] Item removed:', event.detail);
+        saveFormData(); // Update shopIqInput localStorage
+      });
+      
       console.log('[ShopIQ] Mixed scanner initialized successfully');
     } else {
       console.log('[ShopIQ] Waiting for initializeMixedScanner...');
       setTimeout(initScanner, 100);
+    }
+  }
+  
+  // Save form data using FormPersistence (like other modules)
+  function saveFormData() {
+    const productName = document.getElementById('product-name').value.trim();
+    const userPrice = document.getElementById('user-price').value.trim();
+    const scannedItems = mixedScanner ? mixedScanner.getScannedItems() : [];
+    
+    const formData = {
+      'product-name': productName,
+      'scanned-items': scannedItems,
+      'user-price': userPrice
+    };
+    
+    // Save using FormPersistence (same as other modules)
+    window.shopFormPersistence.saveFormData(formData);
+    console.log('[ShopIQ] Form data saved via FormPersistence:', formData);
+  }
+  
+  // Listen for input changes and save to localStorage
+  function attachFormListeners() {
+    const productNameInput = document.getElementById('product-name');
+    const userPriceInput = document.getElementById('user-price');
+    
+    if (productNameInput) {
+      productNameInput.addEventListener('input', saveFormData);
+    }
+    if (userPriceInput) {
+      userPriceInput.addEventListener('input', saveFormData);
     }
   }
   
@@ -142,37 +184,39 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
   // Start scanner initialization and toggle setup
   initScanner();
   initializeToggle();
+  attachFormListeners(); // Add form listeners for real-time saving
 
   // Handle the generate button click
   async function handleGenerateShopIq() {
-    const productName = document.getElementById('product-name').value.trim();
-    const userPrice = document.getElementById('user-price').value.trim();
-    const scannedItems = mixedScanner ? mixedScanner.getScannedItems() : [];
+    const formData = window.shopFormPersistence.getSavedFormData();
+    if (!formData) {
+      console.error('[ShopIQ] No input data found in localStorage.');
+      alert('Please enter product information before proceeding.');
+      return;
+    }
 
     // Validate that we have either product name or scanned items
-    if (!productName && scannedItems.length === 0) {
+    const hasProductName = formData['product-name'] && formData['product-name'].trim();
+    const hasScannedItems = formData['scanned-items'] && formData['scanned-items'].length > 0;
+    
+    if (!hasProductName && !hasScannedItems) {
       alert('Please either scan items or enter a product name.');
       return;
     }
 
-    // Prepare form data
-    const formData = {
-      'product-name': productName,
-      'scanned-items': scannedItems,
-      'user-price': userPrice
-    };
-
     // Check rate limiting before proceeding
-    if (window.rateLimiter && window.rateLimiter.isRateLimited('shop', 6, 60 * 60 * 1000)) {
+    if (window.rateLimiter.isRateLimited('shop', 6, 60 * 60 * 1000)) { // 6 requests per hour
       alert('You have exceeded the request limit for shop analysis. Please try again later.');
       return;
     }
 
-    // Create worker payload with email for paid users
-    const workerPayload = window.rateLimiter ? window.rateLimiter.createWorkerPayload('shop', formData) : { module: 'shop', ...formData };
+    // Create worker payload with email for paid users (DRY function)
+    const workerPayload = window.rateLimiter.createWorkerPayload('shop', formData);
     
+    const dataContainer = document.querySelector('.data-container-in');
+    let backendResponse = null;
     try {
-      const backendResponse = await window.enhancedLoading(
+      backendResponse = await window.enhancedLoading(
         'generate-shop-btn',
         'shop',
         async () => {
@@ -185,34 +229,45 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
             },
             body: JSON.stringify(workerPayload)
           });
-          
           let responseData;
           try {
             responseData = await response.json();
           } catch (e) {
-            console.error('[ShopIQ] Failed to parse JSON response:', e);
-            throw new Error('Invalid response format');
+            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
           }
-
+          // Always call handleRateLimitResponse with backend response
+          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
           if (!response.ok) {
-            if (window.rateLimiter) {
-              window.rateLimiter.handleRateLimitResponse(responseData, 'shop');
-            }
-            throw new Error(responseData.error || 'Request failed');
+            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
           }
-
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          // Store the response using FormPersistence (same as calorie module)
+          window.shopFormPersistence.saveResponseData(responseData);
+          
+          // Dispatch an event to notify dataout.js that a response was received
+          const event = new CustomEvent('api-response-received', {
+            detail: {
+              module: 'shopiq',
+              type: 'worker-response',
+              timestamp: Date.now()
+            }
+          });
+          document.dispatchEvent(event);
+          
           return responseData;
         }
       );
-
-      if (backendResponse && backendResponse.output) {
-        // Load output page with response
-        window.loadWithResponse('ai/shop/shopoutput.html', backendResponse.output);
-      }
-
+      window.rateLimiter.incrementRequestCount('shop');
     } catch (error) {
-      console.error('[ShopIQ] Shop analysis error:', error);
-      alert('An error occurred while analyzing the items. Please try again.');
+      // If backendResponse is available, update rate limit display and show error
+      if (backendResponse && dataContainer) {
+        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
+      }
+      // Optionally, show a toast/modal here for generic errors
+      console.error('[ShopIQ] Error:', error);
     }
   }
 
