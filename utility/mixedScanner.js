@@ -11,6 +11,8 @@
 // Mixed Scanner Utility - Supports Barcodes and QR Codes
 // For physical products, digital services, businesses, and apps
 
+// Html5QrcodeScanner will be loaded from CDN via script tag
+
 export class MixedScanner {
     constructor(containerId, options = {}) {
         this.containerId = containerId;
@@ -26,6 +28,7 @@ export class MixedScanner {
         this.scannedItems = [];
         this.cameraStream = null;
         this.isScanning = false;
+        this.html5QrcodeScanner = null;
         
         this.init();
     }
@@ -55,11 +58,7 @@ export class MixedScanner {
                 </div>
                 
                 <div class="camera-section" style="display: none;">
-                    <video class="camera-preview" autoplay playsinline></video>
-                    <div class="camera-overlay">
-                        <div class="scan-frame"></div>
-                        <div class="scan-instruction">Position code within frame</div>
-                    </div>
+                    <div id="${this.containerId}-scanner" class="scanner-container"></div>
                     <button type="button" class="stop-scan-btn">
                         <i class="fas fa-stop"></i> Stop Scanning
                     </button>
@@ -127,46 +126,18 @@ export class MixedScanner {
                 text-align: center;
             }
             
-            .camera-preview {
+            .scanner-container {
                 width: 100%;
                 max-width: 350px;
+                margin: 0 auto;
                 border-radius: 8px;
-                background: #000;
+                overflow: hidden;
             }
             
-            .camera-overlay {
-                position: absolute;
-                top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100%;
-                max-width: 350px;
-                height: 100%;
-                pointer-events: none;
-            }
-            
-            .scan-frame {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 200px;
-                height: 200px;
-                border: 2px solid #00ff00;
+            .scanner-container video {
+                width: 100% !important;
+                height: auto !important;
                 border-radius: 8px;
-                box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
-            }
-            
-            .scan-instruction {
-                position: absolute;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                color: white;
-                background: rgba(0, 0, 0, 0.7);
-                padding: 8px 16px;
-                border-radius: 20px;
-                font-size: 14px;
             }
             
             .stop-scan-btn {
@@ -305,46 +276,59 @@ export class MixedScanner {
         }
         
         try {
-            // Request camera access
-            this.cameraStream = await navigator.mediaDevices.getUserMedia({
-                video: { 
-                    facingMode: 'environment',
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }
-            });
-            
-            const video = this.container.querySelector('.camera-preview');
             const cameraSection = this.container.querySelector('.camera-section');
             const toggleBtn = this.container.querySelector('.scan-toggle-btn');
+            const scannerId = `${this.containerId}-scanner`;
             
-            video.srcObject = this.cameraStream;
+            // Show camera section
             cameraSection.style.display = 'block';
             toggleBtn.innerHTML = '<i class="fas fa-camera"></i> Scanning...';
             toggleBtn.classList.add('scanning');
             
             this.isScanning = true;
             
+            // Check if Html5QrcodeScanner is available
+            if (typeof Html5QrcodeScanner === 'undefined') {
+                throw new Error('Html5QrcodeScanner not loaded. Please include the library via CDN.');
+            }
+            
+            // Initialize Html5QrcodeScanner with basic configuration
+            this.html5QrcodeScanner = new Html5QrcodeScanner(scannerId, {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                showTorchButtonIfSupported: true,
+                showZoomSliderIfSupported: true
+            });
+            
+            // Start scanning
+            this.html5QrcodeScanner.render(
+                (decodedText, decodedResult) => {
+                    this.onScanSuccess(decodedText, decodedResult);
+                },
+                (error) => {
+                    // Ignore scanning errors (they happen frequently)
+                    // console.warn('Scan error:', error);
+                }
+            );
+            
             // Emit scanning started event
             this.emitEvent('scanning-started');
             
-            // Simulate barcode/QR detection (in real implementation, integrate scanning library)
-            setTimeout(() => {
-                if (this.isScanning) {
-                    this.simulateCodeDetection();
-                }
-            }, this.options.simulationDelay);
-            
         } catch (error) {
-            console.error('Camera access error:', error);
-            alert('Unable to access camera. Please ensure camera permissions are granted.');
+            console.error('Scanner initialization error:', error);
+            alert('Unable to initialize scanner. Please ensure camera permissions are granted.');
+            this.stopScanning();
         }
     }
     
     stopScanning() {
-        if (this.cameraStream) {
-            this.cameraStream.getTracks().forEach(track => track.stop());
-            this.cameraStream = null;
+        if (this.html5QrcodeScanner) {
+            try {
+                this.html5QrcodeScanner.clear();
+            } catch (error) {
+                console.warn('Error clearing scanner:', error);
+            }
+            this.html5QrcodeScanner = null;
         }
         
         const cameraSection = this.container.querySelector('.camera-section');
@@ -360,18 +344,65 @@ export class MixedScanner {
         this.emitEvent('scanning-stopped');
     }
     
-    simulateCodeDetection() {
-        // Simulate different types of codes being detected
-        const simulationTypes = [
-            { type: 'barcode', value: '123456789012', category: 'product' },
-            { type: 'qr', value: 'https://menu.restaurant.com/qr/abc123', category: 'business' },
-            { type: 'qr', value: 'https://apps.apple.com/app/example', category: 'app' },
-            { type: 'barcode', value: '987654321098', category: 'product' }
-        ];
+    onScanSuccess(decodedText, decodedResult) {
+        // Determine scan type based on the format
+        let scanType = 'qr';
+        if (decodedResult.result && decodedResult.result.format) {
+            const format = decodedResult.result.format.formatName;
+            if (format.includes('CODE') || format.includes('UPC') || format.includes('EAN') || format.includes('CODABAR')) {
+                scanType = 'barcode';
+            }
+        }
         
-        const randomCode = simulationTypes[Math.floor(Math.random() * simulationTypes.length)];
-        this.addScannedItem(randomCode.value, randomCode.type, randomCode.category);
-        this.stopScanning();
+        // Add the scanned item
+        const success = this.addScannedItem(decodedText, scanType);
+        
+        if (success) {
+            // Stop scanning after successful scan
+            this.stopScanning();
+            
+            // Show success feedback
+            this.showScanFeedback('success', `${scanType.toUpperCase()} scanned successfully!`);
+        }
+    }
+    
+    showScanFeedback(type, message) {
+        // Create temporary feedback element
+        const feedback = document.createElement('div');
+        feedback.className = `scan-feedback scan-feedback-${type}`;
+        feedback.textContent = message;
+        feedback.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: ${type === 'success' ? '#28a745' : '#dc3545'};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            z-index: 10000;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideDown 0.3s ease;
+        `;
+        
+        // Add animation styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+                to { transform: translateX(-50%) translateY(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        document.body.appendChild(feedback);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            feedback.remove();
+            style.remove();
+        }, 3000);
     }
     
     addScannedItem(value, type, category = null) {

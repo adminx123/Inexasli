@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixed Scanner Test - Simple</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .test-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .test-info h3 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+        
+        .test-info ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .scanner-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .scan-btn {
+            padding: 12px 24px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .scan-btn:hover {
+            background: #0056b3;
+        }
+        
+        .scan-btn.scanning {
+            background: #28a745;
+        }
+        
+        .scan-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        #scanner-container {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        #scanner-container video {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 8px;
+        }
+        
+        .results {
+            margin-top: 30px;
+        }
+        
+        .results h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .scanned-data {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .scan-result {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .scan-result strong {
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-qrcode"></i> Mixed Scanner Test - Simple</h1>
+        
+        <div class="test-info">
+            <h3>Test Instructions:</h3>
+            <ul>
+                <li>Click "Start Scanning" to activate the camera</li>
+                <li>Point your camera at a QR code or barcode</li>
+                <li>The scanner supports: QR codes, UPC, EAN, Code 128, Code 39, etc.</li>
+                <li>Successfully scanned items will appear below</li>
+            </ul>
+        </div>
+        
+        <div class="scanner-section">
+            <button id="start-btn" class="scan-btn">
+                <i class="fas fa-qrcode"></i> Start Scanning
+            </button>
+            <button id="stop-btn" class="scan-btn" style="display: none;">
+                <i class="fas fa-stop"></i> Stop Scanning
+            </button>
+        </div>
+        
+        <!-- Scanner will be inserted here -->
+        <div id="scanner-container"></div>
+        
+        <div class="results">
+            <h3>Scanned Results:</h3>
+            <div id="results-display" class="scanned-data">No items scanned yet...</div>
+        </div>
+    </div>
+
+    <script>
+        let html5QrcodeScanner = null;
+        let scannedItems = [];
+        
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const scannerContainer = document.getElementById('scanner-container');
+        const resultsDisplay = document.getElementById('results-display');
+        
+        function startScanning() {
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            scannerContainer.style.display = 'block';
+            
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "scanner-container",
+                { 
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    showTorchButtonIfSupported: true,
+                    showZoomSliderIfSupported: true
+                }
+            );
+            
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        }
+        
+        function stopScanning() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+                html5QrcodeScanner = null;
+            }
+            
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+            scannerContainer.style.display = 'none';
+            scannerContainer.innerHTML = '';
+        }
+        
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log('Scan success:', decodedText, decodedResult);
+            
+            // Determine scan type
+            let scanType = 'QR Code';
+            if (decodedResult.result && decodedResult.result.format) {
+                const format = decodedResult.result.format.formatName;
+                if (format.includes('CODE') || format.includes('UPC') || format.includes('EAN') || format.includes('CODABAR')) {
+                    scanType = 'Barcode';
+                }
+            }
+            
+            // Add to scanned items
+            const item = {
+                text: decodedText,
+                type: scanType,
+                format: decodedResult.result?.format?.formatName || 'Unknown',
+                timestamp: new Date().toLocaleString()
+            };
+            
+            scannedItems.push(item);
+            updateResultsDisplay();
+            
+            // Show success message
+            showMessage(`${scanType} scanned successfully!`, 'success');
+            
+            // Stop scanning after success
+            stopScanning();
+        }
+        
+        function onScanFailure(error) {
+            // Ignore scan failures (they happen frequently)
+            // console.warn('Scan error:', error);
+        }
+        
+        function updateResultsDisplay() {
+            if (scannedItems.length === 0) {
+                resultsDisplay.textContent = 'No items scanned yet...';
+                return;
+            }
+            
+            const output = scannedItems.map((item, index) => {
+                return `Item ${index + 1}:
+Type: ${item.type}
+Format: ${item.format}
+Value: ${item.text}
+Scanned: ${item.timestamp}
+---`;
+            }).join('\n');
+            
+            resultsDisplay.textContent = output;
+        }
+        
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'scan-result';
+            messageDiv.innerHTML = `<strong>${message}</strong>`;
+            messageDiv.style.background = type === 'success' ? '#d4edda' : '#f8d7da';
+            messageDiv.style.borderColor = type === 'success' ? '#c3e6cb' : '#f5c6cb';
+            messageDiv.style.color = type === 'success' ? '#155724' : '#721c24';
+            
+            document.querySelector('.container').appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+        
+        // Event listeners
+        startBtn.addEventListener('click', startScanning);
+        stopBtn.addEventListener('click', stopScanning);
+        
+        // Clear button for results
+        const clearBtn = document.createElement('button');
+        clearBtn.textContent = 'Clear Results';
+        clearBtn.className = 'scan-btn';
+        clearBtn.style.background = '#6c757d';
+        clearBtn.style.fontSize = '14px';
+        clearBtn.style.padding = '8px 16px';
+        clearBtn.addEventListener('click', () => {
+            scannedItems = [];
+            updateResultsDisplay();
+        });
+        
+        document.querySelector('.results h3').after(clearBtn);
+    </script>
+</body>
+</html>
