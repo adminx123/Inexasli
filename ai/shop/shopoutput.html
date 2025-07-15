@@ -378,13 +378,9 @@
     <div class="api-output shop-output">
       <div class="shop-display">
         <div class="shop-header">
-          <h2>Product Analysis Results</h2>
+          <h2></h2>
         </div>
         <div id="output-container">
-          <div class="loading-placeholder">
-            <div class="loading-spinner"></div>
-            <p>Analyzing product...</p>
-          </div>
         </div>
       </div>
     </div>
@@ -449,12 +445,7 @@
     }
 
     if (!responseData) {
-      outputContainer.innerHTML = `
-        <div class="analysis-card">
-          <h3><i class="fas fa-exclamation-triangle"></i> No Analysis Data</h3>
-          <p>No product analysis data found. Please return to the analysis form and try again.</p>
-        </div>
-      `;
+      outputContainer.innerHTML = '';
       return;
     }
 
