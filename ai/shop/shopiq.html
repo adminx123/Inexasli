@@ -25,29 +25,51 @@
 
 <div class="premium-blur">
 
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Scan barcodes for physical products or QR codes for businesses, apps, and digital services. You can scan up to 3 items for comparison.">
-                Scan Items<span class="tooltip1-content"></span>
+        <div class="row1" data-step-label="Add Products">
+            <h3 class="tooltip1" data-tooltip="Choose how you want to add products for analysis - scan barcodes/QR codes or enter product names manually.">
+                Add Products<span class="tooltip1-content"></span>
             </h3>
             
-            <div id="mixed-scanner-container"></div>
-            
-            <div class="manual-input-section" style="margin-top: 20px;">
-                <h4 style="font-size: 14px; color: #666; margin-bottom: 8px;">Or enter product name manually:</h4>
-                <textarea id="product-name" rows="2" placeholder="Apple iPhone 15 Pro Max 256GB
-Tide Liquid Laundry Detergent, Original Scent"></textarea>
+            <!-- Input Method Toggle -->
+            <div class="input-method-toggle">
+                <div class="toggle-buttons">
+                    <button type="button" class="toggle-btn active" data-method="scan">
+                        <i class="bx bx-scan"></i>
+                        <span>Scan Items</span>
+                    </button>
+                    <button type="button" class="toggle-btn" data-method="manual">
+                        <i class="bx bx-edit"></i>
+                        <span>Enter Manually</span>
+                    </button>
+                </div>
             </div>
-        </div>
+            
+            <!-- Scan Mode -->
+            <div class="input-section active" id="scan-section">
+                <div class="scan-description">
+                    <p>Scan up to 3 barcodes or QR codes for instant product analysis</p>
+                </div>
+                <div id="mixed-scanner-container"></div>
+            </div>
+            
+            <!-- Manual Entry Mode -->
+            <div class="input-section" id="manual-section">
+                <div class="manual-description">
+                    <p>Enter product names manually for analysis</p>
+                </div>
+                <textarea id="product-name" rows="3" placeholder="Apple iPhone 15 Pro Max 256GB
+Tide Liquid Laundry Detergent, Original Scent
+Samsung Galaxy S24 Ultra 512GB"></textarea>
+            </div>
+        
 
-        <div class="row1">
+      
             <h3 class="tooltip1" data-tooltip="Enter the price you see for this product to compare with average market prices.">
                 Price You See<span class="tooltip1-content"></span>
             </h3>
             <input id="user-price" type="text" placeholder="$29.99">
 
             <button class="generate-btn" id="generate-shop-btn">Analyze Items Now!</button>
-
-
         </div>
 
 
@@ -89,8 +111,37 @@ Tide Liquid Laundry Detergent, Original Scent"></textarea>
     }
   }
   
-  // Start scanner initialization
+  // Setup input method toggle functionality
+  function initializeToggle() {
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+    const scanSection = document.getElementById('scan-section');
+    const manualSection = document.getElementById('manual-section');
+    
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const method = button.getAttribute('data-method');
+        
+        // Update active states
+        toggleButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Show/hide sections with animation
+        if (method === 'scan') {
+          scanSection.classList.add('active');
+          manualSection.classList.remove('active');
+        } else {
+          manualSection.classList.add('active');
+          scanSection.classList.remove('active');
+        }
+        
+        console.log('[ShopIQ] Switched to', method, 'mode');
+      });
+    });
+  }
+  
+  // Start scanner initialization and toggle setup
   initScanner();
+  initializeToggle();
 
   // Handle the generate button click
   async function handleGenerateShopIq() {
@@ -176,44 +227,168 @@ Tide Liquid Laundry Detergent, Original Scent"></textarea>
 
 <style>
 .input-method-toggle {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .toggle-buttons {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 0;
+  margin-bottom: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .toggle-btn {
   flex: 1;
-  padding: 12px 20px;
-  border: 2px solid #e0e0e0;
-  background: #f8f8f8;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
   font-weight: 500;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+
+.toggle-btn i {
+  font-size: 16px;
 }
 
 .toggle-btn:hover {
-  border-color: #007bff;
-  background: #f0f8ff;
+  color: #495057;
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .toggle-btn.active {
-  border-color: #007bff;
-  background: #007bff;
-  color: white;
+  background: white;
+  color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 600;
+}
+
+.toggle-btn.active i {
+  color: #007bff;
 }
 
 .input-section {
   display: none;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .input-section.active {
   display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scan-description,
+.manual-description {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.scan-description p,
+.manual-description p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+  font-style: italic;
+}
+
+#product-name {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+}
+
+#product-name:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+#product-name::placeholder {
+  color: #adb5bd;
+  font-style: italic;
+}
+
+/* Enhanced scanner container styling */
+#mixed-scanner-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s ease;
+}
+
+#mixed-scanner-container:hover {
+  border-color: #007bff;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .toggle-buttons {
+    gap: 0;
+    padding: 3px;
+  }
+  
+  .toggle-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    gap: 6px;
+  }
+  
+  .toggle-btn i {
+    font-size: 14px;
+  }
+  
+  .toggle-btn span {
+    display: none;
+  }
+  
+  .scan-description p,
+  .manual-description p {
+    font-size: 13px;
+  }
+  
+  #product-name {
+    min-height: 70px;
+    padding: 10px;
+    font-size: 13px;
+  }
+  
+  #mixed-scanner-container {
+    padding: 15px;
+  }
+}
+
+/* Legacy styles kept for compatibility */
+.input-method-toggle {
+  margin-bottom: 15px;
 }
 
 .barcode-scanner {
