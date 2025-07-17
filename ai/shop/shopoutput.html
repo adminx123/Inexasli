@@ -447,10 +447,10 @@ console.log('Shop API Output script running');
     const responseData = getJSON(responseKey);
     console.log('Retrieved shopIqResponse data:', responseData);
     
-    if (responseData) {
+    if (responseData && responseData.data) {
       try {
         console.log('Attempting to display shop analysis');
-        displayShopAnalysis(responseData, outputSpan);
+        displayShopAnalysis(responseData.data, outputSpan);
       } catch (error) {
         console.error('Error displaying shop analysis:', error);
         outputSpan.innerHTML = `
@@ -476,9 +476,9 @@ console.log('Shop API Output script running');
       return;
     }
 
-    let html = '';
+    console.log('Displaying shop analysis data:', data);
 
-    // Analysis type header with shop-specific styling
+    // Analysis type header
     const analysisType = data.analysisType || 'product';
     const typeHeaders = {
       'product': '🛒 Product Analysis Results',
@@ -490,8 +490,8 @@ console.log('Shop API Output script running');
     
     const headerTitle = typeHeaders[analysisType] || 'Analysis Results';
     
-    // Add header to content
-    html += `
+    // Build complete HTML with wrapper
+    let html = `
       <div class="shop-display">
         <div class="shop-header">
           <h2>${headerTitle}</h2>
@@ -499,7 +499,7 @@ console.log('Shop API Output script running');
         <div class="shop-content">
     `;
 
-    // Adaptive display based on analysis type
+    // Generate content based on analysis type
     if (analysisType === 'comparison') {
       html += generateComparisonDisplay(data);
     } else if (analysisType === 'business') {
@@ -517,7 +517,9 @@ console.log('Shop API Output script running');
       </div>
     `;
 
+    console.log('Generated HTML length:', html.length);
     container.innerHTML = html;
+    console.log('Data displayed successfully');
   }
 
   function generateProductDisplay(data) {
