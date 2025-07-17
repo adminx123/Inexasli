@@ -35,21 +35,39 @@ document.addEventListener('DOMContentLoaded', async function () {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
             const content = await response.text();
+            console.log('[DataOut] Content fetched successfully for:', url);
 
             // Update content - container is always visible at 100% viewport
             dataContainer.innerHTML = `
                 <div class="data-content">${content}</div>
             `;
+            console.log('[DataOut] Content inserted into container');
 
-            dataContainer.querySelectorAll('script').forEach(oldScript => {
+            const scripts = dataContainer.querySelectorAll('script');
+            console.log('[DataOut] Found scripts to execute:', scripts.length);
+            
+            scripts.forEach((oldScript, index) => {
+                console.log(`[DataOut] Processing script ${index + 1}/${scripts.length}`);
                 const newScript = document.createElement('script');
                 if (oldScript.src) {
+                    console.log(`[DataOut] Script ${index + 1} has src:`, oldScript.src);
                     newScript.src = oldScript.src;
                 } else {
+                    console.log(`[DataOut] Script ${index + 1} has inline content, length:`, oldScript.textContent.length);
                     newScript.textContent = oldScript.textContent;
                 }
+                
+                // Add load/error handlers for external scripts
+                if (oldScript.src) {
+                    newScript.onload = () => console.log(`[DataOut] External script loaded:`, oldScript.src);
+                    newScript.onerror = (e) => console.error(`[DataOut] External script failed:`, oldScript.src, e);
+                }
+                
                 oldScript.replaceWith(newScript);
+                console.log(`[DataOut] Script ${index + 1} replaced and should execute`);
             });
+            
+            console.log('[DataOut] All scripts processed');
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
             dataContainer.innerHTML = `
@@ -184,7 +202,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const moduleOutputMap = {
                 'calorieiq': '/ai/calorie/calorieoutput.html',
                 'period': '/ai/period/periodoutput.html',
-                'shop': '/ai/shop/shopoutput.html',
+                'shopiq': '/ai/shop/shopoutput.html',
                 'symptomiq': '/ai/symptom/symptomoutput.html',
                 'adventureiq': '/ai/adventure/adventureoutput.html',
                 'decisioniq': '/ai/decision/decisionoutput.html',

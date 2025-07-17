@@ -375,21 +375,16 @@
 <body>
 <div class="device-container shop-container">
   <div class="output-wrapper">
-    <div class="api-output shop-output">
-      <div class="shop-display">
-        <div class="shop-header">
-          <h2></h2>
-        </div>
-        <div id="output-container">
-        </div>
-      </div>
+    <div id="output-span" class="api-output shop-output">
     </div>
   </div>
 </div>
 
 <script>
+console.log('Shop API Output script running');
+
 (function() {
-  // Reference utility functions
+  // Reference the global utility functions
   const getLocal = window.getLocal || function(key) {
     try {
       return localStorage.getItem(key);
@@ -436,33 +431,42 @@
   }
 
   function updateOutput() {
-    const responseData = getJSON('shopIqResponse');
-    const outputContainer = document.getElementById('output-container');
+    const outputSpan = document.getElementById('output-span');
+    if (!outputSpan) {
+      console.log('Output span not found, will retry');
+      setTimeout(updateOutput, 100);
+      return;
+    }
+
+    console.log('Output span found, looking for data...');
+
+    // Specifically look for shopIqResponse data
+    const responseKey = 'shopIqResponse';
+    console.log('Looking for data with key:', responseKey);
     
-    if (!outputContainer) {
-      console.error('Output container not found');
-      return;
-    }
-
-    if (!responseData) {
-      outputContainer.innerHTML = '';
-      return;
-    }
-
-    try {
-      displayShopAnalysis(responseData, outputContainer);
-    } catch (error) {
-      console.error('Error displaying shop analysis:', error);
-      outputContainer.innerHTML = `
-        <div class="analysis-card">
-          <h3><i class="fas fa-exclamation-triangle"></i> Display Error</h3>
-          <p>An error occurred while displaying the analysis. Please try again.</p>
-          <details>
-            <summary>Error Details</summary>
-            <pre>${error.message}</pre>
-          </details>
-        </div>
-      `;
+    const responseData = getJSON(responseKey);
+    console.log('Retrieved shopIqResponse data:', responseData);
+    
+    if (responseData) {
+      try {
+        console.log('Attempting to display shop analysis');
+        displayShopAnalysis(responseData, outputSpan);
+      } catch (error) {
+        console.error('Error displaying shop analysis:', error);
+        outputSpan.innerHTML = `
+          <div class="analysis-card">
+            <h3><i class="fas fa-exclamation-triangle"></i> Display Error</h3>
+            <p>An error occurred while displaying the analysis. Please try again.</p>
+            <details>
+              <summary>Error Details</summary>
+              <pre>${error.message}</pre>
+            </details>
+          </div>
+        `;
+      }
+    } else {
+      outputSpan.innerHTML = '';
+      console.log('No data found for key:', responseKey);
     }
   }
 
@@ -474,7 +478,7 @@
 
     let html = '';
 
-    // Analysis type header
+    // Analysis type header with shop-specific styling
     const analysisType = data.analysisType || 'product';
     const typeHeaders = {
       'product': '🛒 Product Analysis Results',
@@ -485,7 +489,15 @@
     };
     
     const headerTitle = typeHeaders[analysisType] || 'Analysis Results';
-    document.querySelector('.shop-header h2').textContent = headerTitle;
+    
+    // Add header to content
+    html += `
+      <div class="shop-display">
+        <div class="shop-header">
+          <h2>${headerTitle}</h2>
+        </div>
+        <div class="shop-content">
+    `;
 
     // Adaptive display based on analysis type
     if (analysisType === 'comparison') {
@@ -499,6 +511,11 @@
     } else {
       html += generateProductDisplay(data);
     }
+    
+    html += `
+        </div>
+      </div>
+    `;
 
     container.innerHTML = html;
   }
@@ -1075,17 +1092,20 @@
     return html;
   }
 
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', updateOutput);
+  // Start the update process
+  setTimeout(updateOutput, 100);
   
   // Update when storage changes (for real-time updates)
   window.addEventListener('storage', function(e) {
+    console.log('Storage event fired for key:', e.key);
     if (e.key === 'shopIqResponse') {
+      console.log('shopIqResponse storage changed, updating output');
       updateOutput();
     }
   });
 
 })();
+console.log('Shop API Output script loaded and initialized');
 </script>
 
 </body>
