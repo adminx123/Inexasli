@@ -98,27 +98,31 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
   
   // Initialize the mixed scanner when DOM is ready
   function initScanner() {
-    if (typeof window.initializeMixedScanner === 'function') {
-      mixedScanner = window.initializeMixedScanner('mixed-scanner-container', {
+    if (typeof window.initializeMixedScannerWithLibrary === 'function') {
+      window.initializeMixedScannerWithLibrary('mixed-scanner-container', {
         maxItems: 3,
         scanTypes: 'both',
         simulationDelay: 3000
+      }).then(scanner => {
+        mixedScanner = scanner;
+        
+        // Listen for scanner events and save to localStorage
+        document.addEventListener('scanner-item-scanned', (event) => {
+          console.log('[ShopIQ] Item scanned:', event.detail);
+          saveFormData(); // Save to shopIqInput localStorage
+        });
+        
+        document.addEventListener('scanner-item-removed', (event) => {
+          console.log('[ShopIQ] Item removed:', event.detail);
+          saveFormData(); // Update shopIqInput localStorage
+        });
+        
+        console.log('[ShopIQ] Mixed scanner initialized successfully');
+      }).catch(error => {
+        console.error('[ShopIQ] Failed to initialize scanner:', error);
       });
-      
-      // Listen for scanner events and save to localStorage
-      document.addEventListener('scanner-item-scanned', (event) => {
-        console.log('[ShopIQ] Item scanned:', event.detail);
-        saveFormData(); // Save to shopIqInput localStorage
-      });
-      
-      document.addEventListener('scanner-item-removed', (event) => {
-        console.log('[ShopIQ] Item removed:', event.detail);
-        saveFormData(); // Update shopIqInput localStorage
-      });
-      
-      console.log('[ShopIQ] Mixed scanner initialized successfully');
     } else {
-      console.log('[ShopIQ] Waiting for initializeMixedScanner...');
+      console.log('[ShopIQ] Waiting for initializeMixedScannerWithLibrary...');
       setTimeout(initScanner, 100);
     }
   }

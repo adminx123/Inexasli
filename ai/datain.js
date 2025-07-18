@@ -80,6 +80,72 @@ window.FormPersistence = FormPersistence;
 window.MixedScanner = MixedScanner;
 window.initializeMixedScanner = initializeMixedScanner;
 
+// Load HTML5-QRCode library dynamically for scanner functionality
+function loadHtml5QrCodeLibrary() {
+    return new Promise((resolve, reject) => {
+        // Check if library is already loaded
+        if (typeof window.Html5QrcodeScanner !== 'undefined') {
+            console.log('[DataIn] HTML5-QRCode library already loaded');
+            resolve();
+            return;
+        }
+
+        // Check if script is already being loaded
+        if (document.querySelector('script[src*="html5-qrcode"]')) {
+            console.log('[DataIn] HTML5-QRCode library script already exists, waiting...');
+            // Wait for it to load
+            const checkInterval = setInterval(() => {
+                if (typeof window.Html5QrcodeScanner !== 'undefined') {
+                    clearInterval(checkInterval);
+                    console.log('[DataIn] HTML5-QRCode library loaded successfully');
+                    resolve();
+                }
+            }, 100);
+            
+            // Timeout after 10 seconds
+            setTimeout(() => {
+                clearInterval(checkInterval);
+                reject(new Error('HTML5-QRCode library failed to load within timeout'));
+            }, 10000);
+            return;
+        }
+
+        console.log('[DataIn] Loading HTML5-QRCode library from CDN...');
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+        script.async = true;
+        
+        script.onload = () => {
+            console.log('[DataIn] HTML5-QRCode library loaded successfully from CDN');
+            resolve();
+        };
+        
+        script.onerror = (error) => {
+            console.error('[DataIn] Failed to load HTML5-QRCode library:', error);
+            reject(new Error('Failed to load HTML5-QRCode library from CDN'));
+        };
+        
+        document.head.appendChild(script);
+    });
+}
+
+// Enhanced initializeMixedScanner that ensures HTML5-QRCode is loaded first
+window.initializeMixedScannerWithLibrary = async function(containerId, options = {}) {
+    try {
+        console.log('[DataIn] Initializing Mixed Scanner with library loading...');
+        await loadHtml5QrCodeLibrary();
+        return initializeMixedScanner(containerId, options);
+    } catch (error) {
+        console.error('[DataIn] Failed to initialize Mixed Scanner:', error);
+        throw error;
+    }
+};
+
+// Load the library immediately when datain.js loads
+loadHtml5QrCodeLibrary().catch(error => {
+    console.warn('[DataIn] Failed to preload HTML5-QRCode library:', error);
+});
+
 // Image upload functions are exposed globally by imageUpload.js
 // But let's ensure they're available after import
 document.addEventListener('DOMContentLoaded', () => {
