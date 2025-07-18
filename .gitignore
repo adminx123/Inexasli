@@ -29,6 +29,9 @@ shop.js
 # Template files for module creation
 ai/template/
 
+# Module creation instructions
+MODULE-CREATION-INSTRUCTIONS.md
+
 # Entire prompts directory
 DIRECTION/
 future/
