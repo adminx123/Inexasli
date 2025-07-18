@@ -101,6 +101,12 @@
       backdrop-filter: blur(8px);
       border-radius: 8px;
       border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background-color 0.2s ease;
+    }
+    
+    /* Collapsed state */
+    .timeline-row.collapsed {
+      display: none;
     }
 
     .timeline-row.fertile-window {
@@ -214,6 +220,23 @@
       font-weight: 600;
       backdrop-filter: blur(4px);
       border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    /* Collapsible cycle styles */
+    .clickable-cycle {
+      transition: background-color 0.2s ease;
+    }
+
+    .clickable-cycle:hover {
+      background-color: rgba(255, 107, 157, 0.1);
+    }
+
+    .cycle-toggle {
+      float: right;
+      margin-left: 8px;
+      font-size: 12px;
+      transition: transform 0.2s ease;
     }
 
     /* Phase colors - complementing gray-white-gray dataout.js gradient */
@@ -576,6 +599,11 @@
       if (periodData.phaseCalendar) {
         const timelineContainer = createVerticalTimeline(periodData);
         container.appendChild(timelineContainer);
+        
+        // Add collapsible cycle functionality
+        setTimeout(() => {
+          initCollapsibleCycles();
+        }, 100);
       }
       
       outputElement.appendChild(container);
@@ -714,11 +742,21 @@
               // Check if user has entry for this date
               const userEvent = userEvents.find(event => event.date === dateStr);
               
-              // Check for predicted future periods
+              // Check for predicted future periods and determine cycle number
               let isPredictedPeriod = false;
+              let isActualPeriodStart = false;
+              let cycleNumber = 0;
               if (savedFormData['start-date']) {
                 const lastPeriodStart = new Date(savedFormData['start-date']);
                 const daysSinceLastPeriod = Math.floor((new Date(dateStr) - lastPeriodStart) / (1000 * 60 * 60 * 24));
+                
+                // Determine which cycle this day belongs to
+                cycleNumber = Math.floor(daysSinceLastPeriod / cycleLength);
+                
+                // Check if this is the user's actual period start date
+                if (daysSinceLastPeriod === 0) {
+                  isActualPeriodStart = true;
+                }
                 
                 // Check if this date falls on a future period start (multiples of cycle length)
                 if (daysSinceLastPeriod > 0 && daysSinceLastPeriod % cycleLength === 0) {
@@ -732,8 +770,12 @@
                 eventDisplay = `<div class="user-event">${userEvent.text}</div>`;
               }
               
+              if (isActualPeriodStart) {
+                eventDisplay += `<div class="ai-prediction">Last Period Start <span class="cycle-toggle">▼</span></div>`;
+              }
+              
               if (isPredictedPeriod) {
-                eventDisplay += `<div class="ai-prediction">Estimated Period Start</div>`;
+                eventDisplay += `<div class="ai-prediction">Estimated Period Start <span class="cycle-toggle">▼</span></div>`;
               }
               
               // Only show phase name without confidence to reduce repetition
@@ -742,10 +784,13 @@
               // Get day of week
               const dayOfWeek = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
               
-              const rowClasses = `timeline-row ${isToday ? 'current-day' : ''} ${isFertile ? 'fertile-window' : ''}`;
+              // Add cycle classes and clickable class for period start rows (both actual and predicted)
+              const cycleClasses = `cycle-${cycleNumber}`;
+              const clickableClass = (isActualPeriodStart || isPredictedPeriod) ? 'clickable-cycle' : '';
+              const rowClasses = `timeline-row ${isToday ? 'current-day' : ''} ${isFertile ? 'fertile-window' : ''} ${cycleClasses} ${clickableClass}`;
               
               timelineRows.push(`
-                <div class="${rowClasses}">
+                <div class="${rowClasses}" data-cycle="${cycleNumber}">
                   <div class="date-label ${isToday ? 'current' : ''}">${dateStr} ${dayOfWeek}</div>
                   <div class="phase-bar-container">
                     <div class="phase-bar ${phase}-bar">${phaseText}</div>
@@ -832,6 +877,69 @@
       if (day >= 14 && day <= 16) return "Ovulation Window";
       if (day >= 17 && day <= 28) return "Luteal Phase";
       return "Cycle Phase";
+    }
+
+    // Initialize collapsible cycle functionality
+    function initCollapsibleCycles() {
+      console.log('[PeriodOutput] Initializing collapsible cycles');
+      
+      // Initially keep current cycle (cycle 0) expanded, collapse all others
+      const allCycles = document.querySelectorAll('[data-cycle]');
+      const cyclesToCollapse = new Set();
+      
+      allCycles.forEach(row => {
+        const cycleNumber = parseInt(row.dataset.cycle);
+        if (cycleNumber > 0) {
+          cyclesToCollapse.add(cycleNumber);
+        }
+      });
+      
+      // Collapse all future cycles (cycle > 0)
+      cyclesToCollapse.forEach(cycleNumber => {
+        const cycleRows = document.querySelectorAll(`[data-cycle="${cycleNumber}"]:not(.clickable-cycle)`);
+        cycleRows.forEach(row => {
+          row.classList.add('collapsed');
+        });
+      });
+      
+      // Update toggle icons for all cycles
+      const cycleToggles = document.querySelectorAll('.clickable-cycle .cycle-toggle');
+      cycleToggles.forEach(toggle => {
+        const cycleRow = toggle.closest('.timeline-row');
+        const cycleNumber = parseInt(cycleRow.dataset.cycle);
+        
+        // Current cycle (0) starts expanded, future cycles start collapsed
+        if (cycleNumber === 0) {
+          toggle.textContent = '▼'; // Expanded
+        } else {
+          toggle.textContent = '▶'; // Collapsed
+        }
+      });
+      
+      // Add click handlers to clickable cycle rows
+      const clickableCycles = document.querySelectorAll('.clickable-cycle');
+      clickableCycles.forEach(clickableRow => {
+        clickableRow.style.cursor = 'pointer';
+        clickableRow.addEventListener('click', function() {
+          const cycleNumber = parseInt(this.dataset.cycle);
+          const toggle = this.querySelector('.cycle-toggle');
+          const cycleRows = document.querySelectorAll(`[data-cycle="${cycleNumber}"]:not(.clickable-cycle)`);
+          
+          // Toggle visibility
+          const isExpanded = toggle.textContent === '▼';
+          
+          cycleRows.forEach(row => {
+            if (isExpanded) {
+              row.classList.add('collapsed');
+            } else {
+              row.classList.remove('collapsed');
+            }
+          });
+          
+          // Update toggle icon
+          toggle.textContent = isExpanded ? '▶' : '▼';
+        });
+      });
     }
 
     // Frontend period results display (from localStorage input)
