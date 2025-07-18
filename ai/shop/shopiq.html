@@ -107,14 +107,69 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
         mixedScanner = scanner;
         
         // Listen for scanner events and save to localStorage
+        // Listen for scanner events and save IMMEDIATELY to localStorage
         document.addEventListener('scanner-item-scanned', (event) => {
-          console.log('[ShopIQ] Item scanned:', event.detail);
-          saveFormData(); // Save to shopIqInput localStorage
+          console.log('[ShopIQ] Item scanned - Full event detail:', event.detail);
+          console.log('[ShopIQ] Event detail keys:', Object.keys(event.detail));
+          console.log('[ShopIQ] AllItems from event:', event.detail.allItems);
+          console.log('[ShopIQ] Data from event:', event.detail.data);
+          
+          // Save scanner data IMMEDIATELY to localStorage
+          const productName = document.getElementById('product-name').value.trim();
+          const userPrice = document.getElementById('user-price').value.trim();
+          const scannedItems = event.detail.allItems || [];
+          
+          console.log('[ShopIQ] About to save to localStorage - scannedItems:', scannedItems);
+          
+          const formData = {
+            'product-name': productName,
+            'user-price': userPrice,
+            'scanned-items': scannedItems
+          };
+          
+          // Save directly to localStorage using setJSON
+          if (window.setJSON) {
+            window.setJSON('shopIqInput', formData);
+            console.log('[ShopIQ] Scanner data saved IMMEDIATELY to shopIqInput:', formData);
+          } else {
+            localStorage.setItem('shopIqInput', JSON.stringify(formData));
+            console.log('[ShopIQ] Scanner data saved IMMEDIATELY to shopIqInput (fallback):', formData);
+          }
+          
+          // Verify data was saved
+          const savedData = window.getJSON ? window.getJSON('shopIqInput') : JSON.parse(localStorage.getItem('shopIqInput') || '{}');
+          console.log('[ShopIQ] Verification - Data in localStorage:', savedData);
         });
         
         document.addEventListener('scanner-item-removed', (event) => {
-          console.log('[ShopIQ] Item removed:', event.detail);
-          saveFormData(); // Update shopIqInput localStorage
+          console.log('[ShopIQ] Item removed - Full event detail:', event.detail);
+          console.log('[ShopIQ] AllItems from removal event:', event.detail.allItems);
+          
+          // Save scanner data IMMEDIATELY to localStorage
+          const productName = document.getElementById('product-name').value.trim();
+          const userPrice = document.getElementById('user-price').value.trim();
+          const scannedItems = event.detail.allItems || [];
+          
+          console.log('[ShopIQ] About to save after removal - scannedItems:', scannedItems);
+          
+          const formData = {
+            'product-name': productName,
+            'user-price': userPrice,
+            'scanned-items': scannedItems
+          };
+          
+          // Save directly to localStorage using setJSON
+          if (window.setJSON) {
+            window.setJSON('shopIqInput', formData);
+            console.log('[ShopIQ] Scanner data saved IMMEDIATELY to shopIqInput after removal:', formData);
+          } else {
+            localStorage.setItem('shopIqInput', JSON.stringify(formData));
+            console.log('[ShopIQ] Scanner data saved IMMEDIATELY to shopIqInput after removal (fallback):', formData);
+          }
+          
+          // Verify data was saved
+          const savedData = window.getJSON ? window.getJSON('shopIqInput') : JSON.parse(localStorage.getItem('shopIqInput') || '{}');
+          console.log('[ShopIQ] Verification after removal - Data in localStorage:', savedData);
         });
         
         console.log('[ShopIQ] Mixed scanner initialized successfully');
@@ -127,21 +182,12 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
     }
   }
   
-  // Save form data using FormPersistence (like other modules)
+  // Save form data using FormPersistence for manual inputs only
   function saveFormData() {
-    const productName = document.getElementById('product-name').value.trim();
-    const userPrice = document.getElementById('user-price').value.trim();
-    const scannedItems = mixedScanner ? mixedScanner.getScannedItems() : [];
-    
-    const formData = {
-      'product-name': productName,
-      'scanned-items': scannedItems,
-      'user-price': userPrice
-    };
-    
-    // Save using FormPersistence (same as other modules)
-    window.shopFormPersistence.saveFormData(formData);
-    console.log('[ShopIQ] Form data saved via FormPersistence:', formData);
+    // FormPersistence handles manual input fields (product-name, user-price)
+    // Scanner data is saved immediately via direct localStorage in scanner events
+    window.shopFormPersistence.saveFormData();
+    console.log('[ShopIQ] Form data saved via FormPersistence (manual inputs only)');
   }
   
   // Listen for input changes and save to localStorage

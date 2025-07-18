@@ -335,7 +335,10 @@ class FormPersistence {
             console.warn('[FormPersistence] No relevant data found in DOM for module', this.moduleName, '- skipping save to avoid overwriting.');
             return;
         }
+        
+        console.log(`[FormPersistence] Saving form data for ${this.moduleName}:`, formData);
         setJSON(gridKey, formData);
+        console.log(`[FormPersistence] Form data saved to localStorage key: ${gridKey}`);
     }
 
     /**
@@ -823,7 +826,7 @@ class FormPersistence {
             foundRelevantField = true;
             console.log(`[FormPersistence] Collected ${images.length} images from ImageUploadUtility`);
         }
-        
+
         // If no relevant fields found, return empty object
         if (!foundRelevantField) return {};
         return formData;
@@ -911,6 +914,8 @@ class FormPersistence {
     }
 
     /**
+     * Save response data to localStorage
+     * @param {Object} responseData - The response data to save    /**
      * Get the expected recreation function name for a base pattern
      * @param {string} basePattern - The base pattern (e.g., "snack", "entry")
      * @returns {string} The expected function name
