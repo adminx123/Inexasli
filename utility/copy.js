@@ -22,114 +22,7 @@
 function createCopyButton(containerId, getContentCallback) {
     // Button is now integrated into datain.js - skip external creation
     console.log('[Copy] Button creation skipped - integrated into datain.js');
-    return;
-    
-    // Create the button with the 3D styling
-    const button = document.createElement('button');
-    button.id = 'copyButton';
-    button.title = 'Copy to clipboard';
-    
-    // Apply styling for bottom right corner - borderless
-    button.style.backgroundColor = 'transparent';
-    button.style.color = '#000';
-    button.style.border = 'none';
-    button.style.borderRadius = '0';
-    button.style.boxShadow = 'none';
-    button.style.padding = '0';
-    button.style.width = '36px';
-    button.style.height = '36px';
-    button.style.display = 'flex';
-    button.style.justifyContent = 'center';
-    button.style.alignItems = 'center';
-    button.style.cursor = 'pointer';
-    button.style.margin = '0';
-    button.style.transition = 'transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease';
-    
-    // Create the copy icon (using SVG for consistency)
-    const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    iconSvg.setAttribute('viewBox', '0 0 24 24');
-    iconSvg.setAttribute('width', '18');
-    iconSvg.setAttribute('height', '18');
-    iconSvg.setAttribute('fill', 'none');
-    iconSvg.style.stroke = 'currentColor';
-    iconSvg.style.strokeWidth = '2';
-    iconSvg.style.strokeLinecap = 'round';
-    iconSvg.style.strokeLinejoin = 'round';
-    
-    // Path 1 for the document
-    const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path1.setAttribute('d', 'M8 4V16C8 16.5304 8.21071 17.0391 8.58579 17.4142C8.96086 17.7893 9.46957 18 10 18H18C18.5304 18 19.0391 17.7893 19.4142 17.4142C19.7893 17.0391 20 16.5304 20 16V7.242C20 6.97556 19.9467 6.71181 19.8433 6.46624C19.7399 6.22068 19.5885 5.99824 19.398 5.812L16.083 2.57C15.7094 2.20466 15.2076 2.00007 14.685 2H10C9.46957 2 8.96086 2.21071 8.58579 2.58579C8.21071 2.96086 8 3.46957 8 4V4Z');
-    
-    // Path 2 for the second document (behind)
-    const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path2.setAttribute('d', 'M16 18V20C16 20.5304 15.7893 21.0391 15.4142 21.4142C15.0391 21.7893 14.5304 22 14 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V8C4 7.46957 4.21071 6.96086 4.58579 6.58579C4.96086 6.21071 5.46957 6 6 6H8');
-    
-    iconSvg.appendChild(path1);
-    iconSvg.appendChild(path2);
-    button.appendChild(iconSvg);
-    
-    // Add hover effect
-    button.addEventListener('mouseover', function() {
-        button.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
-    });
-    
-    button.addEventListener('mouseout', function() {
-        button.style.backgroundColor = 'transparent';
-    });
-    
-    // Add active/click effect for bottom right position
-    button.addEventListener('mousedown', function() {
-        button.style.transform = 'scale(0.9)'; // Scale down when pressed
-        button.style.opacity = '0.7';
-    });
-    
-    button.addEventListener('mouseup', function() {
-        button.style.transform = 'scale(1)';
-        button.style.opacity = '1';
-    });
-    
-    // Add click event to open share modal
-    button.addEventListener('click', function() {
-        openShareModal(containerId, getContentCallback);
-    });
-    
-    // Append button to container, and container to body
-    buttonContainer.appendChild(button);
-    document.body.appendChild(buttonContainer);
-    
-    // Add media query for mobile devices
-    const mobileQuery = window.matchMedia("(max-width: 480px)");
-    const adjustForMobile = (query) => {
-        if (query.matches) { // If media query matches (mobile)
-            button.style.width = '28px'; // Match mobile tab width
-            button.style.height = '28px'; // Match mobile tab height
-            iconSvg.setAttribute('width', '14');
-            iconSvg.setAttribute('height', '14');
-            // Keep button snug in the corner even on mobile
-            buttonContainer.style.bottom = '0';
-            buttonContainer.style.right = '0';
-        } else {
-            button.style.width = '36px'; // Desktop size
-            button.style.height = '36px'; // Desktop size
-            iconSvg.setAttribute('width', '18');
-            iconSvg.setAttribute('height', '18');
-            // Keep button snug in the corner
-            buttonContainer.style.bottom = '0';
-            buttonContainer.style.right = '0';
-        }
-    };
-    
-    // Initial check
-    adjustForMobile(mobileQuery);
-    
-    // Listen for changes (like rotation)
-    if (mobileQuery.addEventListener) {
-        mobileQuery.addEventListener('change', adjustForMobile);
-    } else {
-        mobileQuery.addListener(adjustForMobile); // Fallback for older browsers
-    }
-    
-    return buttonContainer;
+    return null;
 }
 
 /**
@@ -774,14 +667,6 @@ function getAnalysisTypeFromPage() {
         if (url.includes('/speculation/') || url.includes('speculation')) {
             console.log('[PDF] Matched speculation pattern');
             return { analysisType: 'speculation-analysis', title: 'Speculation Analysis' };
-        }
-        if (url.includes('/period/') || url.includes('period')) {
-            console.log('[PDF] Matched period pattern');
-            return { analysisType: 'period-analysis', title: 'Period Analysis' };
-        }
-        if (url.includes('/fashion/') || url.includes('fashion')) {
-            console.log('[PDF] Matched fashion pattern');
-            return { analysisType: 'fashion-analysis', title: 'Fashion Analysis' };
         }
         if (url.includes('/period/') || url.includes('period')) {
             console.log('[PDF] Matched period pattern');
