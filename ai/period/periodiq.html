@@ -94,13 +94,12 @@
     </h3>
     
     <label>How regular are your cycles?</label>
-    <div class="grid-items2">
+    <div class="grid-items2" id="period-cycle-regularity-container">
       <div class="grid-item" data-value="very-regular">Very Regular (±1 day)</div>
       <div class="grid-item" data-value="mostly-regular">Mostly Regular (±2-3 days)</div>
       <div class="grid-item" data-value="irregular">Irregular (±4+ days)</div>
       <div class="grid-item" data-value="unpredictable">Unpredictable</div>
     </div>
-    <input type="hidden" id="period-cycle-regularity" />
 
     <label>Average cycle length</label>
     <textarea id="period-cycle-length" placeholder="Average cycle length
@@ -111,13 +110,12 @@
 "></textarea>
 
     <label>Flow intensity</label>
-    <div class="grid-items2">
+    <div class="grid-items2" id="period-flow-intensity-container">
       <div class="grid-item" data-value="light">Light</div>
       <div class="grid-item" data-value="medium">Medium</div>
       <div class="grid-item" data-value="heavy">Heavy</div>
       <div class="grid-item" data-value="varies">Varies</div>
     </div>
-    <input type="hidden" id="period-flow-intensity" />
   </div>
 
   <div class="row1" data-step-label="Period Events Log">
@@ -159,43 +157,17 @@
     
     gridContainers.forEach(grid => {
       const cards = grid.querySelectorAll('.grid-item');
-      const hiddenInput = grid.nextElementSibling;
       
       cards.forEach(card => {
         card.addEventListener('click', function() {
+          // Single selection logic
           cards.forEach(c => c.classList.remove('selected'));
           this.classList.add('selected');
           
-          if (hiddenInput && hiddenInput.type === 'hidden') {
-            hiddenInput.value = this.dataset.value;
-          }
-          
-          // Trigger FormPersistence save
-          if (window.periodFormPersistence) {
-            window.periodFormPersistence.saveFormData();
-          }
+          // FormPersistence will handle saving automatically via its event listeners
         });
       });
     });
-    
-    // Restore saved selections
-    setTimeout(() => {
-      if (window.periodFormPersistence) {
-        const formData = window.periodFormPersistence.getSavedFormData();
-        
-        const regularityValue = formData['period-cycle-regularity'];
-        if (regularityValue) {
-          const card = document.querySelector(`.grid-item[data-value="${regularityValue}"]`);
-          if (card) card.classList.add('selected');
-        }
-        
-        const flowValue = formData['period-flow-intensity'];
-        if (flowValue) {
-          const card = document.querySelector(`.grid-item[data-value="${flowValue}"]`);
-          if (card) card.classList.add('selected');
-        }
-      }
-    }, 200);
   }
 
   // Initialize birth control conditional logic

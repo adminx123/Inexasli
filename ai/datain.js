@@ -257,7 +257,7 @@ function initializeFormPersistence(url) {
     } else if (url.includes('/period/')) {
         moduleType = 'period';
         moduleConfig = {
-            singleSelection: ['period-tracking-reason'],
+            singleSelection: ['period-cycle-regularity-container', 'period-flow-intensity-container'],
             multiSelection: [],
             splitTextareas: true // Special handling for split textarea entries
         };

@@ -864,9 +864,10 @@ class FormPersistence {
                 }
                 return;
             }
-            // Handle grid containers
+            // Handle grid containers (both .grid-container and grid-items classes)
             const containerElement = document.getElementById(elementId) || document.getElementById(fieldName);
-            if (containerElement && containerElement.classList.contains('grid-container')) {
+            if (containerElement && (containerElement.classList.contains('grid-container') || 
+                Array.from(containerElement.classList).some(cls => cls.includes('grid-items')))) {
                 console.log(`[FormPersistence][DEBUG] repopulateGenericForm: repopulating grid container id=${containerElement.id} with value=`, value);
                 this.repopulateGridContainer(containerElement, value);
             }
