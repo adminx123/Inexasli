@@ -42,6 +42,29 @@
     </select>
     <input id="period-birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
 
+    <!-- Natural Cycle Specific Fields -->
+    <div id="natural-cycle-container" style="display: none;">
+      <input id="period-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
+    </div>
+
+    <!-- Birth Control Pill Specific Fields -->
+    <div id="pill-container" style="display: none;">
+      <label for="period-pill-start-date">Hormone pill restart date (after your last period):</label>
+      <input id="period-pill-start-date" type="date">
+    </div>
+
+    <!-- IUD Specific Fields -->
+    <div id="iud-container" style="display: none;">
+      <label for="period-iud-insertion-date">IUD insertion date:</label>
+      <input id="period-iud-insertion-date" type="date">
+    </div>
+
+    <!-- Other Hormonal Methods Container -->
+    <div id="other-hormonal-container" style="display: none;">
+      <label for="period-method-start-date">Method start date:</label>
+      <input id="period-method-start-date" type="date">
+    </div>
+
     <label for="start-date">Last Period Start Date:</label>
     <input id="start-date" type="date" name="start-date">
     
@@ -49,8 +72,6 @@
     <input id="end-date" type="date" name="end-date">
 
     <input id="period-age" type="text" placeholder="Age">
-    <input id="period-weight" type="text" placeholder="Weight (e.g. 140 lbs, 64 kg)">
-    <input id="period-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
    
   </div>
 
@@ -270,11 +291,48 @@
     }
   );
 
+  // Handle contraceptive-specific container visibility
+  const contraceptiveContainerMap = {
+    'none': '#natural-cycle-container',
+    'condoms': '#natural-cycle-container',
+    'diaphragm': '#natural-cycle-container', 
+    'spermicide': '#natural-cycle-container',
+    'pill': '#pill-container',
+    'patch': '#other-hormonal-container',
+    'ring': '#other-hormonal-container',
+    'injectable': '#other-hormonal-container',
+    'implant': '#other-hormonal-container',
+    'iud': '#iud-container'
+  };
+
+  const handleContainerVisibility = window.handleConditionalContainers(
+    'period-birth-control-type',
+    contraceptiveContainerMap,
+    [''], // Empty selection hides all containers
+    () => {
+      if (window.periodFormPersistence) {
+        window.periodFormPersistence.saveFormData();
+      }
+    }
+  );
+
+  // Handle method-specific timing fields for other hormonal methods
+  function updateMethodSpecificFields() {
+    // Removed - no longer needed
+  }
+
+  // Add listener for birth control type changes to update method-specific fields
+  document.getElementById('period-birth-control-type').addEventListener('change', updateMethodSpecificFields);
+
   // Function to trigger conditional logic manually (for form repopulation)
   function triggerConditionalLogic() {
     if (handleBirthControlChange && typeof handleBirthControlChange === 'function') {
       handleBirthControlChange();
     }
+    if (handleContainerVisibility && typeof handleContainerVisibility === 'function') {
+      handleContainerVisibility();
+    }
+    updateMethodSpecificFields();
   }
 
   // Initialize period entries functionality

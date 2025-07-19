@@ -932,6 +932,72 @@ function handleConditionalInput(selectId, conditionalInputId, placeholderMap, hi
 }
 
 /**
+ * Handles conditional container visibility based on select dropdown value
+ * Perfect for showing different field groups based on contraceptive type, etc.
+ * @param {string} selectId - ID of the select dropdown element
+ * @param {Object} containerMap - Map of select values to container selectors or arrays of selectors
+ * @param {string|Array} hideValues - Value(s) that should hide all containers (default: ['none', ''])
+ * @param {Function} persistenceCallback - Optional callback to save form data
+ */
+function handleConditionalContainers(selectId, containerMap, hideValues = ['none', ''], persistenceCallback = null) {
+    const selectElement = document.getElementById(selectId);
+    
+    if (!selectElement) {
+        console.warn('[Input Functionality] Select element not found:', selectId);
+        return null;
+    }
+    
+    // Normalize hideValues to array
+    const hideValuesArray = Array.isArray(hideValues) ? hideValues : [hideValues];
+    
+    function updateContainerVisibility() {
+        const selectedValue = selectElement.value;
+        
+        // Hide all containers first
+        Object.values(containerMap).forEach(containerSelectors => {
+            const selectors = Array.isArray(containerSelectors) ? containerSelectors : [containerSelectors];
+            selectors.forEach(selector => {
+                const container = document.querySelector(selector);
+                if (container) {
+                    container.style.display = 'none';
+                }
+            });
+        });
+        
+        // Show containers for selected value
+        if (selectedValue && !hideValuesArray.includes(selectedValue) && containerMap[selectedValue]) {
+            const containerSelectors = Array.isArray(containerMap[selectedValue]) 
+                ? containerMap[selectedValue] 
+                : [containerMap[selectedValue]];
+            
+            containerSelectors.forEach(selector => {
+                const container = document.querySelector(selector);
+                if (container) {
+                    container.style.display = 'block';
+                    console.log(`[Input Functionality] Showing container: ${selector} for value: ${selectedValue}`);
+                } else {
+                    console.warn(`[Input Functionality] Container not found: ${selector}`);
+                }
+            });
+        }
+        
+        // Trigger container resize for layout adjustment
+        triggerContainerResize();
+        
+        // Call persistence callback if provided
+        if (persistenceCallback && typeof persistenceCallback === 'function') {
+            persistenceCallback();
+        }
+    }
+    
+    // Add event listener
+    selectElement.addEventListener('change', updateContainerVisibility);
+    
+    // Return function for manual triggering (useful for form repopulation)
+    return updateContainerVisibility;
+}
+
+/**
  * Triggers container resize to prevent layout issues when content changes
  */
 function triggerContainerResize() {
@@ -1083,13 +1149,39 @@ function addEntryButton({
   return { button: addBtn, addEntry };
 }
 
+// Make functions globally available on window object
+if (typeof window !== 'undefined') {
+    window.initAutoExpandTextareas = initAutoExpandTextareas;
+    window.createSplitTextarea = createSplitTextarea;
+    window.createSplitCalendarText = createSplitCalendarText;
+    window.deleteEntry = deleteEntry;
+    window.handleConditionalInput = handleConditionalInput;
+    window.handleConditionalContainers = handleConditionalContainers;
+    window.triggerContainerResize = triggerContainerResize;
+    window.addEntryButton = addEntryButton;
+    window.autoExpandTextarea = autoExpandTextarea;
+    window.addDynamicTextareaInput = addDynamicTextareaInput;
+    window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
+    window.initInputFunctionality = initInputFunctionality;
+}
+
+// Auto-initialize when DOM is ready
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initInputFunctionality);
+    } else {
+        initInputFunctionality();
+    }
+}
+
 // Export functions for module use
 export { 
     initAutoExpandTextareas, 
     createSplitTextarea,
     createSplitCalendarText,
     deleteEntry,
-    handleConditionalInput, 
+    handleConditionalInput,
+    handleConditionalContainers,
     triggerContainerResize,
     addEntryButton
 };
