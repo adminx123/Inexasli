@@ -145,7 +145,7 @@ class FormPersistence {
      * This replaces the need for external grid-item-toggled events
      */
     bindGridItemEvents() {
-        const gridItems = document.querySelectorAll('.grid-container .grid-item');
+        const gridItems = document.querySelectorAll('[class*="grid-items"] .grid-item, .grid-container .grid-item');
         let lastSelectionTime = 0;
         const SELECTION_DEBOUNCE = 150; // ms debounce for rapid selections
         
@@ -184,7 +184,7 @@ class FormPersistence {
      */
     processGridSelection(e, item) {
         e.preventDefault();
-        const container = item.closest('.grid-container');
+        const container = item.closest('.grid-container, [class*="grid-items"]');
         if (!container) return;
         
         // Verify the item is still the intended target
@@ -263,7 +263,7 @@ class FormPersistence {
     handleGridItemToggled(event) {
         console.log(`[FormPersistence] Grid item toggled event received for ${this.moduleName}`);
         const item = event.detail.item;
-        const container = item.closest('.grid-container');
+        const container = item.closest('.grid-container, [class*="grid-items"]');
         
         if (!container) return;
 
@@ -318,7 +318,7 @@ class FormPersistence {
         // Extra guard: Only save if DOM contains at least one field for this module
         const modulePrefix = `${this.moduleName}-`;
         const hasModuleField = !!document.querySelector(
-            `input[id^="${modulePrefix}"], textarea[id^="${modulePrefix}"], select[id^="${modulePrefix}"], .grid-container[id^="${modulePrefix}"]`
+            `input[id^="${modulePrefix}"], textarea[id^="${modulePrefix}"], select[id^="${modulePrefix}"], .grid-container[id^="${modulePrefix}"], [class*="grid-items"][id^="${modulePrefix}"]`
         );
         if (!hasModuleField) {
             console.warn('[FormPersistence] No DOM fields found for module', this.moduleName, '- skipping save to avoid overwriting.');
@@ -706,7 +706,7 @@ class FormPersistence {
         // Images are now part of unified storage, no separate clearing needed
         
         // Clear UI elements
-        document.querySelectorAll('.grid-container .grid-item').forEach(item => {
+        document.querySelectorAll('[class*="grid-items"] .grid-item, .grid-container .grid-item').forEach(item => {
             item.classList.remove('selected');
         });
         document.querySelectorAll('input:not([type="button"]):not([type="submit"])').forEach(input => {
@@ -796,7 +796,7 @@ class FormPersistence {
             }
         });
         // Collect from grid containers
-        document.querySelectorAll('.grid-container').forEach(container => {
+        document.querySelectorAll('[class*="grid-items"], .grid-container').forEach(container => {
             const fieldName = this.getFieldName(container.id);
             const selectedItems = container.querySelectorAll('.grid-item.selected');
             if (selectedItems.length > 0) {

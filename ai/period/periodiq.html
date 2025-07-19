@@ -42,33 +42,33 @@
     <input id="period-birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
 
     <!-- Natural Cycle Specific Fields -->
-    <div id="natural-cycle-container" style="display: none;">
-      <input id="period-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
+    <div id="period-natural-cycle-container" style="display: none;">
+      <input id="period-cycle-length-input" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
     </div>
 
     <!-- Birth Control Pill Specific Fields -->
-    <div id="pill-container" style="display: none;">
+    <div id="period-pill-container" style="display: none;">
       <label for="period-pill-start-date">Hormone pill restart date (after your last period):</label>
       <input id="period-pill-start-date" type="date">
     </div>
 
     <!-- IUD Specific Fields -->
-    <div id="iud-container" style="display: none;">
+    <div id="period-iud-container" style="display: none;">
       <label for="period-iud-insertion-date">IUD insertion date:</label>
       <input id="period-iud-insertion-date" type="date">
     </div>
 
     <!-- Other Hormonal Methods Container -->
-    <div id="other-hormonal-container" style="display: none;">
+    <div id="period-other-hormonal-container" style="display: none;">
       <label for="period-method-start-date">Method start date:</label>
       <input id="period-method-start-date" type="date">
     </div>
 
-    <label for="start-date">Last Period Start Date:</label>
-    <input id="start-date" type="date" name="start-date">
+    <label for="period-start-date">Last Period Start Date:</label>
+    <input id="period-start-date" type="date" name="period-start-date">
     
-    <label for="end-date">Last Period End Date:</label>
-    <input id="end-date" type="date" name="end-date">
+    <label for="period-end-date">Last Period End Date:</label>
+    <input id="period-end-date" type="date" name="period-end-date">
 
     <input id="period-age" type="text" placeholder="Age">
   </div>
@@ -102,6 +102,7 @@
     </div>
     <input type="hidden" id="period-cycle-regularity" />
 
+    <label>Average cycle length</label>
     <textarea id="period-cycle-length" placeholder="Average cycle length
 • 28 days (most common)
 • Varies 26-32 days
@@ -129,340 +130,269 @@
     <div id="period-entries-container">
       <!-- Split calendar-text entries will be added here dynamically -->
     </div>
+    <button type="button" id="add-period-entry-btn" class="add-entry-btn">Add Entry</button>
     <!-- View tracker button -->
     <button class="generate-btn" id="generate-period-btn">View My Period Tracker</button>
-    
-    <!-- Enhanced analysis button (only shows if additional entries exist) -->
-    <button class="generate-btn" id="enhanced-analysis-btn" style="display: none; background: #9C27B0; margin-top: 10px;">Get Enhanced AI Analysis</button>
   </div>
 </div>
 
 <script type="module">
+/*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+*/
+
 // Rate limiting utilities are now available globally via window.rateLimiter
 
 (function() {
-  console.log("Period IQ script initializing");
+  // FormPersistence is initialized by datain.js and available as window.periodFormPersistence
+  // No need to create it here - just ensure it's available when we need it
 
-  // Initialize textarea auto-expand
-  window.initAutoExpandTextareas();
-  
-  // Listen for textarea changes to save data
-  document.addEventListener('textarea:changed', function(e) {
-    if (window.periodFormPersistence) {
-      window.periodFormPersistence.saveFormData();
-    }
-  });
-
-  // Listen for form data restoration to trigger conditional logic
-  document.addEventListener('formpersistence:repopulated', function(e) {
-    console.log('[PeriodIQ] Form repopulated, triggering conditional logic');
-    setTimeout(() => {
-      triggerConditionalLogic();
-    }, 50);
-  });
-
-  // Handle generate button click
-  async function handleGeneratePeriodIq() {
-    try {
-      // Force save current form data first
-      if (window.periodFormPersistence) {
-        window.periodFormPersistence.saveFormData();
-      }
+  // Initialize grid functionality for period-specific grids
+  function initCycleGrids() {
+    const gridContainers = document.querySelectorAll('.grid-items2');
+    
+    gridContainers.forEach(grid => {
+      const cards = grid.querySelectorAll('.grid-item');
+      const hiddenInput = grid.nextElementSibling;
       
-      const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
-      console.log('[PeriodIQ] Form data for validation:', formData);
-      
-      // Check if we have basic period dates OR comprehensive medical data
-      const hasBasicData = formData['start-date'] || formData['end-date'];
-      const hasAdvancedData = formData['period-medical-conditions'] || formData['period-current-medications'] || 
-                              formData['period-cycle-regularity'] || formData['period-cycle-length'];
-      console.log('[PeriodIQ] Has basic data:', hasBasicData, 'Has advanced data:', hasAdvancedData);
-      
-      if (!hasBasicData && !hasAdvancedData) { 
-        alert('Please enter your period data or medical history to view your tracker.'); 
-        return;
-      }
-      
-      // Trigger dataout.js navigation like other modules
-      const event = new CustomEvent('api-response-received', {
-        detail: {
-          module: 'period',
-          type: 'frontend-response',
-          timestamp: Date.now()
-        }
-      });
-      document.dispatchEvent(event);
-      console.log('[PeriodIQ] Dispatched api-response-received event for dataout.js');
-      
-    } catch (error) {
-      console.error('[PeriodIQ] Error:', error);
-      alert('An error occurred. Please try again.');
-    }
-  }
-
-  // Handle enhanced analysis (AI generation)
-  async function handleEnhancedAnalysis() {
-    try {
-      const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
-      
-      // Check if we have comprehensive data for enhanced analysis
-      const hasComprehensiveData = formData['period-medical-conditions'] || formData['period-current-medications'] || 
-                                   formData['period-cycle-regularity'] || formData['period-cycle-length'] ||
-                                   Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
-      
-      if (!hasComprehensiveData) { 
-        alert('Please add medical history, symptoms, or period events for comprehensive AI analysis.'); 
-        return;
-      }
-
-      // Check rate limiting
-      if (window.rateLimiter.isRateLimited('period', 8, 60 * 60 * 1000)) {
-        alert('You have exceeded the request limit for period analysis. Please try again later.');
-        return;
-      }
-
-      // Create worker payload with email for paid users (DRY function)
-      const workerPayload = window.rateLimiter.createWorkerPayload('period', formData);
-
-      const dataContainer = document.querySelector('.device-container');
-      let backendResponse = null;
-      
-      try {
-        backendResponse = await window.enhancedLoading(
-          'generate-period-btn',
-          'period',
-          async () => {
-            const apiUrl = 'https://inexasli.com/api/generate';
-            const response = await fetch(apiUrl, { 
-              method: 'POST', 
-              headers: {'Content-Type':'application/json'}, 
-              body: JSON.stringify(workerPayload)
-            });
-            
-            let responseData;
-            try {
-              responseData = await response.json();
-            } catch (e) {
-              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-            }
-            
-            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'PeriodIQ');
-            
-            if (!response.ok) {
-              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-            }
-            if (responseData.message !== 'Success') {
-              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            return responseData;
+      cards.forEach(card => {
+        card.addEventListener('click', function() {
+          cards.forEach(c => c.classList.remove('selected'));
+          this.classList.add('selected');
+          
+          if (hiddenInput && hiddenInput.type === 'hidden') {
+            hiddenInput.value = this.dataset.value;
           }
-        );
-        
-        window.rateLimiter.incrementRequestCount('period');
-        window.periodFormPersistence.saveResponseData(backendResponse);
-        
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'period',
-            type: 'worker-response',
-            timestamp: Date.now()
+          
+          // Trigger FormPersistence save
+          if (window.periodFormPersistence) {
+            window.periodFormPersistence.saveFormData();
           }
         });
-        document.dispatchEvent(event);
-        console.log('[PeriodIQ] Dispatched api-response-received event');
+      });
+    });
+    
+    // Restore saved selections
+    setTimeout(() => {
+      if (window.periodFormPersistence) {
+        const formData = window.periodFormPersistence.getSavedFormData();
         
-      } catch (error) {
-        if (backendResponse && dataContainer) {
-          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'PeriodIQ');
+        const regularityValue = formData['period-cycle-regularity'];
+        if (regularityValue) {
+          const card = document.querySelector(`.grid-item[data-value="${regularityValue}"]`);
+          if (card) card.classList.add('selected');
         }
-        console.error('[PeriodIQ] Error generating enhanced analysis:', error);
+        
+        const flowValue = formData['period-flow-intensity'];
+        if (flowValue) {
+          const card = document.querySelector(`.grid-item[data-value="${flowValue}"]`);
+          if (card) card.classList.add('selected');
+        }
       }
-    } catch (error) {
-      console.error('[PeriodIQ] Error generating enhanced analysis:', error);
-      alert('An error occurred while generating your enhanced analysis. Please try again later.');
-    }
+    }, 200);
   }
 
-  // Show/hide enhanced analysis button based on comprehensive data
-  function updateEnhancedAnalysisButton() {
-    const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
-    const hasComprehensiveData = formData['period-medical-conditions'] || formData['period-current-medications'] || 
-                                formData['period-cycle-regularity'] || formData['period-cycle-length'] ||
-                                Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
-    const enhancedBtn = document.getElementById('enhanced-analysis-btn');
+  // Initialize birth control conditional logic
+  function initBirthControlLogic() {
+    const select = document.getElementById('period-birth-control-type');
+    const detailInput = document.getElementById('period-birth-control-detail');
     
-    if (enhancedBtn) {
-      enhancedBtn.style.display = hasComprehensiveData ? 'block' : 'none';
-    }
-  }
+    const containerMap = {
+      'none': '#period-natural-cycle-container',
+      'condoms': '#period-natural-cycle-container',
+      'diaphragm': '#period-natural-cycle-container', 
+      'spermicide': '#period-natural-cycle-container',
+      'pill': '#period-pill-container',
+      'patch': '#period-other-hormonal-container',
+      'ring': '#period-other-hormonal-container',
+      'injectable': '#period-other-hormonal-container',
+      'implant': '#period-other-hormonal-container',
+      'iud': '#period-iud-container'
+    };
 
-  // Save input data to localStorage for periodoutput.html to read
-  function saveInputToLocalStorage() {
-    const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
-    
-    // Save to localStorage as periodIqInput for output page to read
-    localStorage.setItem('periodIqInput', JSON.stringify(formData));
-    console.log('[PeriodIQ] Saved input data to localStorage');
-    
-    // Trigger dataout.js navigation like other modules
-    const event = new CustomEvent('api-response-received', {
-      detail: {
-        module: 'period',
-        type: 'frontend-response',
-        timestamp: Date.now()
+    const placeholderMap = {
+      'pill': 'Brand name (e.g. Yasmin, Ortho Tri-Cyclen, Alesse)',
+      'iud': 'IUD type (e.g. Mirena, Paragard, Skyla, Kyleena)',
+      'implant': 'Implant type (e.g. Nexplanon, Implanon)',
+      'injectable': 'Injectable type (e.g. Depo-Provera)',
+      'patch': 'Patch brand (e.g. Ortho Evra)',
+      'ring': 'Ring type (e.g. NuvaRing)',
+      'condoms': 'Brand/type (e.g. Trojan, Durex, latex-free)',
+      'diaphragm': 'Brand/type (e.g. Milex, Ortho)',
+      'spermicide': 'Brand/type (e.g. VCF, Conceptrol)'
+    };
+
+    function handleBirthControlChange() {
+      const value = select.value;
+      
+      // Hide all containers
+      Object.values(containerMap).forEach(selector => {
+        const container = document.querySelector(selector);
+        if (container) container.style.display = 'none';
+      });
+      
+      // Show relevant container
+      if (containerMap[value]) {
+        const container = document.querySelector(containerMap[value]);
+        if (container) container.style.display = 'block';
       }
-    });
-    document.dispatchEvent(event);
-    console.log('[PeriodIQ] Dispatched api-response-received event for dataout.js');
-  }
-
-  // Handle birth control type change
-  const placeholderMap = {
-    'pill': 'Brand name (e.g. Yasmin, Ortho Tri-Cyclen, Alesse)',
-    'iud': 'IUD type (e.g. Mirena, Paragard, Skyla, Kyleena)',
-    'implant': 'Implant type (e.g. Nexplanon, Implanon)',
-    'injectable': 'Injectable type (e.g. Depo-Provera)',
-    'patch': 'Patch brand (e.g. Ortho Evra)',
-    'ring': 'Ring type (e.g. NuvaRing)',
-    'condoms': 'Brand/type (e.g. Trojan, Durex, latex-free)',
-    'diaphragm': 'Brand/type (e.g. Milex, Ortho)',
-    'spermicide': 'Brand/type (e.g. VCF, Conceptrol)'
-  };
-
-  const handleBirthControlChange = window.handleConditionalInput(
-    'period-birth-control-type',
-    'period-birth-control-detail',
-    placeholderMap,
-    'none',
-    () => {
+      
+      // Handle detail input
+      if (value && value !== 'none' && placeholderMap[value]) {
+        detailInput.style.display = 'block';
+        detailInput.placeholder = placeholderMap[value];
+      } else {
+        detailInput.style.display = 'none';
+      }
+      
+      // Save form data
       if (window.periodFormPersistence) {
         window.periodFormPersistence.saveFormData();
       }
     }
-  );
-
-  // Handle contraceptive-specific container visibility
-  const contraceptiveContainerMap = {
-    'none': '#natural-cycle-container',
-    'condoms': '#natural-cycle-container',
-    'diaphragm': '#natural-cycle-container', 
-    'spermicide': '#natural-cycle-container',
-    'pill': '#pill-container',
-    'patch': '#other-hormonal-container',
-    'ring': '#other-hormonal-container',
-    'injectable': '#other-hormonal-container',
-    'implant': '#other-hormonal-container',
-    'iud': '#iud-container'
-  };
-
-  const handleContainerVisibility = window.handleConditionalContainers(
-    'period-birth-control-type',
-    contraceptiveContainerMap,
-    [''], // Empty selection hides all containers
-    () => {
-      if (window.periodFormPersistence) {
-        window.periodFormPersistence.saveFormData();
-      }
-    }
-  );
-
-
-
-  // Function to trigger conditional logic manually (for form repopulation)
-  function triggerConditionalLogic() {
-    if (handleBirthControlChange && typeof handleBirthControlChange === 'function') {
-      handleBirthControlChange();
-    }
-    if (handleContainerVisibility && typeof handleContainerVisibility === 'function') {
-      handleContainerVisibility();
+    
+    if (select) {
+      select.addEventListener('change', handleBirthControlChange);
+      // Trigger on page load to restore state
+      setTimeout(handleBirthControlChange, 100);
     }
   }
 
-  // Initialize period entries functionality
-  if (window.addEntryButton) {
-    window.addEntryButton({
-      containerSelector: '#period-entries-container',
-      buttonId: 'add-period-entry-btn',
-      buttonText: 'Add Entry',
-      entryIdPrefix: 'period-entry',
-      whenPlaceholder: 'When did this happen? (e.g., "June 17th", "Today 3pm")',
-      whatPlaceholder: 'What happened? (e.g., "Period started", "Heavy cramping", "Period ended")',
-      useCalendar: false,
-      onAdd: () => {
-        if (window.periodFormPersistence) {
-          window.periodFormPersistence.saveFormData();
-        }
-      }
-    });
+  // Initialize add entry functionality
+  function initAddEntryButton() {
+    const addBtn = document.getElementById('add-period-entry-btn');
+    const container = document.getElementById('period-entries-container');
     
-    // Expose addPeriodEntry globally for FormPersistence recreation
-    window.addPeriodEntry = function(whenValue = '', whatValue = '') {
-      // Get the container
-      const container = document.querySelector('#period-entries-container');
-      if (!container) return;
-      
-      // Find existing entries to determine counter
-      const existingEntries = container.querySelectorAll('[data-entry-id^="period-entry"]');
-      const entryCounter = existingEntries.length + 1;
-      
-      // Default "when" value if not provided
-      if (!whenValue) {
+    if (addBtn && container) {
+      addBtn.addEventListener('click', function() {
+        const entryCount = container.querySelectorAll('[data-entry-id^="period-entry"]').length + 1;
         const now = new Date();
-        whenValue = `Today ${now.toLocaleTimeString('en-US', { 
+        const defaultWhen = `Today ${now.toLocaleTimeString('en-US', { 
           hour: 'numeric', 
           minute: '2-digit',
           hour12: true 
         })}`;
-      }
-      
-      // Create the entry using inputFunctionality's createSplitTextarea
-      if (window.createSplitTextarea) {
-        const entryDiv = window.createSplitTextarea({
-          id: `period-entry-${entryCounter}`,
-          whenPlaceholder: 'When did this happen? (e.g., "June 17th", "Today 3pm")',
-          whatPlaceholder: 'What happened? (e.g., "Period started", "Heavy cramping", "Period ended")',
-          whenValue: whenValue,
-          whatValue: whatValue,
-          entryNumber: entryCounter
-        });
-
-        container.appendChild(entryDiv);
         
-        // Initialize auto-expand for textareas
-        const textareas = entryDiv.querySelectorAll('textarea');
-        textareas.forEach(textarea => {
-          if (window.autoExpandTextarea) {
-            window.autoExpandTextarea(textarea);
-            textarea.addEventListener('input', () => window.autoExpandTextarea(textarea));
-            textarea.addEventListener('paste', () => {
-              setTimeout(() => window.autoExpandTextarea(textarea), 0);
-            });
+        if (window.createSplitTextarea) {
+          const entryDiv = window.createSplitTextarea({
+            id: `period-entry-${entryCount}`,
+            whenPlaceholder: 'When did this happen? (e.g., "June 17th", "Today 3pm")',
+            whatPlaceholder: 'What happened? (e.g., "Period started", "Heavy cramping", "Period ended")',
+            whenValue: defaultWhen,
+            whatValue: '',
+            entryNumber: entryCount
+          });
+          
+          container.appendChild(entryDiv);
+          
+          // Initialize auto-expand for new textareas
+          const textareas = entryDiv.querySelectorAll('textarea');
+          textareas.forEach(textarea => {
+            if (window.autoExpandTextarea) {
+              window.autoExpandTextarea(textarea);
+              textarea.addEventListener('input', () => window.autoExpandTextarea(textarea));
+            }
+          });
+          
+          // Save form data
+          if (window.periodFormPersistence) {
+            setTimeout(() => window.periodFormPersistence.saveFormData(), 100);
           }
-        });
-        
-        // Trigger save immediately after creation
-        if (window.periodFormPersistence) {
-          setTimeout(() => {
-            window.periodFormPersistence.saveFormData();
-          }, 100); // Small delay to ensure DOM is ready
         }
-      }
-    };
-    
-    console.log('[PeriodIQ] addPeriodEntry function exposed globally');
-  }
-
-  // Initialize form persistence for period module
-  if (window.FormPersistence) {
-    window.periodFormPersistence = window.FormPersistence.getInstance('period');
-    if (!window.periodFormPersistence.initialized) {
-      window.periodFormPersistence.init({
-        moduleName: 'period'
       });
     }
   }
 
-  // Initialization - simplified to match calorie module pattern
+  // Initialize all period-specific functionality
+  setTimeout(() => {
+    initCycleGrids();
+    initBirthControlLogic();
+    initAddEntryButton();
+  }, 200);
+
+  // Handle the generate button click
+  async function handleGeneratePeriodIq() {
+    const formData = window.periodFormPersistence.getSavedFormData();
+    if (!formData) {
+      console.error('[PeriodIQ] No input data found in localStorage.');
+      alert('Please complete the form before generating a period analysis.');
+      return;
+    }
+
+    // Check rate limiting before proceeding
+    if (window.rateLimiter.isRateLimited('period', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
+      alert('You have exceeded the request limit for period analysis. Please try again later.');
+      return;
+    }
+
+    // Create worker payload with email for paid users (DRY function)
+    const workerPayload = window.rateLimiter.createWorkerPayload('period', formData);
+    
+    const dataContainer = document.querySelector('.data-container-in');
+    let backendResponse = null;
+    try {
+      backendResponse = await window.enhancedLoading(
+        'generate-period-btn',
+        'period',
+        async () => {
+          // Send data to worker
+          const apiUrl = 'https://inexasli.com/api/generate';
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(workerPayload)
+          });
+          let responseData;
+          try {
+            responseData = await response.json();
+          } catch (e) {
+            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+          }
+          // Always call handleRateLimitResponse with backend response
+          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
+          if (!response.ok) {
+            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+          }
+          if (responseData.message !== 'Success') {
+            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+          }
+          
+          // Store the response
+          window.periodFormPersistence.saveResponseData(responseData);
+          
+          // Dispatch an event to notify dataout.js that a response was received
+          const event = new CustomEvent('api-response-received', {
+            detail: {
+              module: 'period',
+              type: 'worker-response',
+              timestamp: Date.now()
+            }
+          });
+          document.dispatchEvent(event);
+          
+          return responseData;
+        }
+      );
+      window.rateLimiter.incrementRequestCount('period');
+    } catch (error) {
+      // If backendResponse is available, update rate limit display and show error
+      if (backendResponse && dataContainer) {
+        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
+      }
+      // Optionally, show a toast/modal here for generic errors
+      console.error('[PeriodIQ] Error:', error);
+    }
+  }
+
+  // Initialization
   const generatePeriodBtn = document.getElementById('generate-period-btn');
   if (generatePeriodBtn) {
     generatePeriodBtn.addEventListener('click', handleGeneratePeriodIq);
@@ -470,84 +400,5 @@
     generatePeriodBtn.dataset.handlerAttached = 'true';
   }
 
-  const enhancedAnalysisBtn = document.getElementById('enhanced-analysis-btn');
-  if (enhancedAnalysisBtn) {
-    enhancedAnalysisBtn.addEventListener('click', handleEnhancedAnalysis);
-  }
-
-  // Update enhanced analysis button visibility on form changes
-  document.addEventListener('textarea:changed', updateEnhancedAnalysisButton);
-  document.addEventListener('change', updateEnhancedAnalysisButton); // For select/input fields
-  
-  // Initial button state check
-  setTimeout(updateEnhancedAnalysisButton, 100);
-
-  // Initialize new interactive elements
-  initCycleGrids();
-
 })();
-
-// Initialize cycle grid functionality
-function initCycleGrids() {
-  // Handle all cycle grids (both .cycle-grid and .grid-items2)
-  const cycleGrids = document.querySelectorAll('.cycle-grid, .grid-items2');
-  
-  cycleGrids.forEach(grid => {
-    const cards = grid.querySelectorAll('.grid-item');
-    const hiddenInput = grid.nextElementSibling; // The hidden input follows each grid
-    
-    cards.forEach(card => {
-      card.addEventListener('click', function() {
-        // Remove selected class from all cards in this grid
-        cards.forEach(c => c.classList.remove('selected'));
-        
-        // Add selected class to clicked card
-        this.classList.add('selected');
-        
-        // Update hidden input value
-        if (hiddenInput && hiddenInput.type === 'hidden') {
-          hiddenInput.value = this.dataset.value;
-        }
-        
-        // Trigger form persistence save
-        if (window.periodFormPersistence) {
-          window.periodFormPersistence.saveFormData();
-        }
-      });
-    });
-  });
-  
-  // Restore saved selections on page load
-  setTimeout(() => {
-    restoreCycleSelections();
-  }, 200);
-}
-
-// Restore cycle selections from saved form data
-function restoreCycleSelections() {
-  if (!window.periodFormPersistence) return;
-  
-  const formData = window.periodFormPersistence.getSavedFormData();
-  
-  // Restore cycle regularity
-  const regularityValue = formData['period-cycle-regularity'];
-  if (regularityValue) {
-    const card = document.querySelector(`.grid-item[data-value="${regularityValue}"]`);
-    if (card) card.classList.add('selected');
-  }
-  
-  // Restore cycle length
-  const lengthValue = formData['period-cycle-length'];
-  if (lengthValue) {
-    const card = document.querySelector(`.grid-item[data-value="${lengthValue}"]`);
-    if (card) card.classList.add('selected');
-  }
-  
-  // Restore flow intensity
-  const flowValue = formData['period-flow-intensity'];
-  if (flowValue) {
-    const card = document.querySelector(`.grid-item[data-value="${flowValue}"]`);
-    if (card) card.classList.add('selected');
-  }
-}
 </script>

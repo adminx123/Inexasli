@@ -15,7 +15,7 @@
  * Dynamic Sizing Features:
  * - Automatically adjusts data container height based on current step content
  * - Smooth transitions between different step sizes
- * - Mobile-responsive height calculations
+ * - Mobile-responsive height        const hasFormElements = document.querySelector('.row1, [class*="grid-items"], .grid-container, device-container');calculations
  * - Configurable min/max height constraints
  * - Restores original container size when exiting guided mode
  * 
@@ -122,7 +122,7 @@ class GuidedFormSystem {
      */
     analyzeStep(row, index) {
         const label = row.getAttribute('data-step-label') || row.id || `Step ${index + 1}`;
-        const gridContainer = row.querySelector('.grid-container');
+        const gridContainer = row.querySelector('[class*="grid-items"], .grid-container');
         const inputs = row.querySelectorAll('input:not([type="button"]):not([type="submit"])');
         const textareas = row.querySelectorAll('textarea');
         const selects = row.querySelectorAll('select');
@@ -813,7 +813,7 @@ window.getGuidedFormsState = getGuidedFormsState;
 document.addEventListener('DOMContentLoaded', () => {
     if (window.autoInitGuidedForms !== false) {
         // Check if we're in a form context
-        const hasFormElements = document.querySelector('.row1, .grid-container, .device-container');
+        const hasFormElements = document.querySelector('.row1, [class*="grid-items"], .grid-container, .device-container');
         if (hasFormElements) {
             initGuidedForms({
                 autoAdvance: true,
@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('data-in-loaded', (e) => {
     setTimeout(() => {
         const container = e.detail?.container || document;
-        const hasFormElements = container.querySelector('.row1, .grid-container, .device-container');
+        const hasFormElements = container.querySelector('.row1, [class*="grid-items"], .grid-container, .device-container');
         if (hasFormElements && window.autoInitGuidedForms !== false) {
             initGuidedForms({
                 autoAdvance: true,
