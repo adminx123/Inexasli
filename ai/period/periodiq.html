@@ -78,12 +78,12 @@
       Medical Information<span class="tooltip1-content"></span>
     </h3>
     
-    <textarea id="period-medical-conditions" placeholder="Medical conditions (PCOS, endometriosis, thyroid issues, diabetes, etc.)"></textarea>
+    <textarea id="period-medical-conditions" placeholder="Medical conditions
     
-    <textarea id="period-current-medications" placeholder="Current medications and supplements
-Examples:
+    (PCOS, endometriosis, thyroid issues, diabetes, etc.)"></textarea>
+    
+    <textarea id="period-current-medications" placeholder="Other Medication & Supplements & Dosage
 • Zoloft 50mg daily
-• Birth control pill (Yaz)
 • Vitamin D
 • Iron supplement"></textarea>
   </div>
@@ -93,16 +93,30 @@ Examples:
       Cycle Information<span class="tooltip1-content"></span>
     </h3>
     
-    <select id="period-cycle-regularity">
-      <option value="" disabled selected>How regular are your cycles?</option>
-      <option value="very-regular">Very Regular (±1 day)</option>
-      <option value="mostly-regular">Mostly Regular (±2-3 days)</option>
-      <option value="irregular">Irregular (±4+ days)</option>
-      <option value="unpredictable">Unpredictable</option>
-    </select>
+    <label>How regular are your cycles?</label>
+    <div class="grid-items2">
+      <div class="grid-item" data-value="very-regular">Very Regular (±1 day)</div>
+      <div class="grid-item" data-value="mostly-regular">Mostly Regular (±2-3 days)</div>
+      <div class="grid-item" data-value="irregular">Irregular (±4+ days)</div>
+      <div class="grid-item" data-value="unpredictable">Unpredictable</div>
+    </div>
+    <input type="hidden" id="period-cycle-regularity" />
 
-    <input id="period-cycle-length" type="text" placeholder="Average cycle length (e.g. 28 days, varies 25-32)">
-    <input id="period-flow-intensity" type="text" placeholder="Flow intensity (light, medium, heavy, varies)">
+    <textarea id="period-cycle-length" placeholder="Average cycle length
+• 28 days (most common)
+• Varies 26-32 days
+• 25 days on birth control
+
+"></textarea>
+
+    <label>Flow intensity</label>
+    <div class="grid-items2">
+      <div class="grid-item" data-value="light">Light</div>
+      <div class="grid-item" data-value="medium">Medium</div>
+      <div class="grid-item" data-value="heavy">Heavy</div>
+      <div class="grid-item" data-value="varies">Varies</div>
+    </div>
+    <input type="hidden" id="period-flow-intensity" />
   </div>
 
   <div class="row1" data-step-label="Period Events Log">
@@ -352,34 +366,7 @@ Examples:
     }
   );
 
-  // Handle fertility goal change to show/hide conception timing field
-  const handleFertilityGoalChange = window.handleConditionalInput(
-    'period-fertility-goal',
-    'period-conception-months',
-    {'trying-to-conceive': 'Months trying to conceive (e.g. 3 months, just started)'},
-    'trying-to-conceive',
-    () => {
-      if (window.periodFormPersistence) {
-        window.periodFormPersistence.saveFormData();
-      }
-    }
-  );
 
-  // Add fertility goal conditional logic
-  document.getElementById('period-fertility-goal').addEventListener('change', function() {
-    const conceptionField = document.getElementById('period-conception-months');
-    if (this.value === 'trying-to-conceive') {
-      conceptionField.style.display = 'block';
-      conceptionField.placeholder = 'Months trying to conceive (e.g. 3 months, just started)';
-    } else {
-      conceptionField.style.display = 'none';
-      conceptionField.value = '';
-    }
-    
-    if (window.periodFormPersistence) {
-      window.periodFormPersistence.saveFormData();
-    }
-  });
 
   // Function to trigger conditional logic manually (for form repopulation)
   function triggerConditionalLogic() {
@@ -388,18 +375,6 @@ Examples:
     }
     if (handleContainerVisibility && typeof handleContainerVisibility === 'function') {
       handleContainerVisibility();
-    }
-    if (handleFertilityGoalChange && typeof handleFertilityGoalChange === 'function') {
-      handleFertilityGoalChange();
-    }
-    
-    // Trigger fertility goal logic manually
-    const fertilityGoal = document.getElementById('period-fertility-goal').value;
-    const conceptionField = document.getElementById('period-conception-months');
-    if (fertilityGoal === 'trying-to-conceive') {
-      conceptionField.style.display = 'block';
-    } else {
-      conceptionField.style.display = 'none';
     }
   }
 
@@ -508,7 +483,71 @@ Examples:
   setTimeout(updateEnhancedAnalysisButton, 100);
 
   // Initialize new interactive elements
-  // No custom interactive elements needed - using standard inputstyles.css
+  initCycleGrids();
 
 })();
+
+// Initialize cycle grid functionality
+function initCycleGrids() {
+  // Handle all cycle grids (both .cycle-grid and .grid-items2)
+  const cycleGrids = document.querySelectorAll('.cycle-grid, .grid-items2');
+  
+  cycleGrids.forEach(grid => {
+    const cards = grid.querySelectorAll('.grid-item');
+    const hiddenInput = grid.nextElementSibling; // The hidden input follows each grid
+    
+    cards.forEach(card => {
+      card.addEventListener('click', function() {
+        // Remove selected class from all cards in this grid
+        cards.forEach(c => c.classList.remove('selected'));
+        
+        // Add selected class to clicked card
+        this.classList.add('selected');
+        
+        // Update hidden input value
+        if (hiddenInput && hiddenInput.type === 'hidden') {
+          hiddenInput.value = this.dataset.value;
+        }
+        
+        // Trigger form persistence save
+        if (window.periodFormPersistence) {
+          window.periodFormPersistence.saveFormData();
+        }
+      });
+    });
+  });
+  
+  // Restore saved selections on page load
+  setTimeout(() => {
+    restoreCycleSelections();
+  }, 200);
+}
+
+// Restore cycle selections from saved form data
+function restoreCycleSelections() {
+  if (!window.periodFormPersistence) return;
+  
+  const formData = window.periodFormPersistence.getSavedFormData();
+  
+  // Restore cycle regularity
+  const regularityValue = formData['period-cycle-regularity'];
+  if (regularityValue) {
+    const card = document.querySelector(`.grid-item[data-value="${regularityValue}"]`);
+    if (card) card.classList.add('selected');
+  }
+  
+  // Restore cycle length
+  const lengthValue = formData['period-cycle-length'];
+  if (lengthValue) {
+    const card = document.querySelector(`.grid-item[data-value="${lengthValue}"]`);
+    if (card) card.classList.add('selected');
+  }
+  
+  // Restore flow intensity
+  const flowValue = formData['period-flow-intensity'];
+  if (flowValue) {
+    const card = document.querySelector(`.grid-item[data-value="${flowValue}"]`);
+    if (card) card.classList.add('selected');
+  }
+}
 </script>
