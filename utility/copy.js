@@ -181,13 +181,25 @@ function openShareModal(containerId, getContentCallback) {
     window.openCustomModal(htmlContent, {
         maxWidth: '400px',
         onOpen: function(modal, modalContent) {
-            modalContent.addEventListener('click', function(event) {
+            // Remove any existing click handlers to prevent accumulation
+            const existingHandlers = modalContent.querySelectorAll('.share-action-btn');
+            existingHandlers.forEach(btn => {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+            });
+            
+            // Add single click handler with immediate removal after use
+            function handleModalClick(event) {
                 const action = event.target.closest('.share-action-btn')?.dataset.action;
                 if (action) {
+                    // Remove this listener immediately to prevent re-execution
+                    modalContent.removeEventListener('click', handleModalClick);
                     handleShareAction(action, containerId, getContentCallback);
                     window.closeModal();
                 }
-            });
+            }
+            
+            modalContent.addEventListener('click', handleModalClick);
         }
     });
 }
