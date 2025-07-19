@@ -271,16 +271,13 @@ function generateShareablePDF(containerId, getContentCallback) {
             throw new Error(`Cannot generate PDF: Element with ID '${containerId}' not found.`);
         }
 
-        const hasLoadingContent = containerEl.querySelector('.loading, .loading-text, .loading-spinner');
         const textContent = containerEl.textContent || containerEl.innerText || '';
-        const hasActualContent = textContent.trim().length > 0;
+        const hasValidContent = textContent.trim().length > 50 && 
+                               !textContent.includes('No content loaded yet') &&
+                               !textContent.includes('loading');
         
-        if (hasLoadingContent && !hasActualContent) {
-            throw new Error('Content is still loading. Please wait for the analysis to fully load.');
-        }
-
-        if (!hasActualContent) {
-            throw new Error('No content available to share.');
+        if (!hasValidContent) {
+            throw new Error('No analysis results to share. Please generate your analysis first.');
         }
 
         let content = '';
@@ -555,7 +552,7 @@ function generatePDF(containerId, getContentCallback) {
     const outputContent = outputContainer.textContent || outputContainer.innerText || '';
     const hasValidContent = outputContent.trim().length > 50 && 
                            !outputContent.includes('No content loaded yet') &&
-                           outputContainer.querySelector('h3, p, .content-section, .analysis-result');
+                           !outputContent.includes('loading');
     
     if (!hasValidContent) {
         window.enhancedUI.closeToast(progressToast);
@@ -777,6 +774,22 @@ function getAnalysisTypeFromPage() {
         if (url.includes('/speculation/') || url.includes('speculation')) {
             console.log('[PDF] Matched speculation pattern');
             return { analysisType: 'speculation-analysis', title: 'Speculation Analysis' };
+        }
+        if (url.includes('/period/') || url.includes('period')) {
+            console.log('[PDF] Matched period pattern');
+            return { analysisType: 'period-analysis', title: 'Period Analysis' };
+        }
+        if (url.includes('/fashion/') || url.includes('fashion')) {
+            console.log('[PDF] Matched fashion pattern');
+            return { analysisType: 'fashion-analysis', title: 'Fashion Analysis' };
+        }
+        if (url.includes('/period/') || url.includes('period')) {
+            console.log('[PDF] Matched period pattern');
+            return { analysisType: 'period-analysis', title: 'Period Analysis' };
+        }
+        if (url.includes('/fashion/') || url.includes('fashion')) {
+            console.log('[PDF] Matched fashion pattern');
+            return { analysisType: 'fashion-analysis', title: 'Fashion Analysis' };
         }
         
         console.log('[PDF] No pattern matched for URL:', url);
