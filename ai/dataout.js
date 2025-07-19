@@ -15,6 +15,49 @@ import '/utility/imageUpload.js';
 // Make getJSON available globally for loaded content
 window.getJSON = getJSON;
 
+// Load PDF generation utilities once for all modules
+async function loadPDFUtilities() {
+    console.log('[DataOut] Loading PDF utilities...');
+    
+    // Load html2canvas
+    if (!window.html2canvas) {
+        const html2canvasScript = document.createElement('script');
+        html2canvasScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        document.head.appendChild(html2canvasScript);
+        await new Promise((resolve, reject) => {
+            html2canvasScript.onload = resolve;
+            html2canvasScript.onerror = reject;
+        });
+        console.log('[DataOut] html2canvas loaded');
+    }
+    
+    // Load copy.js utilities
+    if (!window.copyUtil) {
+        const copyScript = document.createElement('script');
+        copyScript.src = '/utility/copy.js';
+        document.head.appendChild(copyScript);
+        await new Promise((resolve, reject) => {
+            copyScript.onload = resolve;
+            copyScript.onerror = reject;
+        });
+        console.log('[DataOut] copy.js loaded');
+    }
+    
+    // Load enhancedUI if not already loaded
+    if (!window.enhancedUI) {
+        const enhancedUIScript = document.createElement('script');
+        enhancedUIScript.src = '/utility/enhancedUI.js';
+        document.head.appendChild(enhancedUIScript);
+        await new Promise((resolve, reject) => {
+            enhancedUIScript.onload = resolve;
+            enhancedUIScript.onerror = reject;
+        });
+        console.log('[DataOut] enhancedUI.js loaded');
+    }
+    
+    console.log('[DataOut] All PDF utilities loaded successfully');
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
     // Additional logging for debugging
     console.log('[DataOut] Adding api-response-received event listener');
@@ -34,14 +77,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error(`Failed to fetch content from ${url}`);
-            const content = await response.text();
+            let content = await response.text();
             console.log('[DataOut] Content fetched successfully for:', url);
 
+            // Remove duplicate script tags that are now centralized
+            content = content.replace(/<script[^>]*src=['"]*[^'"]*html2canvas[^'"]*['"][^>]*><\/script>/gi, '');
+            content = content.replace(/<script[^>]*src=['"]*[^'"]*copy\.js[^'"]*['"][^>]*><\/script>/gi, '');
+            content = content.replace(/<script[^>]*src=['"]*[^'"]*enhancedUI\.js[^'"]*['"][^>]*><\/script>/gi, '');
+            
             // Update content - container is always visible at 100% viewport
             dataContainer.innerHTML = `
                 <div class="data-content">${content}</div>
             `;
-            console.log('[DataOut] Content inserted into container');
+            console.log('[DataOut] Content inserted into container (duplicate scripts removed)');
 
             const scripts = dataContainer.querySelectorAll('script');
             console.log('[DataOut] Found scripts to execute:', scripts.length);
@@ -246,6 +294,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function initializeApp() {
+        // Load PDF utilities first
+        try {
+            await loadPDFUtilities();
+        } catch (error) {
+            console.error('[DataOut] Failed to load PDF utilities:', error);
+        }
+        
         // Always initialize the data container - no state management needed
         initializeDataContainer();
 
