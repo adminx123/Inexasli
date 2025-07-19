@@ -22,12 +22,11 @@
   </div>
 
   <div class="row1" data-step-label="Basic Information">
-
     <h3 class="tooltip1" data-tooltip="Basic information to help personalize your period tracking experience.">
       Basic Information<span class="tooltip1-content"></span>
     </h3>
 
- <select id="period-birth-control-type">
+    <select id="period-birth-control-type">
       <option value="" disabled selected>Birth control type</option>
       <option value="pill">Birth Control Pill</option>
       <option value="iud">IUD</option>
@@ -72,7 +71,38 @@
     <input id="end-date" type="date" name="end-date">
 
     <input id="period-age" type="text" placeholder="Age">
-   
+  </div>
+
+  <div class="row1" data-step-label="Medical Information">
+    <h3 class="tooltip1" data-tooltip="Medical conditions and medications that may affect your cycle.">
+      Medical Information<span class="tooltip1-content"></span>
+    </h3>
+    
+    <textarea id="period-medical-conditions" placeholder="Medical conditions (PCOS, endometriosis, thyroid issues, diabetes, etc.)"></textarea>
+    
+    <textarea id="period-current-medications" placeholder="Current medications and supplements
+Examples:
+• Zoloft 50mg daily
+• Birth control pill (Yaz)
+• Vitamin D
+• Iron supplement"></textarea>
+  </div>
+
+  <div class="row1" data-step-label="Cycle Information">
+    <h3 class="tooltip1" data-tooltip="Basic cycle pattern information for predictions.">
+      Cycle Information<span class="tooltip1-content"></span>
+    </h3>
+    
+    <select id="period-cycle-regularity">
+      <option value="" disabled selected>How regular are your cycles?</option>
+      <option value="very-regular">Very Regular (±1 day)</option>
+      <option value="mostly-regular">Mostly Regular (±2-3 days)</option>
+      <option value="irregular">Irregular (±4+ days)</option>
+      <option value="unpredictable">Unpredictable</option>
+    </select>
+
+    <input id="period-cycle-length" type="text" placeholder="Average cycle length (e.g. 28 days, varies 25-32)">
+    <input id="period-flow-intensity" type="text" placeholder="Flow intensity (light, medium, heavy, varies)">
   </div>
 
   <div class="row1" data-step-label="Period Events Log">
@@ -128,12 +158,14 @@
       const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
       console.log('[PeriodIQ] Form data for validation:', formData);
       
-      // Check if we have basic period dates
+      // Check if we have basic period dates OR comprehensive medical data
       const hasBasicData = formData['start-date'] || formData['end-date'];
-      console.log('[PeriodIQ] Has basic data:', hasBasicData);
+      const hasAdvancedData = formData['period-medical-conditions'] || formData['period-current-medications'] || 
+                              formData['period-cycle-regularity'] || formData['period-cycle-length'];
+      console.log('[PeriodIQ] Has basic data:', hasBasicData, 'Has advanced data:', hasAdvancedData);
       
-      if (!hasBasicData) { 
-        alert('Please enter your last period dates to view your tracker.'); 
+      if (!hasBasicData && !hasAdvancedData) { 
+        alert('Please enter your period data or medical history to view your tracker.'); 
         return;
       }
       
@@ -159,11 +191,13 @@
     try {
       const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
       
-      // Check if we have additional entries for analysis
-      const hasEntries = Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
+      // Check if we have comprehensive data for enhanced analysis
+      const hasComprehensiveData = formData['period-medical-conditions'] || formData['period-current-medications'] || 
+                                   formData['period-cycle-regularity'] || formData['period-cycle-length'] ||
+                                   Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
       
-      if (!hasEntries) { 
-        alert('Please add period events/symptoms for enhanced AI analysis.'); 
+      if (!hasComprehensiveData) { 
+        alert('Please add medical history, symptoms, or period events for comprehensive AI analysis.'); 
         return;
       }
 
@@ -235,14 +269,16 @@
     }
   }
 
-  // Show/hide enhanced analysis button based on entries
+  // Show/hide enhanced analysis button based on comprehensive data
   function updateEnhancedAnalysisButton() {
     const formData = window.periodFormPersistence ? window.periodFormPersistence.getSavedFormData() : {};
-    const hasEntries = Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
+    const hasComprehensiveData = formData['period-medical-conditions'] || formData['period-current-medications'] || 
+                                formData['period-cycle-regularity'] || formData['period-cycle-length'] ||
+                                Object.keys(formData).some(key => key.includes('entry') && key.includes('what') && formData[key]);
     const enhancedBtn = document.getElementById('enhanced-analysis-btn');
     
     if (enhancedBtn) {
-      enhancedBtn.style.display = hasEntries ? 'block' : 'none';
+      enhancedBtn.style.display = hasComprehensiveData ? 'block' : 'none';
     }
   }
 
@@ -316,13 +352,34 @@
     }
   );
 
-  // Handle method-specific timing fields for other hormonal methods
-  function updateMethodSpecificFields() {
-    // Removed - no longer needed
-  }
+  // Handle fertility goal change to show/hide conception timing field
+  const handleFertilityGoalChange = window.handleConditionalInput(
+    'period-fertility-goal',
+    'period-conception-months',
+    {'trying-to-conceive': 'Months trying to conceive (e.g. 3 months, just started)'},
+    'trying-to-conceive',
+    () => {
+      if (window.periodFormPersistence) {
+        window.periodFormPersistence.saveFormData();
+      }
+    }
+  );
 
-  // Add listener for birth control type changes to update method-specific fields
-  document.getElementById('period-birth-control-type').addEventListener('change', updateMethodSpecificFields);
+  // Add fertility goal conditional logic
+  document.getElementById('period-fertility-goal').addEventListener('change', function() {
+    const conceptionField = document.getElementById('period-conception-months');
+    if (this.value === 'trying-to-conceive') {
+      conceptionField.style.display = 'block';
+      conceptionField.placeholder = 'Months trying to conceive (e.g. 3 months, just started)';
+    } else {
+      conceptionField.style.display = 'none';
+      conceptionField.value = '';
+    }
+    
+    if (window.periodFormPersistence) {
+      window.periodFormPersistence.saveFormData();
+    }
+  });
 
   // Function to trigger conditional logic manually (for form repopulation)
   function triggerConditionalLogic() {
@@ -332,7 +389,18 @@
     if (handleContainerVisibility && typeof handleContainerVisibility === 'function') {
       handleContainerVisibility();
     }
-    updateMethodSpecificFields();
+    if (handleFertilityGoalChange && typeof handleFertilityGoalChange === 'function') {
+      handleFertilityGoalChange();
+    }
+    
+    // Trigger fertility goal logic manually
+    const fertilityGoal = document.getElementById('period-fertility-goal').value;
+    const conceptionField = document.getElementById('period-conception-months');
+    if (fertilityGoal === 'trying-to-conceive') {
+      conceptionField.style.display = 'block';
+    } else {
+      conceptionField.style.display = 'none';
+    }
   }
 
   // Initialize period entries functionality
@@ -434,9 +502,13 @@
 
   // Update enhanced analysis button visibility on form changes
   document.addEventListener('textarea:changed', updateEnhancedAnalysisButton);
+  document.addEventListener('change', updateEnhancedAnalysisButton); // For select/input fields
   
   // Initial button state check
   setTimeout(updateEnhancedAnalysisButton, 100);
+
+  // Initialize new interactive elements
+  // No custom interactive elements needed - using standard inputstyles.css
 
 })();
 </script>

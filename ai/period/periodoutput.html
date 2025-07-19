@@ -469,24 +469,7 @@
           return;
         }
 
-        // For period module: First check for INPUT data to show frontend calculations
-        const inputKey = 'periodIqInput';
-        console.log('Checking for period input data with key:', inputKey);
-        
-        // Try to get input data first (period module unique workflow)
-        let inputData;
-        try {
-          inputData = getJSON(inputKey);
-          if (inputData && Object.keys(inputData).length > 0) {
-            console.log('Found period input data, displaying frontend results:', inputData);
-            displayFrontendPeriodResults(inputData);
-            return;
-          }
-        } catch (err) {
-          console.error('Error getting input data:', err);
-        }
-        
-        // Fallback: Look for periodIqResponse data (enhanced AI analysis)
+        // Look for periodIqResponse data (AI analysis only)
         const responseKey = 'periodIqResponse';
         console.log('No input data found, checking for response data with key:', responseKey);
         
@@ -518,13 +501,8 @@
             try {
               console.log('Period tracking data:', data);
               
-              // Use frontend parsing for all events
-              console.log('Using frontend event parsing');
-              const formData = getJSON('periodIqInput') || {};
-              const frontendEvents = createEventsFromFormData(formData);
-              
-              // Add frontend events to data for timeline display
-              data.frontendEvents = frontendEvents;
+              // Use AI backend events instead of frontend parsing
+              console.log('Using AI backend event data');
               
               displayPeriodData(data, outputSpan);
               
@@ -671,53 +649,53 @@
             const userEntryDates = [];
             const userEvents = [];
             
-            // Collect user entry dates and events from frontend parsing
-            if (periodData.frontendEvents) {
-              periodData.frontendEvents.forEach(event => {
-                const originalEntry = formEntries[event.originalIndex] || {};
+            // Collect user entry dates and events from AI backend data
+            if (periodData.events || periodData.userEvents) {
+              const aiEvents = periodData.events || periodData.userEvents || [];
+              aiEvents.forEach(event => {
                 let phase = getPhaseForDate(event.date, periodData.phaseCalendar);
-                
-                // Smart phase detection based on user entry text
-                if (phase === 'unknown' && originalEntry.what) {
-                  const entryText = originalEntry.what.toLowerCase();
-                  if (entryText.includes('period ended') || entryText.includes('bleeding') || entryText.includes('period')) {
-                    phase = 'menstrual';
-                  } else if (entryText.includes('ovulation') || entryText.includes('ovulating')) {
-                    phase = 'ovulation';
-                  }
-                }
                 
                 userEntryDates.push(event.date);
                 userEvents.push({
                   date: event.date,
-                  text: originalEntry.what || 'Entry recorded',
+                  text: event.description || event.text || 'Entry recorded',
                   phase: phase
                 });
               });
             }
             
-            // Calculate timeline range - start from last period, extend to show 3 future cycles
-            const periodFormPersistence = window.FormPersistence?.getInstance('period');
-            const savedFormData = periodFormPersistence ? periodFormPersistence.getSavedFormData() : {};
-            const cycleLength = parseInt(savedFormData['cycle-length'] || '28');
+            // Calculate timeline range from AI backend data or fallback
+            const todayForRange = new Date();
+            let cycleLength = 28; // Default fallback
             
-            if (savedFormData['start-date']) {
-              // Start from last period start date
-              startDate = new Date(savedFormData['start-date']);
-              // Show 3 future cycles for predictions
-              endDate = new Date(startDate);
-              endDate.setDate(endDate.getDate() + (cycleLength * 4)); // Current + 3 future cycles
-            } else if (userEntryDates.length > 0) {
-              userEntryDates.sort();
-              startDate = new Date(userEntryDates[0]);
-              endDate = new Date(userEntryDates[userEntryDates.length - 1]);
-              endDate.setDate(endDate.getDate() + (cycleLength * 2));
-            } else {
-              // Fallback to today if no data
-              const today = new Date();
-              startDate = new Date(today);
-              endDate = new Date(today);
-              endDate.setDate(endDate.getDate() + (cycleLength * 2));
+            // Get cycle length from AI data if available
+            if (periodData.cycleLength) {
+              cycleLength = periodData.cycleLength;
+            } else if (periodData.averageCycleLength) {
+              cycleLength = periodData.averageCycleLength;
+            }
+            
+            // Determine start date from AI phase calendar
+            if (periodData.phaseCalendar) {
+              const phases = Object.values(periodData.phaseCalendar);
+              const earliestDate = phases.reduce((earliest, phase) => {
+                const phaseStart = new Date(phase.start);
+                return !earliest || phaseStart < earliest ? phaseStart : earliest;
+              }, null);
+              
+              if (earliestDate) {
+                startDate = earliestDate;
+                // Show current + 2 future cycles
+                endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + (cycleLength * 3));
+              }
+            }
+            
+            // Fallback if no AI data
+            if (!startDate) {
+              startDate = new Date(todayForRange);
+              endDate = new Date(todayForRange);
+              endDate.setDate(endDate.getDate() + (cycleLength * 3));
             }
             
             // Generate daily timeline entries
@@ -748,25 +726,25 @@
               // Check if user has entry for this date
               const userEvent = userEvents.find(event => event.date === dateStr);
               
-              // Check for predicted future periods and determine cycle number
+              // Check for predicted future periods and determine cycle number from AI data
               let isPredictedPeriod = false;
               let isActualPeriodStart = false;
               let cycleNumber = 0;
-              if (savedFormData['start-date']) {
-                const lastPeriodStart = new Date(savedFormData['start-date']);
-                const daysSinceLastPeriod = Math.floor((new Date(dateStr) - lastPeriodStart) / (1000 * 60 * 60 * 24));
-                
-                // Determine which cycle this day belongs to
-                cycleNumber = Math.floor(daysSinceLastPeriod / cycleLength);
-                
-                // Check if this is the user's actual period start date
-                if (daysSinceLastPeriod === 0) {
-                  isActualPeriodStart = true;
-                }
-                
-                // Check if this date falls on a future period start (multiples of cycle length)
-                if (daysSinceLastPeriod > 0 && daysSinceLastPeriod % cycleLength === 0) {
-                  isPredictedPeriod = true;
+              
+              // Use AI backend phase calendar to determine cycle information
+              if (periodData.phaseCalendar) {
+                // Check if this date is a period start from AI data
+                for (const [phaseKey, dates] of Object.entries(periodData.phaseCalendar)) {
+                  if (phaseKey.includes('menstrual') && dateStr === dates.start) {
+                    if (phaseKey.includes('cycle')) {
+                      isPredictedPeriod = true;
+                      cycleNumber = parseInt(phaseKey.match(/cycle(\d+)/)?.[1] || '1');
+                    } else {
+                      isActualPeriodStart = true;
+                      cycleNumber = 0;
+                    }
+                    break;
+                  }
                 }
               }
               
@@ -836,53 +814,13 @@
     }
 
     function createEventsFromFormData(formData) {
-      const events = [];
-      const currentYear = new Date().getFullYear();
-      
-      // Process entries 1-7
-      for (let i = 1; i <= 7; i++) {
-        const whenKey = `entry${i}-when`;
-        const whatKey = `entry${i}-what`;
-        
-        if (formData[whenKey] && formData[whatKey]) {
-          const whenText = formData[whenKey].toLowerCase();
-          let date = '';
-          
-          // Enhanced date parsing for all formats
-          if (whenText.includes('june 17') || whenText.includes('17th') || whenText.includes('17')) {
-            date = '2025-06-17';
-          } else if (whenText.includes('18th') || whenText.includes('18')) {
-            date = '2025-06-18';
-          } else if (whenText.includes('june 19') || whenText.includes('19th') || whenText.includes('19')) {
-            date = '2025-06-19';
-          } else if (whenText.includes('24th') || whenText.includes('24')) {
-            date = '2025-06-24';
-          } else if (whenText.includes('25th') || whenText.includes('25')) {
-            date = '2025-06-25';
-          } else if (whenText.includes('26th') || whenText.includes('26')) {
-            date = '2025-06-26';
-          } else if (whenText.includes('27th') || whenText.includes('27')) {
-            date = '2025-06-27';
-          }
-          
-          if (date) {
-            events.push({
-              date: date,
-              originalIndex: i - 1
-            });
-          }
-        }
-      }
-      
-      return events;
+      // This function is no longer needed - AI backend handles event parsing
+      return [];
     }
 
-    function getCurrentPhase(day) {
-      if (day >= 1 && day <= 5) return "Menstrual Phase";
-      if (day >= 6 && day <= 13) return "Follicular Phase";
-      if (day >= 14 && day <= 16) return "Ovulation Window";
-      if (day >= 17 && day <= 28) return "Luteal Phase";
-      return "Cycle Phase";
+    function getCurrentPhase(day, cycleLength = 28) {
+      // This function is no longer needed - AI backend handles phase calculation
+      return "AI Phase";
     }
 
     // Initialize collapsible cycle functionality
@@ -948,179 +886,36 @@
       });
     }
 
-    // Frontend period results display (from localStorage input)
-    function displayFrontendPeriodResults(inputData) {
-      console.log('[PeriodOutput] Displaying frontend period results from localStorage:', inputData);
-      
-      const outputElement = document.querySelector('.api-output');
-      if (!outputElement) return;
-      
-      outputElement.innerHTML = '';
-      
-      const container = document.createElement('div');
-      container.className = 'period-display';
-      
-      // Header
-      const header = document.createElement('div');
-      header.className = 'period-header';
-      header.innerHTML = `
-        <h2 style="margin: 0; color: #333; display: flex; align-items: center; justify-content: center;">
-          <i class="fas fa-calendar-day" style="margin-right: 12px; color: #ff6b9d;"></i>
-          Period Tracker
-        </h2>
-        <h3 class="content-section">Your Period Analysis</h3>
-      `;
-      container.appendChild(header);
-      
-      // Calculate frontend data from input
-      const periodStartDate = inputData['start-date'];
-      const periodEndDate = inputData['end-date'];
-      const cycleLength = parseInt(inputData['cycle-length']) || 28;
-      
-      if (periodStartDate) {
-        const startDate = new Date(periodStartDate);
-        const endDate = periodEndDate ? new Date(periodEndDate) : null;
-        const today = new Date();
-        
-        const daysSinceStart = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
-        const currentCycleDay = daysSinceStart >= 0 ? daysSinceStart + 1 : 1;
-        
-        // Calculate next period and ovulation
-        const nextPeriodDate = new Date(startDate);
-        nextPeriodDate.setDate(nextPeriodDate.getDate() + cycleLength);
-        const daysUntilNextPeriod = Math.floor((nextPeriodDate - today) / (1000 * 60 * 60 * 24));
-        
-        const ovulationDate = new Date(startDate);
-        ovulationDate.setDate(ovulationDate.getDate() + Math.floor(cycleLength / 2));
-        const daysUntilOvulation = Math.floor((ovulationDate - today) / (1000 * 60 * 60 * 24));
-        
-        // Determine current phase
-        let currentPhase = 'Unknown';
-        if (endDate && daysSinceStart <= Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24))) {
-          currentPhase = 'Menstrual';
-        } else if (daysSinceStart < Math.floor(cycleLength / 2) - 2) {
-          currentPhase = 'Follicular';
-        } else if (Math.abs(daysSinceStart - Math.floor(cycleLength / 2)) <= 1) {
-          currentPhase = 'Ovulation';
-        } else if (daysSinceStart < cycleLength) {
-          currentPhase = 'Luteal';
-        }
-        
-        // Create phase calendar data for ALL cycles in timeline (not just current)
-        const phaseCalendar = {};
-        
-        // Generate phases for 4 cycles to cover entire timeline
-        for (let cycleNum = 0; cycleNum < 4; cycleNum++) {
-          const cycleStartDate = new Date(startDate);
-          cycleStartDate.setDate(cycleStartDate.getDate() + (cycleLength * cycleNum));
-          
-          const cycleEndDate = endDate ? new Date(endDate) : new Date(cycleStartDate);
-          if (!endDate) {
-            cycleEndDate.setDate(cycleEndDate.getDate() + 4); // Default 5-day period
-          }
-          
-          // Menstrual phase (period days)
-          const menstrualStart = cycleStartDate.toISOString().split('T')[0];
-          const menstrualEnd = new Date(cycleStartDate);
-          menstrualEnd.setDate(menstrualEnd.getDate() + 4); // 5 days
-          
-          // Follicular phase (after period until ovulation)
-          const follicularStart = new Date(menstrualEnd);
-          follicularStart.setDate(follicularStart.getDate() + 1);
-          const follicularEnd = new Date(cycleStartDate);
-          follicularEnd.setDate(follicularEnd.getDate() + 12); // Day 13
-          
-          // Ovulation phase (single day - day 14)
-          const ovulationDay = new Date(cycleStartDate);
-          ovulationDay.setDate(ovulationDay.getDate() + 13); // Day 14 (0-indexed)
-          
-          // Luteal phase (after ovulation until next period)
-          const lutealStart = new Date(ovulationDay);
-          lutealStart.setDate(lutealStart.getDate() + 1); // Day 15
-          const lutealEnd = new Date(cycleStartDate);
-          lutealEnd.setDate(lutealEnd.getDate() + 27); // Day 28
-          
-          // Add to phase calendar with cycle-specific keys
-          const cyclePrefix = cycleNum === 0 ? '' : `_cycle${cycleNum}`;
-          
-          phaseCalendar[`menstrual${cyclePrefix}`] = {
-            start: menstrualStart,
-            end: menstrualEnd.toISOString().split('T')[0],
-            confidence: cycleNum === 0 ? 'High' : 'Predicted'
-          };
-          
-          phaseCalendar[`follicular${cyclePrefix}`] = {
-            start: follicularStart.toISOString().split('T')[0],
-            end: follicularEnd.toISOString().split('T')[0],
-            confidence: cycleNum === 0 ? 'High' : 'Predicted'
-          };
-          
-          phaseCalendar[`ovulation${cyclePrefix}`] = {
-            start: ovulationDay.toISOString().split('T')[0],
-            end: ovulationDay.toISOString().split('T')[0], // Single day only
-            confidence: cycleNum === 0 ? 'Medium' : 'Predicted'
-          };
-          
-          phaseCalendar[`luteal${cyclePrefix}`] = {
-            start: lutealStart.toISOString().split('T')[0],
-            end: lutealEnd.toISOString().split('T')[0],
-            confidence: cycleNum === 0 ? 'High' : 'Predicted'
-          };
-        }
-        
-        // Create period data object for your vertical timeline
-        const periodData = {
-          phaseCalendar: phaseCalendar,
-          frontendCalculated: true,
-          currentCycleDay: currentCycleDay,
-          currentPhase: currentPhase,
-          daysUntilNextPeriod: daysUntilNextPeriod,
-          daysUntilOvulation: daysUntilOvulation,
-          periodLength: endDate ? Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1 : null
-        };
-        
-        // Use your existing displayPeriodData function with the vertical timeline
-        displayPeriodData(periodData, outputElement);
-        return;
-      } else {
-        // No period start date
-        const noDataSection = document.createElement('div');
-        noDataSection.className = 'cycle-section';
-        noDataSection.style.background = '#fff3cd';
-        noDataSection.style.borderColor = '#ffeaa7';
-        noDataSection.innerHTML = `
-          <p style="margin: 0; text-align: center;">
-            <strong>No period data found.</strong><br>
-            <a href="./periodiq.html" style="color: #ff6b9d; text-decoration: none;">
-              Enter your period dates to get started
-            </a>
-          </p>
-        `;
-        container.appendChild(noDataSection);
-      }
-      
-      outputElement.appendChild(container);
-    }
+    // Remove displayFrontendPeriodResults - AI backend only now
 
-    // Check for form data first, then fallback to API response
+    // Check for AI response data only
     window.addEventListener('DOMContentLoaded', function() {
-      console.log('[PeriodOutput] DOM loaded, checking for data');
+      console.log('[PeriodOutput] DOM loaded, checking for AI response data');
       
-      // First check for period form INPUT data using getJSON - this is the key difference for period module
-      const inputData = window.getJSON ? window.getJSON('periodIqInput') : null;
-      if (inputData && Object.keys(inputData).length > 0) {
-        console.log('[PeriodOutput] Found period form INPUT data:', inputData);
-        displayFrontendPeriodResults(inputData);
-        return;
-      }
-      
-      // Fallback to API response if no form data (for enhanced AI analysis)
+      // Only check for AI response data - no frontend calculations
       const periodData = getLocal('periodIqResponse');
       if (periodData) {
-        displayPeriodResults(periodData);
+        try {
+          const parsedData = JSON.parse(periodData);
+          displayPeriodData(parsedData, document.querySelector('.api-output'));
+        } catch (err) {
+          console.error('Error parsing AI response:', err);
+        }
       } else {
-        console.log('[PeriodOutput] No period data found - showing empty state');
-        displayFrontendPeriodResults({});
+        console.log('[PeriodOutput] No AI response data found - waiting for AI analysis');
+        const outputElement = document.querySelector('.api-output');
+        if (outputElement) {
+          outputElement.innerHTML = `
+            <div style="text-align: center; padding: 40px; color: #666;">
+              <i class="fas fa-brain" style="font-size: 48px; margin-bottom: 20px; color: #ff6b9d;"></i>
+              <h3>Waiting for AI Analysis</h3>
+              <p>Please submit your period data for AI-powered insights and predictions.</p>
+              <a href="./periodiq.html" style="color: #ff6b9d; text-decoration: none;">
+                Enter Period Data →
+              </a>
+            </div>
+          `;
+        }
       }
     });
   </script>
