@@ -212,7 +212,11 @@
       // Show relevant container
       if (containerMap[value]) {
         const container = document.querySelector(containerMap[value]);
-        if (container) container.style.display = 'block';
+        if (container) {
+          // Use display: contents for birth control containers to make them transparent to layout
+          const isDateContainer = container.id.includes('period-') && container.id.includes('-container');
+          container.style.display = isDateContainer ? 'contents' : 'block';
+        }
       }
       
       // Handle detail input
