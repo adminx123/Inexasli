@@ -570,6 +570,22 @@
           <i class="fas fa-calendar-day" style="margin-right: 12px; color: #ff6b9d;"></i>
           Period Timeline
         </h2>
+        ${periodData.nextPeriodDate ? `
+          <div style="text-align: center; margin: 15px 0; padding: 10px; background: rgba(255, 107, 157, 0.1); border-radius: 8px;">
+            <strong style="color: #ff6b9d;">Next Period: ${new Date(periodData.nextPeriodDate).toLocaleDateString()}</strong>
+            ${periodData.confidence ? `<span style="margin-left: 10px; font-size: 12px; color: #666;">(${periodData.confidence} confidence)</span>` : ''}
+          </div>
+        ` : ''}
+        ${periodData.predictionReasoning ? `
+          <div style="font-size: 14px; color: #666; margin: 10px 0; text-align: center; font-style: italic;">
+            ${periodData.predictionReasoning}
+          </div>
+        ` : ''}
+        ${periodData.causalFactors && periodData.causalFactors.length > 0 ? `
+          <div style="font-size: 12px; color: #888; margin: 10px 0; text-align: center;">
+            <strong>Factors considered:</strong> ${periodData.causalFactors.join(', ')}
+          </div>
+        ` : ''}
       `;
       container.appendChild(header);
       
@@ -650,8 +666,8 @@
             const userEvents = [];
             
             // Collect user entry dates and events from AI backend data
-            if (periodData.events || periodData.userEvents) {
-              const aiEvents = periodData.events || periodData.userEvents || [];
+            if (periodData.standardizedEvents || periodData.events || periodData.userEvents) {
+              const aiEvents = periodData.standardizedEvents || periodData.events || periodData.userEvents || [];
               aiEvents.forEach(event => {
                 let phase = getPhaseForDate(event.date, periodData.phaseCalendar);
                 
