@@ -659,26 +659,9 @@
         
         <div class="vertical-timeline">
           ${(() => {
-            // Determine timeline date range based on user entries
+            // Determine timeline date range based on AI data only
             let startDate = null;
             let endDate = null;
-            const userEntryDates = [];
-            const userEvents = [];
-            
-            // Collect user entry dates and events from AI backend data
-            if (periodData.standardizedEvents || periodData.events || periodData.userEvents) {
-              const aiEvents = periodData.standardizedEvents || periodData.events || periodData.userEvents || [];
-              aiEvents.forEach(event => {
-                let phase = getPhaseForDate(event.date, periodData.phaseCalendar);
-                
-                userEntryDates.push(event.date);
-                userEvents.push({
-                  date: event.date,
-                  text: event.description || event.text || 'Entry recorded',
-                  phase: phase
-                });
-              });
-            }
             
             // Calculate timeline range from AI backend data or fallback
             const todayForRange = new Date();
@@ -739,9 +722,6 @@
               // Get phase for this date
               const phase = getPhaseForDate(dateStr, periodData.phaseCalendar);
               
-              // Check if user has entry for this date
-              const userEvent = userEvents.find(event => event.date === dateStr);
-              
               // Check for predicted future periods and determine cycle number from AI data
               let isPredictedPeriod = false;
               let isActualPeriodStart = false;
@@ -764,11 +744,8 @@
                 }
               }
               
-              // Create timeline row
+              // Create timeline row - only AI predictions, no user events
               let eventDisplay = '';
-              if (userEvent) {
-                eventDisplay = `<div class="user-event">${userEvent.text}</div>`;
-              }
               
               if (isActualPeriodStart) {
                 eventDisplay += `<div class="ai-prediction">Last Period Start <span class="cycle-toggle">▼</span></div>`;
