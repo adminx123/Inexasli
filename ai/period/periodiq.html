@@ -26,7 +26,7 @@
       Basic Information<span class="tooltip1-content"></span>
     </h3>
 
-    <select id="period-birth-control-type">
+    <select id="birth-control-type">
       <option value="" disabled selected>Birth control type</option>
       <option value="pill">Birth Control Pill</option>
       <option value="iud">IUD</option>
@@ -39,38 +39,38 @@
       <option value="spermicide">Spermicide</option>
       <option value="none">None</option>
     </select>
-    <input id="period-birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
+    <input id="birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
 
     <!-- Natural Cycle Specific Fields -->
-    <div id="period-natural-cycle-container" style="display: none;">
-      <input id="period-natural-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
+    <div id="natural-cycle-container" style="display: none;">
+      <input id="cycle-length-input" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
     </div>
 
     <!-- Birth Control Pill Specific Fields -->
-    <div id="period-pill-container" style="display: none;">
-      <label for="period-pill-start-date">Birth control pill restart date (after your last period):</label>
-      <input id="period-pill-start-date" type="date">
+    <div id="pill-container" style="display: none;">
+      <label for="pill-start-date">Birth control pill restart date (after your last period):</label>
+      <input id="pill-start-date" type="date">
     </div>
 
     <!-- IUD Specific Fields -->
-    <div id="period-iud-container" style="display: none;">
-      <label for="period-iud-insertion-date">IUD insertion date:</label>
-      <input id="period-iud-insertion-date" type="date">
+    <div id="iud-container" style="display: none;">
+      <label for="iud-insertion-date">IUD insertion date:</label>
+      <input id="iud-insertion-date" type="date">
     </div>
 
     <!-- Other Hormonal Methods Container -->
-    <div id="period-other-hormonal-container" style="display: none;">
-      <label for="period-hormonal-method-start-date">Patch/Ring/Injectable/Implant start date:</label>
-      <input id="period-hormonal-method-start-date" type="date">
+    <div id="other-hormonal-container" style="display: none;">
+      <label for="method-start-date">Patch/Ring/Injectable/Implant start date:</label>
+      <input id="method-start-date" type="date">
     </div>
 
-    <label for="period-last-period-start-date">Last period start date:</label>
-    <input id="period-last-period-start-date" type="date" name="last-period-start-date">
+    <label for="start-date">Last period start date:</label>
+    <input id="start-date" type="date" name="last-period-start-date">
     
-    <label for="period-last-period-end-date">Last period end date:</label>
-    <input id="period-last-period-end-date" type="date" name="last-period-end-date">
+    <label for="end-date">Last period end date:</label>
+    <input id="end-date" type="date" name="last-period-end-date">
 
-    <input id="period-age" type="text" placeholder="Age">
+    <input id="age" type="text" placeholder="Age">
   </div>
 
   <div class="row1" data-step-label="Medical Information">
@@ -78,11 +78,11 @@
       Medical Information<span class="tooltip1-content"></span>
     </h3>
     
-    <textarea id="period-medical-conditions" placeholder="Medical conditions
+    <textarea id="medical-conditions" placeholder="Medical conditions
     
     (PCOS, endometriosis, thyroid issues, diabetes, etc.)"></textarea>
     
-    <textarea id="period-current-medications" placeholder="Other Medication & Supplements & Dosage
+    <textarea id="current-medications" placeholder="Other Medication & Supplements & Dosage
 • Zoloft 50mg daily
 • Vitamin D
 • Iron supplement"></textarea>
@@ -94,7 +94,7 @@
     </h3>
     
     <label>How regular are your cycles?</label>
-    <div class="grid-items2" id="period-cycle-regularity-container">
+    <div class="grid-items2" id="cycle-regularity-container">
       <div class="grid-item" data-value="very-regular">Very Regular (±1 day)</div>
       <div class="grid-item" data-value="mostly-regular">Mostly Regular (±2-3 days)</div>
       <div class="grid-item" data-value="irregular">Irregular (±4+ days)</div>
@@ -102,7 +102,7 @@
     </div>
 
     <label>Average cycle length</label>
-    <textarea id="period-cycle-length" placeholder="Average cycle length
+    <textarea id="cycle-length" placeholder="Average cycle length
 • 28 days (most common)
 • Varies 26-32 days
 • 25 days on birth control
@@ -110,7 +110,7 @@
 "></textarea>
 
     <label>Flow intensity</label>
-    <div class="grid-items2" id="period-flow-intensity-container">
+    <div class="grid-items2" id="flow-intensity-container">
       <div class="grid-item" data-value="light">Light</div>
       <div class="grid-item" data-value="medium">Medium</div>
       <div class="grid-item" data-value="heavy">Heavy</div>
@@ -125,7 +125,7 @@
     <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
       Use the date fields above for basic tracking. Add entries below only for symptoms, irregularities, or notes requiring analysis.
     </p>
-    <div id="period-entries-container">
+    <div id="entries-container">
       <!-- Split calendar-text entries will be added here dynamically -->
     </div>
     <button type="button" id="add-period-entry-btn" class="add-entry-btn">Add Entry</button>
@@ -172,20 +172,20 @@
 
   // Initialize birth control conditional logic
   function initBirthControlLogic() {
-    const select = document.getElementById('period-birth-control-type');
-    const detailInput = document.getElementById('period-birth-control-detail');
+    const select = document.getElementById('birth-control-type');
+    const detailInput = document.getElementById('birth-control-detail');
     
     const containerMap = {
-      'none': '#period-natural-cycle-container',
-      'condoms': '#period-natural-cycle-container',
-      'diaphragm': '#period-natural-cycle-container', 
-      'spermicide': '#period-natural-cycle-container',
-      'pill': '#period-pill-container',
-      'patch': '#period-other-hormonal-container',
-      'ring': '#period-other-hormonal-container',
-      'injectable': '#period-other-hormonal-container',
-      'implant': '#period-other-hormonal-container',
-      'iud': '#period-iud-container'
+      'none': '#natural-cycle-container',
+      'condoms': '#natural-cycle-container',
+      'diaphragm': '#natural-cycle-container', 
+      'spermicide': '#natural-cycle-container',
+      'pill': '#pill-container',
+      'patch': '#other-hormonal-container',
+      'ring': '#other-hormonal-container',
+      'injectable': '#other-hormonal-container',
+      'implant': '#other-hormonal-container',
+      'iud': '#iud-container'
     };
 
     const placeholderMap = {
@@ -214,7 +214,7 @@
         const container = document.querySelector(containerMap[value]);
         if (container) {
           // Use display: contents for birth control containers to make them transparent to layout
-          const isDateContainer = container.id.includes('period-') && container.id.includes('-container');
+          const isDateContainer = container.id.includes('-container');
           container.style.display = isDateContainer ? 'contents' : 'block';
         }
       }
@@ -243,11 +243,11 @@
   // Initialize add entry functionality
   function initAddEntryButton() {
     const addBtn = document.getElementById('add-period-entry-btn');
-    const container = document.getElementById('period-entries-container');
+    const container = document.getElementById('entries-container');
     
     if (addBtn && container) {
       addBtn.addEventListener('click', function() {
-        const entryCount = container.querySelectorAll('[data-entry-id^="period-entry"]').length + 1;
+        const entryCount = container.querySelectorAll('[data-entry-id^="entry"]').length + 1;
         const now = new Date();
         const defaultWhen = `Today ${now.toLocaleTimeString('en-US', { 
           hour: 'numeric', 
@@ -257,7 +257,7 @@
         
         if (window.createSplitTextarea) {
           const entryDiv = window.createSplitTextarea({
-            id: `period-entry-${entryCount}`,
+            id: `entry-${entryCount}`,
             whenPlaceholder: 'When did this happen? (e.g., "June 17th", "Today 3pm")',
             whatPlaceholder: 'What happened? (e.g., "Period started", "Heavy cramping", "Period ended")',
             whenValue: defaultWhen,
@@ -295,24 +295,29 @@
   // Handle the generate button click
   async function handleGeneratePeriodIq() {
     // Cleanup of hidden field data is now handled by conditional field change events, not here
-    
+    console.debug('[PeriodIQ][DEBUG] Generate button clicked. Starting execution path.');
+
     // Use FormPersistence to get current form data
-    const formData = window.periodFormPersistence?.getSavedFormData() || {};
-    if (!formData || Object.keys(formData).length === 0) {
-      console.error('[PeriodIQ] No input data found.');
+    const formData = window.periodFormPersistence.getSavedFormData();
+    console.debug('[PeriodIQ][DEBUG] Retrieved formData:', formData);
+    if (!formData) {
+      console.error('[PeriodIQ] No input data found in localStorage.');
       alert('Please complete the form before generating a period analysis.');
       return;
     }
 
     // Check rate limiting before proceeding
-    if (window.rateLimiter.isRateLimited('period', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
+    const isLimited = window.rateLimiter.isRateLimited('period', 8, 60 * 60 * 1000);
+    console.debug('[PeriodIQ][DEBUG] Rate limit check:', isLimited);
+    if (isLimited) {
       alert('You have exceeded the request limit for period analysis. Please try again later.');
       return;
     }
 
     // Create worker payload with email for paid users (DRY function)
     const workerPayload = window.rateLimiter.createWorkerPayload('period', formData);
-    
+    console.debug('[PeriodIQ][DEBUG] Worker payload:', workerPayload);
+
     const dataContainer = document.querySelector('.data-container-in');
     let backendResponse = null;
     try {
@@ -322,6 +327,8 @@
         async () => {
           // Send data to worker
           const apiUrl = 'https://inexasli.com/api/generate';
+          console.debug('[PeriodIQ][DEBUG] Sending POST request to:', apiUrl);
+          console.debug('[PeriodIQ][DEBUG] POST body:', workerPayload);
           const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -329,24 +336,30 @@
             },
             body: JSON.stringify(workerPayload)
           });
+          console.debug('[PeriodIQ][DEBUG] Response status:', response.status);
           let responseData;
           try {
             responseData = await response.json();
+            console.debug('[PeriodIQ][DEBUG] Response JSON:', responseData);
           } catch (e) {
             responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
+            console.error('[PeriodIQ][DEBUG] Error parsing JSON:', e);
           }
           // Always call handleRateLimitResponse with backend response
           window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
           if (!response.ok) {
+            console.error('[PeriodIQ][DEBUG] Response not OK:', responseData);
             throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
           }
           if (responseData.message !== 'Success') {
+            console.error('[PeriodIQ][DEBUG] Response message not Success:', responseData);
             throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
           }
-          
+
           // Store the response
           window.periodFormPersistence.saveResponseData(responseData);
-          
+          console.debug('[PeriodIQ][DEBUG] Response data saved.');
+
           // Dispatch an event to notify dataout.js that a response was received
           const event = new CustomEvent('api-response-received', {
             detail: {
@@ -356,15 +369,18 @@
             }
           });
           document.dispatchEvent(event);
-          
+          console.debug('[PeriodIQ][DEBUG] api-response-received event dispatched.');
+
           return responseData;
         }
       );
       window.rateLimiter.incrementRequestCount('period');
+      console.debug('[PeriodIQ][DEBUG] Request count incremented.');
     } catch (error) {
       // If backendResponse is available, update rate limit display and show error
       if (backendResponse && dataContainer) {
         window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
+        console.debug('[PeriodIQ][DEBUG] handleRateLimitResponse called with error.');
       }
       // Optionally, show a toast/modal here for generic errors
       console.error('[PeriodIQ] Error:', error);
