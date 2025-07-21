@@ -785,12 +785,17 @@ class FormPersistence {
                 
                 if (isModuleField || isInDeviceContainer) {
                     const fieldName = this.getFieldName(element.id);
-                    foundRelevantField = true;
-                    // Save all values, including empty ones for textareas (to preserve user's intention to clear)
+                    // Only save non-empty values
                     if (element.type === 'number') {
-                        formData[fieldName] = element.value ? (parseInt(element.value, 10) || parseFloat(element.value)) : '';
+                        if (element.value) {
+                            formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
+                            foundRelevantField = true;
+                        }
                     } else {
-                        formData[fieldName] = element.value || '';
+                        if (element.value) {
+                            formData[fieldName] = element.value;
+                            foundRelevantField = true;
+                        }
                     }
                 }
             }
@@ -809,14 +814,8 @@ class FormPersistence {
                         item.dataset.value || item.textContent.trim()
                     );
                 }
-            } else {
-                if (this.singleSelectionContainers.has(container.id) || 
-                    this.isInferredSingleSelection(container)) {
-                    formData[fieldName] = null;
-                } else {
-                    formData[fieldName] = [];
-                }
             }
+            // Note: Removed saving null/[] for unselected containers to prevent empty state storage
         });
         
         // Collect images from ImageUploadUtility if available

@@ -1163,6 +1163,8 @@ if (typeof window !== 'undefined') {
     window.addDynamicTextareaInput = addDynamicTextareaInput;
     window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
     window.initInputFunctionality = initInputFunctionality;
+    window.clearConditionalFields = clearConditionalFields;
+    window.cleanupHiddenFieldData = cleanupHiddenFieldData;
 }
 
 // Auto-initialize when DOM is ready
@@ -1174,6 +1176,144 @@ if (typeof document !== 'undefined') {
     }
 }
 
+/**
+ * Clear specific conditional fields from localStorage for a module
+ * This is called when form logic changes and certain fields become irrelevant
+ * @param {string} moduleName - The name of the module
+ * @param {Array<string>} fieldsToRemove - Array of field names to remove from storage
+ */
+function clearConditionalFields(moduleName, fieldsToRemove) {
+    if (!moduleName || !Array.isArray(fieldsToRemove) || fieldsToRemove.length === 0) {
+        return;
+    }
+    
+    console.log(`[InputFunctionality] Clearing conditional fields for ${moduleName}:`, fieldsToRemove);
+    
+    // Import required utilities
+    import('./../../utility/getJSON.js').then(({ getJSON }) => {
+        import('./../../utility/setJSON.js').then(({ setJSON }) => {
+            const storageKey = `${moduleName}IqInput`;
+            const currentData = getJSON(storageKey, {});
+            
+            if (Object.keys(currentData).length === 0) {
+                console.log(`[InputFunctionality] No existing data for ${moduleName}, nothing to clear`);
+                return;
+            }
+            
+            // Remove specified fields
+            let removedCount = 0;
+            fieldsToRemove.forEach(fieldName => {
+                if (currentData.hasOwnProperty(fieldName)) {
+                    delete currentData[fieldName];
+                    removedCount++;
+                    console.log(`[InputFunctionality] Removed field: ${fieldName}`);
+                }
+            });
+            
+            if (removedCount > 0) {
+                // Save updated data back to localStorage
+                setJSON(storageKey, currentData);
+                console.log(`[InputFunctionality] Cleared ${removedCount} conditional fields, updated storage`);
+                
+                // Trigger FormPersistence to re-save current form state
+                if (window.FormPersistence) {
+                    try {
+                        const fpInstance = window.FormPersistence.getInstance(moduleName);
+                        if (fpInstance) {
+                            fpInstance.saveFormData();
+                            console.log(`[InputFunctionality] Triggered FormPersistence re-save for ${moduleName}`);
+                        }
+                    } catch (error) {
+                        console.warn(`[InputFunctionality] Could not trigger FormPersistence re-save:`, error);
+                    }
+                }
+            } else {
+                console.log(`[InputFunctionality] No fields were removed (didn't exist in storage)`);
+            }
+        });
+    });
+}
+
+/**
+ * Clean up all hidden field data from localStorage for a module
+ * This scans the DOM and removes any stored data for fields that are currently hidden
+ * @param {string} moduleName - The name of the module
+ */
+function cleanupHiddenFieldData(moduleName) {
+    if (!moduleName) return;
+    
+    console.log(`[InputFunctionality] Cleaning up hidden field data for ${moduleName}`);
+    
+    // Import required utilities
+    import('./../../utility/getJSON.js').then(({ getJSON }) => {
+        import('./../../utility/setJSON.js').then(({ setJSON }) => {
+            const storageKey = `${moduleName}IqInput`;
+            const currentData = getJSON(storageKey, {});
+            
+            if (Object.keys(currentData).length === 0) {
+                console.log(`[InputFunctionality] No existing data for ${moduleName}, nothing to cleanup`);
+                return;
+            }
+            
+            const fieldsToRemove = [];
+            const modulePrefix = `${moduleName}-`;
+            
+            // Check each stored field to see if its DOM element is visible
+            Object.keys(currentData).forEach(fieldName => {
+                // Skip special fields
+                if (fieldName === 'images') return;
+                
+                // Try to find the corresponding DOM element
+                let elementId = fieldName;
+                if (!fieldName.startsWith(modulePrefix)) {
+                    elementId = `${modulePrefix}${fieldName}`;
+                }
+                
+                const element = document.getElementById(elementId) || 
+                               document.querySelector(`[name="${fieldName}"]`) ||
+                               document.querySelector(`[class*="grid-items"][id*="${fieldName}"]`) ||
+                               document.querySelector(`.grid-container[id*="${fieldName}"]`);
+                
+                if (element && isElementHidden(element)) {
+                    fieldsToRemove.push(fieldName);
+                    console.log(`[InputFunctionality] Found hidden field to remove: ${fieldName}`);
+                }
+            });
+            
+            if (fieldsToRemove.length > 0) {
+                clearConditionalFields(moduleName, fieldsToRemove);
+            } else {
+                console.log(`[InputFunctionality] No hidden fields found to cleanup`);
+            }
+        });
+    });
+}
+
+/**
+ * Check if an element is currently hidden in the DOM
+ * @param {HTMLElement} element - The element to check
+ * @returns {boolean} True if element is hidden
+ */
+function isElementHidden(element) {
+    if (!element) return true;
+    
+    // Check if element and all parents are visible
+    let current = element;
+    while (current && current !== document.body) {
+        const computedStyle = window.getComputedStyle(current);
+        if (computedStyle.display === 'none' || 
+            computedStyle.visibility === 'hidden' ||
+            computedStyle.opacity === '0') {
+            return true;
+        }
+        current = current.parentElement;
+    }
+    
+    // Check if element has dimensions
+    const rect = element.getBoundingClientRect();
+    return rect.width === 0 && rect.height === 0;
+}
+
 // Export functions for module use
 export { 
     initAutoExpandTextareas, 
@@ -1183,6 +1323,12 @@ export {
     handleConditionalInput,
     handleConditionalContainers,
     triggerContainerResize,
-    addEntryButton
+    addEntryButton,
+    autoExpandTextarea,
+    addDynamicTextareaInput,
+    addDynamicTextareaAddButton,
+    initInputFunctionality,
+    clearConditionalFields,
+    cleanupHiddenFieldData
 };
 
