@@ -85,21 +85,26 @@
   }
   
   .quote-card {
-    background: transparent;
-    border-radius: 10px;
-    padding: 22px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 12px;
+    padding: 24px 26px 22px 26px;
     margin-bottom: 0;
     position: relative;
-    transition: all 0.3s ease;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    transition: box-shadow 0.28s cubic-bezier(.4,1.4,.6,1), transform 0.22s cubic-bezier(.4,1.4,.6,1);
+    box-shadow: 0 6px 32px 0 rgba(80,60,180,0.13), 0 1.5px 8px 0 rgba(0,0,0,0.07);
     border-left: 5px solid;
+    border-top: 1.5px solid #e5e7eb;
+    border-right: 1.5px solid #e5e7eb;
+    border-bottom: 1.5px solid #e5e7eb;
     opacity: 0; /* For animation */
     transform: translateY(20px); /* For animation */
+    will-change: box-shadow, transform;
   }
-  
+
   .quote-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transform: translateY(-6px) scale(1.025);
+    box-shadow: 0 16px 40px 0 rgba(80,60,180,0.18), 0 4px 16px 0 rgba(0,0,0,0.13);
+    z-index: 2;
   }
   
   .tradition {
