@@ -420,6 +420,21 @@ export const MODULE_VALIDATION_RULES = {
   },
   
   period: {
+    // Date fields
+    'last-period-start-date': { type: 'text', required: false, maxLength: 20 },
+    'last-period-end-date': { type: 'text', required: false, maxLength: 20 },
+    'hormonal-method-start-date': { type: 'text', required: false, maxLength: 20 },
+    'iud-insertion-date': { type: 'text', required: false, maxLength: 20 },
+    
+    // Cycle info
+    'natural-cycle-length': { type: 'text', required: false, maxLength: 50 },
+    
+    // Birth control
+    'contraceptive-type': { type: 'text', required: false, maxLength: 100 },
+    'barrier-method-type': { type: 'text', required: false, maxLength: 100 },
+    'fertility-awareness-method': { type: 'text', required: false, maxLength: 100 },
+    
+    // Legacy fields
     'period-entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 },
     'entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 }
   }
@@ -434,10 +449,10 @@ export function validateModuleData(moduleName, formData) {
     const basicValidated = {};
     for (const [key, value] of Object.entries(formData)) {
       if (typeof value === 'string') {
-        basicValidated[key] = validateText(value, key, 10000);
+        basicValidated[key] = validateText(value, key, 500);
       } else if (Array.isArray(value)) {
         basicValidated[key] = value.map(item => 
-          typeof item === 'string' ? validateText(item, key, 10000) : item
+          typeof item === 'string' ? validateText(item, key, 500) : item
         );
       } else {
         basicValidated[key] = value;
@@ -459,7 +474,7 @@ export function validateModuleData(moduleName, formData) {
         if (value !== null && value !== undefined && value !== '') {
           switch (rule.type) {
             case 'text':
-              validated[field] = validateText(value, field, rule.maxLength || 10000);
+              validated[field] = validateText(value, field, rule.maxLength || 500);
               break;
             case 'number':
               validated[field] = validateNumber(value, field, rule.min, rule.max);
@@ -491,10 +506,10 @@ export function validateModuleData(moduleName, formData) {
       } else {
         // No specific rule - apply basic security validation
         if (typeof value === 'string') {
-          validated[field] = validateText(value, field, 10000);
+          validated[field] = validateText(value, field, 500);
         } else if (Array.isArray(value)) {
           validated[field] = value.map(item => 
-            typeof item === 'string' ? validateText(item, field, 1000) : item
+            typeof item === 'string' ? validateText(item, field, 500) : item
           );
         } else {
           validated[field] = value;

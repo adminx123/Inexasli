@@ -43,12 +43,12 @@
 
     <!-- Natural Cycle Specific Fields -->
     <div id="period-natural-cycle-container" style="display: none;">
-      <input id="period-cycle-length-input" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
+      <input id="natural-cycle-length" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
     </div>
 
     <!-- Birth Control Pill Specific Fields -->
     <div id="period-pill-container" style="display: none;">
-      <label for="period-pill-start-date">Hormone pill restart date (after your last period):</label>
+      <label for="period-pill-start-date">Birth control pill restart date (after your last period):</label>
       <input id="period-pill-start-date" type="date">
     </div>
 
@@ -60,15 +60,15 @@
 
     <!-- Other Hormonal Methods Container -->
     <div id="period-other-hormonal-container" style="display: none;">
-      <label for="period-method-start-date">Method start date:</label>
-      <input id="period-method-start-date" type="date">
+      <label for="hormonal-method-start-date">Patch/Ring/Injectable/Implant start date:</label>
+      <input id="hormonal-method-start-date" type="date">
     </div>
 
-    <label for="period-start-date">Last Period Start Date:</label>
-    <input id="period-start-date" type="date" name="period-start-date">
+    <label for="last-period-start-date">Last period start date:</label>
+    <input id="last-period-start-date" type="date" name="last-period-start-date">
     
-    <label for="period-end-date">Last Period End Date:</label>
-    <input id="period-end-date" type="date" name="period-end-date">
+    <label for="last-period-end-date">Last period end date:</label>
+    <input id="last-period-end-date" type="date" name="last-period-end-date">
 
     <input id="period-age" type="text" placeholder="Age">
   </div>
@@ -292,11 +292,62 @@
     initAddEntryButton();
   }, 200);
 
+  // Custom form data collector that only sends relevant fields
+  function collectCleanPeriodData() {
+    const formData = {};
+    const birthControlType = document.getElementById('period-birth-control-type')?.value || '';
+    
+    // Always collect basic fields
+    const basicFields = [
+      'period-birth-control-type', 'period-birth-control-detail', 'last-period-start-date', 
+      'last-period-end-date', 'period-age', 'period-medical-conditions', 'period-current-medications',
+      'period-cycle-length', 'natural-cycle-length'
+    ];
+    
+    basicFields.forEach(id => {
+      const element = document.getElementById(id);
+      if (element && element.value) {
+        formData[id] = element.value;
+      }
+    });
+    
+    // Only collect birth control specific fields based on selection
+    if (birthControlType === 'pill') {
+      const pillDate = document.getElementById('period-pill-start-date')?.value;
+      if (pillDate) formData['period-pill-start-date'] = pillDate;
+    } else if (birthControlType === 'iud') {
+      const iudDate = document.getElementById('period-iud-insertion-date')?.value;
+      if (iudDate) formData['period-iud-insertion-date'] = iudDate;
+    } else if (['patch', 'ring', 'injectable', 'implant'].includes(birthControlType)) {
+      const methodDate = document.getElementById('hormonal-method-start-date')?.value;
+      if (methodDate) formData['hormonal-method-start-date'] = methodDate;
+    }
+    
+    // Collect grid selections
+    const cycleRegularity = document.querySelector('#period-cycle-regularity-container .grid-item.selected');
+    if (cycleRegularity) formData['period-cycle-regularity-container'] = cycleRegularity.dataset.value;
+    
+    const flowIntensity = document.querySelector('#period-flow-intensity-container .grid-item.selected');
+    if (flowIntensity) formData['period-flow-intensity-container'] = flowIntensity.dataset.value;
+    
+    // Collect entries
+    const entries = document.querySelectorAll('#period-entries-container [data-entry-id^="period-entry"]');
+    entries.forEach((entry, index) => {
+      const whenTextarea = entry.querySelector('textarea[placeholder*="When"]');
+      const whatTextarea = entry.querySelector('textarea[placeholder*="What"]');
+      if (whenTextarea?.value.trim()) formData[`entry-${index + 1}-when`] = whenTextarea.value.trim();
+      if (whatTextarea?.value.trim()) formData[`entry-${index + 1}-what`] = whatTextarea.value.trim();
+    });
+    
+    return formData;
+  }
+
   // Handle the generate button click
   async function handleGeneratePeriodIq() {
-    const formData = window.periodFormPersistence.getSavedFormData();
-    if (!formData) {
-      console.error('[PeriodIQ] No input data found in localStorage.');
+    // Use custom form data collection to send only relevant fields
+    const formData = collectCleanPeriodData();
+    if (!formData || Object.keys(formData).length === 0) {
+      console.error('[PeriodIQ] No input data found.');
       alert('Please complete the form before generating a period analysis.');
       return;
     }
