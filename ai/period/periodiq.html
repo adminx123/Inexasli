@@ -227,6 +227,11 @@
         detailInput.style.display = 'none';
       }
       
+      // Clean up hidden field data when birth control type changes
+      if (window.cleanupHiddenFieldData) {
+        setTimeout(() => window.cleanupHiddenFieldData('period'), 100);
+      }
+      
       // Save form data
       if (window.periodFormPersistence) {
         window.periodFormPersistence.saveFormData();
@@ -292,60 +297,15 @@
     initAddEntryButton();
   }, 200);
 
-  // Custom form data collector that only sends relevant fields
-  function collectCleanPeriodData() {
-    const formData = {};
-    const birthControlType = document.getElementById('period-birth-control-type')?.value || '';
-    
-    // Always collect basic fields
-    const basicFields = [
-      'period-birth-control-type', 'period-birth-control-detail', 'last-period-start-date', 
-      'last-period-end-date', 'period-age', 'period-medical-conditions', 'period-current-medications',
-      'period-cycle-length', 'natural-cycle-length'
-    ];
-    
-    basicFields.forEach(id => {
-      const element = document.getElementById(id);
-      if (element && element.value) {
-        formData[id] = element.value;
-      }
-    });
-    
-    // Only collect birth control specific fields based on selection
-    if (birthControlType === 'pill') {
-      const pillDate = document.getElementById('period-pill-start-date')?.value;
-      if (pillDate) formData['period-pill-start-date'] = pillDate;
-    } else if (birthControlType === 'iud') {
-      const iudDate = document.getElementById('period-iud-insertion-date')?.value;
-      if (iudDate) formData['period-iud-insertion-date'] = iudDate;
-    } else if (['patch', 'ring', 'injectable', 'implant'].includes(birthControlType)) {
-      const methodDate = document.getElementById('hormonal-method-start-date')?.value;
-      if (methodDate) formData['hormonal-method-start-date'] = methodDate;
-    }
-    
-    // Collect grid selections
-    const cycleRegularity = document.querySelector('#period-cycle-regularity-container .grid-item.selected');
-    if (cycleRegularity) formData['period-cycle-regularity-container'] = cycleRegularity.dataset.value;
-    
-    const flowIntensity = document.querySelector('#period-flow-intensity-container .grid-item.selected');
-    if (flowIntensity) formData['period-flow-intensity-container'] = flowIntensity.dataset.value;
-    
-    // Collect entries
-    const entries = document.querySelectorAll('#period-entries-container [data-entry-id^="period-entry"]');
-    entries.forEach((entry, index) => {
-      const whenTextarea = entry.querySelector('textarea[placeholder*="When"]');
-      const whatTextarea = entry.querySelector('textarea[placeholder*="What"]');
-      if (whenTextarea?.value.trim()) formData[`entry-${index + 1}-when`] = whenTextarea.value.trim();
-      if (whatTextarea?.value.trim()) formData[`entry-${index + 1}-what`] = whatTextarea.value.trim();
-    });
-    
-    return formData;
-  }
-
   // Handle the generate button click
   async function handleGeneratePeriodIq() {
-    // Use custom form data collection to send only relevant fields
-    const formData = collectCleanPeriodData();
+    // Clean up any hidden field data before collecting
+    if (window.cleanupHiddenFieldData) {
+      window.cleanupHiddenFieldData('period');
+    }
+    
+    // Use FormPersistence to get current form data
+    const formData = window.periodFormPersistence?.getSavedFormData() || {};
     if (!formData || Object.keys(formData).length === 0) {
       console.error('[PeriodIQ] No input data found.');
       alert('Please complete the form before generating a period analysis.');
