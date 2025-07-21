@@ -14,6 +14,48 @@
   <script src="../../utility/enhancedUI.js"></script>
   
   <style>
+    /* Add margin between product groups */
+    .product-collapsible-group {
+      margin-bottom: 32px;
+    }
+    /* Collapsible button styled as a container/card */
+    .collapsible-btn {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      padding: 20px 24px;
+      margin-bottom: 8px;
+      font-size: 20px;
+      font-family: inherit;
+      color: #000;
+      text-align: left;
+      cursor: pointer;
+      outline: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .collapsible-btn[aria-expanded="true"] {
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+    .collapsible-btn:active, .collapsible-btn:focus {
+      background: rgba(74,144,226,0.10);
+      border-color: rgba(74,144,226,0.25);
+    }
+    .collapsible-btn::after {
+      content: '\25BC';
+      margin-left: auto;
+      font-size: 18px;
+      color: #4a90e2;
+      transition: transform 0.2s;
+    }
+    .collapsible-btn[aria-expanded="true"]::after {
+      transform: rotate(180deg);
+    }
     html {
       height: 100%;
       margin: 0;
@@ -907,27 +949,110 @@ console.log('Shop API Output script running');
         <div class="shop-content">
     `;
 
-    // Generate content based on analysis type
-    if (analysisType === 'comparison') {
-      html += generateComparisonDisplay(data);
-    } else if (analysisType === 'business') {
-      html += generateBusinessDisplay(data);
-    } else if (analysisType === 'app') {
-      html += generateAppDisplay(data);
-    } else if (analysisType === 'service') {
-      html += generateServiceDisplay(data);
+    // Collapsible for product or comparison
+    if (analysisType === 'comparison' && data.itemsCompared && Array.isArray(data.itemsCompared)) {
+      // Add recommendations (not per product) at the top
+      if (data.recommendations) {
+        html += `
+          <div class="analysis-card recommendation" style="margin-bottom:32px;">
+            <h3><i class="fas fa-trophy"></i> Recommendations</h3>
+            ${data.recommendations.overallWinner ? `<div class="verdict buy">Overall Winner: ${data.itemsCompared.find(i => i.id === data.recommendations.overallWinner)?.name || ''}</div>` : ''}
+            ...existing code...
+          </div>
+        `;
+      }
+      // For each product in comparison, group all related info in a collapsible
+      data.itemsCompared.forEach((item, idx) => {
+        const itemId = item.id;
+        html += `
+          <div class="product-collapsible-group">
+            <button class="collapsible-btn" type="button" aria-expanded="${idx === 0 ? 'true' : 'false'}" aria-controls="product-group-${itemId}" onclick="toggleCollapse('product-group-${itemId}', this)">
+              <span style="font-weight:bold;">${item.name}</span> <span style="font-size:13px;opacity:0.7;">(${item.category || ''})</span>
+            </button>
+            <div id="product-group-${itemId}" class="collapsible-content" style="display:${idx === 0 ? 'block' : 'none'};">
+              ${generateComparisonProductGroup(data, itemId)}
+            </div>
+          </div>
+        `;
+      });
+    } else if (analysisType === 'product') {
+      // Single product, one collapsible
+      html += `
+        <div class="product-collapsible-group">
+          <button class="collapsible-btn" type="button" aria-expanded="true" aria-controls="product-group-single" onclick="toggleCollapse('product-group-single', this)">
+            <span style="font-weight:bold;">${data.productInfo?.name || 'Product'}</span>
+          </button>
+          <div id="product-group-single" class="collapsible-content" style="display:block;">
+            ${generateProductDisplay(data)}
+          </div>
+        </div>
+      `;
     } else {
-      html += generateProductDisplay(data);
+      // Fallback to original logic for other types
+      if (analysisType === 'business') {
+        html += generateBusinessDisplay(data);
+      } else if (analysisType === 'app') {
+        html += generateAppDisplay(data);
+      } else if (analysisType === 'service') {
+        html += generateServiceDisplay(data);
+      }
     }
-    
+
     html += `
         </div>
       </div>
     `;
 
-    console.log('Generated HTML length:', html.length);
     container.innerHTML = html;
     console.log('Data displayed successfully');
+  }
+
+  // Helper for comparison: group all analysis for a product
+  function generateComparisonProductGroup(data, itemId) {
+    let html = '';
+    const item = data.itemsCompared.find(i => i.id === itemId);
+    if (!item) return '';
+    // Start single card for all info
+    html += `<div class="analysis-card product-info">
+      <h3><i class="fas fa-box"></i> Product Information</h3>
+      <div class="product-details">
+        <p><strong>Product:</strong> ${item.name || 'Unknown'}</p>
+        <p><strong>Category:</strong> ${item.category || 'Unknown'}</p>
+      </div>`;
+    // Ratings (all together)
+    if (data.comparisonMatrix) {
+      let ratingsHtml = '';
+      ['safety','quality','value'].forEach(type => {
+        const found = data.comparisonMatrix[type]?.find(x => x.itemId === itemId);
+        if (found) {
+          ratingsHtml += `<div class="rating-display"><span>${type.charAt(0).toUpperCase()+type.slice(1)}:</span><div class="rating-stars">${generateStars(found.rating)}</div><span class="rating-number">${found.rating}/10</span></div>`;
+        }
+      });
+      if (ratingsHtml) {
+        html += `<div style="margin-top:12px;">${ratingsHtml}</div>`;
+      }
+    }
+    // Item analysis
+    if (data.itemAnalysis) {
+      const analysis = data.itemAnalysis.find(x => x.itemId === itemId);
+      if (analysis) {
+        if (analysis.bestFor) html += `<p style="margin-top:14px;"><strong>Best For:</strong> ${analysis.bestFor}</p>`;
+        if (analysis.strengths?.length) html += `<div class="strengths-list" style="margin-top:10px;">${analysis.strengths.map(s=>`<div class="strength-item"><div class="strength-icon">💪</div><div class="strength-text">${s}</div></div>`).join('')}</div>`;
+        if (analysis.weaknesses?.length) html += `<div class="weaknesses-list" style="margin-top:10px;">${analysis.weaknesses.map(w=>`<div class="weakness-item"><div class="weakness-icon">⚠️</div><div class="weakness-text">${w}</div></div>`).join('')}</div>`;
+        if (analysis.warnings?.length) html += `<div class="item-warnings-list" style="margin-top:10px;">${analysis.warnings.map(w=>`<div class="item-warning-item"><div class="item-warning-icon">🚨</div><div class="item-warning-text">${w}</div></div>`).join('')}</div>`;
+      }
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  // Collapsible JS
+  window.toggleCollapse = function(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    el.style.display = expanded ? 'none' : 'block';
+    btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
   }
 
   function generateProductDisplay(data) {
