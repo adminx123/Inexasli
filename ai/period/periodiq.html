@@ -299,10 +299,7 @@
 
   // Handle the generate button click
   async function handleGeneratePeriodIq() {
-    // Clean up any hidden field data before collecting
-    if (window.cleanupHiddenFieldData) {
-      window.cleanupHiddenFieldData('period');
-    }
+    // Cleanup of hidden field data is now handled by conditional field change events, not here
     
     // Use FormPersistence to get current form data
     const formData = window.periodFormPersistence?.getSavedFormData() || {};
