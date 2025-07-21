@@ -549,7 +549,7 @@
         }
         
         return `
-          <div class="question-card" data-question="${index}" data-type="${questionType}" style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 24px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+          <div class="question-card" data-question="${index}" data-type="${questionType}" style="background: white; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 32px; overflow: hidden; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.04); width: 100%; max-width: none; margin-left: 0; margin-right: 0;">
             <div style="background: #f8f9fa; padding: 16px 20px; border-bottom: 1px solid #e9ecef; display: flex; align-items: center; gap: 12px;">
               <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px;">${question.questionNumber}</div>
               <span style="font-weight: 600; color: #495057;">Question ${question.questionNumber} (${questionType.replace('-', ' ')})</span>
@@ -624,7 +624,6 @@
         const cleanInstructions = cleanText(quiz.instructions);
         
         let html = `
-          <div style="max-width: 900px; margin: 0 auto; background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px; text-align: center;">
               <h1 style="margin: 0; font-size: 24px; font-weight: 600;"><i class="fas fa-brain"></i> ${cleanTitle}</h1>
             </div>
@@ -676,8 +675,7 @@
 
         html += `
             </div>
-            
-            <div style="background: #f8f9fa; padding: 24px; border-top: 1px solid #e9ecef; display: flex; justify-content: center; gap: 16px;">
+            <div style="background: #f8f9fa; padding: 24px; border-top: 1px solid #e9ecef; display: flex; justify-content: center; gap: 16px; max-width: none;">
               <button onclick="resetQuiz()" style="padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-size: 14px; background: #6c757d; color: white;">
                 <i class="fas fa-redo"></i> Reset Quiz
               </button>
@@ -685,8 +683,8 @@
                 <i class="fas fa-check"></i> Submit Answers
               </button>
             </div>
-          </div>
-        `;        return html;
+        `;
+        return html;
       }
 
       function updateOutput() {
