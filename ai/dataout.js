@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             .data-container-out .data-content {
-                padding: 0;
+                padding: 0 0 35px 0; /* Add 35px bottom padding for overscroll */
                 font-size: 14px;
                 height: calc(100vh - 40px);
                 overflow-y: auto;
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 .data-container-out .data-content {
                     font-size: 12px;
-                    padding: 0;
+                    padding: 0 0 35px 0; /* Add 35px bottom padding for overscroll on mobile */
                     overflow-x: auto;
                     overflow-y: auto;
                     margin-top: 25px;
