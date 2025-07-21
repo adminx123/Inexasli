@@ -15,14 +15,16 @@
       height: 100%;
       margin: 0;
       padding: 0;
-    }
+    
+
+    /* Removed .event-main-card to allow sections to float on background */
 
     /* Event-specific styling */
     .event-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 25px;
-      border-radius: 12px 12px 0 0;
+      padding: 36px 24px 28px 24px;
+      border-radius: 18px 18px 0 0;
       text-align: center;
       margin-bottom: 0;
     }
@@ -55,17 +57,22 @@
     .complexity-high { background: #ef4444; }
 
     .section {
-      background: white;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
+      background: rgba(255,255,255,0.72);
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.35);
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 16px rgba(31,38,135,0.10);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+      padding: 32px 24px 28px 24px;
+      margin-bottom: 32px;
+      /* Ensure margin is transparent so background shows through */
+    }
     }
 
     .section-header {
       background: #f8fafc;
-      padding: 15px 20px;
+      padding: 14px 0 14px 0;
       border-bottom: 1px solid #e5e7eb;
       font-weight: 600;
       font-size: 18px;
@@ -73,10 +80,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      margin-bottom: 14px;
+      justify-content: center;
+      text-align: center;
     }
 
     .section-content {
-      padding: 20px;
+      padding: 0;
     }
 
     /* Timeline Styles */
@@ -134,12 +144,16 @@
       padding: 12px;
       border-radius: 6px;
       margin-bottom: 8px;
-      border-left: 4px solid transparent;
     }
-
-    .task-item.priority-high { border-left-color: #ef4444; }
-    .task-item.priority-medium { border-left-color: #f59e0b; }
-    .task-item.priority-low { border-left-color: #10b981; }
+    .task-item.priority-high {
+      background: #fee2e2;
+    }
+    .task-item.priority-medium {
+      background: #fef3c7;
+    }
+    .task-item.priority-low {
+      background: #d1fae5;
+    }
 
     .task-name {
       font-weight: 500;
@@ -407,18 +421,21 @@
       padding: 10px;
       background: #f9fafb;
       border-radius: 6px;
-      border-left: 4px solid transparent;
       cursor: pointer;
       transition: all 0.2s ease;
     }
-
+    .checklist-item.critical {
+      background: #fee2e2;
+    }
+    .checklist-item.important {
+      background: #fef3c7;
+    }
+    .checklist-item.nice-to-have {
+      background: #d1fae5;
+    }
     .checklist-item:hover {
       background: #f3f4f6;
     }
-
-    .checklist-item.critical { border-left-color: #ef4444; }
-    .checklist-item.important { border-left-color: #f59e0b; }
-    .checklist-item.nice-to-have { border-left-color: #10b981; }
 
     .checklist-checkbox {
       width: 18px;
@@ -502,10 +519,25 @@
     /* Progress indicators */
     .progress-container {
       margin-top: 30px;
-      padding: 20px;
-      background: #f8fafc;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      padding: 24px;
+      background: rgba(255,255,255,0.68);
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      box-shadow: 0 4px 16px rgba(31,38,135,0.10);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+    }
+
+    .dashboard-card {
+      background: rgba(255,255,255,0.72);
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      box-shadow: 0 4px 16px rgba(31,38,135,0.10);
+      backdrop-filter: blur(10px) saturate(160%);
+      -webkit-backdrop-filter: blur(10px) saturate(160%);
+      padding: 28px 22px 24px 22px;
+      margin-bottom: 28px;
+      transition: box-shadow 0.2s, border 0.2s;
     }
 
     .progress-title {
@@ -547,9 +579,7 @@
 <body>
   <div id="main-content" class="device-container event-container">
     <div class="output-wrapper">
-      <div id="output-span" class="api-output">
-        <!-- Content will be populated by JavaScript -->
-      </div>
+      <div id="output-span"><!-- Content will be populated by JavaScript --></div>
     </div>
   </div>
   <script>
@@ -587,31 +617,26 @@
 
         let html = '';
 
-        // Event Header
+        // Event Header (flattened, no extra wrapper)
         if (eventPlan) {
           const complexityClass = `complexity-${(eventPlan.complexity || 'medium').toLowerCase()}`;
           html += `
-            <div class="event-header">
+            <div class="event-header" style="margin-bottom:24px;">
               <h1>${eventPlan.eventTitle || 'Your Event Plan'}</h1>
               <div class="event-summary">${eventPlan.eventSummary || 'Comprehensive event planning guide'}</div>
               <div class="complexity-badge ${complexityClass}">${eventPlan.complexity || 'Medium'} Complexity</div>
-              ${eventPlan.recommendedPlanningTime ? `<div style="margin-top: 10px; font-size: 14px;">Recommended Planning Time: ${eventPlan.recommendedPlanningTime}</div>` : ''}
+              ${eventPlan.recommendedPlanningTime ? `<div style=\"margin-top: 10px; font-size: 14px;\">Recommended Planning Time: ${eventPlan.recommendedPlanningTime}</div>` : ''}
             </div>
           `;
         }
 
-        // Timeline Section
+        // Timeline Section (flattened)
         if (timeline && timeline.phases) {
           html += `
             <div class="section">
-              <div class="section-header">
-                <i class="fas fa-calendar-alt"></i>
-                Planning Timeline
-              </div>
-              <div class="section-content">
-                <div class="timeline">
+              <div class="section-header"><i class="fas fa-calendar-alt"></i> Planning Timeline</div>
+              <div class="timeline">
           `;
-          
           timeline.phases.forEach(phase => {
             html += `
               <div class="timeline-phase">
@@ -620,339 +645,127 @@
                 <div class="phase-timeframe">${phase.timeframe}</div>
                 <div class="phase-tasks">
             `;
-            
             if (phase.tasks) {
               phase.tasks.forEach(task => {
                 const priorityClass = `priority-${(task.priority || 'medium').toLowerCase()}`;
                 html += `
                   <div class="task-item ${priorityClass}">
                     <div class="task-name">${task.task}</div>
-                    <div class="task-details">
-                      Priority: ${task.priority || 'Medium'} | 
-                      Time: ${task.estimatedTime || 'TBD'}
-                    </div>
+                    <div class="task-details">Priority: ${task.priority || 'Medium'} | Time: ${task.estimatedTime || 'TBD'}</div>
                   </div>
                 `;
               });
             }
-            
-            html += `
-                </div>
-              </div>
-            `;
+            html += `</div></div>`;
           });
-          
-          html += `
-                </div>
-              </div>
-            </div>
-          `;
+          html += `</div></div>`;
         }
 
-        // Budget Section
+        // Budget Section (flattened)
         if (budget) {
           html += `
             <div class="section">
-              <div class="section-header">
-                <i class="fas fa-dollar-sign"></i>
-                Budget Breakdown
-              </div>
-              <div class="section-content">
+              <div class="section-header"><i class="fas fa-dollar-sign"></i> Budget Breakdown</div>
           `;
-          
           if (budget.totalBudget) {
-            html += `
-              <div class="budget-overview">
-                <div class="total-budget">$${budget.totalBudget.toLocaleString()}</div>
-                <div>Total Budget</div>
-              </div>
-            `;
+            html += `<div class="budget-overview"><div class="total-budget">$${budget.totalBudget.toLocaleString()}</div><div>Total Budget</div></div>`;
           }
-          
           if (budget.categories) {
             html += '<div class="budget-categories">';
             budget.categories.forEach(category => {
-              html += `
-                <div class="budget-category" style="--percentage: ${category.percentage}%">
-                  <div class="category-header">
-                    <div class="category-name">${category.category}</div>
-                    <div class="category-amount">$${category.amount.toLocaleString()}</div>
-                  </div>
-                  <div class="category-percentage">${category.percentage}% of budget</div>
-                  ${category.notes ? `<div class="category-notes">${category.notes}</div>` : ''}
-                </div>
-              `;
+              html += `<div class="budget-category" style="--percentage: ${category.percentage}%"><div class="category-header"><div class="category-name">${category.category}</div><div class="category-amount">$${category.amount.toLocaleString()}</div></div><div class="category-percentage">${category.percentage}% of budget</div>${category.notes ? `<div class="category-notes">${category.notes}</div>` : ''}</div>`;
             });
             html += '</div>';
           }
-          
           if (budget.costSavingTips) {
-            html += `
-              <div style="margin-top: 20px;">
-                <h4 style="color: #059669; margin-bottom: 10px;"><i class="fas fa-lightbulb"></i> Cost-Saving Tips</h4>
-                <ul style="color: #374151; line-height: 1.6;">
-            `;
-            budget.costSavingTips.forEach(tip => {
-              html += `<li>${tip}</li>`;
-            });
+            html += `<div style="margin-top: 20px;"><h4 style="color: #059669; margin-bottom: 10px;"><i class="fas fa-lightbulb"></i> Cost-Saving Tips</h4><ul style="color: #374151; line-height: 1.6;">`;
+            budget.costSavingTips.forEach(tip => { html += `<li>${tip}</li>`; });
             html += '</ul></div>';
           }
-          
-          html += '</div></div>';
+          html += '</div>';
         }
 
-        // Vendors Section
+        // Vendors Section (flattened by one level)
         if (vendors && vendors.length) {
-          html += `
-            <div class="section">
-              <div class="section-header">
-                <i class="fas fa-handshake"></i>
-                Vendor Recommendations
-              </div>
-              <div class="section-content">
-          `;
-          
+          html += `<div class="section"><div class="section-header"><i class="fas fa-handshake"></i> Vendor Recommendations</div>`;
           vendors.forEach(vendor => {
-            html += `
-              <div class="vendor-category">
-                <div class="vendor-header">
-                  <div class="vendor-name">${vendor.category}</div>
-                  <div class="vendor-timeline">Book by: ${vendor.bookingTimeline || 'TBD'}</div>
-                </div>
-                <div class="vendor-suggestions">
-            `;
-            
+            html += `<div class="vendor-header"><div class="vendor-name">${vendor.category}</div><div class="vendor-timeline">Book by: ${vendor.bookingTimeline || 'TBD'}</div></div>`;
             if (vendor.suggestions) {
+              html += '<div class="vendor-suggestions">';
               vendor.suggestions.forEach(suggestion => {
-                html += `
-                  <div class="vendor-option">
-                    <div class="vendor-option-header">
-                      <div class="vendor-type">${suggestion.type}</div>
-                      <div class="vendor-cost">${suggestion.estimatedCost}</div>
-                    </div>
-                    <div class="pros-cons">
-                      <div class="pros">
-                        <h5>Pros</h5>
-                        <ul>
-                `;
-                
-                if (suggestion.pros) {
-                  suggestion.pros.forEach(pro => {
-                    html += `<li>${pro}</li>`;
-                  });
-                }
-                
-                html += `
-                        </ul>
-                      </div>
-                      <div class="cons">
-                        <h5>Cons</h5>
-                        <ul>
-                `;
-                
-                if (suggestion.cons) {
-                  suggestion.cons.forEach(con => {
-                    html += `<li>${con}</li>`;
-                  });
-                }
-                
-                html += `
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                `;
+                html += `<div class="vendor-option"><div class="vendor-option-header"><div class="vendor-type">${suggestion.type}</div><div class="vendor-cost">${suggestion.estimatedCost}</div></div><div class="pros-cons"><div class="pros"><h5>Pros</h5><ul>`;
+                if (suggestion.pros) { suggestion.pros.forEach(pro => { html += `<li>${pro}</li>`; }); }
+                html += `</ul></div><div class="cons"><h5>Cons</h5><ul>`;
+                if (suggestion.cons) { suggestion.cons.forEach(con => { html += `<li>${con}</li>`; }); }
+                html += `</ul></div></div></div>`;
               });
+              html += '</div>';
             }
-            
-            html += '</div></div>';
           });
-          
-          html += '</div></div>';
+          html += '</div>';
         }
 
-        // Risk Mitigation Section
+        // Risk Mitigation Section (flattened)
         if (risks && risks.length) {
-          html += `
-            <div class="section">
-              <div class="section-header">
-                <i class="fas fa-shield-alt"></i>
-                Risk Mitigation
-              </div>
-              <div class="section-content">
-          `;
-          
+          html += `<div class="section"><div class="section-header"><i class="fas fa-shield-alt"></i> Risk Mitigation</div>`;
           risks.forEach(risk => {
-            html += `
-              <div class="risk-item">
-                <div class="risk-header">
-                  <div class="risk-name">${risk.risk}</div>
-                  <div class="risk-badges">
-                    <div class="risk-badge probability-${(risk.probability || 'medium').toLowerCase()}">
-                      ${risk.probability || 'Medium'} Probability
-                    </div>
-                    <div class="risk-badge impact-${(risk.impact || 'medium').toLowerCase()}">
-                      ${risk.impact || 'Medium'} Impact
-                    </div>
-                  </div>
-                </div>
-                <div class="risk-details">
-                  <strong>Mitigation:</strong> ${risk.mitigation}<br>
-                  <strong>Contingency:</strong> ${risk.contingency}
-                </div>
-              </div>
-            `;
+            html += `<div class="risk-item"><div class="risk-header"><div class="risk-name">${risk.risk}</div><div class="risk-badges"><div class="risk-badge probability-${(risk.probability || 'medium').toLowerCase()}">${risk.probability || 'Medium'} Probability</div><div class="risk-badge impact-${(risk.impact || 'medium').toLowerCase()}">${risk.impact || 'Medium'} Impact</div></div></div><div class="risk-details"><strong>Mitigation:</strong> ${risk.mitigation}<br><strong>Contingency:</strong> ${risk.contingency}</div></div>`;
           });
-          
-          html += '</div></div>';
+          html += '</div>';
         }
 
-        // Checklist Section
+        // Checklist Section (flattened)
         if (checklist) {
-          html += `
-            <div class="section">
-              <div class="section-header">
-                <i class="fas fa-tasks"></i>
-                Event Checklist
-              </div>
-              <div class="section-content">
-          `;
-          
+          html += `<div class="section"><div class="section-header"><i class="fas fa-tasks"></i> Event Checklist</div>`;
           if (checklist.critical) {
-            html += `
-              <div class="checklist-category">
-                <div class="checklist-title">
-                  <i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i>
-                  Critical Items
-                </div>
-                <div class="checklist-items">
-            `;
+            html += `<div class="checklist-category"><div class="checklist-title"><i class="fas fa-exclamation-triangle" style="color: #ef4444;"></i> Critical Items</div><div class="checklist-items">`;
             checklist.critical.forEach((item, index) => {
-              html += `
-                <div class="checklist-item critical" onclick="toggleChecklistItem(this)">
-                  <div class="checklist-checkbox" id="critical-${index}"></div>
-                  <div>${item}</div>
-                </div>
-              `;
+              html += `<div class="checklist-item critical" onclick="toggleChecklistItem(this)"><div class="checklist-checkbox" id="critical-${index}"></div><div>${item}</div></div>`;
             });
             html += '</div></div>';
           }
-          
           if (checklist.important) {
-            html += `
-              <div class="checklist-category">
-                <div class="checklist-title">
-                  <i class="fas fa-star" style="color: #f59e0b;"></i>
-                  Important Items
-                </div>
-                <div class="checklist-items">
-            `;
+            html += `<div class="checklist-category"><div class="checklist-title"><i class="fas fa-star" style="color: #f59e0b;"></i> Important Items</div><div class="checklist-items">`;
             checklist.important.forEach((item, index) => {
-              html += `
-                <div class="checklist-item important" onclick="toggleChecklistItem(this)">
-                  <div class="checklist-checkbox" id="important-${index}"></div>
-                  <div>${item}</div>
-                </div>
-              `;
+              html += `<div class="checklist-item important" onclick="toggleChecklistItem(this)"><div class="checklist-checkbox" id="important-${index}"></div><div>${item}</div></div>`;
             });
             html += '</div></div>';
           }
-          
           if (checklist['nice-to-have']) {
-            html += `
-              <div class="checklist-category">
-                <div class="checklist-title">
-                  <i class="fas fa-heart" style="color: #10b981;"></i>
-                  Nice-to-Have Items
-                </div>
-                <div class="checklist-items">
-            `;
+            html += `<div class="checklist-category"><div class="checklist-title"><i class="fas fa-heart" style="color: #10b981;"></i> Nice-to-Have Items</div><div class="checklist-items">`;
             checklist['nice-to-have'].forEach((item, index) => {
-              html += `
-                <div class="checklist-item nice-to-have" onclick="toggleChecklistItem(this)">
-                  <div class="checklist-checkbox" id="nice-to-have-${index}"></div>
-                  <div>${item}</div>
-                </div>
-              `;
+              html += `<div class="checklist-item nice-to-have" onclick="toggleChecklistItem(this)"><div class="checklist-checkbox" id="nice-to-have-${index}"></div><div>${item}</div></div>`;
             });
             html += '</div></div>';
           }
-          
-          html += '</div></div>';
+          html += '</div>';
         }
 
-        // Recommendations Section
+        // Recommendations Section (flattened)
         if (recommendations) {
-          html += `
-            <div class="section">
-              <div class="section-header">
-                <i class="fas fa-magic"></i>
-                Expert Recommendations
-              </div>
-              <div class="section-content">
-          `;
-          
+          html += `<div class="section"><div class="section-header"><i class="fas fa-magic"></i> Expert Recommendations</div>`;
           if (recommendations.keySuccessFactors) {
-            html += `
-              <div class="recommendation-group">
-                <h4><i class="fas fa-key"></i> Key Success Factors</h4>
-                <div class="recommendation-list">
-            `;
-            recommendations.keySuccessFactors.forEach(factor => {
-              html += `<div class="recommendation-item">${factor}</div>`;
-            });
+            html += `<div class="recommendation-group"><h4><i class="fas fa-key"></i> Key Success Factors</h4><div class="recommendation-list">`;
+            recommendations.keySuccessFactors.forEach(factor => { html += `<div class="recommendation-item">${factor}</div>`; });
             html += '</div></div>';
           }
-          
           if (recommendations.personalizedTips) {
-            html += `
-              <div class="recommendation-group">
-                <h4><i class="fas fa-user-check"></i> Personalized Tips</h4>
-                <div class="recommendation-list">
-            `;
-            recommendations.personalizedTips.forEach(tip => {
-              html += `<div class="recommendation-item">${tip}</div>`;
-            });
+            html += `<div class="recommendation-group"><h4><i class="fas fa-user-check"></i> Personalized Tips</h4><div class="recommendation-list">`;
+            recommendations.personalizedTips.forEach(tip => { html += `<div class="recommendation-item">${tip}</div>`; });
             html += '</div></div>';
           }
-          
           if (recommendations.commonPitfalls) {
-            html += `
-              <div class="recommendation-group">
-                <h4><i class="fas fa-exclamation-circle"></i> Common Pitfalls to Avoid</h4>
-                <div class="recommendation-list">
-            `;
-            recommendations.commonPitfalls.forEach(pitfall => {
-              html += `<div class="recommendation-item">${pitfall}</div>`;
-            });
+            html += `<div class="recommendation-group"><h4><i class="fas fa-exclamation-circle"></i> Common Pitfalls to Avoid</h4><div class="recommendation-list">`;
+            recommendations.commonPitfalls.forEach(pitfall => { html += `<div class="recommendation-item">${pitfall}</div>`; });
             html += '</div></div>';
           }
-          
-          html += '</div></div>';
+          html += '</div>';
         }
 
-        // Progress Tracking Section
+        // Progress Tracking Section (flattened)
         if (checklist) {
           const totalItems = (checklist.critical?.length || 0) + (checklist.important?.length || 0) + (checklist['nice-to-have']?.length || 0);
-          html += `
-            <div class="progress-container">
-              <div class="progress-title">Planning Progress</div>
-              <div class="progress-stats">
-                <div class="progress-stat">
-                  <div class="progress-number" id="completed-count">0</div>
-                  <div class="progress-label">Completed</div>
-                </div>
-                <div class="progress-stat">
-                  <div class="progress-number">${totalItems}</div>
-                  <div class="progress-label">Total Items</div>
-                </div>
-                <div class="progress-stat">
-                  <div class="progress-number" id="progress-percentage">0%</div>
-                  <div class="progress-label">Progress</div>
-                </div>
-              </div>
-            </div>
-          `;
+          html += `<div class="progress-container"><div class="progress-title">Planning Progress</div><div class="progress-stats"><div class="progress-stat"><div class="progress-number" id="completed-count">0</div><div class="progress-label">Completed</div></div><div class="progress-stat"><div class="progress-number">${totalItems}</div><div class="progress-label">Total Items</div></div><div class="progress-stat"><div class="progress-number" id="progress-percentage">0%</div><div class="progress-label">Progress</div></div></div></div>`;
         }
 
         container.innerHTML = html;
