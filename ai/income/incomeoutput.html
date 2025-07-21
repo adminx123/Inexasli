@@ -1531,7 +1531,7 @@
         
         let transparencyContent = `
           <h3><i class="fas fa-eye"></i>Tax Calculation Transparency</h3>
-          <div style="padding: 20px; background: white; border-radius: 8px; border-left: 4px solid #3b82f6;">
+          <div style="padding: 20px; background: white; border-radius: 8px;">
         `;
         
         // Taxable Income Total
@@ -1608,7 +1608,7 @@
         
         recommendationsSection.innerHTML = `
           <h3><i class="fas fa-lightbulb"></i>AI Recommendations</h3>
-          <div style="padding: 20px; background: white; border-radius: 8px; border-left: 4px solid #f59e0b;">
+          <div style="padding: 20px; background: white; border-radius: 8px;">
             <p style="margin: 0; line-height: 1.8; font-size: 1.05em; color: #374151;">
               ${incomeData.recommendations || incomeData.advice}
             </p>
@@ -1634,7 +1634,7 @@
           
           sectionElement.innerHTML = `
             <h3><i class="${section.icon}" style="color: ${section.color};"></i>${section.title}</h3>
-            <div style="padding: 20px; background: #f8fafc; border-radius: 8px; border-left: 4px solid ${section.color};">
+            <div style="padding: 20px; background: #f8fafc; border-radius: 8px;">
               <p style="margin: 0; line-height: 1.8; font-size: 1.05em; color: #374151;">
                 ${incomeData[section.key]}
               </p>
