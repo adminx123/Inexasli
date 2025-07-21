@@ -769,65 +769,43 @@ class FormPersistence {
     }
 
     /**
-     * Generic form data collection (public method for use in custom collectors)
+     * Generic form data collection (scoped to main device-container wrapper)
      * @returns {Object} The collected form data using generic logic
      */
     collectGenericFormData() {
         const formData = {};
         let foundRelevantField = false;
-        // Collect from text inputs, textareas, and selects
-        document.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea, select').forEach(element => {
-            if (element.id) {
-                // Only collect fields that belong to this module (have the module prefix) or are in the device-container
-                const modulePrefix = `${this.moduleName}-`;
-                const isModuleField = element.id.startsWith(modulePrefix);
-                const isInDeviceContainer = element.closest('.device-container');
-                
-                if (isModuleField || isInDeviceContainer) {
-                    const fieldName = this.getFieldName(element.id);
-                    // Only save non-empty values
-                    if (element.type === 'number') {
-                        if (element.value) {
-                            formData[fieldName] = parseInt(element.value, 10) || parseFloat(element.value);
-                            foundRelevantField = true;
-                        }
-                    } else {
-                        if (element.value) {
-                            formData[fieldName] = element.value;
-                            foundRelevantField = true;
-                        }
-                    }
-                }
-            }
+        // Get module name from lastGridItemUrl for scoping
+        const moduleName = this.getModuleNameFromLastGridItemUrl();
+        const wrapperId = moduleName ? `${moduleName}iq-device-container` : null;
+        const wrapper = wrapperId ? document.getElementById(wrapperId) : null;
+        if (!wrapper) {
+            console.warn(`[FormPersistence] No main wrapper found for module: ${moduleName}`);
+            return formData;
+        }
+        // Collect from text inputs, textareas, and selects inside wrapper
+        wrapper.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea, select').forEach(element => {
+            if (!element.id) return;
+            formData[element.id] = element.value;
+            foundRelevantField = true;
         });
-        // Collect from grid containers
-        document.querySelectorAll('[class*="grid-items"], .grid-container').forEach(container => {
-            const fieldName = this.getFieldName(container.id);
-            const selectedItems = container.querySelectorAll('.grid-item.selected');
-            if (selectedItems.length > 0) {
+        // Collect from grid containers inside wrapper
+        wrapper.querySelectorAll('[class*="grid-items"], .grid-container').forEach(container => {
+            if (!container.id) return;
+            const selected = Array.from(container.querySelectorAll('.grid-item.selected')).map(item => item.dataset.value || item.textContent.trim());
+            if (selected.length > 0) {
+                formData[container.id] = selected.length === 1 ? selected[0] : selected;
                 foundRelevantField = true;
-                if (this.singleSelectionContainers.has(container.id) || 
-                    this.isInferredSingleSelection(container)) {
-                    formData[fieldName] = selectedItems[0].dataset.value || selectedItems[0].textContent.trim();
-                } else {
-                    formData[fieldName] = Array.from(selectedItems).map(item => 
-                        item.dataset.value || item.textContent.trim()
-                    );
-                }
             }
-            // Note: Removed saving null/[] for unselected containers to prevent empty state storage
         });
-        
         // Collect images from ImageUploadUtility if available
         const images = this.collectImages();
-        if (images && images.length > 0) {
+        if (images && Array.isArray(images) && images.length > 0) {
             formData.images = images;
             foundRelevantField = true;
-            console.log(`[FormPersistence] Collected ${images.length} images from ImageUploadUtility`);
         }
-
         // If no relevant fields found, return empty object
-        if (!foundRelevantField) return {};
+        if (!foundRelevantField) return formData;
         return formData;
     }
 
