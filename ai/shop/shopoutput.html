@@ -957,7 +957,31 @@ console.log('Shop API Output script running');
           <div class="analysis-card recommendation" style="margin-bottom:32px;">
             <h3><i class="fas fa-trophy"></i> Recommendations</h3>
             ${data.recommendations.overallWinner ? `<div class="verdict buy">Overall Winner: ${data.itemsCompared.find(i => i.id === data.recommendations.overallWinner)?.name || ''}</div>` : ''}
-            ...existing code...
+            ${data.recommendations.rankings?.length > 0 ? `
+              <h4>🏆 Rankings</h4>
+              <div class="rankings-list">
+                ${data.recommendations.rankings.map((r, index) => {
+                  const itemInfo = data.itemsCompared.find(i => i.id === r.itemId);
+                  return `
+                    <div class="ranking-item rank-${index + 1}">
+                      <div class="rank-number">${index + 1}</div>
+                      <div class="rank-content">
+                        <div class="rank-name">${itemInfo ? itemInfo.name : `Item ${r.itemId}`}</div>
+                        <div class="rank-reason">${r.reason}</div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
+            ${data.recommendations.specificRecommendations?.length > 0 ? `
+              <h4>Specific Recommendations:</h4>
+              ${data.recommendations.specificRecommendations.map(rec => {
+                const itemInfo = data.itemsCompared.find(i => i.id === rec.recommendedItem);
+                return `<p><strong>For ${rec.scenario}:</strong> Recommend ${itemInfo ? itemInfo.name : `Item ${rec.recommendedItem}`} because ${rec.reason}</p>`;
+              }).join('')}
+            ` : ''}
+            ${data.recommendations.bottomLine ? `<p><strong>Bottom Line:</strong> ${data.recommendations.bottomLine}</p>` : ''}
           </div>
         `;
       }
