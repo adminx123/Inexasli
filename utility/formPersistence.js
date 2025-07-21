@@ -145,7 +145,17 @@ class FormPersistence {
      * This replaces the need for external grid-item-toggled events
      */
     bindGridItemEvents() {
-        const gridItems = document.querySelectorAll('[class*="grid-items"] .grid-item, .grid-container .grid-item');
+        // Universal approach: Only bind events for grid items in the current module's container
+        const moduleName = this.getModuleNameFromLastGridItemUrl();
+        const wrapperId = moduleName ? `${moduleName}iq-device-container` : null;
+        const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
+        
+        if (!wrapper) {
+            console.warn(`[FormPersistence] No container found for grid event binding`);
+            return;
+        }
+        
+        const gridItems = wrapper.querySelectorAll('[class*="grid-items"] .grid-item, .grid-container .grid-item');
         let lastSelectionTime = 0;
         const SELECTION_DEBOUNCE = 150; // ms debounce for rapid selections
         
@@ -315,17 +325,19 @@ class FormPersistence {
             console.warn('[FormPersistence] No module key found, not saving form data.');
             return;
         }
-        // Extra guard: Only save if DOM contains at least one field for this module
-        const modulePrefix = `${this.moduleName}-`;
-        const hasModuleField = !!document.querySelector(
-            `input[id^="${modulePrefix}"], textarea[id^="${modulePrefix}"], select[id^="${modulePrefix}"], .grid-container[id^="${modulePrefix}"], [class*="grid-items"][id^="${modulePrefix}"]`
-        );
-        if (!hasModuleField) {
-            console.warn('[FormPersistence] No DOM fields found for module', this.moduleName, '- skipping save to avoid overwriting.');
+        
+        // Universal approach: Check if wrapper container exists instead of module-specific fields
+        const moduleName = this.getModuleNameFromLastGridItemUrl();
+        const wrapperId = moduleName ? `${moduleName}iq-device-container` : null;
+        const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
+        
+        if (!wrapper) {
+            console.warn('[FormPersistence] No device container found for module', this.moduleName, '- skipping save.');
             return;
         }
+        
         const formData = this.collectFormData();
-        // Guard: Only save if at least one non-empty field for this module exists
+        // Guard: Only save if at least one non-empty field exists
         const hasRelevantData = Object.entries(formData).some(([key, value]) => {
             if (Array.isArray(value)) return value.length > 0;
             if (typeof value === 'object' && value !== null) return Object.keys(value).length > 0;
@@ -645,9 +657,19 @@ class FormPersistence {
      * Set up input change handlers for automatic saving
      */
     setupInputHandlers() {
-        document.querySelectorAll('input, textarea, select').forEach(element => {
-            // Skip if element already has our handler
-            if (element._fpHandlerAttached) return;
+        // Universal approach: Set up handlers for ALL form elements in the container
+        const moduleName = this.getModuleNameFromLastGridItemUrl();
+        const wrapperId = moduleName ? `${moduleName}iq-device-container` : null;
+        const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
+        
+        if (!wrapper) {
+            console.warn(`[FormPersistence] No container found for input handlers setup`);
+            return;
+        }
+        
+        wrapper.querySelectorAll('input, textarea, select').forEach(element => {
+            // Skip buttons and already handled elements
+            if (element.type === 'button' || element.type === 'submit' || element._fpHandlerAttached) return;
             
             // Add change event for all elements
             element.addEventListener('change', () => {
@@ -777,31 +799,42 @@ class FormPersistence {
         // Get module name from lastGridItemUrl for scoping
         const moduleName = this.getModuleNameFromLastGridItemUrl();
         const wrapperId = moduleName ? `${moduleName}iq-device-container` : null;
-        const wrapper = wrapperId ? document.getElementById(wrapperId) : null;
+        const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
         if (!wrapper) {
             console.warn(`[FormPersistence] No main wrapper found for module: ${moduleName}`);
             return formData;
         }
-        // Collect from text inputs, textareas, and selects inside wrapper
-        wrapper.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea, select').forEach(element => {
+        
+        console.log(`[FormPersistence] Collecting data from container: ${wrapper.id || wrapper.className}`);
+        
+        // Collect ALL form elements inside wrapper - no field ID restrictions
+        wrapper.querySelectorAll('input, textarea, select').forEach(element => {
+            // Skip buttons and hidden inputs
+            if (element.type === 'button' || element.type === 'submit' || element.type === 'hidden') return;
             if (!element.id) return;
             if (element.value !== null && element.value !== undefined && element.value !== '') {
                 formData[element.id] = element.value;
+                console.log(`[FormPersistence] Collected field: ${element.id} = ${element.value}`);
             }
         });
-        // Collect from grid containers inside wrapper
+        
+        // Collect from ALL grid containers inside wrapper
         wrapper.querySelectorAll('[class*="grid-items"], .grid-container').forEach(container => {
             if (!container.id) return;
             const selected = Array.from(container.querySelectorAll('.grid-item.selected')).map(item => item.dataset.value || item.textContent.trim());
             if (selected.length > 0) {
                 formData[container.id] = selected.length === 1 ? selected[0] : selected;
+                console.log(`[FormPersistence] Collected grid: ${container.id} = ${formData[container.id]}`);
             }
         });
+        
         // Collect images from ImageUploadUtility if available
         const images = this.collectImages();
         if (images && Array.isArray(images) && images.length > 0) {
             formData.images = images;
         }
+        
+        console.log(`[FormPersistence] Total collected data:`, formData);
         return formData;
     }
 
