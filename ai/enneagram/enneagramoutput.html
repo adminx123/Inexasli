@@ -31,12 +31,15 @@
     /* Custom styles for enneagram output */
     .api-output {
       white-space: normal;
-      background-color: #f9f9f9;
+      background: transparent;
       padding: 0;
     }
     
     .enneagram-content {
       padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
     
     /* Card styles */
@@ -44,7 +47,7 @@
       background-color: #fff;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 20px;
+      /* Remove margin-bottom to use gap from container */
       overflow: hidden;
       transform: translateY(0);
       transition: all 0.3s ease;
@@ -177,14 +180,7 @@
     .delay-4 { animation-delay: 0.4s; }
     .delay-5 { animation-delay: 0.5s; }
     
-    /* Footer */
-    .enneagram-footer {
-      text-align: center;
-      margin-top: 30px;
-      padding: 15px;
-      font-size: 13px;
-      color: #888;
-    }
+    /* Footer removed, now in a card */
     
     /* Share button */
     .share-button {
@@ -308,7 +304,7 @@
       }
       
       .enneagram-card {
-        margin-bottom: 15px;
+        /* Remove margin-bottom for mobile as well */
         border-radius: 8px;
       }
       
@@ -795,9 +791,20 @@
               Generated on ${new Date(data.generatedDate).toLocaleDateString()}
             </p>
           </div>
-          <p style="padding: 15px; line-height: 1.6;">${analysis.introduction}</p>
         `;
         mainEl.appendChild(introEl);
+
+        // Thank you/intro paragraph as its own card
+        if (analysis.introduction) {
+          const introCard = createCard(
+            '',
+            '',
+            `<p style='padding: 15px; line-height: 1.6;'>${analysis.introduction}</p>`,
+            '',
+            0
+          );
+          mainEl.appendChild(introCard);
+        }
         
         // 2. Core Type Profile Card
         if (analysis.coreTypeProfile) {
@@ -976,14 +983,7 @@
           mainEl.appendChild(summaryCard);
         }
         
-        // Footer
-        const footerEl = document.createElement('div');
-        footerEl.className = 'enneagram-footer';
-        footerEl.innerHTML = `
-          <p>✨ Enneagram analysis by <strong>INEXASLI</strong> ✨</p>
-          <p style="font-size: 11px; margin-top: 5px; color: #aaa;">Discover your authentic self through ancient wisdom</p>
-        `;
-        mainEl.appendChild(footerEl);
+        // Footer removed per user request
         
         return mainEl;
       }
