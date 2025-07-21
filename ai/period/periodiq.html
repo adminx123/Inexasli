@@ -151,25 +151,6 @@
   // FormPersistence is initialized by datain.js and available as window.periodFormPersistence
   // No need to create it here - just ensure it's available when we need it
 
-  // Initialize grid functionality for period-specific grids
-  function initCycleGrids() {
-    const gridContainers = document.querySelectorAll('.grid-items2');
-    
-    gridContainers.forEach(grid => {
-      const cards = grid.querySelectorAll('.grid-item');
-      
-      cards.forEach(card => {
-        card.addEventListener('click', function() {
-          // Single selection logic
-          cards.forEach(c => c.classList.remove('selected'));
-          this.classList.add('selected');
-          
-          // FormPersistence will handle saving automatically via its event listeners
-        });
-      });
-    });
-  }
-
   // Initialize birth control conditional logic
   function initBirthControlLogic() {
     const select = document.getElementById('birth-control-type');
@@ -227,10 +208,7 @@
         detailInput.style.display = 'none';
       }
       
-      // Save form data
-      if (window.periodFormPersistence) {
-        window.periodFormPersistence.saveFormData();
-      }
+      // FormPersistence handles saving automatically
     }
     
     if (select) {
@@ -276,28 +254,20 @@
             }
           });
           
-          // Save form data
-          if (window.periodFormPersistence) {
-            setTimeout(() => window.periodFormPersistence.saveFormData(), 100);
-          }
+          // FormPersistence handles saving automatically
         }
       });
     }
   }
 
-  // Initialize all period-specific functionality
+  // Initialize functionality  
   setTimeout(() => {
-    initCycleGrids();
     initBirthControlLogic();
     initAddEntryButton();
   }, 200);
 
   // Handle the generate button click
   async function handleGeneratePeriodIq() {
-    // Cleanup of hidden field data is now handled by conditional field change events, not here
-    console.debug('[PeriodIQ][DEBUG] Generate button clicked. Starting execution path.');
-
-    // Use FormPersistence to get current form data
     const formData = window.periodFormPersistence.getSavedFormData();
     console.debug('[PeriodIQ][DEBUG] Retrieved formData:', formData);
     if (!formData) {
