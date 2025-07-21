@@ -227,11 +227,6 @@
         detailInput.style.display = 'none';
       }
       
-      // Clean up hidden field data when birth control type changes
-      if (window.cleanupHiddenFieldData) {
-        setTimeout(() => window.cleanupHiddenFieldData('period'), 100);
-      }
-      
       // Save form data
       if (window.periodFormPersistence) {
         window.periodFormPersistence.saveFormData();

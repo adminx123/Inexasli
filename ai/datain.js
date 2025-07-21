@@ -10,7 +10,7 @@ import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { FormPersistence } from '/utility/formPersistence.js';
 import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/utility/swipeFunctionality.js';
-import { initAutoExpandTextareas, createSplitTextarea, createSplitCalendarText, deleteEntry, handleConditionalInput, addEntryButton } from '/ai/styles/inputFunctionality.js';
+import { initAutoExpandTextareas, createSplitTextarea, createSplitCalendarText, deleteEntry, handleConditionalInput, addEntryButton, cleanupHiddenFieldData } from '/ai/styles/inputFunctionality.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
@@ -59,6 +59,7 @@ window.utilityFunctions = {
     createSplitCalendarText,
     deleteEntry,
     handleConditionalInput,
+    cleanupHiddenFieldData,
     addEntryButton,
     getFingerprintForWorker,
     incrementRequestCount,
@@ -77,6 +78,7 @@ window.setJSON = setJSON;
 window.getCookie = getCookie;
 window.setCookie = setCookie;
 window.FormPersistence = FormPersistence;
+window.cleanupHiddenFieldData = cleanupHiddenFieldData;
 window.MixedScanner = MixedScanner;
 window.initializeMixedScanner = initializeMixedScanner;
 
@@ -301,6 +303,11 @@ function initializeFormPersistence(url) {
         };
         
         console.log('[DataIn] FormPersistence instance initialized for module:', moduleType);
+        
+        // Centralized cleanup of hidden field data for all modules
+        if (cleanupHiddenFieldData && moduleType !== 'categories') {
+            setTimeout(() => cleanupHiddenFieldData(moduleType), 100);
+        }
     } catch (error) {
         console.error('[DataIn] Error initializing FormPersistence:', error);
     }
