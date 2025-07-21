@@ -774,7 +774,6 @@ class FormPersistence {
      */
     collectGenericFormData() {
         const formData = {};
-        let foundRelevantField = false;
         // Get module name from lastGridItemUrl for scoping
         const moduleName = this.getModuleNameFromLastGridItemUrl();
         const wrapperId = moduleName ? `${moduleName}iq-device-container` : null;
@@ -786,8 +785,9 @@ class FormPersistence {
         // Collect from text inputs, textareas, and selects inside wrapper
         wrapper.querySelectorAll('input[type="text"], input[type="number"], input[type="email"], input[type="date"], textarea, select').forEach(element => {
             if (!element.id) return;
-            formData[element.id] = element.value;
-            foundRelevantField = true;
+            if (element.value !== null && element.value !== undefined && element.value !== '') {
+                formData[element.id] = element.value;
+            }
         });
         // Collect from grid containers inside wrapper
         wrapper.querySelectorAll('[class*="grid-items"], .grid-container').forEach(container => {
@@ -795,17 +795,13 @@ class FormPersistence {
             const selected = Array.from(container.querySelectorAll('.grid-item.selected')).map(item => item.dataset.value || item.textContent.trim());
             if (selected.length > 0) {
                 formData[container.id] = selected.length === 1 ? selected[0] : selected;
-                foundRelevantField = true;
             }
         });
         // Collect images from ImageUploadUtility if available
         const images = this.collectImages();
         if (images && Array.isArray(images) && images.length > 0) {
             formData.images = images;
-            foundRelevantField = true;
         }
-        // If no relevant fields found, return empty object
-        if (!foundRelevantField) return formData;
         return formData;
     }
 
