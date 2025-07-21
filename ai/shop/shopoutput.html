@@ -74,9 +74,50 @@
       gap: 10px;
     }
 
+    /* Improved text contrast and readability */
     .analysis-card p, .analysis-card li {
-      color: rgba(255, 255, 255, 0.8);
-      margin: 8px 0;
+      color: rgba(255, 255, 255, 0.95);
+      margin: 10px 0;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      line-height: 1.6;
+    }
+
+    .analysis-card h4, .analysis-card h5 {
+      color: rgba(255, 255, 255, 0.98);
+      margin: 16px 0 10px 0;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    /* Container overflow fixes */
+    .analysis-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* Reduce nesting in comparison sections */
+    .comparison-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .comparison-item h4 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: rgba(255, 255, 255, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
     }
 
     /* Product info card */
@@ -138,45 +179,371 @@
       border: 1px solid rgba(13, 202, 240, 0.2);
     }
 
-    /* Rating displays */
+    /* Enhanced rating displays with better spacing */
     .rating-display {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin: 10px 0;
+      gap: 12px;
+      margin: 12px 0;
+      padding: 8px 0;
     }
 
     .rating-stars {
       color: #ffc107;
       font-size: 18px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
     .rating-number {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 4px 8px;
-      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 8px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.98);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Warning list styling */
+    /* Enhanced list styling - no more ugly bullets */
     .warning-list {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     .warning-list li {
       background: rgba(220, 53, 69, 0.1);
       border-left: 4px solid #dc3545;
-      padding: 8px 12px;
-      margin: 6px 0;
-      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 8px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     .warning-list li.critical {
       background: rgba(220, 53, 69, 0.2);
       border-left-color: #dc3545;
       font-weight: 600;
+    }
+
+    /* General list improvements */
+    ul, ol {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+    }
+
+    ul li, ol li {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 6px 0;
+      position: relative;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+    }
+
+    /* Custom numbering for ordered lists */
+    ol {
+      counter-reset: list-counter;
+    }
+
+    ol li {
+      counter-increment: list-counter;
+      padding-left: 45px;
+    }
+
+    ol li::before {
+      content: counter(list-counter);
+      position: absolute;
+      left: 16px;
+      top: 12px;
+      background: rgba(74, 144, 226, 0.3);
+      color: rgba(255, 255, 255, 0.9);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Custom bullets for unordered lists */
+    ul li {
+      padding-left: 35px;
+    }
+
+    ul li::before {
+      content: "•";
+      position: absolute;
+      left: 16px;
+      top: 12px;
+      color: rgba(74, 144, 226, 0.8);
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    /* Rankings section styling */
+    .rankings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .ranking-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .ranking-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .rank-number {
+      min-width: 32px;
+      height: 32px;
+      background: rgba(74, 144, 226, 0.3);
+      color: rgba(255, 255, 255, 0.98);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      border: 2px solid rgba(74, 144, 226, 0.5);
+    }
+
+    .rank-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rank-name {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.98);
+      margin-bottom: 4px;
+      font-size: 16px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    .rank-reason {
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    /* Special styling for top ranks */
+    .ranking-item.rank-1 .rank-number {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #333;
+      border-color: #ffd700;
+    }
+
+    .ranking-item.rank-2 .rank-number {
+      background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
+      color: #333;
+      border-color: #c0c0c0;
+    }
+
+    .ranking-item.rank-3 .rank-number {
+      background: linear-gradient(135deg, #cd7f32, #daa520);
+      color: #fff;
+      border-color: #cd7f32;
+    }
+
+    /* Enhanced list styling for reasons, recommendations, highlights */
+    .reasons-list, .recommendations-list, .highlights-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .reason-item, .recommendation-item, .highlight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .reason-item:hover, .recommendation-item:hover, .highlight-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(4px);
+    }
+
+    .reason-icon, .rec-icon, .highlight-icon {
+      min-width: 24px;
+      height: 24px;
+      background: rgba(74, 144, 226, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      border: 1px solid rgba(74, 144, 226, 0.5);
+    }
+
+    .reason-text, .rec-text, .highlight-text {
+      flex: 1;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    /* Specific icon colors */
+    .reason-icon {
+      background: rgba(40, 167, 69, 0.3);
+      border-color: rgba(40, 167, 69, 0.5);
+      color: #fff;
+    }
+
+    .rec-icon {
+      background: rgba(255, 193, 7, 0.3);
+      border-color: rgba(255, 193, 7, 0.5);
+      color: #fff;
+    }
+
+    .highlight-icon {
+      background: rgba(108, 117, 125, 0.3);
+      border-color: rgba(108, 117, 125, 0.5);
+      color: #fff;
+    }
+
+    /* Warning sections styling */
+    .violations-list, .safety-warnings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .violation-item, .safety-warning-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.3);
+      border-radius: 10px;
+      padding: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .violation-item:hover, .safety-warning-item:hover {
+      background: rgba(220, 53, 69, 0.15);
+      transform: translateX(4px);
+    }
+
+    .violation-icon, .warning-icon {
+      min-width: 24px;
+      height: 24px;
+      background: rgba(220, 53, 69, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      border: 1px solid rgba(220, 53, 69, 0.5);
+      color: #fff;
+    }
+
+    .violation-text, .warning-text {
+      flex: 1;
+      color: rgba(255, 255, 255, 0.95);
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    }
+
+    /* Additional styled sections */
+    .regulatory-list, .strengths-list, .weaknesses-list, .item-warnings-list,
+    .data-collection-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .regulatory-item, .strength-item, .weakness-item, .item-warning-item,
+    .data-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .regulatory-item:hover, .strength-item:hover, .weakness-item:hover, 
+    .item-warning-item:hover, .data-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateX(4px);
+    }
+
+    .regulatory-icon, .strength-icon, .weakness-icon, .item-warning-icon,
+    .data-icon {
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+      border: 1px solid;
+      color: #fff;
+    }
+
+    .regulatory-icon, .data-icon {
+      background: rgba(108, 117, 125, 0.3);
+      border-color: rgba(108, 117, 125, 0.5);
+    }
+
+    .strength-icon {
+      background: rgba(40, 167, 69, 0.3);
+      border-color: rgba(40, 167, 69, 0.5);
+    }
+
+    .weakness-icon, .item-warning-icon {
+      background: rgba(220, 53, 69, 0.3);
+      border-color: rgba(220, 53, 69, 0.5);
+    }
+
+    .regulatory-text, .strength-text, .weakness-text, .item-warning-text,
+    .data-text {
+      flex: 1;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.5;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
     /* Ingredients styling */
@@ -207,41 +574,47 @@
     .severity-high { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
     .severity-critical { background: rgba(220, 53, 69, 0.4); color: #fff; }
 
-    /* Alternative products grid */
+    /* Simplified alternatives grid - less nesting */
     .alternatives-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
     }
 
     .alternative-item {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 12px;
-      padding: 15px;
+      padding: 20px;
+      overflow: hidden;
     }
 
     .alternative-name {
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.95);
+      color: rgba(255, 255, 255, 0.98);
       margin-bottom: 8px;
+      font-size: 16px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
     }
 
     .alternative-brand {
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.85);
       font-size: 14px;
       margin-bottom: 8px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     }
 
     .alternative-price {
-      background: rgba(40, 167, 69, 0.2);
-      color: #28a745;
-      padding: 4px 8px;
-      border-radius: 4px;
+      background: rgba(40, 167, 69, 0.25);
+      color: rgba(255, 255, 255, 0.95);
+      padding: 6px 12px;
+      border-radius: 6px;
       font-weight: 600;
       display: inline-block;
       margin-bottom: 8px;
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
     }
 
     /* Price comparison */
@@ -276,32 +649,35 @@
     .price-fair { color: #ffc107; }
     .price-high { color: #dc3545; }
 
-    /* Verdict styling */
+    /* Enhanced verdict styling with better contrast */
     .verdict {
       text-align: center;
-      padding: 20px;
+      padding: 24px;
       border-radius: 12px;
       margin: 20px 0;
       font-size: 20px;
       font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      overflow: hidden;
+      word-wrap: break-word;
     }
 
     .verdict.buy {
-      background: rgba(40, 167, 69, 0.2);
-      border: 2px solid rgba(40, 167, 69, 0.4);
-      color: #28a745;
+      background: rgba(40, 167, 69, 0.25);
+      border: 2px solid rgba(40, 167, 69, 0.5);
+      color: rgba(255, 255, 255, 0.98);
     }
 
     .verdict.avoid {
-      background: rgba(220, 53, 69, 0.2);
-      border: 2px solid rgba(220, 53, 69, 0.4);
-      color: #dc3545;
+      background: rgba(220, 53, 69, 0.25);
+      border: 2px solid rgba(220, 53, 69, 0.5);
+      color: rgba(255, 255, 255, 0.98);
     }
 
     .verdict.consider {
-      background: rgba(255, 193, 7, 0.2);
-      border: 2px solid rgba(255, 193, 7, 0.4);
-      color: #ffc107;
+      background: rgba(255, 193, 7, 0.25);
+      border: 2px solid rgba(255, 193, 7, 0.5);
+      color: rgba(255, 255, 255, 0.98);
     }
 
     /* Comparison mode styles */
@@ -352,13 +728,13 @@
     /* Mobile responsiveness */
     @media (max-width: 768px) {
       .analysis-card {
-        padding: 15px;
-        margin-bottom: 15px;
+        padding: 16px;
+        margin-bottom: 16px;
       }
       
       .price-comparison {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
       }
       
       .alternatives-grid {
@@ -367,6 +743,38 @@
       
       .comparison-grid {
         grid-template-columns: 1fr;
+      }
+
+      .ranking-item, .reason-item, .recommendation-item, .highlight-item,
+      .violation-item, .safety-warning-item {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .rank-number, .reason-icon, .rec-icon, .highlight-icon,
+      .violation-icon, .warning-icon {
+        min-width: 20px;
+        height: 20px;
+        font-size: 10px;
+      }
+
+      .rank-name {
+        font-size: 14px;
+      }
+
+      .rating-display {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .shop-header h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+      }
+
+      .verdict {
+        font-size: 18px;
+        padding: 20px 16px;
       }
     }
   </style>
@@ -576,16 +984,26 @@ console.log('Shop API Output script running');
           
           ${data.safetyAnalysis.regulatoryIssues && data.safetyAnalysis.regulatoryIssues.length > 0 ? `
             <h4>📋 Regulatory Issues</h4>
-            <ul class="warning-list">
-              ${data.safetyAnalysis.regulatoryIssues.map(issue => `<li>${issue}</li>`).join('')}
-            </ul>
+            <div class="regulatory-list">
+              ${data.safetyAnalysis.regulatoryIssues.map(issue => `
+                <div class="regulatory-item">
+                  <div class="regulatory-icon">📋</div>
+                  <div class="regulatory-text">${issue}</div>
+                </div>
+              `).join('')}
+            </div>
           ` : ''}
           
           ${data.safetyAnalysis.safetyRecommendations && data.safetyAnalysis.safetyRecommendations.length > 0 ? `
             <h4>💡 Safety Recommendations</h4>
-            <ul>
-              ${data.safetyAnalysis.safetyRecommendations.map(rec => `<li>${rec}</li>`).join('')}
-            </ul>
+            <div class="recommendations-list">
+              ${data.safetyAnalysis.safetyRecommendations.map(rec => `
+                <div class="recommendation-item">
+                  <div class="rec-icon">💡</div>
+                  <div class="rec-text">${rec}</div>
+                </div>
+              `).join('')}
+            </div>
           ` : ''}
         </div>
       `;
@@ -678,9 +1096,14 @@ console.log('Shop API Output script running');
           
           ${data.brandReputation.historyHighlights && data.brandReputation.historyHighlights.length > 0 ? `
             <h4>📚 Brand History Highlights</h4>
-            <ul>
-              ${data.brandReputation.historyHighlights.map(highlight => `<li>${highlight}</li>`).join('')}
-            </ul>
+            <div class="highlights-list">
+              ${data.brandReputation.historyHighlights.map(highlight => `
+                <div class="highlight-item">
+                  <div class="highlight-icon">📚</div>
+                  <div class="highlight-text">${highlight}</div>
+                </div>
+              `).join('')}
+            </div>
           ` : ''}
         </div>
       `;
@@ -752,9 +1175,14 @@ console.log('Shop API Output script running');
           
           ${data.recommendation.primaryReasons && data.recommendation.primaryReasons.length > 0 ? `
             <h4>Key Reasons</h4>
-            <ul>
-              ${data.recommendation.primaryReasons.map(reason => `<li>${reason}</li>`).join('')}
-            </ul>
+            <div class="reasons-list">
+              ${data.recommendation.primaryReasons.map(reason => `
+                <div class="reason-item">
+                  <div class="reason-icon">✓</div>
+                  <div class="reason-text">${reason}</div>
+                </div>
+              `).join('')}
+            </div>
           ` : ''}
           
           ${data.recommendation.bottomLine ? `
@@ -826,25 +1254,53 @@ console.log('Shop API Output script running');
       `;
     }
 
-    // Item Analysis
+    // Item Analysis - flattened structure with individual cards
     if (data.itemAnalysis && data.itemAnalysis.length > 0) {
-        html += `
-            <div class="analysis-card">
-                <h3><i class="fas fa-tasks"></i> Detailed Analysis</h3>
-                ${data.itemAnalysis.map(item => {
-                    const itemInfo = data.itemsCompared.find(i => i.id === item.itemId);
-                    return `
-                        <div class="analysis-card" style="margin-top: 15px;">
-                            <h4>${itemInfo ? itemInfo.name : `Item ${item.itemId}`}</h4>
-                            <p><strong>Best For:</strong> ${item.bestFor || 'N/A'}</p>
-                            ${item.strengths?.length > 0 ? `<h5>Strengths:</h5><ul>${item.strengths.map(s => `<li>${s}</li>`).join('')}</ul>` : ''}
-                            ${item.weaknesses?.length > 0 ? `<h5>Weaknesses:</h5><ul>${item.weaknesses.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
-                            ${item.warnings?.length > 0 ? `<h5>Warnings:</h5><ul class="warning-list">${item.warnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        `;
+        data.itemAnalysis.forEach(item => {
+            const itemInfo = data.itemsCompared.find(i => i.id === item.itemId);
+            html += `
+                <div class="analysis-card">
+                    <h3><i class="fas fa-tasks"></i> ${itemInfo ? itemInfo.name : `Item ${item.itemId}`} Analysis</h3>
+                    <p><strong>Best For:</strong> ${item.bestFor || 'N/A'}</p>
+                    
+                    ${item.strengths?.length > 0 ? `
+                      <h4>💪 Strengths</h4>
+                      <div class="strengths-list">
+                        ${item.strengths.map(s => `
+                          <div class="strength-item">
+                            <div class="strength-icon">💪</div>
+                            <div class="strength-text">${s}</div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    ` : ''}
+                    
+                    ${item.weaknesses?.length > 0 ? `
+                      <h4>⚠️ Weaknesses</h4>
+                      <div class="weaknesses-list">
+                        ${item.weaknesses.map(w => `
+                          <div class="weakness-item">
+                            <div class="weakness-icon">⚠️</div>
+                            <div class="weakness-text">${w}</div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    ` : ''}
+                    
+                    ${item.warnings?.length > 0 ? `
+                      <h4>🚨 Warnings</h4>
+                      <div class="item-warnings-list">
+                        ${item.warnings.map(w => `
+                          <div class="item-warning-item">
+                            <div class="item-warning-icon">🚨</div>
+                            <div class="item-warning-text">${w}</div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    ` : ''}
+                </div>
+            `;
+        });
     }
 
 
@@ -858,11 +1314,21 @@ console.log('Shop API Output script running');
                 ${winnerInfo ? `<div class="verdict buy">Overall Winner: ${winnerInfo.name}</div>` : ''}
                 
                 ${data.recommendations.rankings?.length > 0 ? `
-                    <h4>Rankings:</h4>
-                    <ol>${data.recommendations.rankings.map(r => {
-                        const itemInfo = data.itemsCompared.find(i => i.id === r.itemId);
-                        return `<li><strong>${itemInfo ? itemInfo.name : `Item ${r.itemId}`}:</strong> ${r.reason}</li>`;
-                    }).join('')}</ol>
+                    <h4>🏆 Rankings</h4>
+                    <div class="rankings-list">
+                        ${data.recommendations.rankings.map((r, index) => {
+                            const itemInfo = data.itemsCompared.find(i => i.id === r.itemId);
+                            return `
+                                <div class="ranking-item rank-${index + 1}">
+                                    <div class="rank-number">${index + 1}</div>
+                                    <div class="rank-content">
+                                        <div class="rank-name">${itemInfo ? itemInfo.name : `Item ${r.itemId}`}</div>
+                                        <div class="rank-reason">${r.reason}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
                 ` : ''}
 
                 ${data.recommendations.specificRecommendations?.length > 0 ? `
@@ -908,8 +1374,28 @@ console.log('Shop API Output script running');
                     <span class="rating-number">${data.healthSafety.healthRating}/10</span>
                 </div>
                 <p><strong>Inspection Score:</strong> ${data.healthSafety.inspectionScore || 'N/A'}</p>
-                ${data.healthSafety.violations?.length > 0 ? `<h4>Violations:</h4><ul class="warning-list">${data.healthSafety.violations.map(v => `<li>${v}</li>`).join('')}</ul>` : ''}
-                ${data.healthSafety.safetyWarnings?.length > 0 ? `<h4>Warnings:</h4><ul class="warning-list">${data.healthSafety.safetyWarnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+                ${data.healthSafety.violations?.length > 0 ? `
+                  <h4>Violations</h4>
+                  <div class="violations-list">
+                    ${data.healthSafety.violations.map(v => `
+                      <div class="violation-item">
+                        <div class="violation-icon">⚠️</div>
+                        <div class="violation-text">${v}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                ${data.healthSafety.safetyWarnings?.length > 0 ? `
+                  <h4>Warnings</h4>
+                  <div class="safety-warnings-list">
+                    ${data.healthSafety.safetyWarnings.map(w => `
+                      <div class="safety-warning-item">
+                        <div class="warning-icon">🚨</div>
+                        <div class="warning-text">${w}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
             </div>
         `;
     }
@@ -942,7 +1428,17 @@ console.log('Shop API Output script running');
                     <span class="rating-number">${data.recommendation.overallRating}/10</span>
                 </div>
                 <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">${data.recommendation.verdict}</div>
-                ${data.recommendation.primaryReasons?.length > 0 ? `<h4>Reasons:</h4><ul>${data.recommendation.primaryReasons.map(r => `<li>${r}</li>`).join('')}</ul>` : ''}
+                ${data.recommendation.primaryReasons?.length > 0 ? `
+                  <h4>Reasons</h4>
+                  <div class="reasons-list">
+                    ${data.recommendation.primaryReasons.map(r => `
+                      <div class="reason-item">
+                        <div class="reason-icon">✓</div>
+                        <div class="reason-text">${r}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
                 <p><strong>Bottom Line:</strong> ${data.recommendation.bottomLine || 'N/A'}</p>
             </div>
         `;
@@ -982,7 +1478,17 @@ console.log('Shop API Output script running');
                     <div class="rating-stars">${generateStars(data.privacySecurity.securityRating)}</div>
                     <span class="rating-number">${data.privacySecurity.securityRating}/10</span>
                 </div>
-                ${data.privacySecurity.dataCollection?.length > 0 ? `<h4>Data Collected:</h4><ul>${data.privacySecurity.dataCollection.map(d => `<li>${d}</li>`).join('')}</ul>` : ''}
+                ${data.privacySecurity.dataCollection?.length > 0 ? `
+                  <h4>Data Collected</h4>
+                  <div class="data-collection-list">
+                    ${data.privacySecurity.dataCollection.map(d => `
+                      <div class="data-item">
+                        <div class="data-icon">📊</div>
+                        <div class="data-text">${d}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
                 ${data.privacySecurity.securityConcerns?.length > 0 ? `<h4>Security Concerns:</h4><ul class="warning-list">${data.privacySecurity.securityConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
             </div>
         `;
