@@ -214,50 +214,21 @@
                     throw new Error('Payment not completed: ' + (checkData.message || checkData.paymentStatus || 'Unknown error'));
                 }
 
-                // Step 2: Link payment to fingerprint in KV
-                log('Calling linkPaymentToFingerprint API...');
-                const linkResponse = await fetch('https://stripeintegration.4hm7q4q75z.workers.dev/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        task: 'linkPaymentToFingerprint',
-                        username: checkData.username,
-                        email: checkData.customerEmail,
-                        customerId: checkData.customerId,
-                        fingerprint: fingerprint,
-                        tier: checkData.tier || 'BASIC'
-                    })
-                });
-
-                if (!linkResponse.ok) {
-                    throw new Error('Failed to link payment: ' + linkResponse.status);
-                }
-
-                const linkData = await linkResponse.json();
-                log('linkPaymentToFingerprint response: ' + JSON.stringify(linkData));
-
-                if (!linkData.success) {
-                    throw new Error('Failed to link payment: ' + (linkData.message || 'Unknown error'));
-                }
-
                 // Update localStorage
                 localStorage.setItem('authenticated', 'paid');
                 log('Updated localStorage.authenticated to "paid"');
 
-                // Create rateLimitStatus from linkData response (no additional API call needed)
-                if (linkData.rateLimitStatus) {
-                    // Use the rateLimitStatus from the backend response (includes email)
-                    localStorage.setItem('rateLimitStatus', JSON.stringify(linkData.rateLimitStatus));
-                    log('Rate limit status created from backend rateLimitStatus: ' + JSON.stringify(linkData.rateLimitStatus));
-                } else if (linkData.limits && linkData.remaining) {
+                // Create rateLimitStatus from checkData response (no additional API call needed)
+                if (checkData.rateLimitStatus) {
+                    localStorage.setItem('rateLimitStatus', JSON.stringify(checkData.rateLimitStatus));
+                    log('Rate limit status created from backend rateLimitStatus: ' + JSON.stringify(checkData.rateLimitStatus));
+                } else if (checkData.limits && checkData.remaining) {
                     // Fallback: create rateLimitStatus manually
                     const rateLimitStatus = {
-                        allowed: linkData.allowed,
-                        isPaid: linkData.isPaid,
-                        limits: linkData.limits,
-                        remaining: linkData.remaining,
+                        allowed: checkData.allowed,
+                        isPaid: checkData.isPaid,
+                        limits: checkData.limits,
+                        remaining: checkData.remaining,
                         username: linkData.username,
                         lastUpdated: Date.now()
                     };
