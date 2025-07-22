@@ -238,12 +238,12 @@ export function handleRateLimitResponse(container, response, showError = true, m
     
     if (status && status.remaining && status.limits) {
         // Get existing rateLimitStatus to preserve email if it exists
-        let existingEmail = null;
+        let existingUsername = null;
         try {
             const existingStatus = localStorage.getItem('rateLimitStatus');
             if (existingStatus) {
                 const parsed = JSON.parse(existingStatus);
-                existingEmail = parsed.email;
+                existingUsername = parsed.username;
             }
         } catch (e) {
             // Ignore parsing errors
@@ -254,7 +254,7 @@ export function handleRateLimitResponse(container, response, showError = true, m
             limits: { perDay: status.limits.perDay },
             isPaid: status.isPaid || isPaidUser,
             allowed: status.allowed,
-            email: status.email || response.email || existingEmail || null, // Preserve existing email if backend doesn't provide one
+            username: status.username || response.username || existingUsername || null, // Preserve existing username if backend doesn't provide one
             lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
@@ -425,28 +425,26 @@ export function createWorkerPayload(module, formData) {
         fingerprint: fingerprintData
     };
     
-    // Get email ONLY from localStorage.rateLimitStatus
-    let userEmail = null;
-    
+    // Get username ONLY from localStorage.rateLimitStatus
+    let userName = null;
     try {
         const rateLimitStatus = localStorage.getItem('rateLimitStatus');
         if (rateLimitStatus) {
             const status = JSON.parse(rateLimitStatus);
-            if (status.email) {
-                userEmail = status.email;
-                console.log(`[RateLimit] Found email in rateLimitStatus: ${userEmail}`);
+            if (status.username) {
+                userName = status.username;
+                console.log(`[RateLimit] Found username in rateLimitStatus: ${userName}`);
             }
         }
     } catch (error) {
         console.error(`[RateLimit] Error parsing rateLimitStatus:`, error);
     }
-    
-    // Add email to payload if found
-    if (userEmail) {
-        payload.email = userEmail;
-        console.log(`[RateLimit] ✅ Email added to payload: ${userEmail}`);
+    // Add username to payload if found
+    if (userName) {
+        payload.username = userName;
+        console.log(`[RateLimit] ✅ Username added to payload: ${userName}`);
     } else {
-        console.log(`[RateLimit] ⚠️ No email in rateLimitStatus - using fingerprint-based limits`);
+        console.log(`[RateLimit] ⚠️ No username in rateLimitStatus - using fingerprint-based limits`);
     }
     
     return payload;

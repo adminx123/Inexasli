@@ -223,6 +223,7 @@
                     },
                     body: JSON.stringify({
                         task: 'linkPaymentToFingerprint',
+                        username: checkData.username,
                         email: checkData.customerEmail,
                         customerId: checkData.customerId,
                         fingerprint: fingerprint,
@@ -257,7 +258,7 @@
                         isPaid: linkData.isPaid,
                         limits: linkData.limits,
                         remaining: linkData.remaining,
-                        email: linkData.email,
+                        username: linkData.username,
                         lastUpdated: Date.now()
                     };
                     

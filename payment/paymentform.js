@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             </div>
             <div id="status" class="payment-status"></div>
             <form class="payment-form" id="payment-form">
-                <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
+                <input type="text" class="payment-input" id="username" placeholder="Choose a username" required>
                 <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
                 
                 <div class="subscription-tiers">
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="payment-support-link">Customer Portal</a>
                 </div>
                 <div id="recovery-form" class="recovery-form" style="display: none;">
-                    <input type="email" class="payment-input recovery-input" id="recovery-email" placeholder="Recovery Email" required>
+                    <input type="text" class="payment-input recovery-input" id="recovery-username" placeholder="Recovery Username" required>
                     <button class="payment-recover-button" id="recover-button" type="button">Recover Access</button>
                     <button class="payment-cancel-button" id="cancel-recovery" type="button">Cancel</button>
                 </div>
@@ -820,7 +820,7 @@ async function initializePaymentProcessing() {
         const recoveryForm = document.querySelector("#recovery-form");
         const recoverButton = document.querySelector("#recover-button");
         const cancelRecoveryButton = document.querySelector("#cancel-recovery");
-        const recoveryEmailInput = document.querySelector("#recovery-email");
+        const recoveryUsernameInput = document.querySelector("#recovery-username");
         
         if (recoveryButton && recoveryForm) {
             recoveryButton.addEventListener("click", function(e) {
@@ -836,20 +836,20 @@ async function initializePaymentProcessing() {
             console.log("Recovery button listener added");
         }
         
-        if (recoverButton && recoveryEmailInput) {
+        if (recoverButton && recoveryUsernameInput) {
             recoverButton.addEventListener("click", async function(e) {
                 e.preventDefault();
                 console.log("Recover access button clicked");
                 
-                const email = recoveryEmailInput.value.trim();
+                const username = recoveryUsernameInput.value.trim();
                 const payStatus = document.querySelector("#status");
                 
-                if (!email) {
-                    payStatus.innerHTML = "Please enter your email address";
+                if (!username) {
+                    payStatus.innerHTML = "Please enter your username";
                     return;
                 }
                 
-                payStatus.innerHTML = "Verifying email...";
+                payStatus.innerHTML = "Verifying username...";
                 recoverButton.disabled = true;
                 
                 try {
@@ -872,7 +872,7 @@ async function initializePaymentProcessing() {
                         },
                         body: JSON.stringify({
                             task: "addDeviceToAccount",
-                            email: email,
+                            username: username,
                             fingerprint: fingerprint
                         }),
                         mode: "cors"
@@ -883,7 +883,7 @@ async function initializePaymentProcessing() {
                     if (data.success) {
                         // Store authentication locally
                         localStorage.setItem("authenticated", encodeURIComponent("paid"));
-                        localStorage.setItem("userEmail", encodeURIComponent(email));
+                        localStorage.setItem("username", encodeURIComponent(username));
                         
                         // OPERATION RATEPAY: Update rateLimitStatus after successful email recovery
                         try {
@@ -897,7 +897,7 @@ async function initializePaymentProcessing() {
                                 body: JSON.stringify({
                                     task: "checkPaymentAndLimits",
                                     fingerprint: fingerprint,
-                                    email: email,
+                                    username: username,
                                     module: "payment" // Generic module for status check
                                 }),
                                 mode: "cors"
@@ -964,8 +964,8 @@ async function initializePaymentProcessing() {
                 recoveryForm.style.display = "none";
                 
                 // Clear recovery email input
-                if (recoveryEmailInput) {
-                    recoveryEmailInput.value = "";
+                if (recoveryUsernameInput) {
+                    recoveryUsernameInput.value = "";
                 }
                 
                 // Clear status
@@ -989,24 +989,24 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     console.log("Processing payment submission");
 
     const payButton = document.querySelector("#pay-button");
-    const nameInput = document.querySelector("#username");
+    const usernameInput = document.querySelector("#username");
     const emailInput = document.querySelector("#useremail");
     const payStatus = document.querySelector("#status");
 
-    console.log("Form elements:", { payButton, nameInput, emailInput, payStatus });
+    console.log("Form elements:", { payButton, usernameInput, emailInput, payStatus });
 
     payStatus.innerHTML = "Please wait...";
-    const name = nameInput.value;
+    const username = usernameInput.value;
     const email = emailInput.value;
-    console.log("Form data:", { name, email });
+    console.log("Form data:", { username, email });
 
-    if (!name || !email) {
-        console.warn("Missing name or email");
-        payStatus.innerHTML = "Please enter your name and email.";
+    if (!username || !email) {
+        console.warn("Missing username or email");
+        payStatus.innerHTML = "Please enter your username and email.";
         return;
     }
 
-    nameInput.disabled = true;
+    usernameInput.disabled = true;
     emailInput.disabled = true;
     payButton.disabled = true;
 
@@ -1018,7 +1018,7 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     const payload = { 
         task: "pay", 
         client_email: email, 
-        client_name: name,
+        username: username,
         price_id: selectedPriceId === 'default' ? null : selectedPriceId
     };
     console.log("Sending payload to Cloudflare Worker:", payload);
@@ -1075,7 +1075,7 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
         } else {
             console.warn("No session ID in response:", data);
             payStatus.innerHTML = data.error || "Payment failed. Please try again.";
-            nameInput.disabled = false;
+            usernameInput.disabled = false;
             emailInput.disabled = false;
             payButton.disabled = false;
         }
@@ -1094,7 +1094,7 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
             payStatus.innerHTML = "Unable to connect. Please try again or contact support.";
         }
         
-        nameInput.disabled = false;
+        usernameInput.disabled = false;
         emailInput.disabled = false;
         payButton.disabled = false;
     }
