@@ -237,24 +237,23 @@ export function handleRateLimitResponse(container, response, showError = true, m
     badge.style.verticalAlign = 'middle';
     
     if (status && status.remaining && status.limits) {
-        // Get existing rateLimitStatus to preserve email if it exists
-        let existingEmail = null;
+        // Get existing rateLimitStatus to preserve oauthUserId if it exists
+        let existingOauthUserId = null;
         try {
             const existingStatus = localStorage.getItem('rateLimitStatus');
             if (existingStatus) {
                 const parsed = JSON.parse(existingStatus);
-                existingEmail = parsed.email;
+                existingOauthUserId = parsed.oauthUserId;
             }
         } catch (e) {
             // Ignore parsing errors
         }
-        
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay },
             isPaid: status.isPaid || isPaidUser,
             allowed: status.allowed,
-            email: status.email || response.email || existingEmail || null, // Preserve existing email if backend doesn't provide one
+            oauthUserId: status.oauthUserId || response.oauthUserId || existingOauthUserId || null, // Preserve existing oauthUserId if backend doesn't provide one
             lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
@@ -361,7 +360,7 @@ export function updateRateLimitStatus(rateLimitData) {
             isPaid: rateLimitData.isPaid,
             limits: rateLimitData.limits,
             remaining: rateLimitData.remaining,
-            email: rateLimitData.email,
+            // email: rateLimitData.email, // Orphaned: email-based logic removed (Phase 3)
             lastUpdated: Date.now()
         };
         
@@ -408,7 +407,7 @@ export function ensureRateLimitStatusForPaidUser() {
 }
 
 /**
- * Create a standardized worker payload with email for paid users
+ * Orphaned: email-based payload for paid users removed (Phase 3)
  * This eliminates duplicate code across all AI modules
  * @param {string} module - The module name (e.g., 'income', 'philosophy', etc.)
  * @param {Object} formData - The form data to send
@@ -425,28 +424,26 @@ export function createWorkerPayload(module, formData) {
         fingerprint: fingerprintData
     };
     
-    // Get email ONLY from localStorage.rateLimitStatus
-    let userEmail = null;
-    
+    // Get oauthUserId ONLY from localStorage.rateLimitStatus
+    let userOauthUserId = null;
     try {
         const rateLimitStatus = localStorage.getItem('rateLimitStatus');
         if (rateLimitStatus) {
             const status = JSON.parse(rateLimitStatus);
-            if (status.email) {
-                userEmail = status.email;
-                console.log(`[RateLimit] Found email in rateLimitStatus: ${userEmail}`);
+            if (status.oauthUserId) {
+                userOauthUserId = status.oauthUserId;
+                console.log(`[RateLimit] Found oauthUserId in rateLimitStatus: ${userOauthUserId}`);
             }
         }
     } catch (error) {
         console.error(`[RateLimit] Error parsing rateLimitStatus:`, error);
     }
-    
-    // Add email to payload if found
-    if (userEmail) {
-        payload.email = userEmail;
-        console.log(`[RateLimit] ✅ Email added to payload: ${userEmail}`);
+    // Add oauthUserId to payload if found
+    if (userOauthUserId) {
+        payload.oauthUserId = userOauthUserId;
+        console.log(`[RateLimit] ✅ oauthUserId added to payload: ${userOauthUserId}`);
     } else {
-        console.log(`[RateLimit] ⚠️ No email in rateLimitStatus - using fingerprint-based limits`);
+        console.log(`[RateLimit] ⚠️ No oauthUserId in rateLimitStatus - using fingerprint-based limits`);
     }
     
     return payload;

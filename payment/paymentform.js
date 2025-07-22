@@ -913,6 +913,9 @@ async function initializePaymentProcessing() {
                         
                         // Store authentication locally
                         localStorage.setItem("authenticated", encodeURIComponent("paid"));
+                        if (data.oauthUserId) {
+                            localStorage.setItem("oauthUserId", data.oauthUserId);
+                        }
                         localStorage.setItem("userEmail", encodeURIComponent(email));
                         
                         // STAGE 1 ENHANCEMENT: Use fingerprint from recovery response if provided
@@ -1035,11 +1038,17 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     const selectedPriceId = selectedTier ? selectedTier.value : 'default';
     console.log("Selected subscription tier:", selectedPriceId);
 
+    // Add oauthUserId for authenticated users if available
+    let oauthUserId = null;
+    try {
+        oauthUserId = localStorage.getItem('oauthUserId') || null;
+    } catch (e) {}
     const payload = { 
         task: "pay", 
         client_email: email, 
         client_name: name,
-        price_id: selectedPriceId === 'default' ? null : selectedPriceId
+        price_id: selectedPriceId === 'default' ? null : selectedPriceId,
+        ...(oauthUserId ? { oauthUserId } : {})
     };
     console.log("Sending payload to Cloudflare Worker:", payload);
 
@@ -1089,6 +1098,10 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
 
         if (data.id) {
             console.log("Checkout session ID received:", data.id);
+            // Store oauthUserId if provided in response
+            if (data.oauthUserId) {
+                localStorage.setItem('oauthUserId', data.oauthUserId);
+            }
             payStatus.innerHTML = "Redirecting to payment...";
             await stripe.redirectToCheckout({ sessionId: data.id });
             console.log("Redirect to Stripe checkout initiated");

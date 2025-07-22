@@ -1,0 +1,45 @@
+Phased Plan: Remove Email Storage, Use OAuth User ID for Authenticated Users
+
+---
+
+
+
+Phase 1: Preparation & Analysis  ✅ COMPLETE (July 22, 2025)
+- All code audited for email storage, lookup, and logging (KV, DB, logs, etc.)
+- All user identification logic located (rate limiter, payment, etc.)
+- Dependencies and modules interacting with user identity listed
+
+Findings:
+- Email is used for user identification in backend/payment logic, especially in:
+  - /payment/stage3-test.js, /payment/stage4-test.js, /payment/stage5-test.js, /payment/stage6-test.js, /payment/redirectUrl.html
+  - /ai/rate-limiter/rateLimit.js, /ai/rate-limiter/rateLimiter.js
+  - /ai/master.js (payload validation, rate limit, payment verification)
+- No email is stored in browser localStorage or frontend modules.
+
+
+
+
+
+Phase 2: Refactor for OAuth User ID  ✅ COMPLETE (July 22, 2025)
+- All backend and payment logic now uses OAuth user ID for authenticated users.
+- KV/data access patterns updated.
+- Fingerprint logic retained for anonymous/free users.
+
+Phase 3: Remove Email Storage & Usage  🚧 IN PROGRESS (July 22, 2025)
+- Starting removal and orphaning of all email-based identification logic except for free/recovery flows.
+- Technical approach: Replace all email-based keys and lookups with OAuth user ID for authenticated users, fallback to fingerprint for anonymous users.
+
+Phase 3: Remove Email Storage & Usage
+- Remove all code that stores, logs, or uses emails for identification.
+- Ensure no email is used as a key or value in any KV, DB, or log.
+- Update privacy policy and documentation to reflect this change.
+
+Phase 4: Testing & Validation
+- Test all flows (free, paid, upgrade, downgrade, rate limiting) for both anonymous and authenticated users.
+- Confirm no email is stored or processed anywhere in the system.
+- Validate that OAuth user ID-based logic works for all authenticated features.
+
+Phase 5: Deployment & Monitoring
+- Deploy changes to staging, then production.
+- Monitor for errors, regressions, or unexpected behavior.
+- Periodically audit to ensure no email data is being stored or processed.
