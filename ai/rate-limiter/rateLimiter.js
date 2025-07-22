@@ -13,8 +13,8 @@ const RATE_LIMIT_CONFIG = {
 };
 
 /**
- * Generate an enhanced device fingerprint with IP component
- * @returns {string} A unique composite fingerprint
+ * Generate a device fingerprint based on browser characteristics
+ * @returns {string} A unique device fingerprint
  */
 function generateDeviceFingerprint() {
     const canvas = document.createElement('canvas');
@@ -24,8 +24,7 @@ function generateDeviceFingerprint() {
     ctx.fillText('Fingerprint test', 2, 2);
     const canvasFingerprint = canvas.toDataURL();
     
-    // Enhanced fingerprint components
-    const components = [
+    const fingerprint = [
         navigator.userAgent,
         navigator.language,
         screen.width + 'x' + screen.height,
@@ -33,14 +32,8 @@ function generateDeviceFingerprint() {
         new Date().getTimezoneOffset(),
         navigator.platform,
         navigator.cookieEnabled,
-        canvasFingerprint.slice(-50), // Last 50 chars of canvas fingerprint
-        // Additional stability indicators
-        navigator.hardwareConcurrency || 'unknown',
-        navigator.deviceMemory || 'unknown',
-        window.screen.availWidth + 'x' + window.screen.availHeight
-    ];
-    
-    const fingerprint = components.join('|');
+        canvasFingerprint.slice(-50) // Last 50 chars of canvas fingerprint
+    ].join('|');
     
     // Simple hash function
     let hash = 0;
@@ -237,23 +230,12 @@ export function handleRateLimitResponse(container, response, showError = true, m
     badge.style.verticalAlign = 'middle';
     
     if (status && status.remaining && status.limits) {
-        // Get existing rateLimitStatus to preserve oauthUserId if it exists
-        let existingOauthUserId = null;
-        try {
-            const existingStatus = localStorage.getItem('rateLimitStatus');
-            if (existingStatus) {
-                const parsed = JSON.parse(existingStatus);
-                existingOauthUserId = parsed.oauthUserId;
-            }
-        } catch (e) {
-            // Ignore parsing errors
-        }
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay },
             isPaid: status.isPaid || isPaidUser,
             allowed: status.allowed,
-            oauthUserId: status.oauthUserId || response.oauthUserId || existingOauthUserId || null, // Preserve existing oauthUserId if backend doesn't provide one
+            email: status.email,
             lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
@@ -360,7 +342,7 @@ export function updateRateLimitStatus(rateLimitData) {
             isPaid: rateLimitData.isPaid,
             limits: rateLimitData.limits,
             remaining: rateLimitData.remaining,
-            // email: rateLimitData.email, // Orphaned: email-based logic removed (Phase 3)
+            email: rateLimitData.email,
             lastUpdated: Date.now()
         };
         
@@ -404,63 +386,4 @@ export function ensureRateLimitStatusForPaidUser() {
         console.error('[RateLimit][DEBUG] 💥 ERROR in ensureRateLimitStatusForPaidUser:', error);
         return null;
     }
-}
-
-/**
- * Orphaned: email-based payload for paid users removed (Phase 3)
- * This eliminates duplicate code across all AI modules
- * @param {string} module - The module name (e.g., 'income', 'philosophy', etc.)
- * @param {Object} formData - The form data to send
- * @returns {Object} Complete payload ready for API call
- */
-export function createWorkerPayload(module, formData) {
-    // Get fingerprint data for rate limiting
-    const fingerprintData = getFingerprintForWorker();
-    
-    // Create base payload
-    const payload = {
-        module,
-        formData,
-        fingerprint: fingerprintData
-    };
-    
-    // Get oauthUserId ONLY from localStorage.rateLimitStatus
-    let userOauthUserId = null;
-    try {
-        const rateLimitStatus = localStorage.getItem('rateLimitStatus');
-        if (rateLimitStatus) {
-            const status = JSON.parse(rateLimitStatus);
-            if (status.oauthUserId) {
-                userOauthUserId = status.oauthUserId;
-                console.log(`[RateLimit] Found oauthUserId in rateLimitStatus: ${userOauthUserId}`);
-            }
-        }
-    } catch (error) {
-        console.error(`[RateLimit] Error parsing rateLimitStatus:`, error);
-    }
-    // Add oauthUserId to payload if found
-    if (userOauthUserId) {
-        payload.oauthUserId = userOauthUserId;
-        console.log(`[RateLimit] ✅ oauthUserId added to payload: ${userOauthUserId}`);
-    } else {
-        console.log(`[RateLimit] ⚠️ No oauthUserId in rateLimitStatus - using fingerprint-based limits`);
-    }
-    
-    return payload;
-}
-
-// Export functions to global window object for module access
-if (typeof window !== 'undefined') {
-    window.rateLimiter = {
-        getFingerprint,
-        getFingerprintForWorker,
-        isRateLimited,
-        incrementRequestCount,
-        handleRateLimitResponse,
-        canSendRequest,
-        renderRateLimitDisplay,
-        updateRateLimitStatus,
-        ensureRateLimitStatusForPaidUser,
-        createWorkerPayload
-    };
 }

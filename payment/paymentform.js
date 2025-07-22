@@ -32,10 +32,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="payment-modal-header">
                 <div class="payment-modal-title">Premium Features</div>
             </div>
-            <div class="oauth-signin-row">
-                <button id="google-signin" class="oauth-signin-button google">Sign in with Google</button>
-                <button id="apple-signin" class="oauth-signin-button apple">Sign in with Apple</button>
-            </div>
             <div id="status" class="payment-status"></div>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
@@ -84,23 +80,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         modal.appendChild(modalContent);
         document.body.appendChild(modal);
-        // Add OAuth button handlers
-        const googleBtn = document.getElementById('google-signin');
-        if (googleBtn) {
-            googleBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // TODO: Integrate Google OAuth flow here
-                alert('Google sign-in not yet implemented.');
-            });
-        }
-        const appleBtn = document.getElementById('apple-signin');
-        if (appleBtn) {
-            appleBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // TODO: Integrate Apple OAuth flow here
-                alert('Apple sign-in not yet implemented.');
-            });
-        }
 
         console.log('Payment modal created');
 
@@ -179,41 +158,6 @@ function addPaymentModalStyles() {
     const style = document.createElement('style');
     style.id = 'payment-modal-styles';
     style.textContent = `
-        .oauth-signin-row {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-        .oauth-signin-button {
-            width: 100%;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 15px;
-            font-family: 'Geist', 'Inter', sans-serif;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            margin-bottom: 0;
-            transition: background 0.2s, color 0.2s;
-        }
-        .oauth-signin-button.google {
-            background: #fff;
-            color: #444;
-            border: 1px solid #d1d1d1;
-            box-shadow: 0 2px 8px rgba(66,133,244,0.08);
-        }
-        .oauth-signin-button.google:hover {
-            background: #f5f5f5;
-        }
-        .oauth-signin-button.apple {
-            background: #000;
-            color: #fff;
-            border: 1px solid #222;
-        }
-        .oauth-signin-button.apple:hover {
-            background: #222;
-        }
         .payment-modal {
             position: fixed;
             top: 0;
@@ -494,7 +438,7 @@ function addPaymentModalStyles() {
             text-decoration: none !important;
         }
         
-        /* Premium Section Styling
+        /* Premium Section Styling */
         .premium-blur {
             filter: blur(3px);
             color: #888;
@@ -502,8 +446,6 @@ function addPaymentModalStyles() {
             transition: filter 0.3s ease, color 0.3s ease;
             font-family: "Inter", sans-serif;
         }
-
- */
 
         /* Section1 Styling (Premium-specific) */
         .section1 {
@@ -767,12 +709,7 @@ function removePaymentModalEventListeners(modal) {
 
 
 // --- PREMIUM ACCESS LOGIC ---
-let premiumFeaturesEnabled = false;
-
 function enablePremiumFeatures() {
-    // Prevent repeated execution
-    if (premiumFeaturesEnabled) return;
-    
     const auth = localStorage.getItem('authenticated');
     console.log('[Premium][Debug] localStorage.authenticated =', auth);
     const premiumElements = document.querySelectorAll('.premium-blur');
@@ -793,7 +730,6 @@ function enablePremiumFeatures() {
         const stillBlurred = document.querySelectorAll('.premium-blur');
         console.log('[Premium][Debug] After unblur, still blurred:', stillBlurred.length, stillBlurred);
         console.log('[Premium] Premium features enabled for paid user.');
-        premiumFeaturesEnabled = true;
     } else {
         console.log('[Premium][Debug] User is not paid, premium features remain blurred.');
     }
@@ -804,22 +740,9 @@ if (document.readyState === 'loading') {
 } else {
     enablePremiumFeatures();
 }
-// Only observe for new premium-blur elements if not already enabled
-if (!window.premiumPaymentObserver && !premiumFeaturesEnabled) {
-    window.premiumPaymentObserver = new MutationObserver((mutations) => {
-        // Only check if new elements with premium-blur are added
-        const hasNewPremiumElements = mutations.some(mutation => 
-            Array.from(mutation.addedNodes).some(node => 
-                node.nodeType === 1 && (
-                    node.classList?.contains('premium-blur') || 
-                    node.querySelector?.('.premium-blur')
-                )
-            )
-        );
-        if (hasNewPremiumElements && !premiumFeaturesEnabled) {
-            enablePremiumFeatures();
-        }
-    });
+// Observe DOM for dynamically added premium-blur elements
+if (!window.premiumPaymentObserver) {
+    window.premiumPaymentObserver = new MutationObserver(() => enablePremiumFeatures());
     window.premiumPaymentObserver.observe(document.body, { childList: true, subtree: true });
 }
 // Expose for other scripts
@@ -916,7 +839,7 @@ async function initializePaymentProcessing() {
         if (recoverButton && recoveryEmailInput) {
             recoverButton.addEventListener("click", async function(e) {
                 e.preventDefault();
-                console.log("[PaymentForm] STAGE 3: Recover access button clicked - email-only recovery");
+                console.log("Recover access button clicked");
                 
                 const email = recoveryEmailInput.value.trim();
                 const payStatus = document.querySelector("#status");
@@ -926,21 +849,19 @@ async function initializePaymentProcessing() {
                     return;
                 }
                 
-                // Basic email validation
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
-                    payStatus.innerHTML = "Please enter a valid email address";
-                    return;
-                }
-                
                 payStatus.innerHTML = "Verifying email...";
                 recoverButton.disabled = true;
                 
                 try {
-                    // STAGE 3: Email-only recovery - no fingerprint dependency
-                    console.log("[PaymentForm] STAGE 3: Attempting email-only recovery for:", email);
+                    // Get fingerprint data
+                    const fingerprintData = localStorage.getItem("fingerprintData");
+                    if (!fingerprintData) {
+                        throw new Error("Unable to get device fingerprint");
+                    }
                     
-                    // Call the email recovery endpoint
+                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
+                    
+                    // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
                     
                     const response = await fetch(paymentEndpoint, {
@@ -950,9 +871,9 @@ async function initializePaymentProcessing() {
                             "Accept": "application/json"
                         },
                         body: JSON.stringify({
-                            task: "recoverByEmailOnly", // STAGE 3: New task for email-only recovery
-                            email: email
-                            // No fingerprint required for Stage 3
+                            task: "addDeviceToAccount",
+                            email: email,
+                            fingerprint: fingerprint
                         }),
                         mode: "cors"
                     });
@@ -960,69 +881,69 @@ async function initializePaymentProcessing() {
                     const data = await response.json();
                     
                     if (data.success) {
-                        console.log("[PaymentForm] STAGE 3: Email recovery successful", {
-                            email: email,
-                            tier: data.tier,
-                            isPaid: data.isPaid,
-                            crossDevice: data.crossDevice
-                        });
-                        
                         // Store authentication locally
                         localStorage.setItem("authenticated", encodeURIComponent("paid"));
-                        if (data.oauthUserId) {
-                            localStorage.setItem("oauthUserId", data.oauthUserId);
-                        }
-                        // localStorage.setItem("userEmail", encodeURIComponent(email)); // Orphaned: email-based storage removed (Phase 3)
+                        localStorage.setItem("userEmail", encodeURIComponent(email));
                         
-                        // STAGE 1 ENHANCEMENT: Use fingerprint from recovery response if provided
-                        if (data.fingerprint) {
-                            localStorage.setItem("fingerprintData", encodeURIComponent(JSON.stringify(data.fingerprint)));
-                            console.log("[PaymentForm] STAGE 1: Using fingerprint from recovery response:", data.fingerprint);
-                        } else {
-                            // Fallback: Generate new fingerprint for this device if needed
-                            let currentFingerprint;
-                            try {
-                                const fingerprintData = localStorage.getItem("fingerprintData");
-                                if (!fingerprintData) {
-                                    const { generateFingerprint } = await import('../utility/utils.js');
-                                    currentFingerprint = await generateFingerprint();
-                                    localStorage.setItem("fingerprintData", encodeURIComponent(JSON.stringify(currentFingerprint)));
-                                    console.log("[PaymentForm] STAGE 3: Generated new fingerprint for cross-device recovery");
-                                }
-                            } catch (fingerprintError) {
-                                console.warn("[PaymentForm] STAGE 3: Fingerprint generation failed, continuing without:", fingerprintError);
-                            }
-                        }
-                        
-                        // STAGE 1 ENHANCEMENT: Use rateLimitStatus from recovery response (no additional API call needed)
-                        if (data.rateLimitStatus) {
-                            // Use the rateLimitStatus from the backend response (includes email)
-                            localStorage.setItem('rateLimitStatus', JSON.stringify(data.rateLimitStatus));
-                            console.log('[PaymentForm] STAGE 1: Rate limit status created from recovery response:', data.rateLimitStatus);
+                        // OPERATION RATEPAY: Update rateLimitStatus after successful email recovery
+                        try {
+                            const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
+                            const rateLimitResponse = await fetch(rateLimitEndpoint, {
+                                method: "POST",
+                                headers: { 
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json"
+                                },
+                                body: JSON.stringify({
+                                    task: "checkPaymentAndLimits",
+                                    fingerprint: fingerprint,
+                                    email: email,
+                                    module: "payment" // Generic module for status check
+                                }),
+                                mode: "cors"
+                            });
                             
-                            // Enhanced success message with cross-device info
-                            const limitsText = data.rateLimitStatus.isPaid ? `${data.rateLimitStatus.limits?.perDay || 'premium'} per day` : `${data.rateLimitStatus.remaining?.perDay || 0} remaining today`;
-                            const crossDeviceText = data.crossDevice ? " (cross-device recovery)" : "";
-                            payStatus.innerHTML = `Access recovered successfully${crossDeviceText}! You now have ${limitsText} generations. Redirecting...`;
-                        } else {
-                            console.warn("[PaymentForm] STAGE 1: No rateLimitStatus in recovery response - using fallback");
+                            if (rateLimitResponse.ok) {
+                                const rateLimitData = await rateLimitResponse.json();
+                                
+                                // Update rateLimitStatus in localStorage immediately
+                                const rateLimitStatus = {
+                                    allowed: rateLimitData.allowed,
+                                    isPaid: rateLimitData.isPaid,
+                                    limits: rateLimitData.limits,
+                                    remaining: rateLimitData.remaining,
+                                    email: rateLimitData.email,
+                                    lastUpdated: Date.now()
+                                };
+                                
+                                localStorage.setItem("rateLimitStatus", JSON.stringify(rateLimitStatus));
+                                console.log("Rate limit status updated after email recovery:", rateLimitStatus);
+                                
+                                // Update success message with new limits
+                                const limitsText = rateLimitData.isPaid ? "unlimited" : `${rateLimitData.remaining?.perDay || 0} remaining today`;
+                                payStatus.innerHTML = `Access recovered successfully! You now have ${limitsText} generations. Redirecting...`;
+                            } else {
+                                console.warn("Failed to refresh rate limit status after email recovery");
+                                payStatus.innerHTML = "Access recovered successfully! Redirecting...";
+                            }
+                        } catch (rateLimitError) {
+                            console.warn("Error refreshing rate limit status:", rateLimitError);
                             payStatus.innerHTML = "Access recovered successfully! Redirecting...";
                         }
                         
                         // Close modal and redirect after delay
                         setTimeout(() => {
                             closePaymentModal();
-                            // Reload to refresh premium features
+                            // Reload or redirect to refresh premium features
                             window.location.reload();
                         }, 2000);
                         
                     } else {
-                        console.log("[PaymentForm] STAGE 3: Email recovery failed:", data.error);
                         payStatus.innerHTML = sanitizeErrorMessage(data.error) || "Email verification failed. Please check your email or contact support.";
                     }
                     
                 } catch (error) {
-                    console.error("[PaymentForm] STAGE 3: Recovery error:", error);
+                    console.error("Recovery error:", error);
                     payStatus.innerHTML = "Error occurred during recovery. Please try again or contact support.";
                 } finally {
                     recoverButton.disabled = false;
@@ -1094,17 +1015,11 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     const selectedPriceId = selectedTier ? selectedTier.value : 'default';
     console.log("Selected subscription tier:", selectedPriceId);
 
-    // Add oauthUserId for authenticated users if available
-    let oauthUserId = null;
-    try {
-        oauthUserId = localStorage.getItem('oauthUserId') || null;
-    } catch (e) {}
     const payload = { 
         task: "pay", 
         client_email: email, 
         client_name: name,
-        price_id: selectedPriceId === 'default' ? null : selectedPriceId,
-        ...(oauthUserId ? { oauthUserId } : {})
+        price_id: selectedPriceId === 'default' ? null : selectedPriceId
     };
     console.log("Sending payload to Cloudflare Worker:", payload);
 
@@ -1154,10 +1069,6 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
 
         if (data.id) {
             console.log("Checkout session ID received:", data.id);
-            // Store oauthUserId if provided in response
-            if (data.oauthUserId) {
-                localStorage.setItem('oauthUserId', data.oauthUserId);
-            }
             payStatus.innerHTML = "Redirecting to payment...";
             await stripe.redirectToCheckout({ sessionId: data.id });
             console.log("Redirect to Stripe checkout initiated");
