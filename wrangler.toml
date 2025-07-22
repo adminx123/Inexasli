@@ -5,6 +5,9 @@ name = "x-worker"
 main = "./ai/x.js"
 compatibility_date = "2025-07-21"
 
+[env.x.triggers]
+crons = ["5 18 * * *"]
+
 [[env.x.services]]
 binding = "secret_binding"
 service = "secretworker"
