@@ -13,8 +13,8 @@ const RATE_LIMIT_CONFIG = {
 };
 
 /**
- * Generate a device fingerprint based on browser characteristics
- * @returns {string} A unique device fingerprint
+ * Generate an enhanced device fingerprint with IP component
+ * @returns {string} A unique composite fingerprint
  */
 function generateDeviceFingerprint() {
     const canvas = document.createElement('canvas');
@@ -24,7 +24,8 @@ function generateDeviceFingerprint() {
     ctx.fillText('Fingerprint test', 2, 2);
     const canvasFingerprint = canvas.toDataURL();
     
-    const fingerprint = [
+    // Enhanced fingerprint components
+    const components = [
         navigator.userAgent,
         navigator.language,
         screen.width + 'x' + screen.height,
@@ -32,8 +33,14 @@ function generateDeviceFingerprint() {
         new Date().getTimezoneOffset(),
         navigator.platform,
         navigator.cookieEnabled,
-        canvasFingerprint.slice(-50) // Last 50 chars of canvas fingerprint
-    ].join('|');
+        canvasFingerprint.slice(-50), // Last 50 chars of canvas fingerprint
+        // Additional stability indicators
+        navigator.hardwareConcurrency || 'unknown',
+        navigator.deviceMemory || 'unknown',
+        window.screen.availWidth + 'x' + window.screen.availHeight
+    ];
+    
+    const fingerprint = components.join('|');
     
     // Simple hash function
     let hash = 0;
@@ -230,12 +237,24 @@ export function handleRateLimitResponse(container, response, showError = true, m
     badge.style.verticalAlign = 'middle';
     
     if (status && status.remaining && status.limits) {
+        // Get existing rateLimitStatus to preserve email if it exists
+        let existingEmail = null;
+        try {
+            const existingStatus = localStorage.getItem('rateLimitStatus');
+            if (existingStatus) {
+                const parsed = JSON.parse(existingStatus);
+                existingEmail = parsed.email;
+            }
+        } catch (e) {
+            // Ignore parsing errors
+        }
+        
         const dailyStatus = {
             remaining: { perDay: status.remaining.perDay },
             limits: { perDay: status.limits.perDay },
             isPaid: status.isPaid || isPaidUser,
             allowed: status.allowed,
-            email: status.email,
+            email: status.email || response.email || existingEmail || null, // Preserve existing email if backend doesn't provide one
             lastUpdated: Date.now()
         };
         localStorage.setItem('rateLimitStatus', JSON.stringify(dailyStatus));
@@ -386,4 +405,65 @@ export function ensureRateLimitStatusForPaidUser() {
         console.error('[RateLimit][DEBUG] 💥 ERROR in ensureRateLimitStatusForPaidUser:', error);
         return null;
     }
+}
+
+/**
+ * Create a standardized worker payload with email for paid users
+ * This eliminates duplicate code across all AI modules
+ * @param {string} module - The module name (e.g., 'income', 'philosophy', etc.)
+ * @param {Object} formData - The form data to send
+ * @returns {Object} Complete payload ready for API call
+ */
+export function createWorkerPayload(module, formData) {
+    // Get fingerprint data for rate limiting
+    const fingerprintData = getFingerprintForWorker();
+    
+    // Create base payload
+    const payload = {
+        module,
+        formData,
+        fingerprint: fingerprintData
+    };
+    
+    // Get email ONLY from localStorage.rateLimitStatus
+    let userEmail = null;
+    
+    try {
+        const rateLimitStatus = localStorage.getItem('rateLimitStatus');
+        if (rateLimitStatus) {
+            const status = JSON.parse(rateLimitStatus);
+            if (status.email) {
+                userEmail = status.email;
+                console.log(`[RateLimit] Found email in rateLimitStatus: ${userEmail}`);
+            }
+        }
+    } catch (error) {
+        console.error(`[RateLimit] Error parsing rateLimitStatus:`, error);
+    }
+    
+    // Add email to payload if found
+    if (userEmail) {
+        payload.email = userEmail;
+        console.log(`[RateLimit] ✅ Email added to payload: ${userEmail}`);
+    } else {
+        console.log(`[RateLimit] ⚠️ No email in rateLimitStatus - using fingerprint-based limits`);
+    }
+    
+    return payload;
+}
+
+// Export functions to global window object for module access
+if (typeof window !== 'undefined') {
+    window.rateLimiter = {
+        getFingerprint,
+        getFingerprintForWorker,
+        isRateLimited,
+        incrementRequestCount,
+        handleRateLimitResponse,
+        canSendRequest,
+        renderRateLimitDisplay,
+        updateRateLimitStatus,
+        ensureRateLimitStatusForPaidUser,
+        createWorkerPayload
+    };
 }
