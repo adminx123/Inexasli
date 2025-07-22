@@ -939,7 +939,9 @@ async function initializePaymentProcessing() {
                         }, 2000);
                         
                     } else {
-                        payStatus.innerHTML = sanitizeErrorMessage(data.error) || "Email verification failed. Please check your email or contact support.";
+                        // Simple error sanitization - remove script tags and limit length
+                        const errorMessage = data.error ? String(data.error).replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').substring(0, 200) : "Username verification failed. Please check your username or contact support.";
+                        payStatus.innerHTML = errorMessage;
                     }
                     
                 } catch (error) {
