@@ -69,29 +69,17 @@ export function getFingerprint() {
     try {
         const stored = localStorage.getItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
         let fingerprintData;
-        let legacyCorrupt = false;
-        
         if (stored) {
-            try {
-                fingerprintData = JSON.parse(stored);
-            } catch (e) {
-                // Corrupt JSON, treat as legacy/corrupt
-                legacyCorrupt = true;
-            }
-            // Check if session expired (24 hours)
-            if (!legacyCorrupt && fingerprintData) {
-                const sessionAge = Date.now() - fingerprintData.sessionCreated;
-                if (sessionAge > 24 * 60 * 60 * 1000) {
-                    // Create new session but keep device ID
-                    fingerprintData.sessionId = generateSessionId();
-                    fingerprintData.sessionCreated = Date.now();
-                    fingerprintData.requestCounts = {};
-                    fingerprintData.lastRequestTimes = [];
-                }
+            fingerprintData = JSON.parse(stored);
+            const sessionAge = Date.now() - fingerprintData.sessionCreated;
+            if (sessionAge > 24 * 60 * 60 * 1000) {
+                fingerprintData.sessionId = generateSessionId();
+                fingerprintData.sessionCreated = Date.now();
+                fingerprintData.requestCounts = {};
+                fingerprintData.lastRequestTimes = [];
             }
         }
-        if (!stored || legacyCorrupt || !fingerprintData || typeof fingerprintData.deviceId !== 'string' || !fingerprintData.deviceId) {
-            // Legacy/corrupt/missing: clear and regenerate
+        if (!stored || !fingerprintData || typeof fingerprintData.deviceId !== 'string' || !fingerprintData.deviceId) {
             localStorage.removeItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
             fingerprintData = {
                 deviceId: generateDeviceFingerprint(),
@@ -102,22 +90,16 @@ export function getFingerprint() {
                 rateLimitStatus: {}
             };
         }
-        // --- HARDENING PATCH ---
-        // Always ensure deviceId exists and is a string
         if (!fingerprintData.deviceId || typeof fingerprintData.deviceId !== 'string') {
             fingerprintData.deviceId = generateDeviceFingerprint();
         }
-        // Always ensure lastRequestTimes is an array
         if (!Array.isArray(fingerprintData.lastRequestTimes)) {
             fingerprintData.lastRequestTimes = [];
         }
-        // Save updated fingerprint
         localStorage.setItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY, JSON.stringify(fingerprintData));
         return fingerprintData;
-        
     } catch (error) {
         console.error('Error getting fingerprint:', error);
-        // Return minimal fingerprint if storage fails
         return {
             deviceId: generateDeviceFingerprint(),
             sessionId: generateSessionId(),
