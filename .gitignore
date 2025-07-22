@@ -1,3 +1,5 @@
+# Ignore Cloudflare Worker file with credentials
+ai/x.js
 # INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP
