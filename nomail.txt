@@ -1,0 +1,18 @@
+Phase 1: Username for Rate Limiting
+- Prompt users for a username instead of email for rate limiting/general use.
+- Store/check usernames in KV for rate limiting.
+- Remove all email references from rate limiting logic/storage.
+
+Phase 2: Payment Form Update
+- Update payment form to collect:
+  - Email (for payment/receipt)
+  - Username (for account/rate limiting/Stripe metadata)
+- Replace the name field with a username field.
+
+Phase 3: Stripe Integration
+- Add username as metadata when creating Stripe customer/payment (metadata: { username: "user123" }).
+- Update backend to include username in Stripe API calls.
+
+Phase 4: Documentation & Testing
+- Update documentation to reflect changes.
+- Test to confirm usernames are handled correctly in both systems.
