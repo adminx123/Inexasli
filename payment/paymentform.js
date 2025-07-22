@@ -887,6 +887,10 @@ async function initializePaymentProcessing() {
                         
                         // OPERATION RATEPAY: Update rateLimitStatus after successful email recovery
                         try {
+                            console.log("🚀 [RECOVERY DEBUG] Starting rate limit update call - timestamp:", Date.now());
+                            console.log("🚀 [RECOVERY DEBUG] Username:", username);
+                            console.log("🚀 [RECOVERY DEBUG] Fingerprint:", fingerprint);
+                            
                             const rateLimitEndpoint = "https://ratelimit.4hm7q4q75z.workers.dev/";
                             const rateLimitResponse = await fetch(rateLimitEndpoint, {
                                 method: "POST",
@@ -903,8 +907,12 @@ async function initializePaymentProcessing() {
                                 mode: "cors"
                             });
                             
+                            console.log("🚀 [RECOVERY DEBUG] Rate limit response status:", rateLimitResponse.status);
+                            console.log("🚀 [RECOVERY DEBUG] Rate limit response ok:", rateLimitResponse.ok);
+                            
                             if (rateLimitResponse.ok) {
                                 const rateLimitData = await rateLimitResponse.json();
+                                console.log("🚀 [RECOVERY DEBUG] Rate limit data received:", JSON.stringify(rateLimitData, null, 2));
                                 
                                 // Update rateLimitStatus in localStorage immediately
                                 const rateLimitStatus = {
@@ -917,16 +925,24 @@ async function initializePaymentProcessing() {
                                 };
                                 
                                 localStorage.setItem("rateLimitStatus", JSON.stringify(rateLimitStatus));
-                                console.log("Rate limit status updated after email recovery:", rateLimitStatus);
+                                console.log("🚀 [RECOVERY DEBUG] Rate limit status SET in localStorage:", JSON.stringify(rateLimitStatus, null, 2));
+                                console.log("🚀 [RECOVERY DEBUG] localStorage verification:", localStorage.getItem("rateLimitStatus"));
                                 
                                 // Update success message with new limits
                                 const limitsText = rateLimitData.isPaid ? "unlimited" : `${rateLimitData.remaining?.perDay || 0} remaining today`;
                                 payStatus.innerHTML = `Access recovered successfully! You now have ${limitsText} generations. Redirecting...`;
                             } else {
+                                console.error("🚀 [RECOVERY DEBUG] Rate limit response NOT OK:");
+                                console.error("🚀 [RECOVERY DEBUG] Status:", rateLimitResponse.status);
+                                console.error("🚀 [RECOVERY DEBUG] Status Text:", rateLimitResponse.statusText);
+                                const errorText = await rateLimitResponse.text();
+                                console.error("🚀 [RECOVERY DEBUG] Error response body:", errorText);
                                 console.warn("Failed to refresh rate limit status after email recovery");
                                 payStatus.innerHTML = "Access recovered successfully! Redirecting...";
                             }
                         } catch (rateLimitError) {
+                            console.error("🚀 [RECOVERY DEBUG] Rate limit ERROR:", rateLimitError);
+                            console.error("🚀 [RECOVERY DEBUG] Error stack:", rateLimitError.stack);
                             console.warn("Error refreshing rate limit status:", rateLimitError);
                             payStatus.innerHTML = "Access recovered successfully! Redirecting...";
                         }
