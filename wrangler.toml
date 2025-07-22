@@ -1,6 +1,6 @@
+
 # --- X Poster Worker (Standalone) ---
-# --- X Poster Worker (Standalone) ---
-[env.xposter]
+[env.x]
 name = "x-worker"
 main = "./ai/x.js"
 compatibility_date = "2025-07-21"
