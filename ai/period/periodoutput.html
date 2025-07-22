@@ -681,20 +681,26 @@
                 const phaseStart = new Date(phase.start);
                 return !earliest || phaseStart < earliest ? phaseStart : earliest;
               }, null);
-              
               if (earliestDate) {
                 startDate = earliestDate;
-                // Show current + 2 future cycles
-                endDate = new Date(startDate);
-                endDate.setDate(endDate.getDate() + (cycleLength * 3));
+                // If nextPeriodDate is present, use it as endDate
+                if (periodData.nextPeriodDate) {
+                  endDate = new Date(periodData.nextPeriodDate);
+                } else {
+                  endDate = new Date(startDate);
+                  endDate.setDate(endDate.getDate() + cycleLength); // fallback: 1 cycle
+                }
               }
             }
-            
             // Fallback if no AI data
             if (!startDate) {
               startDate = new Date(todayForRange);
-              endDate = new Date(todayForRange);
-              endDate.setDate(endDate.getDate() + (cycleLength * 3));
+              if (periodData.nextPeriodDate) {
+                endDate = new Date(periodData.nextPeriodDate);
+              } else {
+                endDate = new Date(todayForRange);
+                endDate.setDate(endDate.getDate() + cycleLength);
+              }
             }
             
             // Generate daily timeline entries
@@ -705,7 +711,6 @@
             while (currentDate <= endDate) {
               const dateStr = currentDate.toISOString().split('T')[0];
               const isToday = dateStr === today;
-              
               // Check if date is in fertile window
               let isFertile = false;
               if (periodData.phaseCalendar && periodData.phaseCalendar.ovulation) {
@@ -714,19 +719,16 @@
                 fertileStart.setDate(fertileStart.getDate() - 5);
                 const fertileEnd = new Date(ovulationStart);
                 fertileEnd.setDate(fertileEnd.getDate() + 1);
-                
                 const currentDateObj = new Date(dateStr);
                 isFertile = currentDateObj >= fertileStart && currentDateObj <= fertileEnd;
               }
-              
               // Get phase for this date
               const phase = getPhaseForDate(dateStr, periodData.phaseCalendar);
-              
               // Check for predicted future periods and determine cycle number from AI data
               let isPredictedPeriod = false;
               let isActualPeriodStart = false;
+              let isNextPeriod = false;
               let cycleNumber = 0;
-              
               // Use AI backend phase calendar to determine cycle information
               if (periodData.phaseCalendar) {
                 // Check if this date is a period start from AI data
@@ -743,39 +745,38 @@
                   }
                 }
               }
-              
+              // Special: mark nextPeriodDate if it matches this date
+              if (periodData.nextPeriodDate && dateStr === periodData.nextPeriodDate) {
+                isNextPeriod = true;
+              }
               // Create timeline row - only AI predictions, no user events
               let eventDisplay = '';
-              
               if (isActualPeriodStart) {
-                eventDisplay += `<div class="ai-prediction">Last Period Start <span class="cycle-toggle">▼</span></div>`;
+                eventDisplay += `<div class=\"ai-prediction\">Last Period Start <span class=\"cycle-toggle\">▼</span></div>`;
               }
-              
               if (isPredictedPeriod) {
-                eventDisplay += `<div class="ai-prediction">Estimated Period Start <span class="cycle-toggle">▼</span></div>`;
+                eventDisplay += `<div class=\"ai-prediction\">Estimated Period Start <span class=\"cycle-toggle\">▼</span></div>`;
               }
-              
+              if (isNextPeriod) {
+                eventDisplay += `<div class=\"ai-prediction\" style=\"background: #ff6b9d; color: #fff;\">Next Predicted Period <i class=\"fas fa-star\" style=\"margin-left:6px;\"></i></div>`;
+              }
               // Only show phase name without confidence to reduce repetition
               let phaseText = phase;
-              
               // Get day of week
               const dayOfWeek = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
-              
               // Add cycle classes and clickable class for period start rows (both actual and predicted)
               const cycleClasses = `cycle-${cycleNumber}`;
               const clickableClass = (isActualPeriodStart || isPredictedPeriod) ? 'clickable-cycle' : '';
               const rowClasses = `timeline-row ${isToday ? 'current-day' : ''} ${isFertile ? 'fertile-window' : ''} ${cycleClasses} ${clickableClass}`;
-              
               timelineRows.push(`
-                <div class="${rowClasses}" data-cycle="${cycleNumber}">
-                  <div class="date-label ${isToday ? 'current' : ''}">${dateStr} ${dayOfWeek}</div>
-                  <div class="phase-bar-container">
-                    <div class="phase-bar ${phase}-bar">${phaseText}</div>
+                <div class=\"${rowClasses}\" data-cycle=\"${cycleNumber}\">
+                  <div class=\"date-label ${isToday ? 'current' : ''}\">${dateStr} ${dayOfWeek}</div>
+                  <div class=\"phase-bar-container\">
+                    <div class=\"phase-bar ${phase}-bar\">${phaseText}</div>
                     ${eventDisplay}
                   </div>
                 </div>
               `);
-              
               // Move to next day
               currentDate.setDate(currentDate.getDate() + 1);
             }
