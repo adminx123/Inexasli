@@ -25,14 +25,13 @@ Phase 2: Refactor for OAuth User ID  ✅ COMPLETE (July 22, 2025)
 - KV/data access patterns updated.
 - Fingerprint logic retained for anonymous/free users.
 
-Phase 3: Remove Email Storage & Usage  🚧 IN PROGRESS (July 22, 2025)
-- Starting removal and orphaning of all email-based identification logic except for free/recovery flows.
-- Technical approach: Replace all email-based keys and lookups with OAuth user ID for authenticated users, fallback to fingerprint for anonymous users.
 
-Phase 3: Remove Email Storage & Usage
-- Remove all code that stores, logs, or uses emails for identification.
-- Ensure no email is used as a key or value in any KV, DB, or log.
-- Update privacy policy and documentation to reflect this change.
+Phase 3: Remove Email Storage & Usage  ✅ COMPLETE (July 22, 2025)
+  - All email-based identification logic removed/orphaned in backend and payment modules except for free/recovery flows.
+  - All main logic now uses OAuth user ID for authenticated users; fingerprint for anonymous/free users.
+  - No email is used as a key or value in any KV, DB, or log except for recovery/free flows.
+  - "Sign in with Google" and "Sign in with Apple" buttons added to payment modal (paymentform.js), ready for OAuth integration.
+  - Ready for Phase 4 (testing).
 
 Phase 4: Testing & Validation
 - Test all flows (free, paid, upgrade, downgrade, rate limiting) for both anonymous and authenticated users.

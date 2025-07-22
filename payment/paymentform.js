@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="payment-modal-header">
                 <div class="payment-modal-title">Premium Features</div>
             </div>
+            <div class="oauth-signin-row">
+                <button id="google-signin" class="oauth-signin-button google">Sign in with Google</button>
+                <button id="apple-signin" class="oauth-signin-button apple">Sign in with Apple</button>
+            </div>
             <div id="status" class="payment-status"></div>
             <form class="payment-form" id="payment-form">
                 <input type="text" class="payment-input" id="username" placeholder="Input your name" required>
@@ -80,6 +84,23 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         modal.appendChild(modalContent);
         document.body.appendChild(modal);
+        // Add OAuth button handlers
+        const googleBtn = document.getElementById('google-signin');
+        if (googleBtn) {
+            googleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // TODO: Integrate Google OAuth flow here
+                alert('Google sign-in not yet implemented.');
+            });
+        }
+        const appleBtn = document.getElementById('apple-signin');
+        if (appleBtn) {
+            appleBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // TODO: Integrate Apple OAuth flow here
+                alert('Apple sign-in not yet implemented.');
+            });
+        }
 
         console.log('Payment modal created');
 
@@ -158,6 +179,41 @@ function addPaymentModalStyles() {
     const style = document.createElement('style');
     style.id = 'payment-modal-styles';
     style.textContent = `
+        .oauth-signin-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .oauth-signin-button {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Geist', 'Inter', sans-serif;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 0;
+            transition: background 0.2s, color 0.2s;
+        }
+        .oauth-signin-button.google {
+            background: #fff;
+            color: #444;
+            border: 1px solid #d1d1d1;
+            box-shadow: 0 2px 8px rgba(66,133,244,0.08);
+        }
+        .oauth-signin-button.google:hover {
+            background: #f5f5f5;
+        }
+        .oauth-signin-button.apple {
+            background: #000;
+            color: #fff;
+            border: 1px solid #222;
+        }
+        .oauth-signin-button.apple:hover {
+            background: #222;
+        }
         .payment-modal {
             position: fixed;
             top: 0;
@@ -916,7 +972,7 @@ async function initializePaymentProcessing() {
                         if (data.oauthUserId) {
                             localStorage.setItem("oauthUserId", data.oauthUserId);
                         }
-                        localStorage.setItem("userEmail", encodeURIComponent(email));
+                        // localStorage.setItem("userEmail", encodeURIComponent(email)); // Orphaned: email-based storage removed (Phase 3)
                         
                         // STAGE 1 ENHANCEMENT: Use fingerprint from recovery response if provided
                         if (data.fingerprint) {

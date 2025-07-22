@@ -1,12 +1,12 @@
+compatibility_date = "2025-07-22"
 
 # --- X Poster Worker (Standalone) ---
 [env.x]
 name = "x-worker"
 main = "./ai/x.js"
-compatibility_date = "2025-07-21"
 
 [env.x.triggers]
-crons = ["5 18 * * *"]
+crons = ["11 18 * * *"]
 
 [[env.x.services]]
 binding = "secret_binding"
