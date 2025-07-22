@@ -5,6 +5,10 @@ name = "x-worker"
 main = "./ai/x.js"
 compatibility_date = "2025-07-21"
 
+[[env.x.services]]
+binding = "secret_binding"
+service = "secretworker"
+
 # CENTRALIZED MASTER WORKER ARCHITECTURE
 # This project uses a master worker that imports all individual modules.
 # Individual modules (calorie.js, event.js, etc.) are NOT standalone workers - 
@@ -27,7 +31,6 @@ compatibility_date = "2025-07-21"
 
 account_id = "b70c309587ed8ba2bfa06320792ea457"
 workers_dev = true
-compatibility_date = "2025-05-11"
 
 # Global build configuration that applies to all workers
 [build]
