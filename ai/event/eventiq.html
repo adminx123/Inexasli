@@ -117,9 +117,9 @@
   <h3 class="tooltip1" data-tooltip="Set the start and end time for your event.">
       Event Time<span class="tooltip1-content"></span>
   </h3>
-            <label for="event-start">Start:</label>
+            <label for="start">Start:</label>
             <input type="time" id="start" name="start">
-            <label for="event-end">End:</label>
+            <label for="end">End:</label>
             <input type="time" id="end" name="end">
 
 <h3 class="tooltip1" data-tooltip="Enter the expected number of guests and your budget.">
@@ -155,17 +155,17 @@ Need accommodations for 3 wheelchair users"></textarea>
 (function() {
     // Initialize FormPersistence for eventiq module
     const fields = [
-        { id: 'event-types', type: 'grid' },
-        { id: 'event-venue', type: 'dropdown' },
-        { id: 'event-location', type: 'dropdown' },
-        { id: 'event-setup', type: 'grid' },
-        { id: 'event-elements', type: 'grid' },
-        { id: 'event-guests', type: 'input' },
-        { id: 'event-budget', type: 'input' },
-        { id: 'event-start', type: 'input' },
-        { id: 'event-end', type: 'input' },
-        { id: 'event-specific-location', type: 'textarea' },
-        { id: 'event-specific-context', type: 'textarea' }
+        { id: 'types', type: 'grid' },
+        { id: 'venue', type: 'dropdown' },
+        { id: 'location', type: 'dropdown' },
+        { id: 'setup', type: 'grid' },
+        { id: 'elements', type: 'grid' },
+        { id: 'guests', type: 'input' },
+        { id: 'budget', type: 'input' },
+        { id: 'start', type: 'input' },
+        { id: 'end', type: 'input' },
+        { id: 'specific-location', type: 'textarea' },
+        { id: 'specific-context', type: 'textarea' }
     ];
 
     // FormPersistence will be initialized by datain.js as window.eventFormPersistence
