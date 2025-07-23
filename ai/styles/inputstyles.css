@@ -197,7 +197,7 @@ textarea {
   margin: 8px auto; /* Centered with vertical spacing */
   font-size: 16px; /* Readable font size */
   line-height: 1.5; /* Improved readability */
-  border: 1px solid rgba(107, 114, 128, 0.2);
+    border: none;
   border-radius: 6px; /* Modern rounded corners */
   background-color: #f9f9f9; /* Subtle off-white background */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle depth */
@@ -312,7 +312,7 @@ textarea:focus {
   color: #4b5563;
   padding: 1rem;
   border-radius: 16px;
-  border: 1px solid rgba(107, 114, 128, 0.2);
+  border: none;
   box-shadow: 0 4px 16px rgba(107, 114, 128, 0.08), 0 2px 8px rgba(107, 114, 128, 0.06), 0 1px 3px rgba(107, 114, 128, 0.04);
   text-align: center;
   cursor: pointer;
