@@ -520,42 +520,41 @@ function addPaymentModalStyles() {
 
         @media (max-width: 480px) {
             .payment-modal-content {
-                max-width: 280px;
-                padding: 15px;
+        @media (max-width: 600px) {
+            .payment-modal-content {
+                width: 95vw;
+                max-width: 400px;
+                min-width: unset;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                padding: 12px;
+                box-sizing: border-box;
             }
-            
-            .payment-input-row {
-                flex-direction: column;
-                gap: 8px;
+            .payment-modal {
+                padding: 8px;
             }
-            
+            .payment-input-row,
             .payment-button-row {
                 flex-direction: column;
                 gap: 8px;
             }
-
             .premium-notice {
                 font-size: 0.65em;
                 padding: 3px 6px;
             }
-
             .premium-notice1 {
                 font-size: 12px;
                 padding: 3px 6px;
             }
-
             .section1-header {
                 padding: 2px;
                 font-size: 11px;
             }
-            
             .section1-header h2 {
                 gap: 3px;
             }
         }
-        
-        /* Subscription Tier Styles */
-        .subscription-tiers {
             display: flex;
             flex-direction: column;
             gap: 12px;
