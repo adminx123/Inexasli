@@ -43,7 +43,9 @@
                 <div class="grid-item" data-value="Community Gathering">Community Gathering</div>
             </div>
 
-                    <label class="category-label">Event Elements</label>
+            <h3 class="tooltip1" data-tooltip="Select the elements that will be part of your event (e.g., food, drinks, entertainment, etc.) for tailored planning.">
+                Event Elements<span class="tooltip1-content"></span>
+            </h3>
             <div class="grid-container" id="event-elements">
                 <div class="grid-item" data-value="Food">Food</div>
                 <div class="grid-item" data-value="Drinks">Drinks</div>
@@ -80,7 +82,9 @@
                 <option value="outdoors">Outdoors</option>
             </select>
 
-             <label class="category-label">Event Location</label>
+            <h3 class="tooltip1" data-tooltip="Specify the location or address for your event.">
+                Event Location<span class="tooltip1-content"></span>
+            </h3>
             <textarea id="event-specific-location" rows="1" placeholder="123 Main St, New York"></textarea>
         </div>
 
@@ -110,17 +114,23 @@
     
         <div class="row1">
 
-  <label class="category-label">Event Time</label>
+  <h3 class="tooltip1" data-tooltip="Set the start and end time for your event.">
+      Event Time<span class="tooltip1-content"></span>
+  </h3>
             <label for="event-start">Start:</label>
             <input type="time" id="event-start" name="event-start">
             <label for="event-end">End:</label>
             <input type="time" id="event-end" name="event-end">
 
-<label class="category-label">Attendance & Budget</label>
+<h3 class="tooltip1" data-tooltip="Enter the expected number of guests and your budget.">
+    Attendance & Budget<span class="tooltip1-content"></span>
+</h3>
             <input type="number" id="event-guests" placeholder="50" min="1">
             <input type="number" id="event-budget" placeholder="5000">
 
-            <label class="category-label">Additional Context</label>
+            <h3 class="tooltip1" data-tooltip="Add any extra details or context that will help us plan your event.">
+                Additional Context<span class="tooltip1-content"></span>
+            </h3>
             <textarea id="event-specific-context" rows="3" placeholder="Majority of attendees have an Italian background
 Most individuals between 5-10 yrs old
 Need accommodations for 3 wheelchair users"></textarea>
