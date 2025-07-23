@@ -344,7 +344,7 @@ textarea:focus {
 }
 
 .grid-item.selected {
-  background-color: rgba(107, 114, 128, 0.9);
+  background-color: #f0f0f0;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: #fff;
