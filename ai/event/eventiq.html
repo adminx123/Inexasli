@@ -30,7 +30,7 @@
             <h3 class="tooltip1" data-tooltip="Select the type of event you're planning to receive tailored suggestions and planning advice.">
                 Event Type<span class="tooltip1-content"></span>
             </h3>
-            <div class="grid-container" id="event-types">
+            <div class="grid-container" id="types">
                 <div class="grid-item" data-value="Birthday">Birthday</div>
                 <div class="grid-item" data-value="Wedding">Wedding</div>
                 <div class="grid-item" data-value="House Party">House Party</div>
@@ -46,7 +46,7 @@
             <h3 class="tooltip1" data-tooltip="Select the elements that will be part of your event (e.g., food, drinks, entertainment, etc.) for tailored planning.">
                 Event Elements<span class="tooltip1-content"></span>
             </h3>
-            <div class="grid-container" id="event-elements">
+            <div class="grid-container" id="elements">
                 <div class="grid-item" data-value="Food">Food</div>
                 <div class="grid-item" data-value="Drinks">Drinks</div>
                 <div class="grid-item" data-value="Alcoholic Drinks">Alcoholic Drinks</div>
@@ -66,7 +66,7 @@
    <h3 class="tooltip1" data-tooltip="Indicate whether you already have a venue secured or need help finding one.">
                 Venue Status<span class="tooltip1-content"></span>
             </h3>
-            <select id="event-venue">
+            <select id="venue">
                 <option value="" disabled selected>Select Venue Status</option>
                 <option value="Venue Secured">Venue Secured</option>
                 <option value="Venue Needed">Venue Needed</option>
@@ -76,7 +76,7 @@
             <h3 class="tooltip1" data-tooltip="Choose whether your event will be held indoors or outdoors to get appropriate planning recommendations.">
                 Location Type<span class="tooltip1-content"></span>
             </h3>
-            <select id="event-location">
+            <select id="location">
                 <option value="" disabled selected>Select Location Type</option>
                 <option value="indoors">Indoors</option>
                 <option value="outdoors">Outdoors</option>
@@ -85,7 +85,7 @@
             <h3 class="tooltip1" data-tooltip="Specify the location or address for your event.">
                 Event Location<span class="tooltip1-content"></span>
             </h3>
-            <textarea id="event-specific-location" rows="1" placeholder="123 Main St, New York"></textarea>
+            <textarea id="specific-location" rows="1" placeholder="123 Main St, New York"></textarea>
         </div>
 
 
@@ -93,7 +93,7 @@
             <h3 class="tooltip1" data-tooltip="Select all the equipment, services, and setup requirements needed for your event.">
                 Requirements<span class="tooltip1-content"></span>
             </h3>
-            <div class="grid-container" id="event-setup">
+            <div class="grid-container" id="setup">
                 <div class="grid-item" data-value="Seating">Seating</div>
                 <div class="grid-item" data-value="Lighting">Lighting</div>
                 <div class="grid-item" data-value="Decor">Decor</div>
@@ -118,22 +118,22 @@
       Event Time<span class="tooltip1-content"></span>
   </h3>
             <label for="event-start">Start:</label>
-            <input type="time" id="event-start" name="event-start">
+            <input type="time" id="start" name="start">
             <label for="event-end">End:</label>
-            <input type="time" id="event-end" name="event-end">
+            <input type="time" id="end" name="end">
 
 <h3 class="tooltip1" data-tooltip="Enter the expected number of guests and your budget.">
     Attendance & Budget<span class="tooltip1-content"></span>
 </h3>
-            <input type="number" id="event-guests" placeholder="50" min="1">
-            <input type="number" id="event-budget" placeholder="5000">
+            <input type="number" id="guests" placeholder="50" min="1">
+            <input type="number" id="budget" placeholder="5000">
 
             <h3 class="tooltip1" data-tooltip="Add any extra details or context that will help us plan your event.">
                 Additional Context<span class="tooltip1-content"></span>
             </h3>
-            <textarea id="event-specific-context" rows="3" placeholder="Majority of attendees have an Italian background
 Most individuals between 5-10 yrs old
 Need accommodations for 3 wheelchair users"></textarea>
+            <textarea id="specific-context" rows="3" placeholder="Majority of attendees have an Italian background. Most individuals between 5-10 yrs old. Need accommodations for 3 wheelchair users."></textarea>
        
             <button class="generate-btn" id="generate-event-btn">Generate EventIQ™ Plan</button>
         </div>
