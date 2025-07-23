@@ -17,34 +17,21 @@ export function validateText(text, field = 'text', maxLength = 10000) {
   }
   
   // Security check: Block obvious XSS attempts but allow natural language
-  const dangerousPatterns = [
-    /<script[^>]*>/gi,
-    /javascript:/gi,
-    /vbscript:/gi,
-    /on\w+\s*=/gi,
-    /<iframe[^>]*>/gi,
-    /<object[^>]*>/gi,
-    /<embed[^>]*>/gi
-  ];
-  
-  for (const pattern of dangerousPatterns) {
-    if (pattern.test(text)) {
-      throw new ValidationError(`${field} contains potentially harmful content`, field);
-    }
-  }
+  // If any HTML tag or angle bracket is present, reject input
+  if (/<[^>]*>|[<>]/.test(text)) return '';
+  // If any event handler or javascript/data URI is present, reject input
+  if (/on\w+\s*=|javascript:|data:/i.test(text)) return '';
+  // If script/style/iframe/object/embed/svg/math/link/meta/img/audio/video/source/base/form/input/button/textarea/select/option/frame/frameset/applet/body/html/head/title tags are present, reject input
+  if (/(script|style|iframe|object|embed|svg|math|link|meta|img|audio|video|source|base|form|input|button|textarea|select|option|frame|frameset|applet|body|html|head|title)/i.test(text)) return '';
   
   if (text.length > maxLength) {
     throw new ValidationError(`${field} is too long (max ${maxLength} characters)`, field);
   }
   
   // Light HTML removal - keep the content natural but remove tags
-  const cleaned = text
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  
-  return cleaned;
+  // Remove excess whitespace
+  let sanitized = text.trim();
+  return sanitized;
 }
 
 // Numeric validation (client-side)

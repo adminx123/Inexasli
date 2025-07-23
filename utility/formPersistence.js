@@ -31,6 +31,7 @@
 import { setJSON } from './setJSON.js';
 import { getJSON } from './getJSON.js';
 import { getLocal } from './getlocal.js';
+import { validateText, validateNumber } from './inputValidation.js';
 
 /**
  * Main FormPersistence class
@@ -804,20 +805,32 @@ class FormPersistence {
             console.warn(`[FormPersistence] No main wrapper found for module: ${moduleName}`);
             return formData;
         }
-        
+
         console.log(`[FormPersistence] Collecting data from container: ${wrapper.id || wrapper.className}`);
-        
+
         // Collect ALL form elements inside wrapper - no field ID restrictions
         wrapper.querySelectorAll('input, textarea, select').forEach(element => {
             // Skip buttons and hidden inputs
             if (element.type === 'button' || element.type === 'submit' || element.type === 'hidden') return;
             if (!element.id) return;
             if (element.value !== null && element.value !== undefined && element.value !== '') {
-                formData[element.id] = element.value;
-                console.log(`[FormPersistence] Collected field: ${element.id} = ${element.value}`);
+                let sanitizedValue = element.value;
+                try {
+                    if (element.tagName === 'TEXTAREA' || element.type === 'text') {
+                        sanitizedValue = validateText(element.value, element.id);
+                    } else if (element.type === 'number') {
+                        sanitizedValue = validateNumber(element.value, element.id);
+                    } // For selects and other types, keep as is
+                } catch (e) {
+                    // If validation fails, store empty string and log error
+                    sanitizedValue = '';
+                    console.warn(`[FormPersistence] Validation failed for ${element.id}:`, e.message);
+                }
+                formData[element.id] = sanitizedValue;
+                console.log(`[FormPersistence] Collected field: ${element.id} = ${sanitizedValue}`);
             }
         });
-        
+
         // Collect from ALL grid containers inside wrapper
         wrapper.querySelectorAll('[class*="grid-items"], .grid-container').forEach(container => {
             if (!container.id) return;
@@ -827,13 +840,13 @@ class FormPersistence {
                 console.log(`[FormPersistence] Collected grid: ${container.id} = ${formData[container.id]}`);
             }
         });
-        
+
         // Collect images from ImageUploadUtility if available
         const images = this.collectImages();
         if (images && Array.isArray(images) && images.length > 0) {
             formData.images = images;
         }
-        
+
         console.log(`[FormPersistence] Total collected data:`, formData);
         return formData;
     }
