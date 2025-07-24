@@ -28,6 +28,7 @@
 
 
 
+    <input id="age" type="text" placeholder="Age">
     <select id="birth-control-type">
       <option value="" disabled selected>Birth control type</option>
       <option value="pill">Birth Control Pill</option>
@@ -71,8 +72,6 @@
     
     <label for="end-date">Last period end date:</label>
     <input id="end-date" type="date" name="last-period-end-date">
-
-    <input id="age" type="text" placeholder="Age">
   </div>
 
   <div class="row1" data-step-label="Medical Information">
@@ -215,6 +214,15 @@
     
     if (select) {
       select.addEventListener('change', handleBirthControlChange);
+      // Add resize on dropdown change (like incomeiq.html)
+      if (window.dataInContainerManager && window.guidedForms) {
+        select.addEventListener('change', function() {
+          var step = window.guidedForms.steps[window.guidedForms.currentStep];
+          if (step && step.element) {
+            window.dataInContainerManager.adjustContainerSize(step.element);
+          }
+        });
+      }
       // Trigger on page load to restore state
       setTimeout(handleBirthControlChange, 100);
     }
