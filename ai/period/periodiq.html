@@ -177,7 +177,7 @@
       'injectable': 'Injectable type (e.g. Depo-Provera)',
       'patch': 'Patch brand (e.g. Ortho Evra)',
       'ring': 'Ring type (e.g. NuvaRing)',
-      'condoms': 'Brand/type (e.g. Trojan, Durex, latex-free)',
+      // No brand/type for condoms
       'diaphragm': 'Brand/type (e.g. Milex, Ortho)',
       'spermicide': 'Brand/type (e.g. VCF, Conceptrol)'
     };
@@ -203,8 +203,13 @@
       
       // Handle detail input
       if (value && value !== 'none' && placeholderMap[value]) {
-        detailInput.style.display = 'block';
-        detailInput.placeholder = placeholderMap[value];
+        // Do NOT show brand/type for condoms
+        if (value === 'condoms') {
+          detailInput.style.display = 'none';
+        } else {
+          detailInput.style.display = 'block';
+          detailInput.placeholder = placeholderMap[value];
+        }
       } else {
         detailInput.style.display = 'none';
       }
