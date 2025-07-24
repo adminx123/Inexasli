@@ -14,13 +14,10 @@ function getCookie(name) {
       const [cookieName, cookieValue] = cookie.split('=');
       if (cookieName === name) {
         const decodedValue = decodeURIComponent(cookieValue);
-        console.log(`getCookie called for ${name}, stored value: ${cookieValue}`);
-        console.log(`Decoded value for ${name}: ${decodedValue}`);
         const timestamp = isNaN(parseInt(decodedValue)) ? null : parseInt(decodedValue);
         return { value: decodedValue, timestamp: timestamp }; // e.g., { value: "1744328673033", timestamp: 1744328673033 }
       }
     }
-    console.log(`No cookie found for ${name}`);
     return null;
   }
   

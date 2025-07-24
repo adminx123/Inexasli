@@ -16,7 +16,6 @@ function hideShowClass(className, task) {
 // Define the visibility logic as a reusable function
 function updateHideShow() {
     const region = getLocal('RegionDropdown');
-    console.log('Region in hideShow.js:', region); // Debug
 
     // Inject CSS to enforce hiding (optional, but ensures precedence)
     let styleSheet = document.getElementById('hide-show-styles');
@@ -45,7 +44,6 @@ const regionDropdown = document.getElementById('RegionDropdown');
 
 regionDropdown.addEventListener('change', () => {
     const region = regionDropdown.value;
-    console.log(`Region changed to: ${region}`); // Debug log
 
     // Update localStorage with the new region value
     setLocal('RegionDropdown', region);

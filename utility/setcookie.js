@@ -13,7 +13,6 @@ function setCookie(name, value, days) {
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
   const cookieValue = String(value);
   document.cookie = `${name}=${cookieValue}; expires=${expires.toUTCString()}; path=/`;
-  console.log(`setCookie: ${name}=${cookieValue}, expires in ${days} days`);
 }
 
 export { setCookie };
