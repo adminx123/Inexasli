@@ -33,42 +33,35 @@
             <!-- Input Method Toggle -->
             <div class="input-method-toggle">
                 <div class="toggle-buttons">
-                    <button type="button" class="toggle-btn active" data-method="scan">
+                    <button type="button" class="toggle-btn" data-method="scan" disabled style="opacity:0.5;cursor:not-allowed;">
                         <i class="bx bx-scan"></i>
-                        <span>Scan Items</span>
+                        <span>Scan Items (Coming Soon)</span>
                     </button>
-                    <button type="button" class="toggle-btn" data-method="manual">
+                    <button type="button" class="toggle-btn active" data-method="manual" disabled style="cursor:not-allowed;">
                         <i class="bx bx-edit"></i>
                         <span>Enter Manually</span>
                     </button>
                 </div>
             </div>
-            
-            <!-- Scan Mode -->
-            <div class="input-section active" id="scan-section">
+            <!-- Scan Mode (hidden/disabled) -->
+            <!-- <div class="input-section" id="scan-section" style="display:none;">
                 <div class="scan-description">
                     <p>Scan up to 3 barcodes or QR codes for instant product analysis</p>
                 </div>
                 <div id="mixed-scanner-container"></div>
-            </div>
-            
-            <!-- Manual Entry Mode -->
-            <div class="input-section" id="manual-section">
+            </div> -->
+            <!-- Manual Entry Mode (active) -->
+            <div class="input-section active" id="manual-section">
                 <div class="manual-description">
-                    <p>Enter product names manually for analysis</p>
+                    <p>Enter 1 product to analyze, or 2–3 to compare.</p>
                 </div>
-                <textarea id="product-name" rows="3" placeholder="Apple iPhone 15 Pro Max 256GB
-Tide Liquid Laundry Detergent, Original Scent
-Samsung Galaxy S24 Ultra 512GB"></textarea>
+                <textarea id="product-name" rows="3" placeholder="Apple iPhone 15 Pro Max 256GB - $1399.99 CAD
+Samsung Galaxy S24 Ultra 512GB - $1799.99 CAD
+Google Pixel 8 Pro 256GB - $1199.99 CAD"></textarea>
             </div>
         
 
       
-            <h3 class="tooltip1" data-tooltip="Enter the price you see for this product to compare with average market prices.">
-                Price You See<span class="tooltip1-content"></span>
-            </h3>
-            <input id="user-price" type="text" placeholder="$29.99">
-
             <button class="generate-btn" id="generate-shop-btn">Analyze Items Now!</button>
         </div>
 
@@ -418,7 +411,9 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
 }
 
 #product-name {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
   min-height: 80px;
   padding: 12px;
   border: 2px solid #e9ecef;
@@ -428,6 +423,17 @@ Samsung Galaxy S24 Ultra 512GB"></textarea>
   resize: vertical;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background: white;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Ensure all parent containers are full width */
+.device-container .row1,
+.device-container .input-section,
+.device-container .manual-description {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 #product-name:focus {
