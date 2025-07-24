@@ -12,7 +12,7 @@
 
 
 <div class="device-container" id="calorieiq-device-container" >
-  <div class="row1 product-description-container">
+  <div class="row1 product-description-container" data-step-label="Introduction">
     <h2 class="product-description-heading">Unlock Personalized Calorie Insights!</h2>
     <p class="product-description-text">
         Ever wondered how to get truly tailored advice on your calorie needs? Instead of guessing or struggling with generic information, CalorieIQ™ guides you. By answering a few simple questions, you'll help us create a specialized query for our advanced AI. This means you get precise, actionable insights, presented in an easy-to-understand way, helping you make smarter decisions about your diet and health.
@@ -204,8 +204,7 @@
         if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
           console.log('[CalorieIQ] Jumping to Food Log stage (step 5)');
           window.guidedForms.showStep(5);
-          const intro = document.querySelector('.product-description-container');
-          if (intro) intro.style.display = 'none';
+          // Do not forcibly hide the intro; guidedForms will handle step visibility
         } else {
           console.log('[CalorieIQ] Guided forms not ready, will not jump to stage.');
         }
