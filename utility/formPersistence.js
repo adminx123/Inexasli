@@ -68,7 +68,7 @@ class FormPersistence {
         }
         if (options.customFormDataCollector) this.customFormDataCollector = options.customFormDataCollector;
         if (options.customFormRepopulator) this.customFormRepopulator = options.customFormRepopulator;
-        console.log('[FormPersistence] Instance created for', this.moduleName);
+
     }
 
     /**
@@ -102,7 +102,7 @@ class FormPersistence {
             this.multiSelectionContainers = new Set();
 
             if (!this.moduleName) {
-                console.error('[FormPersistence] Could not detect module name');
+            // [FormPersistence] Could not detect module name
                 return false;
             }
 
@@ -131,12 +131,11 @@ class FormPersistence {
             this.setupInputHandlers();
 
             this.initialized = true;
-            console.log(`[FormPersistence] Initialized for module: ${this.moduleName}`);
-            console.log(`[FormPersistence][DEBUG] init: moduleName=${this.moduleName}, storageKeys=`, this.storageKeys, 'options:', options);
+
             
             return true;
         } catch (error) {
-            console.error('[FormPersistence] Initialization error:', error);
+            // [FormPersistence] Initialization error
             return false;
         }
     }
@@ -152,7 +151,7 @@ class FormPersistence {
         const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
         
         if (!wrapper) {
-            console.warn(`[FormPersistence] No container found for grid event binding`);
+            // [FormPersistence] No container found for grid event binding
             return;
         }
         
@@ -167,27 +166,25 @@ class FormPersistence {
                 // Enhanced debouncing to prevent rapid-fire selections
                 const now = Date.now();
                 if (now - lastSelectionTime < SELECTION_DEBOUNCE) {
-                    console.log('[FormPersistence] Grid selection debounced');
+                    // [FormPersistence] Grid selection debounced
                     return;
                 }
                 lastSelectionTime = now;
                 
                 // Check if this touch was monitored by swipe functionality
                 if (e._swipeMonitoring) {
-                    console.log('[FormPersistence] Touch was monitored by swipe, adding small delay');
-                    // Small delay to ensure swipe processing is complete
+                    // [FormPersistence] Touch was monitored by swipe, adding small delay
                     setTimeout(() => {
                         this.processGridSelection(e, item);
                     }, 50);
                 } else {
-                    // Process immediately if no swipe monitoring
                     this.processGridSelection(e, item);
                 }
             };
             item._fpGridClickHandler = handler;
             item.addEventListener('click', handler);
         });
-        console.log(`[FormPersistence] Grid item event binding complete for ${this.moduleName}`);
+
     }
     
     /**
@@ -205,7 +202,7 @@ class FormPersistence {
         
         // Check if click/touch coordinates are within the item bounds
         if (clickX < rect.left || clickX > rect.right || clickY < rect.top || clickY > rect.bottom) {
-            console.log('[FormPersistence] Click coordinates outside target item, ignoring');
+            // [FormPersistence] Click coordinates outside target item, ignoring
             return;
         }
         
@@ -253,18 +250,18 @@ class FormPersistence {
         });
 
         // Listen for image upload changes to auto-save form data
+
         document.addEventListener('imageUploadChanged', (event) => {
-            console.log(`[FormPersistence] Image upload changed, saving form data for ${this.moduleName}`);
             this.saveFormData();
         });
 
         // Listen for entry deletion to auto-save form data
+
         document.addEventListener('entry:deleted', (event) => {
-            console.log(`[FormPersistence] Entry deleted, auto-saving form data for ${this.moduleName}`);
             this.saveFormData();
         });
 
-        console.log(`[FormPersistence] Event listeners set up for ${this.moduleName}`);
+
     }
 
     /**
@@ -272,7 +269,7 @@ class FormPersistence {
      * @param {Event} event - The grid item toggle event
      */
     handleGridItemToggled(event) {
-        console.log(`[FormPersistence] Grid item toggled event received for ${this.moduleName}`);
+
         const item = event.detail.item;
         const container = item.closest('.grid-container, [class*="grid-items"]');
         
@@ -323,7 +320,7 @@ class FormPersistence {
     saveFormData() {
         const gridKey = this.getCurrentGridItemKey();
         if (!gridKey) {
-            console.warn('[FormPersistence] No module key found, not saving form data.');
+            // [FormPersistence] No module key found, not saving form data.
             return;
         }
         
@@ -333,7 +330,7 @@ class FormPersistence {
         const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
         
         if (!wrapper) {
-            console.warn('[FormPersistence] No device container found for module', this.moduleName, '- skipping save.');
+            // [FormPersistence] No device container found for module
             return;
         }
         
@@ -345,13 +342,13 @@ class FormPersistence {
             return value !== null && value !== undefined && value !== '';
         });
         if (!hasRelevantData) {
-            console.warn('[FormPersistence] No relevant data found in DOM for module', this.moduleName, '- skipping save to avoid overwriting.');
+            // [FormPersistence] No relevant data found in DOM for module
             return;
         }
         
-        console.log(`[FormPersistence] Saving form data for ${this.moduleName}:`, formData);
+        // [FormPersistence] Saving form data
         setJSON(gridKey, formData);
-        console.log(`[FormPersistence] Form data saved to localStorage key: ${gridKey}`);
+        // [FormPersistence] Form data saved
     }
 
     /**
@@ -360,7 +357,7 @@ class FormPersistence {
      */
     saveInput(input) {
         if (!input || !input.id) return;
-        console.log(`[FormPersistence] Input changed, saving all form data for ${this.moduleName}`);
+        // [FormPersistence] Input changed, saving all form data
         this.saveFormData();
     }
 
@@ -369,7 +366,7 @@ class FormPersistence {
      * @param {Element} item - The grid item that was toggled
      */
     saveGridItem(item) {
-        console.log(`[FormPersistence] Grid item changed, saving all form data for ${this.moduleName}`);
+        // [FormPersistence] Grid item changed, saving all form data
         this.saveFormData();
     }
 
@@ -377,7 +374,7 @@ class FormPersistence {
      * Save images (now handled directly in saveFormData)
      */
     saveImages() {
-        console.log(`[FormPersistence] saveImages() called but now using unified storage in saveFormData() for ${this.moduleName}`);
+        // [FormPersistence] saveImages() called but now using unified storage
         // Images are now saved as part of the main form data, no separate storage needed
         this.saveFormData();
     }
@@ -389,7 +386,7 @@ class FormPersistence {
     getSavedImages() {
         // Only return images for modules that support them
         if (!this.supportsImages()) {
-            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, returning empty array`);
+            // [FormPersistence] Module does not support images, returning empty array
             return [];
         }
         
@@ -433,13 +430,13 @@ class FormPersistence {
      */
     repopulateForm() {
         const gridKey = this.getCurrentGridItemKey();
-        console.log(`[FormPersistence][DEBUG] repopulateForm: gridKey=${gridKey}`);
+        // [FormPersistence][DEBUG] repopulateForm: gridKey
         if (!gridKey) {
-            console.warn('[FormPersistence] No module key found, cannot repopulate form.');
+            // [FormPersistence] No module key found, cannot repopulate form.
             return;
         }
         const data = getJSON(gridKey, null);
-        console.log('[FormPersistence][DEBUG] repopulateForm: loaded data =', data);
+        // [FormPersistence][DEBUG] repopulateForm: loaded data
         if (!data) return;
         
         // Use imageUpload.js auto-restoration instead of local restoration
@@ -469,7 +466,7 @@ class FormPersistence {
     recreateDynamicInputs(data) {
         if (!data || typeof data !== 'object') return;
         
-        console.log('[FormPersistence] Auto-detecting dynamic inputs from saved data:', data);
+        // [FormPersistence] Auto-detecting dynamic inputs from saved data
         
         // Special handling for period module entries
         if (this.moduleName === 'period') {
@@ -504,7 +501,7 @@ class FormPersistence {
         
         if (entryNumbers.size === 0) return;
         
-        console.log('[FormPersistence] Found period entries to recreate:', Array.from(entryNumbers));
+        // [FormPersistence] Found period entries to recreate
         
         // Recreate each entry
         entryNumbers.forEach(entryNum => {
@@ -514,12 +511,12 @@ class FormPersistence {
             const whatValue = data[whatKey] || '';
             
             if (window.addPeriodEntry && typeof window.addPeriodEntry === 'function') {
-                console.log(`[FormPersistence] Recreating period entry ${entryNum} with values:`, { whenValue, whatValue });
+                // [FormPersistence] Recreating period entry
                 setTimeout(() => {
                     window.addPeriodEntry(whenValue, whatValue);
                 }, 50 * entryNum); // Stagger creation to avoid conflicts
             } else {
-                console.warn('[FormPersistence] addPeriodEntry function not available');
+                // [FormPersistence] addPeriodEntry function not available
             }
         });
     }
@@ -583,14 +580,14 @@ class FormPersistence {
     recreateNumberedInputs(pattern) {
         const { basePattern, detectedNumbers } = pattern;
         
-        console.log('[FormPersistence] Recreating numbered inputs for pattern:', basePattern, 'numbers:', detectedNumbers);
+        // [FormPersistence] Recreating numbered inputs for pattern
         
         // Look for module-specific recreation function
         const functionName = this.getRecreationFunctionName(basePattern);
         let recreationFunction = this.findRecreationFunction(functionName);
         
         if (!recreationFunction) {
-            console.warn('[FormPersistence] No recreation function found for pattern:', basePattern, 'expected function:', functionName);
+            // [FormPersistence] No recreation function found for pattern
             return;
         }
         
@@ -599,7 +596,7 @@ class FormPersistence {
             const expectedElementId = this.getExpectedElementId(basePattern, number);
             
             if (!document.getElementById(expectedElementId)) {
-                console.log('[FormPersistence] Recreating input for:', basePattern, 'number:', number);
+                // [FormPersistence] Recreating input for
                 
                 try {
                     // Get saved values for recreation
@@ -616,7 +613,7 @@ class FormPersistence {
                         recreationFunction();
                     }
                 } catch (error) {
-                    console.error('[FormPersistence] Error calling recreation function:', error);
+                    // [FormPersistence] Error calling recreation function
                 }
             }
         });
@@ -632,7 +629,7 @@ class FormPersistence {
 
         const values = Array.isArray(value) ? value : [value];
         
-        console.log(`[FormPersistence][DEBUG] repopulateGridContainer: container.id=${container.id}, values=`, values);
+        // [FormPersistence][DEBUG] repopulateGridContainer: container.id, values
         values.forEach(val => {
             // Try to find by data-value first
             let element = container.querySelector(`.grid-item[data-value="${val}"]`);
@@ -647,9 +644,9 @@ class FormPersistence {
             
             if (element) {
                 element.classList.add('selected');
-                console.log(`[FormPersistence][DEBUG] repopulateGridContainer: selected grid-item for value=`, val, 'element=', element);
+                // [FormPersistence][DEBUG] repopulateGridContainer: selected grid-item for value
             } else {
-                console.warn(`[FormPersistence][DEBUG] repopulateGridContainer: No grid-item found for value=`, val, 'in container.id=', container.id);
+                // [FormPersistence][DEBUG] repopulateGridContainer: No grid-item found for value
             }
         });
     }
@@ -664,7 +661,7 @@ class FormPersistence {
         const wrapper = wrapperId ? document.getElementById(wrapperId) : document.querySelector('.device-container');
         
         if (!wrapper) {
-            console.warn(`[FormPersistence] No container found for input handlers setup`);
+            // [FormPersistence] No container found for input handlers setup
             return;
         }
         
@@ -688,7 +685,7 @@ class FormPersistence {
             element._fpHandlerAttached = true;
         });
 
-        console.log(`[FormPersistence] Input handlers set up for ${this.moduleName}`);
+        // [FormPersistence] Input handlers set up
     }
 
     /**
@@ -708,7 +705,7 @@ class FormPersistence {
      * This method can be called by modules after adding new form elements
      */
     refreshInputHandlers() {
-        console.log(`[FormPersistence] Refreshing input handlers for ${this.moduleName}`);
+        // [FormPersistence] Refreshing input handlers
         this.setupInputHandlers();
     }
 
@@ -742,7 +739,7 @@ class FormPersistence {
             select.selectedIndex = 0;
         });
 
-        console.log(`[FormPersistence] Local storage cleared for module: ${gridKey}`);
+        // [FormPersistence] Local storage cleared for module
         return true;
     }
 
@@ -772,7 +769,7 @@ class FormPersistence {
         setJSON(this.storageKeys.response, responseData);
         // Remove saving under calorieIqData, only save under calorieIqResponse for calorie module
         // (No extra key for new standard)
-        console.log(`[FormPersistence] Response data saved for ${this.moduleName}`);
+        // [FormPersistence] Response data saved
     }
 
     /**
@@ -806,7 +803,7 @@ class FormPersistence {
             return formData;
         }
 
-        console.log(`[FormPersistence] Collecting data from container: ${wrapper.id || wrapper.className}`);
+        // [FormPersistence] Collecting data from container
 
         // Collect ALL form elements inside wrapper - no field ID restrictions
         wrapper.querySelectorAll('input, textarea, select').forEach(element => {
@@ -827,7 +824,7 @@ class FormPersistence {
                     console.warn(`[FormPersistence] Validation failed for ${element.id}:`, e.message);
                 }
                 formData[element.id] = sanitizedValue;
-                console.log(`[FormPersistence] Collected field: ${element.id} = ${sanitizedValue}`);
+                // [FormPersistence] Collected field
             }
         });
 
@@ -837,7 +834,7 @@ class FormPersistence {
             const selected = Array.from(container.querySelectorAll('.grid-item.selected')).map(item => item.dataset.value || item.textContent.trim());
             if (selected.length > 0) {
                 formData[container.id] = selected.length === 1 ? selected[0] : selected;
-                console.log(`[FormPersistence] Collected grid: ${container.id} = ${formData[container.id]}`);
+                // [FormPersistence] Collected grid
             }
         });
 
@@ -847,7 +844,7 @@ class FormPersistence {
             formData.images = images;
         }
 
-        console.log(`[FormPersistence] Total collected data:`, formData);
+        // [FormPersistence] Total collected data
         return formData;
     }
 
@@ -857,7 +854,7 @@ class FormPersistence {
      */
     repopulateGenericForm(data) {
         if (!data) return;
-        console.log('[FormPersistence][DEBUG] repopulateGenericForm: data =', data);
+        // [FormPersistence][DEBUG] repopulateGenericForm: data
         
         // Images are now restored directly from the same data object
         
@@ -873,10 +870,10 @@ class FormPersistence {
             if (!element) {
                 element = document.getElementById(fieldName);
             }
-            console.log(`[FormPersistence][DEBUG] repopulateGenericForm: fieldName=${fieldName}, value=`, value, 'elementId=', elementId, 'element=', element);
+            // [FormPersistence][DEBUG] repopulateGenericForm: fieldName, value, elementId, element
             if (element && (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA' || element.tagName === 'SELECT')) {
                 element.value = value;
-                console.log(`[FormPersistence][DEBUG] Set value for element id=${element.id}`);
+                // [FormPersistence][DEBUG] Set value for element id
                 // If textarea, trigger autoExpandTextarea if available
                 if (element.tagName === 'TEXTAREA' && typeof window.autoExpandTextarea === 'function') {
                     window.autoExpandTextarea(element);
@@ -887,7 +884,7 @@ class FormPersistence {
             const containerElement = document.getElementById(elementId) || document.getElementById(fieldName);
             if (containerElement && (containerElement.classList.contains('grid-container') || 
                 Array.from(containerElement.classList).some(cls => cls.includes('grid-items')))) {
-                console.log(`[FormPersistence][DEBUG] repopulateGenericForm: repopulating grid container id=${containerElement.id} with value=`, value);
+                // [FormPersistence][DEBUG] repopulateGenericForm: repopulating grid container id with value
                 this.repopulateGridContainer(containerElement, value);
             }
         });
@@ -903,7 +900,7 @@ class FormPersistence {
     collectImages() {
         // Only collect images for modules that support them
         if (!this.supportsImages()) {
-            console.log(`[FormPersistence] Module ${this.moduleName} does not support images, returning empty array`);
+            // [FormPersistence] Module does not support images, returning empty array
             return [];
         }
         
@@ -911,7 +908,7 @@ class FormPersistence {
             // Try to get images from global helper function first
             if (typeof window.getImagesForBackend === 'function') {
                 const images = window.getImagesForBackend();
-                console.log(`[FormPersistence] Collected ${images.length} images via global function`);
+                // [FormPersistence] Collected images via global function
                 return images;
             }
             
@@ -920,15 +917,15 @@ class FormPersistence {
                 const instances = Object.values(window.ImageUploadUtility.instances);
                 if (instances.length > 0) {
                     const images = instances[0].getImagesForBackend();
-                    console.log(`[FormPersistence] Collected ${images.length} images from first instance`);
+                    // [FormPersistence] Collected images from first instance
                     return images;
                 }
             }
             
-            console.log('[FormPersistence] No ImageUploadUtility instances found, no images collected');
+            // [FormPersistence] No ImageUploadUtility instances found, no images collected
             return [];
         } catch (error) {
-            console.error('[FormPersistence] Error collecting images:', error);
+            // [FormPersistence] Error collecting images
             return [];
         }
     }
