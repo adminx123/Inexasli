@@ -70,7 +70,7 @@
         Select Tax Residency<span class="tooltip1-content"></span>
     </h3>
     
-    <select id="income-country" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
+    <select id="country" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
         <option value="">Select Country</option>
         <option value="CAN">Canada</option>
         <option value="USA">USA</option>
@@ -79,14 +79,14 @@
         <option value="OTHER">Other</option>
     </select>
 
-    <div id="income-subregionContainer" style="display: block;">
-        <select id="income-subregion" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+    <div id="subregionContainer" style="display: block;">
+        <select id="subregion" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             <option value="">Select Tax Subregion</option>
         </select>
     </div>
 
-    <div id="income-residencyStatus" style="display: block;">
-        <select id="income-residency" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+    <div id="residencyStatus" style="display: block;">
+        <select id="residency" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             <option value="">Select Residency Status</option>
             <option value="Full_Resident">Full Resident (Lived entire year, full taxes)</option>
             <option value="Part_Year_Resident">Part-Year Resident (Lived part-year, partial taxes)</option>
@@ -99,18 +99,18 @@
         Select Filing Status<span class="tooltip1-content"></span>
     </h3>
     
-    <select id="income-filingStatus" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
+    <select id="filingStatus" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
         <option value="">Select Filing Status</option>
     </select>
 
-    <div id="income-specifics" style=" text-align: center;">
+    <div id="specifics" style=" text-align: center;">
         <h3 class="tooltip1" data-tooltip="Relevant personal information.">
             Select Personal Details<span class="tooltip1-content"></span>
         </h3>
 
-        <input type="number" placeholder="Your Age" inputmode="numeric" id="income-ageSelf" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
+        <input type="number" placeholder="Your Age" inputmode="numeric" id="ageSelf" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;">
 
-        <select id="income-employmentStatus" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+        <select id="employmentStatus" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             <option value="">Select Your Employment Status</option>
             <option value="employed">Employed</option>
             <option value="self_employed">Self-Employed</option>
@@ -119,10 +119,10 @@
             <option value="student">Student</option>
         </select>
         
-        <div class="income-spouseFields">
-            <input type="number" placeholder="Spouse Age" inputmode="numeric" id="income-ageSpouse" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+        <div class="spouseFields">
+            <input type="number" placeholder="Spouse Age" inputmode="numeric" id="ageSpouse" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             
-            <select id="income-employmentStatusSpouse" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
+            <select id="employmentStatusSpouse" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
                 <option value="">Select Spouse Employment Status</option>
                 <option value="employed">Employed</option>
                 <option value="self_employed">Self-Employed</option>
@@ -132,11 +132,11 @@
             </select>
         </div>
 
-        <div class="income-dependantsContainer">
-            <label for="income-birthYearDisabledDependants" class="category-label tooltip" data-tooltip="Enter the birth years of disabled dependants, separated by commas.">
+        <div class="dependantsContainer">
+            <label for="birthYearDisabledDependants" class="category-label tooltip" data-tooltip="Enter the birth years of disabled dependants, separated by commas.">
                 Birth Years of Disabled Dependants<span class="tooltip-content"></span>
             </label>
-            <textarea id="income-birthYearDisabledDependants" placeholder="e.g., 2005, 2010, 2015" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;"></textarea>
+            <textarea id="birthYearDisabledDependants" placeholder="e.g., 2005, 2010, 2015" style="width: 345px; max-width: 100%; margin: 0 auto; display: block;"></textarea>
         </div>
     </div>
 </div>
@@ -1132,14 +1132,14 @@
         constructor(stateManager) {
             this.stateManager = stateManager;
             this.dropdowns = {
-                country: document.getElementById('income-country'),
-                subregion: document.getElementById('income-subregion'),
-                residency: document.getElementById('income-residency'),
-                filingStatus: document.getElementById('income-filingStatus')
+                country: document.getElementById('country'),
+                subregion: document.getElementById('subregion'),
+                residency: document.getElementById('residency'),
+                filingStatus: document.getElementById('filingStatus')
             };
             
             this.containers = {
-                subregion: document.getElementById('income-subregionContainer')
+                subregion: document.getElementById('subregionContainer')
             };
             
             this.setupEventListeners();
@@ -1466,15 +1466,15 @@
         // Setup DOM event listeners for form inputs
         setupDOMEventListeners() {
             const fieldMappings = {
-                'income-country': 'country',
-                'income-subregion': 'subregion',
-                'income-residency': 'residency',
-                'income-filingStatus': 'filingStatus',
-                'income-ageSelf': 'ageSelf',
-                'income-employmentStatus': 'employmentStatus',
-                'income-ageSpouse': 'ageSpouse',
-                'income-employmentStatusSpouse': 'employmentStatusSpouse',
-                'income-birthYearDisabledDependants': 'birthYearDisabledDependants'
+                'country': 'country',
+                'subregion': 'subregion',
+                'residency': 'residency',
+                'filingStatus': 'filingStatus',
+                'ageSelf': 'ageSelf',
+                'employmentStatus': 'employmentStatus',
+                'ageSpouse': 'ageSpouse',
+                'employmentStatusSpouse': 'employmentStatusSpouse',
+                'birthYearDisabledDependants': 'birthYearDisabledDependants'
             };
             
             Object.entries(fieldMappings).forEach(([elementId, stateField]) => {
@@ -1519,11 +1519,11 @@
         // Restore input field values
         restoreInputValues(state) {
             const inputMappings = {
-                'income-ageSelf': state.ageSelf,
-                'income-employmentStatus': state.employmentStatus,
-                'income-ageSpouse': state.ageSpouse,
-                'income-employmentStatusSpouse': state.employmentStatusSpouse,
-                'income-birthYearDisabledDependants': state.birthYearDisabledDependants
+                'ageSelf': state.ageSelf,
+                'employmentStatus': state.employmentStatus,
+                'ageSpouse': state.ageSpouse,
+                'employmentStatusSpouse': state.employmentStatusSpouse,
+                'birthYearDisabledDependants': state.birthYearDisabledDependants
             };
             
             Object.entries(inputMappings).forEach(([elementId, value]) => {
@@ -1808,7 +1808,7 @@
             introSectionController.dropdownManager.updateFilingStatusDropdown(country);
         } else {
             // Fallback for legacy compatibility
-            const filingStatusDropdown = document.getElementById('income-filingStatus');
+            const filingStatusDropdown = document.getElementById('filingStatus');
             if (!filingStatusDropdown) return;
 
             filingStatusDropdown.innerHTML = '<option value="">Select Filing Status</option>';
@@ -1829,7 +1829,7 @@
         } else {
             // Fallback for legacy compatibility
             const dependantsContainer = document.querySelector('.income-dependantsContainer');
-            const filingStatusDropdown = document.getElementById('income-filingStatus');
+            const filingStatusDropdown = document.getElementById('filingStatus');
             const countryDropdown = document.getElementById('income-country');
             
             if (!dependantsContainer || !filingStatusDropdown || !countryDropdown) {
