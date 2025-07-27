@@ -119,7 +119,7 @@
             <option value="student">Student</option>
         </select>
         
-        <div class="spouseFields" style="display: none;">
+        <div class="income-spouseFields" style="display: none;">
             <input type="number" placeholder="Spouse Age" inputmode="numeric" id="ageSpouse" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             <select id="employmentStatusSpouse" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
                 <option value="">Select Spouse Employment Status</option>
@@ -1422,15 +1422,28 @@
             const spouseFields = this.elements.spouseFields;
             const country = this.stateManager.getField('country');
             const filingStatus = this.stateManager.getField('filingStatus');
-            
-            if (!spouseFields) return;
-            
             const metadata = this.getFilingStatusMetadata(country, filingStatus);
             const shouldShow = metadata.showSpouseFields && Boolean(filingStatus);
-            
+
+            console.log('---[DEBUG: updateSpouseVisibility]---');
+            console.log('country:', country);
+            console.log('filingStatus:', filingStatus);
+            console.log('metadata:', metadata);
+            console.log('shouldShow:', shouldShow);
+            console.log('spouseFields element:', spouseFields);
+
+            if (!spouseFields) {
+                console.error('[VisibilityManager] spouseFields element NOT FOUND. Check selector .income-spouseFields');
+                return;
+            }
+
             spouseFields.style.display = shouldShow ? 'block' : 'none';
-            
-            console.log(`[VisibilityManager] Spouse fields visibility: ${shouldShow} (country: ${country}, filingStatus: ${filingStatus})`);
+
+            if (shouldShow) {
+                console.log('[VisibilityManager] spouseFields should be VISIBLE.');
+            } else {
+                console.log('[VisibilityManager] spouseFields should be HIDDEN.');
+            }
         }
         
         // Show/hide dependants container based on filing status
