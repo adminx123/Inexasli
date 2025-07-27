@@ -954,8 +954,10 @@ console.log('Shop API Output script running');
       // Add recommendations (not per product) at the top
       if (data.recommendations) {
         html += `
-          <div class="analysis-card recommendation" style="margin-bottom:32px;">
-            <h3><i class="fas fa-trophy"></i> Recommendations</h3>
+          <button class="collapsible-btn" type="button" aria-expanded="false" aria-controls="recommendations-content" id="recommendations-toggle" style="margin-bottom:18px;">
+            <i class="fas fa-trophy"></i> Recommendations
+          </button>
+          <div class="analysis-card recommendation" id="recommendations-content" style="margin-bottom:48px; display:none;">
             ${data.recommendations.overallWinner ? `<div class="verdict buy">Overall Winner: ${data.itemsCompared.find(i => i.id === data.recommendations.overallWinner)?.name || ''}</div>` : ''}
             ${data.recommendations.rankings?.length > 0 ? `
               <h4>🏆 Rankings</h4>
@@ -988,12 +990,18 @@ console.log('Shop API Output script running');
       // For each product in comparison, group all related info in a collapsible
       data.itemsCompared.forEach((item, idx) => {
         const itemId = item.id;
+        // Calculate combined score out of 30
+        let safety = data.comparisonMatrix?.safety?.find(x => x.itemId === itemId)?.rating || 0;
+        let value = data.comparisonMatrix?.value?.find(x => x.itemId === itemId)?.rating || 0;
+        let quality = data.comparisonMatrix?.quality?.find(x => x.itemId === itemId)?.rating || 0;
+        let combinedScore = safety + value + quality;
         html += `
-          <div class="product-collapsible-group">
-            <button class="collapsible-btn" type="button" aria-expanded="${idx === 0 ? 'true' : 'false'}" aria-controls="product-group-${itemId}" onclick="toggleCollapse('product-group-${itemId}', this)">
-              <span style="font-weight:bold;">${item.name}</span> <span style="font-size:13px;opacity:0.7;">(${item.category || ''})</span>
+          <div class="product-collapsible-group" style="margin-bottom:15px;">
+            <button class="collapsible-btn" type="button" aria-expanded="false" aria-controls="product-group-${itemId}" onclick="toggleCollapse('product-group-${itemId}', this)">
+              <span style="font-weight:bold;">${item.name}</span>
+              <span style="font-size:13px;opacity:0.7;margin-left:8px;">Score: ${combinedScore}/30</span>
             </button>
-            <div id="product-group-${itemId}" class="collapsible-content" style="display:${idx === 0 ? 'block' : 'none'};">
+            <div id="product-group-${itemId}" class="collapsible-content" style="display:none;">
               ${generateComparisonProductGroup(data, itemId)}
             </div>
           </div>
@@ -1028,6 +1036,20 @@ console.log('Shop API Output script running');
     `;
 
     container.innerHTML = html;
+    // Attach collapsible toggle for recommendations after rendering
+    setTimeout(function() {
+      var btn = document.getElementById('recommendations-toggle');
+      var content = document.getElementById('recommendations-content');
+      if (btn && content) {
+        btn.setAttribute('aria-expanded', 'false');
+        content.style.display = 'none';
+        btn.addEventListener('click', function() {
+          var expanded = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', (!expanded).toString());
+          content.style.display = expanded ? 'none' : 'block';
+        });
+      }
+    }, 0);
     console.log('Data displayed successfully');
   }
 
