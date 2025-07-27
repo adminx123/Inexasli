@@ -239,7 +239,6 @@
             <i class="fas fa-star" style="margin-right: 8px; color: #f39c12;"></i>
             Overall Rating
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
               <span style="font-size: 24px; font-weight: bold; color: #2c3e50; margin-right: 10px;">
                 ${fashionData.overallRating.score}/10
@@ -253,7 +252,6 @@
             <p style="margin: 0; color: #555; line-height: 1.5;">
               ${fashionData.overallRating.explanation || 'No explanation provided'}
             </p>
-          </div>
         `;
         container.appendChild(overallSection);
 
@@ -282,7 +280,6 @@
             <i class="fas fa-chart-bar" style="margin-right: 8px; color: #27ae60;"></i>
             Analysis Breakdown
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.analysisScores.map(score => `
               <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #f8f9fa;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -297,7 +294,6 @@
                 </p>
               </div>
             `).join('')}
-          </div>
         `;
         container.appendChild(scoresSection);
       }
@@ -311,7 +307,6 @@
             <i class="fas fa-tshirt" style="margin-right: 8px; color: #e74c3c;"></i>
             Outfit Analysis
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.outfitBreakdown.map((outfit, index) => `
               <div style="margin-bottom: 20px; ${index < fashionData.outfitBreakdown.length - 1 ? 'padding-bottom: 20px; border-bottom: 1px solid #f8f9fa;' : ''}">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -322,34 +317,27 @@
                 </div>
                 
                 ${outfit.garments && outfit.garments.length > 0 ? `
-                  <div style="margin-bottom: 12px;">
                     <strong style="color: #2c3e50; font-size: 14px;">Garments:</strong>
                     <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
                       ${outfit.garments.map(garment => `<li style="margin-bottom: 2px; font-size: 14px;">${garment}</li>`).join('')}
                     </ul>
-                  </div>
                 ` : ''}
                 
                 ${outfit.strengths && outfit.strengths.length > 0 ? `
-                  <div style="margin-bottom: 12px;">
                     <strong style="color: #27ae60; font-size: 14px;">✓ Strengths:</strong>
                     <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
                       ${outfit.strengths.map(strength => `<li style="margin-bottom: 2px; font-size: 14px;">${strength}</li>`).join('')}
                     </ul>
-                  </div>
                 ` : ''}
                 
                 ${outfit.improvements && outfit.improvements.length > 0 ? `
-                  <div style="margin-bottom: 12px;">
                     <strong style="color: #e67e22; font-size: 14px;">⚡ Improvements:</strong>
                     <ul style="margin: 5px 0; padding-left: 20px; color: #555;">
                       ${outfit.improvements.map(improvement => `<li style="margin-bottom: 2px; font-size: 14px;">${improvement}</li>`).join('')}
                     </ul>
-                  </div>
                 ` : ''}
               </div>
             `).join('')}
-          </div>
         `;
         container.appendChild(outfitSection);
       }
@@ -363,7 +351,6 @@
             <i class="fas fa-user" style="margin-right: 8px; color: #9b59b6;"></i>
             Body Type Analysis
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.bodyTypeAnalysis.estimatedBodyType ? `
               <div style="margin-bottom: 15px;">
                 <strong style="color: #2c3e50;">Estimated Body Type:</strong>
@@ -397,7 +384,6 @@
                 </ul>
               </div>
             ` : ''}
-          </div>
         `;
         container.appendChild(bodyTypeSection);
       }
@@ -411,7 +397,6 @@
             <i class="fas fa-palette" style="margin-right: 8px; color: #f39c12;"></i>
             Color Analysis
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.colorAnalysis.skinTone ? `
               <div style="margin-bottom: 15px;">
                 <strong style="color: #2c3e50;">Skin Tone:</strong>
@@ -443,7 +428,6 @@
                 </ul>
               </div>
             ` : ''}
-          </div>
         `;
         container.appendChild(colorSection);
       }
@@ -457,7 +441,6 @@
             <i class="fas fa-lightbulb" style="margin-right: 8px; color: #f1c40f;"></i>
             Specific Recommendations
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.specificRecommendations.map((rec, index) => `
               <div style="margin-bottom: 15px; ${index < fashionData.specificRecommendations.length - 1 ? 'padding-bottom: 15px; border-bottom: 1px solid #f8f9fa;' : ''}">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -476,7 +459,6 @@
                 </p>
               </div>
             `).join('')}
-          </div>
         `;
         container.appendChild(recommendationsSection);
       }
@@ -490,7 +472,6 @@
             <i class="fas fa-shopping-bag" style="margin-right: 8px; color: #2ecc71;"></i>
             Shopping List
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.shoppingList.map((item, index) => `
               <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; ${index < fashionData.shoppingList.length - 1 ? 'border-bottom: 1px solid #f8f9fa;' : ''}">
                 <div style="flex: 1;">
@@ -506,7 +487,6 @@
                 </div>
               </div>
             `).join('')}
-          </div>
         `;
         container.appendChild(shoppingSection);
       }
@@ -520,7 +500,6 @@
             <i class="fas fa-arrow-up" style="margin-right: 8px; color: #8e44ad;"></i>
             Style Evolution
           </h3>
-          <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e9ecef;">
             ${fashionData.styleEvolution.currentLevel ? `
               <div style="margin-bottom: 15px;">
                 <strong style="color: #2c3e50;">Current Level:</strong>
@@ -545,7 +524,6 @@
                 </ul>
               </div>
             ` : ''}
-          </div>
         `;
         container.appendChild(evolutionSection);
       }
