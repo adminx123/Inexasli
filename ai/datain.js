@@ -808,7 +808,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.className = 'data-container-in';
         dataContainer.innerHTML = `
             <div class="container-header">
-                <div class="utility-buttons-container">
+                <div class="utility-buttons-container" id="utility-buttons-top">
                     <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                     </button>
@@ -832,6 +832,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 </div>
             </div>
             <div class="data-content">No content selected. Please select a grid item.</div>
+            <div class="utility-buttons-container" id="utility-buttons-bottom" style="display:none;"></div>
         `;
 
         document.body.appendChild(dataContainer);
@@ -940,33 +941,40 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         isVisible = !isVisible;
         
+        const topContainer = dataContainer.querySelector('#utility-buttons-top');
+        const bottomContainer = dataContainer.querySelector('#utility-buttons-bottom');
+        const buttons = Array.from(topContainer.children);
         if (isVisible) {
             // Check for terms and consent before showing content
             if (window.termsConsentManager && !window.termsConsentManager.checkStatus()) {
                 console.log('[DataIn] Terms/consent not accepted, showing modal');
                 window.termsConsentManager.show();
             }
-            
+            // Move buttons to bottom
+            buttons.forEach(btn => bottomContainer.appendChild(btn));
+            bottomContainer.style.display = 'flex';
+            topContainer.style.display = 'none';
             // Show: move container up
             dataContainer.classList.add('visible');
             document.body.style.overflow = 'hidden';
             setLocal('dataContainerState', 'visible');
-            
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'visible' } }));
             document.dispatchEvent(new CustomEvent('left-sidebar-open', { detail: { state: 'visible' } }));
-            
             // Load stored content if available
             const storedUrl = getLocal('lastGridItemUrl');
             if (storedUrl) {
                 loadStoredContent(storedUrl);
             }
         } else {
+            // Move buttons back to top
+            Array.from(bottomContainer.children).forEach(btn => topContainer.appendChild(btn));
+            topContainer.style.display = 'flex';
+            bottomContainer.style.display = 'none';
             // Hide: move container down
             dataContainer.classList.remove('visible');
             document.body.style.overflow = '';
             setLocal('dataContainerState', 'hidden');
-            
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'hidden' } }));
         }
