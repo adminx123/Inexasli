@@ -233,7 +233,7 @@
       // Overall Rating Section
       if (fashionData.overallRating) {
         const overallSection = document.createElement('div');
-        overallSection.className = 'fashion-section';
+        overallSection.className = 'main-card';
         overallSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-star" style="margin-right: 8px; color: #f39c12;"></i>
@@ -276,7 +276,7 @@
       // Analysis Scores Section
       if (fashionData.analysisScores && Array.isArray(fashionData.analysisScores)) {
         const scoresSection = document.createElement('div');
-        scoresSection.className = 'fashion-section';
+        scoresSection.className = 'main-card';
         scoresSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-chart-bar" style="margin-right: 8px; color: #27ae60;"></i>
@@ -305,7 +305,7 @@
       // Outfit Breakdown Section
       if (fashionData.outfitBreakdown && Array.isArray(fashionData.outfitBreakdown)) {
         const outfitSection = document.createElement('div');
-        outfitSection.className = 'fashion-section';
+        outfitSection.className = 'main-card';
         outfitSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-tshirt" style="margin-right: 8px; color: #e74c3c;"></i>
@@ -357,7 +357,7 @@
       // Body Type Analysis Section
       if (fashionData.bodyTypeAnalysis) {
         const bodyTypeSection = document.createElement('div');
-        bodyTypeSection.className = 'fashion-section';
+        bodyTypeSection.className = 'main-card';
         bodyTypeSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-user" style="margin-right: 8px; color: #9b59b6;"></i>
@@ -405,7 +405,7 @@
       // Color Analysis Section
       if (fashionData.colorAnalysis) {
         const colorSection = document.createElement('div');
-        colorSection.className = 'fashion-section';
+        colorSection.className = 'main-card';
         colorSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-palette" style="margin-right: 8px; color: #f39c12;"></i>
@@ -451,7 +451,7 @@
       // Specific Recommendations Section
       if (fashionData.specificRecommendations && Array.isArray(fashionData.specificRecommendations)) {
         const recommendationsSection = document.createElement('div');
-        recommendationsSection.className = 'fashion-section';
+        recommendationsSection.className = 'main-card';
         recommendationsSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-lightbulb" style="margin-right: 8px; color: #f1c40f;"></i>
@@ -484,7 +484,7 @@
       // Shopping List Section
       if (fashionData.shoppingList && Array.isArray(fashionData.shoppingList)) {
         const shoppingSection = document.createElement('div');
-        shoppingSection.className = 'fashion-section';
+        shoppingSection.className = 'main-card';
         shoppingSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-shopping-bag" style="margin-right: 8px; color: #2ecc71;"></i>
@@ -514,7 +514,7 @@
       // Style Evolution Section
       if (fashionData.styleEvolution) {
         const evolutionSection = document.createElement('div');
-        evolutionSection.className = 'fashion-section';
+        evolutionSection.className = 'main-card';
         evolutionSection.innerHTML = `
           <h3 style="margin-top: 0; color: #2c3e50; display: flex; align-items: center;">
             <i class="fas fa-arrow-up" style="margin-right: 8px; color: #8e44ad;"></i>
@@ -582,7 +582,7 @@
       
       // Main content section
       const contentSection = document.createElement('div');
-      contentSection.className = 'fashion-section';
+      contentSection.className = 'main-card';
       
       const analysisContent = document.createElement('div');
       analysisContent.className = 'fashion-analysis-content';
