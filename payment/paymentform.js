@@ -839,30 +839,41 @@ async function initializePaymentProcessing() {
             recoverButton.addEventListener("click", async function(e) {
                 e.preventDefault();
                 console.log("Recover access button clicked");
-                
-                const username = recoveryUsernameInput.value.trim();
+
+                // Import validateText
+                const { validateText } = await import('../utility/inputValidation.js');
+                let username = recoveryUsernameInput.value.trim();
                 const payStatus = document.querySelector("#status");
-                
-                if (!username) {
-                    payStatus.innerHTML = "Please enter your username";
+
+                // Validate and sanitize recovery username
+                try {
+                    username = validateText(username, 'recovery-username', 100);
+                } catch (validationError) {
+                    console.warn("Validation error:", validationError);
+                    payStatus.innerHTML = validationError.message || "Invalid recovery username.";
                     return;
                 }
-                
+
+                if (!username) {
+                    payStatus.innerHTML = "Please enter a valid username";
+                    return;
+                }
+
                 payStatus.innerHTML = "Verifying username...";
                 recoverButton.disabled = true;
-                
+
                 try {
                     // Get fingerprint data
                     const fingerprintData = localStorage.getItem("fingerprintData");
                     if (!fingerprintData) {
                         throw new Error("Unable to get device fingerprint");
                     }
-                    
+
                     const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
-                    
+
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
-                    
+
                     const response = await fetch(paymentEndpoint, {
                         method: "POST",
                         headers: {
@@ -876,40 +887,22 @@ async function initializePaymentProcessing() {
                         }),
                         mode: "cors"
                     });
-                    
+
                     const data = await response.json();
-                    
+
                     if (data.success) {
-                        // Store authentication locally
-                        localStorage.setItem("authenticated", encodeURIComponent("paid"));
-                        localStorage.setItem("username", encodeURIComponent(username));
-                        
-                        // Use rateLimitStatus from stripeintegration response instead of separate call
-                        if (data.rateLimitStatus) {
-                            localStorage.setItem("rateLimitStatus", JSON.stringify(data.rateLimitStatus));
-                            console.log("Rate limit status updated from recovery response:", data.rateLimitStatus);
-                            
-                            // Update success message with new limits
-                            const limitsText = data.rateLimitStatus.isPaid ? "unlimited" : `${data.rateLimitStatus.remaining?.daily || 0} remaining today`;
-                            payStatus.innerHTML = `Access recovered successfully! You now have ${limitsText} generations. Redirecting...`;
-                        } else {
-                            console.warn("No rateLimitStatus in recovery response");
-                            payStatus.innerHTML = "Access recovered successfully! Redirecting...";
-                        }
-                        
-                        // Close modal and redirect after delay
+                        payStatus.innerHTML = "Access restored! Reloading...";
                         setTimeout(() => {
-                            closePaymentModal();
                             // Reload or redirect to refresh premium features
                             window.location.reload();
                         }, 2000);
-                        
+
                     } else {
                         // Simple error sanitization - remove script tags and limit length
                         const errorMessage = data.error ? String(data.error).replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').substring(0, 200) : "Username verification failed. Please check your username or contact support.";
                         payStatus.innerHTML = errorMessage;
                     }
-                    
+
                 } catch (error) {
                     console.error("Recovery error:", error);
                     payStatus.innerHTML = "Error occurred during recovery. Please try again or contact support.";
@@ -964,13 +957,27 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
     console.log("Form elements:", { payButton, usernameInput, emailInput, payStatus });
 
     payStatus.innerHTML = "Please wait...";
-    const username = usernameInput.value;
-    const email = emailInput.value;
-    console.log("Form data:", { username, email });
+
+    // Import validation functions
+    const { validateText, validateEmail } = await import('../utility/inputValidation.js');
+
+    let username = usernameInput.value;
+    let email = emailInput.value;
+    console.log("Form data (raw):", { username, email });
+
+    // Validate and sanitize username and email
+    try {
+        username = validateText(username, 'username', 100);
+        email = validateEmail(email, 'email');
+    } catch (validationError) {
+        console.warn("Validation error:", validationError);
+        payStatus.innerHTML = validationError.message || "Invalid input.";
+        return;
+    }
 
     if (!username || !email) {
-        console.warn("Missing username or email");
-        payStatus.innerHTML = "Please enter your username and email.";
+        console.warn("Missing or invalid username or email after validation");
+        payStatus.innerHTML = "Please enter a valid username and email.";
         return;
     }
 
