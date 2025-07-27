@@ -1050,7 +1050,7 @@
         if (!storedResponse) {
             console.log('[IncomeOutput] incomeIqResponse deleted, clearing output display');
             if (outputSpan) {
-                outputSpan.innerHTML = '<div style="padding: 20px; text-align: center; color: #6c757d; font-style: italic;">No analysis data available. Please generate a new analysis.</div>';
+                outputSpan.innerHTML = '';
             }
             // Also destroy any active charts
             destroyAllCharts();
