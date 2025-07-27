@@ -148,12 +148,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 top: 0;
                 left: 0;
                 background:
-                  linear-gradient(120deg, #888 0%, #b0b0b0 20%, #e0e0e0 40%, #fff 60%, #b0b0b0 80%, #888 100%),
-                  linear-gradient(210deg, #e0e0e0 0%, #fff 30%, #b0b0b0 70%, transparent 100%),
-                  linear-gradient(75deg, #b0b0b0 0%, #fff 25%, #e0e0e0 60%, transparent 100%),
-                  repeating-linear-gradient(115deg, rgba(255,255,255,0.18) 0px, rgba(255,255,255,0.08) 8px, transparent 16px, transparent 32px),
-                  repeating-linear-gradient(60deg, rgba(255,255,255,0.12) 0px, rgba(255,255,255,0.04) 6px, transparent 12px, transparent 24px),
-                  repeating-linear-gradient(170deg, rgba(255,255,255,0.10) 0px, rgba(255,255,255,0.04) 4px, transparent 10px, transparent 20px);
+                  linear-gradient(120deg, #888 0%, #b0b0b0 25%, #e0e0e0 45%, #b0b0b0 65%, #888 85%, #e0e0e0 100%),
+                  linear-gradient(210deg, #b0b0b0 0%, #e0e0e0 30%, #b0b0b0 70%, transparent 100%),
+                  linear-gradient(75deg, #b0b0b0 0%, #e0e0e0 35%, #888 70%, transparent 100%),
+                  repeating-linear-gradient(115deg, rgba(176,176,176,0.22) 0px, rgba(224,224,224,0.12) 8px, transparent 16px, transparent 32px),
+                  repeating-linear-gradient(60deg, rgba(176,176,176,0.16) 0px, rgba(224,224,224,0.08) 6px, transparent 12px, transparent 24px),
+                  repeating-linear-gradient(170deg, rgba(136,136,136,0.14) 0px, rgba(176,176,176,0.08) 4px, transparent 10px, transparent 20px);
                 background-blend-mode: lighten, screen, overlay, soft-light, lighten, normal;
                 padding: 4px;
                 border-radius: 0 0 27px 27px;
