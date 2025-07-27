@@ -79,13 +79,13 @@
         <option value="OTHER">Other</option>
     </select>
 
-    <div id="subregionContainer" style="display: block;">
+    <div id="subregionContainer" style="display: none;">
         <select id="subregion" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             <option value="">Select Tax Subregion</option>
         </select>
     </div>
 
-    <div id="residencyStatus" style="display: block;">
+    <div id="residencyStatus" style="display: none;">
         <select id="residency" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
             <option value="">Select Residency Status</option>
             <option value="Full_Resident">Full Resident (Lived entire year, full taxes)</option>
@@ -119,9 +119,8 @@
             <option value="student">Student</option>
         </select>
         
-        <div class="spouseFields">
+        <div class="spouseFields" style="display: none;">
             <input type="number" placeholder="Spouse Age" inputmode="numeric" id="ageSpouse" min="0" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
-            
             <select id="employmentStatusSpouse" style="width: 345px; max-width: 100%; margin: 0 auto; display: block; margin-top: 5px;">
                 <option value="">Select Spouse Employment Status</option>
                 <option value="employed">Employed</option>
@@ -132,7 +131,7 @@
             </select>
         </div>
 
-        <div class="dependantsContainer">
+        <div class="dependantsContainer" style="display: none;">
             <h3 class="tooltip1" data-tooltip="Enter the birth years of disabled dependants, separated by commas.">
                 Disabled Dependant Birth Year(s)<span class="tooltip1-content"></span>
             </h3>
@@ -858,6 +857,65 @@
 
     // Initialize FormPersistence for income module
     let incomeFormPersistence = null;
+    // --- Robust State Restoration for Tax Residency Dropdowns ---
+    function restoreTaxResidencyState(savedState) {
+        // savedState: { country, subregion, residency, filingStatus }
+        const countrySelect = document.getElementById('country');
+        const subregionSelect = document.getElementById('subregion');
+        const residencySelect = document.getElementById('residency');
+        const filingStatusSelect = document.getElementById('filingStatus');
+
+        // 1. Set country first
+        if (savedState.country) {
+            countrySelect.value = savedState.country;
+        } else {
+            countrySelect.value = '';
+        }
+
+        // 2. Repopulate subregion dropdown based on country
+        let subregions = subregionMap[countrySelect.value] || [];
+        subregionSelect.innerHTML = '<option value="">Select Tax Subregion</option>' + subregions.map(r => `<option value="${r}">${r}</option>`).join('');
+        if (savedState.subregion && subregions.includes(savedState.subregion)) {
+            subregionSelect.value = savedState.subregion;
+        } else {
+            subregionSelect.value = '';
+        }
+
+        // 3. Set residency dropdown (if needed)
+        if (savedState.residency) {
+            residencySelect.value = savedState.residency;
+        } else {
+            residencySelect.value = '';
+        }
+
+        // 4. Repopulate filing status dropdown based on country
+        let filingStatuses = filingStatusMap[countrySelect.value] || [];
+        filingStatusSelect.innerHTML = '<option value="">Select Filing Status</option>' + filingStatuses.map(f => `<option value="${f.value}">${f.text}</option>`).join('');
+        if (savedState.filingStatus && filingStatuses.some(f => f.value === savedState.filingStatus)) {
+            filingStatusSelect.value = savedState.filingStatus;
+        } else {
+            filingStatusSelect.value = '';
+        }
+
+        // 5. Restore personal details (age, employment status, spouse age, spouse employment status, disabled dependants age)
+        const ageSelfInput = document.getElementById('ageSelf');
+        if (ageSelfInput) ageSelfInput.value = savedState.ageSelf || '';
+        const employmentStatusInput = document.getElementById('employmentStatus');
+        if (employmentStatusInput) employmentStatusInput.value = savedState.employmentStatus || '';
+        const ageSpouseInput = document.getElementById('ageSpouse');
+        if (ageSpouseInput) ageSpouseInput.value = savedState.ageSpouse || '';
+        const employmentStatusSpouseInput = document.getElementById('employmentStatusSpouse');
+        if (employmentStatusSpouseInput) employmentStatusSpouseInput.value = savedState.employmentStatusSpouse || '';
+        const birthYearDisabledDependantsInput = document.getElementById('birthYearDisabledDependants');
+        if (birthYearDisabledDependantsInput) birthYearDisabledDependantsInput.value = savedState.birthYearDisabledDependants || '';
+
+        // 6. After all dropdowns and personal details are restored, force visibility update for spouseFields and dependantsContainer
+        if (window.introSectionController && window.introSectionController.visibilityManager) {
+            window.introSectionController.visibilityManager.updateAllVisibility();
+        }
+    }
+
+    // Example usage: restoreTaxResidencyState({ country: 'CAN', subregion: 'British Columbia', residency: 'Full_Resident', filingStatus: 'married_with_dependants' });
 
     // Subregion mapping for different countries
     const subregionMap = {
@@ -1354,17 +1412,9 @@
             }
         }
         
-        // Show/hide personal details section
+        // Remove all conditional visibility logic for personal details fields
         updateSpecificsVisibility() {
-            const specificsDiv = this.elements.specifics;
-            const filingStatus = this.stateManager.getField('filingStatus');
-            
-            if (!specificsDiv) return;
-            
-            const shouldShow = Boolean(filingStatus);
-            specificsDiv.style.display = shouldShow ? 'block' : 'none';
-            
-            console.log(`[VisibilityManager] Specifics visibility: ${shouldShow} (filingStatus: ${filingStatus})`);
+            // Intentionally left blank. Awaiting new instructions.
         }
         
         // Show/hide spouse fields based on filing status
