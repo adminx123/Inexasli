@@ -815,19 +815,19 @@
     </h3>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-checking-accounts">Checking Account:</label>
+        <label for="assets-checking-accounts" class="tooltip" data-tooltip="Funds available in your checking/current account for daily transactions.">Checking Account:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-checking-accounts">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-checking-accounts-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-savings-accounts">Savings Account:</label>
+        <label for="assets-savings-accounts" class="tooltip" data-tooltip="Funds set aside in a savings account, typically earning interest.">Savings Account:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-savings-accounts">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-savings-accounts-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-other-liquid-accounts">Other Liquid Account:</label>
+        <label for="assets-other-liquid-accounts" class="tooltip" data-tooltip="Other accounts that can be quickly converted to cash, such as money market funds.">Other Liquid Account:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-other-liquid-accounts">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-other-liquid-accounts-percent" inputmode="numeric">
     </div>
@@ -845,19 +845,19 @@
     </h3>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-long-term-investment-accounts">Long Term Investment Account:</label>
+        <label for="assets-long-term-investment-accounts" class="tooltip" data-tooltip="Investments intended to be held for more than one year, such as retirement accounts or bonds.">Long Term Investment Account:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-long-term-investment-accounts">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-long-term-investment-accounts-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-investment-properties">Investment Property:</label>
+        <label for="assets-investment-properties" class="tooltip" data-tooltip="Real estate or property held for investment purposes, not for personal use.">Investment Property:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-investment-properties">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-investment-properties-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-art-jewelry">Art/Jewelry:</label>
+        <label for="assets-art-jewelry" class="tooltip" data-tooltip="Valuable art, jewelry, or collectibles considered as part of your assets.">Art/Jewelry:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-art-jewelry">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-art-jewelry-percent" inputmode="numeric">
     </div>
@@ -867,19 +867,19 @@
     </h3>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-primary-residence">Primary Residence:</label>
+        <label for="assets-primary-residence" class="tooltip" data-tooltip="The market value of your main home or residence.">Primary Residence:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-primary-residence">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-primary-residence-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-small-business">Small Business:</label>
+        <label for="assets-small-business" class="tooltip" data-tooltip="The value of any small business you own, including sole proprietorships or partnerships.">Small Business:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-small-business">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-small-business-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="assets-vehicles">Vehicle:</label>
+        <label for="assets-vehicles" class="tooltip" data-tooltip="The current value of your car, truck, or other vehicles.">Vehicle:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="assets-vehicles">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="assets-vehicles-percent" inputmode="numeric">
     </div>
@@ -892,25 +892,25 @@
     </h3>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-small-business-loan">Small Business Loan:</label>
+        <label for="liabilities-small-business-loan" class="tooltip" data-tooltip="Outstanding balance on loans taken for your small business.">Small Business Loan:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-small-business-loan">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-small-business-loan-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-primary-residence">Primary Residence, Mortgage:</label>
+        <label for="liabilities-primary-residence" class="tooltip" data-tooltip="Remaining mortgage balance on your primary residence.">Primary Residence, Mortgage:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-primary-residence">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-primary-residence-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-investment-properties">Investment Property, Mortgage:</label>
+        <label for="liabilities-investment-properties" class="tooltip" data-tooltip="Outstanding mortgage on investment properties you own.">Investment Property, Mortgage:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-investment-properties">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-investment-properties-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-vehicle-loan">Vehicle Loan:</label>
+        <label for="liabilities-vehicle-loan" class="tooltip" data-tooltip="Remaining balance on loans for your vehicles.">Vehicle Loan:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-vehicle-loan">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-vehicle-loan-percent" inputmode="numeric">
     </div>
@@ -928,25 +928,25 @@
     </h3>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-student-loan">Student Loan:</label>
+        <label for="liabilities-student-loan" class="tooltip" data-tooltip="Outstanding student loan balance.">Student Loan:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-student-loan">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-student-loan-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-line-of-credit">Line of Credit:</label>
+        <label for="liabilities-line-of-credit" class="tooltip" data-tooltip="Current balance owed on your line of credit.">Line of Credit:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-line-of-credit">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-line-of-credit-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-credit-card">Credit Card, Current Balance:</label>
+        <label for="liabilities-credit-card" class="tooltip" data-tooltip="Total current balance on your credit cards.">Credit Card, Current Balance:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-credit-card">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-credit-card-percent" inputmode="numeric">
     </div>
 
     <div class="checkboxrow dual-input">
-        <label for="liabilities-tax-arrears">Tax Arrears:</label>
+        <label for="liabilities-tax-arrears" class="tooltip" data-tooltip="Unpaid taxes owed to government authorities.">Tax Arrears:<span class="tooltip-content"></span></label>
         <input type='number' inputmode="numeric" id="liabilities-tax-arrears">
         <input type="number" min="0" max="100" placeholder="100%" class="percent-input" id="liabilities-tax-arrears-percent" inputmode="numeric">
     </div>
