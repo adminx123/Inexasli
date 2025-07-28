@@ -95,3 +95,8 @@ preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
 [[env.stripeintegration.services]]
 binding = "rateLimit_binding"
 service = "ratelimit"
+
+# --- Fact Generator Worker ---
+[env.fact-generator]
+name = "fact-generator"
+main = "./ai/fact-generator/fact-generator.js"
