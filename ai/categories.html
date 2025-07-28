@@ -18,73 +18,10 @@
     margin-left: auto !important;
 }
 
-/* Product layout styling */
-.category-item .product-name {
-    font-weight: 600;
-    margin-right: 8px;
-}
-
-.category-item .product-description {
-    font-size: 12px;
-    color: #666;
-    font-weight: normal;
-    flex: 1;
-    text-align: center;
-    width: 100%;
-    display: block;
-}
-
-/* Base styling for category items */
-.category-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    margin: 4px 0;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: relative;
-    box-sizing: border-box;
-}
-
-.category-item:hover {
-    background: #e9ecef;
-    border-color: #dee2e6;
-}
-
-.category-item.active {
-    background: #dee2e6;
-    border-color: #adb5bd;
-}
+/* Removed orphaned .category-item styles; .grid-item is now used for all product/favourite cards */
 
 /* Category selection items (2 columns) */
-.category-selector {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 8px;
-    margin: 4px;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-    font-weight: 500;
-}
-
-.category-selector:hover {
-    background: #e9ecef;
-    border-color: #dee2e6;
-}
-
-.category-selector.active {
-    background: #dee2e6;
-    border-color: #adb5bd;
-}
+/* .category-selector now inherits .grid-item styles for unified look */
 
 /* Grid containers */
 .category-grid {
@@ -242,71 +179,71 @@
 
 
 <div id="favorites-container">
-    <div class="favorites-grid" id="favorites-grid"></div>
+    <div class="grid-items2" id="favorites-grid"></div>
 </div>
 
 <div class="category-selection-grid" id="category-selection">
-    <div class="category-selector" data-value="all" style="font-weight: bold;">ALL PRODUCTS</div>
-    <div class="category-selector" data-value="health">HEALTH</div>
-    <div class="category-selector" data-value="business">BUSINESS</div>
-    <div class="category-selector" data-value="finance">FINANCE</div>
-    <div class="category-selector" data-value="lifestyle">LIFESTYLE</div>
-    <div class="category-selector" data-value="learning">LEARNING</div>
-    <div class="category-selector" data-value="productivity">PRODUCTIVITY</div>
+    <div class="grid-item category-selector" data-value="all" style="font-weight: bold;">ALL PRODUCTS</div>
+    <div class="grid-item category-selector" data-value="health">HEALTH</div>
+    <div class="grid-item category-selector" data-value="business">BUSINESS</div>
+    <div class="grid-item category-selector" data-value="finance">FINANCE</div>
+    <div class="grid-item category-selector" data-value="lifestyle">LIFESTYLE</div>
+    <div class="grid-item category-selector" data-value="learning">LEARNING</div>
+    <div class="grid-item category-selector" data-value="productivity">PRODUCTIVITY</div>
 </div>
 </div>
 
 
 <div class="row1" data-step-label="Products">
-    <div class="products-grid">
+    <div class="grid-items1">
         <!-- Health Products -->
-        <div class="category-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
+        <div class="grid-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
             <span class="product-name">CalorieIQ™</span>
             <span class="product-description">Track calories & nutrition</span>
         </div>
 
-        <div class="category-item" data-category="health" data-value="/ai/period/periodiq.html">
+        <div class="grid-item" data-category="health" data-value="/ai/period/periodiq.html">
             <span class="product-name">PeriodIQ™</span>
             <span class="product-description">Period tracking & insights</span>
         </div>
         
         <!-- Business Products -->
-        <div class="category-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
+        <div class="grid-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
             <span class="product-name">DecisionIQ™</span>
             <span class="product-description">Smart decision making</span>
         </div>
 
-        <div class="category-item" data-category="business,lifestyle" data-value="/ai/shop/shopiq.html">
+        <div class="grid-item" data-category="business,lifestyle" data-value="/ai/shop/shopiq.html">
             <span class="product-name">ShopIQ™</span>
             <span class="product-description">Smart shopping decisions</span>
         </div>
         
         <!-- Finance Products -->
-        <div class="category-item" data-category="finance" data-value="/ai/income/incomeiq.html">
+        <div class="grid-item" data-category="finance" data-value="/ai/income/incomeiq.html">
             <span class="product-name">IncomeIQ™</span>
             <span class="product-description">Income optimization</span>
         </div>
         
         <!-- Lifestyle Products -->
-        <div class="category-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
+        <div class="grid-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
             <span class="product-name">EventIQ™</span>
             <span class="product-description">Event planning assistant</span>
         </div>
-        <div class="category-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
+        <div class="grid-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
             <span class="product-name">FashionIQ™</span>
             <span class="product-description">Style & outfit advisor</span>
         </div>
-        <div class="category-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
+        <div class="grid-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
             <span class="product-name">PhilosophyIQ™</span>
             <span class="product-description">Explore philosophical ideas</span>
         </div>
-        <div class="category-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
+        <div class="grid-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
             <span class="product-name">EnneagramIQ™</span>
             <span class="product-description">Personality insights</span>
         </div>
         
         <!-- Learning Products -->
-        <div class="category-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
+        <div class="grid-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
             <span class="product-name">QuizIQ™</span>
             <span class="product-description">Interactive learning quizzes</span>
         </div>
@@ -323,7 +260,7 @@
 console.log('[Categories] Script executing immediately');
 
 const favoritesGrid = document.getElementById('favorites-grid');
-const productsGrid = document.querySelector('.row1[data-step-label="Products"] .products-grid');
+const productsGrid = document.querySelector('.row1[data-step-label="Products"] .grid-items1');
 const deviceContainer = document.querySelector('.device-container');
 
 function getFavorites() {
@@ -348,14 +285,14 @@ function renderFavorites() {
         const product = allProducts.find(p => p.dataset.value === url);
         if (product) {
             const clone = product.cloneNode(true);
-            
             // Remove description from favorites - only keep name and premium tag
             const description = clone.querySelector('.product-description');
             if (description) {
                 description.remove();
             }
-            
-            // Event listeners are handled by delegation, no need to add them here
+            // Ensure the favourite uses only grid-item for style
+            clone.classList.remove('grid-item2');
+            clone.classList.add('grid-item');
             favoritesGrid.appendChild(clone);
         }
     });
@@ -377,7 +314,7 @@ function toggleFavorite(url) {
 function updateFavoriteIcons() {
     const favorites = getFavorites();
     // This will update icons in both the main grid and the favorites grid
-    document.querySelectorAll('.category-item[data-value]').forEach(item => {
+    document.querySelectorAll('.grid-item[data-value]').forEach(item => {
         const icon = item.querySelector('.favorite-icon');
         if (icon) {
             if (favorites.includes(item.dataset.value)) {
@@ -390,7 +327,7 @@ function updateFavoriteIcons() {
 }
 
 function addFavoriteIcons() {
-    document.querySelectorAll('.category-item[data-category]').forEach(product => {
+    document.querySelectorAll('.grid-item[data-category]').forEach(product => {
         if (product.querySelector('.favorite-icon')) return; // Don't add twice
         const icon = document.createElement('span');
         icon.className = 'favorite-icon';
@@ -402,7 +339,7 @@ function addFavoriteIcons() {
 
 // Function to filter products using DIRECT INLINE STYLES (bypasses all CSS)
 function filterProducts(selectedCategory) {
-    const products = document.querySelectorAll('.category-item[data-category]');
+    const products = document.querySelectorAll('.grid-item[data-category]');
     console.log('[Categories] filterProducts called with:', selectedCategory, 'Found products:', products.length);
     
     products.forEach(product => {
@@ -446,7 +383,7 @@ setTimeout(function() {
         });
         
         console.log('[Categories] Initializing - hiding all products first');
-        document.querySelectorAll('.category-item[data-category]').forEach(product => {
+        document.querySelectorAll('.grid-item[data-category]').forEach(product => {
             product.style.display = 'none';
         });
     
@@ -463,28 +400,25 @@ setTimeout(function() {
 // Consolidated event listener for both product selection and favorite toggling
 if (deviceContainer) {
     deviceContainer.addEventListener('click', function(e) {
-        const categoryItem = e.target.closest('.category-item');
-        if (!categoryItem || !categoryItem.dataset.value) return;
+        const gridItem = e.target.closest('.grid-item');
+        if (!gridItem || !gridItem.dataset.value) return;
 
         // Handle favorite icon clicks
         if (e.target.classList.contains('favorite-icon')) {
             e.stopPropagation(); // Prevent product selection from firing
-            toggleFavorite(categoryItem.dataset.value);
+            toggleFavorite(gridItem.dataset.value);
             return;
         }
 
         // Handle product selection clicks (if it's a product URL)
-        if (categoryItem.dataset.value.startsWith('/ai/')) {
+        if (gridItem.dataset.value.startsWith('/ai/')) {
             e.stopPropagation(); // Stop the event from bubbling up to datain.js modal handlers
-            
             // Set lastGridItemUrl so datain.js can remember the selection
-            localStorage.setItem('lastGridItemUrl', categoryItem.dataset.value);
+            localStorage.setItem('lastGridItemUrl', gridItem.dataset.value);
 
             // NEW: Check if we are inside the datain.js container
-            const datainContainer = categoryItem.closest('#data-in-container');
-            
-            const eventDetail = { detail: { url: categoryItem.dataset.value } };
-            
+            const datainContainer = gridItem.closest('#data-in-container');
+            const eventDetail = { detail: { url: gridItem.dataset.value } };
             if (datainContainer) {
                 // If inside datain, dispatch the event directly on the container
                 // so only datain.js handles it.

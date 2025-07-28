@@ -1,3 +1,28 @@
+.grid-item .product-description {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+/* ====================
+   1-Column Grid Layout
+   ==================== */
+.grid-items1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 10px 0 20px 0;
+  width: 100%;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .grid-items1 {
+    gap: 8px;
+  }
+}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /* Global Reset and Base Styles */
