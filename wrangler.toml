@@ -8,10 +8,6 @@ main = "./ai/x.js"
 [env.x.triggers]
 crons = ["11 18 * * *"]
 
-[[env.x.services]]
-binding = "secret_binding"
-service = "secretworker"
-
 # CENTRALIZED MASTER WORKER ARCHITECTURE
 # This project uses a master worker that imports all individual modules.
 # Individual modules (calorie.js, event.js, etc.) are NOT standalone workers - 
@@ -75,10 +71,6 @@ id = "285495ae3e0f468a86f47bdd056ecfc3"
 preview_id = "02f5fab88e5143a5aa52c315fde404d1"
 
 # Service bindings for external dependencies
-[[env.master.services]]
-binding = "secret_binding"
-service = "secretworker"
-
 [[env.master.services]]
 binding = "rateLimit_binding"
 service = "ratelimit"

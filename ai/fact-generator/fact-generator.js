@@ -324,50 +324,59 @@ function getWeekNumber() {
 /**
  * Get API key from secret binding service (same pattern as calorie worker)
  */
+// async function getApiKey(env) {
+//     console.log("Attempting to get API key from environment");
+//     
+//     // First try to get from secret_binding
+//     try {
+//         if (env.secret_binding) {
+//             console.log("Secret binding exists, attempting to use it");
+//             
+//             // Make request to the bound service
+//             const response = await env.secret_binding.fetch(new Request("https://placeholder", {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json"
+//                 },
+//                 body: JSON.stringify({
+//                     secretName: "XAI_API_KEY"
+//                 })
+//             }));
+//             
+//             if (!response.ok) {
+//                 const errorText = await response.text();
+//                 console.error("Error from secret worker:", errorText);
+//                 throw new Error(`Secret worker error: ${response.status}`);
+//             }
+//             
+//             // Parse the response to get the API key
+//             const data = await response.json();
+//             if (data && data.value) {
+//                 console.log("Successfully retrieved API key from secret_binding");
+//                 return data.value;
+//             }
+//             
+//             throw new Error("Invalid response from secret_binding");
+//         }
+//     } catch (bindingError) {
+//         console.error("Error with secret_binding:", bindingError);
+//         // Continue to next method if this fails
+//     }
+//     
+//     // Fallback to environment variable (if somehow available)
+//     if (env.XAI_API_KEY) {
+//         console.log("Using fallback XAI_API_KEY from environment");
+//         return env.XAI_API_KEY;
+//     }
+//     
+//     throw new Error("No API key available - neither secret_binding nor XAI_API_KEY found");
+// }
+
+// --- New way: use environment variable only ---
 async function getApiKey(env) {
-    console.log("Attempting to get API key from environment");
-    
-    // First try to get from secret_binding
-    try {
-        if (env.secret_binding) {
-            console.log("Secret binding exists, attempting to use it");
-            
-            // Make request to the bound service
-            const response = await env.secret_binding.fetch(new Request("https://placeholder", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    secretName: "XAI_API_KEY"
-                })
-            }));
-            
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Error from secret worker:", errorText);
-                throw new Error(`Secret worker error: ${response.status}`);
-            }
-            
-            // Parse the response to get the API key
-            const data = await response.json();
-            if (data && data.value) {
-                console.log("Successfully retrieved API key from secret_binding");
-                return data.value;
-            }
-            
-            throw new Error("Invalid response from secret_binding");
-        }
-    } catch (bindingError) {
-        console.error("Error with secret_binding:", bindingError);
-        // Continue to next method if this fails
-    }
-    
-    // Fallback to environment variable (if somehow available)
     if (env.XAI_API_KEY) {
-        console.log("Using fallback XAI_API_KEY from environment");
+        console.log("Using XAI_API_KEY from environment");
         return env.XAI_API_KEY;
     }
-    
-    throw new Error("No API key available - neither secret_binding nor XAI_API_KEY found");
+    throw new Error("No API key available in environment");
 }
