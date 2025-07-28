@@ -100,3 +100,8 @@ service = "ratelimit"
 [env.fact-generator]
 name = "fact-generator"
 main = "./ai/fact-generator/fact-generator.js"
+
+[[env.fact-generator.kv_namespaces]]
+binding = "FACT_STORE"
+id = "2da5e6f46847458a9aa83ffe54dea66e"
+preview_id = "2da5e6f46847458a9aa83ffe54dea66e"
