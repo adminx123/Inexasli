@@ -172,18 +172,38 @@ async function startFactRotation(overlay, moduleName) {
  * @returns {Promise<Array>} Array of educational facts
  */
 async function getFactsForModule(moduleName) {
+    // Caching logic: cache all facts for 1 week in localStorage
+    const CACHE_KEY = 'allModuleFactsCache';
+    const CACHE_TIME_KEY = 'allModuleFactsCacheTime';
+    const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 1 week
+
+    const now = Date.now();
+    const cachedFacts = window.getJSON(CACHE_KEY, null);
+    const cacheTime = window.getJSON(CACHE_TIME_KEY, null);
+
+    if (cachedFacts && cacheTime && (now - cacheTime < CACHE_TTL_MS)) {
+        if (cachedFacts[moduleName] && Array.isArray(cachedFacts[moduleName]) && cachedFacts[moduleName].length > 0) {
+            console.log(`[Educational Overlay] Using cached facts for ${moduleName}`);
+            return cachedFacts[moduleName];
+        }
+    }
+
+    // Fetch all facts from the worker if cache is missing or expired
     try {
-        // Always fetch from the central fact-generator worker
-        const response = await fetch(`https://fact-generator.4hm7q4q75z.workers.dev/facts?module=${encodeURIComponent(moduleName)}`);
+        const response = await fetch('https://fact-generator.4hm7q4q75z.workers.dev/facts');
         if (response.ok) {
             const data = await response.json();
-            if (data.facts && Array.isArray(data.facts) && data.facts.length > 0) {
-                console.log(`[Educational Overlay] Fetched ${data.facts.length} facts from fact-generator for ${moduleName}`);
-                return data.facts;
+            if (data.facts && typeof data.facts === 'object') {
+                window.setJSON(CACHE_KEY, data.facts);
+                window.setJSON(CACHE_TIME_KEY, now);
+                if (data.facts[moduleName] && Array.isArray(data.facts[moduleName]) && data.facts[moduleName].length > 0) {
+                    console.log(`[Educational Overlay] Fetched and cached facts for ${moduleName}`);
+                    return data.facts[moduleName];
+                }
             }
         }
     } catch (error) {
-        console.warn(`[Educational Overlay] Failed to fetch facts for ${moduleName} from fact-generator:`, error.message);
+        console.warn(`[Educational Overlay] Failed to fetch all facts from fact-generator:`, error.message);
     }
     // Fallback to hardcoded facts if fetch fails
     console.log(`[Educational Overlay] Using fallback hardcoded facts for ${moduleName}`);
