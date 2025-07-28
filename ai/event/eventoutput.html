@@ -713,6 +713,13 @@
           html += '</div>';
         }
 
+
+        // Progress Tracking Section (flattened)
+        if (checklist) {
+          const totalItems = (checklist.critical?.length || 0) + (checklist.important?.length || 0) + (checklist['nice-to-have']?.length || 0);
+          html += `<div class="progress-container"><div class="progress-title">Planning Progress</div><div class="progress-stats"><div class="progress-stat"><div class="progress-number" id="completed-count">0</div><div class="progress-label">Completed</div></div><div class="progress-stat"><div class="progress-number">${totalItems}</div><div class="progress-label">Total Items</div></div><div class="progress-stat"><div class="progress-number" id="progress-percentage">0%</div><div class="progress-label">Progress</div></div></div></div>`;
+        }
+
         // Checklist Section (flattened)
         if (checklist) {
           html += `<div class="section"><div class="section-header"><i class="fas fa-tasks"></i> Event Checklist</div>`;
