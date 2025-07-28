@@ -341,31 +341,37 @@
         if (philosophyData.quotes && Array.isArray(philosophyData.quotes)) {
           philosophyData.quotes.forEach(quote => {
             const quoteCard = document.createElement('div');
-            
             // Custom colors for different traditions using CSS classes
             let traditionClass = '';
+            let iconHtml = '';
             switch(quote.tradition.toLowerCase()) {
               case 'taoism':
                 traditionClass = 'tradition-taoism';
+                iconHtml = '<i class="fas fa-yin-yang" title="Taoism" style="margin-right:8px;"></i>';
                 break;
               case 'buddhism':
                 traditionClass = 'tradition-buddhism';
+                iconHtml = '<i class="fas fa-om" title="Buddhism" style="margin-right:8px;"></i>';
                 break;
               case 'christianity':
                 traditionClass = 'tradition-christianity';
+                iconHtml = '<i class="fas fa-cross" title="Christianity" style="margin-right:8px;"></i>';
                 break;
               case 'islam':
                 traditionClass = 'tradition-islam';
+                iconHtml = '<i class="fas fa-star-and-crescent" title="Islam" style="margin-right:8px;"></i>';
                 break;
               case 'hermetic':
                 traditionClass = 'tradition-hermetic';
+                iconHtml = '<i class="fas fa-infinity" title="Hermetic" style="margin-right:8px;"></i>';
                 break;
+              default:
+                iconHtml = '';
             }
-            
             quoteCard.className = `quote-card ${traditionClass}`;
             quoteCard.innerHTML = `
               <div class="tradition">
-                ${quote.tradition}
+                ${iconHtml}${quote.tradition}
               </div>
               <div class="quote">
                 "${quote.quote}"
@@ -377,7 +383,6 @@
                 ${quote.relevance}
               </div>
             `;
-            
             quotesContainer.appendChild(quoteCard);
           });
         }
