@@ -691,15 +691,14 @@
           vendors.forEach(vendor => {
             html += `<div class="vendor-header"><div class="vendor-name">${vendor.category}</div><div class="vendor-timeline">Book by: ${vendor.bookingTimeline || 'TBD'}</div></div>`;
             if (vendor.suggestions) {
-              html += '<div class="vendor-suggestions">';
               vendor.suggestions.forEach(suggestion => {
-                html += `<div class="vendor-option"><div class="vendor-option-header"><div class="vendor-type">${suggestion.type}</div><div class="vendor-cost">${suggestion.estimatedCost}</div></div><div class="pros-cons"><div class="pros"><h5>Pros</h5><ul>`;
+                html += `<div class=\"vendor-option-header\"><div class=\"vendor-type\">${suggestion.type}</div><div class=\"vendor-cost\">${suggestion.estimatedCost}</div></div>`;
+                html += `<div class=\"pros-cons\"><div class=\"pros\"><h5>Pros</h5><ul>`;
                 if (suggestion.pros) { suggestion.pros.forEach(pro => { html += `<li>${pro}</li>`; }); }
-                html += `</ul></div><div class="cons"><h5>Cons</h5><ul>`;
+                html += `</ul></div><div class=\"cons\"><h5>Cons</h5><ul>`;
                 if (suggestion.cons) { suggestion.cons.forEach(con => { html += `<li>${con}</li>`; }); }
-                html += `</ul></div></div></div>`;
+                html += `</ul></div></div>`;
               });
-              html += '</div>';
             }
           });
           html += '</div>';
