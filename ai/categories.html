@@ -18,7 +18,7 @@
     margin-left: auto !important;
 }
 
-/* Removed orphaned .category-item styles; .grid-item is now used for all product/favourite cards */
+
 
 /* Category selection items (2 columns) */
 /* .category-selector now inherits .grid-item styles for unified look */
@@ -62,48 +62,7 @@
     margin: 0 auto;
 }
 
-/* Mobile responsive */
-@media (max-width: 480px) {
-    .category-grid, .products-grid, .favorites-grid {
-        gap: 6px;
-        max-width: 360px;
-    }
-    
-    .category-selection-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        max-width: 360px;
-    }
-    
-    .category-item, .category-selector {
-        min-height: 40px;
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 375px) {
-    .category-grid, .products-grid, .favorites-grid {
-        gap: 5px;
-        max-width: 340px;
-    }
-    
-    .category-selection-grid {
-        gap: 6px;
-        max-width: 340px;
-    }
-}
-
-@media (max-width: 320px) {
-    .category-grid, .products-grid, .favorites-grid {
-        max-width: 280px;
-    }
-    
-    .category-selection-grid {
-        gap: 5px;
-        max-width: 280px;
-    }
-}
+/* Removed legacy responsive CSS for old grid classes. Use grid-items1/grid-items2 for layout and responsiveness. */
 
 .favorite-icon {
     position: absolute;
@@ -119,19 +78,11 @@
 }
 
 /* Add space for the favorite icon on product items */
-.category-item[data-category] {
-    padding-right: 35px;
-}
+
 
 /* Mobile-specific adjustments for favorite star and premium tag spacing */
 @media (max-width: 480px) {
-    .category-item[data-category] {
-        padding-right: 40px;
-    }
-    
-    .favorites-grid .category-item[data-category] {
-        padding-right: 40px;
-    }
+
     
     .favorite-icon {
         top: 4px;
@@ -145,13 +96,7 @@
 }
 
 @media (max-width: 375px) {
-    .category-item[data-category] {
-        padding-right: 42px;
-    }
-    
-    .favorites-grid .category-item[data-category] {
-        padding-right: 42px;
-    }
+
     
     .premium-tag {
         margin-right: 28px;
@@ -179,10 +124,16 @@
 
 
 <div id="favorites-container">
+
+
+
+
     <div class="grid-items2" id="favorites-grid"></div>
+
+
 </div>
 
-<div class="category-selection-grid" id="category-selection">
+<div class="grid-items2" id="category-selection">
     <div class="grid-item category-selector" data-value="all" style="font-weight: bold;">ALL PRODUCTS</div>
     <div class="grid-item category-selector" data-value="health">HEALTH</div>
     <div class="grid-item category-selector" data-value="business">BUSINESS</div>
@@ -195,7 +146,7 @@
 
 
 <div class="row1" data-step-label="Products">
-    <div class="grid-items1">
+    <div class="grid-items2">
         <!-- Health Products -->
         <div class="grid-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
             <span class="product-name">CalorieIQ™</span>
@@ -260,7 +211,7 @@
 console.log('[Categories] Script executing immediately');
 
 const favoritesGrid = document.getElementById('favorites-grid');
-const productsGrid = document.querySelector('.row1[data-step-label="Products"] .grid-items1');
+const productsGrid = document.querySelector('.row1[data-step-label="Products"] .grid-items2');
 const deviceContainer = document.querySelector('.device-container');
 
 function getFavorites() {
