@@ -21,7 +21,7 @@ export default {
             if (url.pathname === '/generate-weekly-facts') {
                 return await generateWeeklyFacts(env, corsHeaders);
             }
-            
+
             if (url.pathname === '/status') {
                 return new Response(JSON.stringify({
                     status: 'active',
@@ -35,11 +35,27 @@ export default {
                 });
             }
 
-            return new Response('Fact Generator Worker - Use /generate-weekly-facts or /status', {
+            if (url.pathname === '/facts') {
+                // Return the latest facts for all modules from KV
+                const modules = ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz'];
+                const facts = {};
+                for (const module of modules) {
+                    const data = await env.FACT_STORE.get(`facts_${module}`);
+                    facts[module] = data ? JSON.parse(data) : [];
+                }
+                return new Response(JSON.stringify({ facts }), {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...corsHeaders
+                    }
+                });
+            }
+
+            return new Response('Fact Generator Worker - Use /generate-weekly-facts, /facts, or /status', {
                 status: 200,
                 headers: corsHeaders
             });
-            
+
         } catch (error) {
             console.error('Fact Generator Error:', error);
             return new Response(JSON.stringify({
