@@ -173,23 +173,19 @@ async function startFactRotation(overlay, moduleName) {
  */
 async function getFactsForModule(moduleName) {
     try {
-        // Try to fetch facts from the module's API endpoint
-        const apiUrl = getModuleApiUrl(moduleName);
-        if (apiUrl) {
-            const response = await fetch(`${apiUrl}/facts`);
-            if (response.ok) {
-                const data = await response.json();
-                if (data.facts && Array.isArray(data.facts) && data.facts.length > 0) {
-                    console.log(`[Educational Overlay] Fetched ${data.facts.length} facts from KV for ${moduleName}`);
-                    return data.facts;
-                }
+        // Always fetch from the central fact-generator worker
+        const response = await fetch(`https://fact-generator.4hm7q4q75z.workers.dev/facts?module=${encodeURIComponent(moduleName)}`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.facts && Array.isArray(data.facts) && data.facts.length > 0) {
+                console.log(`[Educational Overlay] Fetched ${data.facts.length} facts from fact-generator for ${moduleName}`);
+                return data.facts;
             }
         }
     } catch (error) {
-        console.warn(`[Educational Overlay] Failed to fetch facts for ${moduleName} from KV:`, error.message);
+        console.warn(`[Educational Overlay] Failed to fetch facts for ${moduleName} from fact-generator:`, error.message);
     }
-    
-    // Fallback to hardcoded facts if KV fetch fails
+    // Fallback to hardcoded facts if fetch fails
     console.log(`[Educational Overlay] Using fallback hardcoded facts for ${moduleName}`);
     return getFallbackFactsForModule(moduleName);
 }
@@ -199,20 +195,7 @@ async function getFactsForModule(moduleName) {
  * @param {string} moduleName - The module name
  * @returns {string|null} The API URL or null if not found
  */
-function getModuleApiUrl(moduleName) {
-    const moduleUrls = {
-        'calorie': 'https://calorie.4hm7q4q75z.workers.dev',
-        'decision': 'https://decision.4hm7q4q75z.workers.dev',
-        'enneagram': 'https://enneagram.4hm7q4q75z.workers.dev',
-        'philosophy': 'https://philosophy.4hm7q4q75z.workers.dev',
-        'event': 'https://event.4hm7q4q75z.workers.dev',
-        'fashion': 'https://fashion.4hm7q4q75z.workers.dev',
-        'quiz': 'https://quiz.4hm7q4q75z.workers.dev',
-        'income': 'https://income.4hm7q4q75z.workers.dev'
-    };
-    
-    return moduleUrls[moduleName] || null;
-}
+// getModuleApiUrl removed: all facts now come from the central fact-generator worker
 
 /**
  * Fallback hardcoded facts (kept as backup)

@@ -36,19 +36,32 @@ export default {
             }
 
             if (url.pathname === '/facts') {
-                // Return the latest facts for all modules from KV
                 const modules = ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz'];
-                const facts = {};
-                for (const module of modules) {
-                    const data = await env.FACT_STORE.get(`facts_${module}`);
-                    facts[module] = data ? JSON.parse(data) : [];
-                }
-                return new Response(JSON.stringify({ facts }), {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...corsHeaders
+                const moduleParam = url.searchParams.get('module');
+                if (moduleParam && modules.includes(moduleParam)) {
+                    // Return facts for a single module
+                    const data = await env.FACT_STORE.get(`facts_${moduleParam}`);
+                    const facts = data ? JSON.parse(data) : [];
+                    return new Response(JSON.stringify({ facts }), {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...corsHeaders
+                        }
+                    });
+                } else {
+                    // Return all facts
+                    const facts = {};
+                    for (const module of modules) {
+                        const data = await env.FACT_STORE.get(`facts_${module}`);
+                        facts[module] = data ? JSON.parse(data) : [];
                     }
-                });
+                    return new Response(JSON.stringify({ facts }), {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...corsHeaders
+                        }
+                    });
+                }
             }
 
             return new Response('Fact Generator Worker - Use /generate-weekly-facts, /facts, or /status', {
