@@ -41,7 +41,9 @@ export default {
                 if (moduleParam && modules.includes(moduleParam)) {
                     // Return facts for a single module
                     const data = await env.FACT_STORE.get(`facts_${moduleParam}`);
+                    console.log(`[DEBUG] Raw KV data for facts_${moduleParam}:`, data);
                     const facts = data ? JSON.parse(data) : [];
+                    console.log(`[DEBUG] Parsed facts for ${moduleParam}:`, facts);
                     return new Response(JSON.stringify({ facts }), {
                         headers: {
                             'Content-Type': 'application/json',
@@ -53,7 +55,9 @@ export default {
                     const facts = {};
                     for (const module of modules) {
                         const data = await env.FACT_STORE.get(`facts_${module}`);
+                        console.log(`[DEBUG] Raw KV data for facts_${module}:`, data);
                         facts[module] = data ? JSON.parse(data) : [];
+                        console.log(`[DEBUG] Parsed facts for ${module}:`, facts[module]);
                     }
                     return new Response(JSON.stringify({ facts }), {
                         headers: {
