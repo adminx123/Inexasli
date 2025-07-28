@@ -38,6 +38,9 @@ MODULE-CREATION-INSTRUCTIONS.md
 DIRECTION/
 future/
 
+# Local secrets (do not commit)
+secret.js
+
 # Catch-all patterns for any missed worker files
 ai/**/*worker*.js
 /*worker.js
