@@ -158,11 +158,11 @@ function initScrollToTopFAB() {
     fab.setAttribute('aria-label', 'Scroll to top of page');
     
     fab.style.cssText = `
-        background-color: rgba(74, 124, 89, 0.2);
-        color: #2d5a3d;
-        border: 2px solid rgba(45, 90, 61, 0.3);
+        background: linear-gradient(120deg, #888 0%, #b0b0b0 25%, #e0e0e0 45%, #b0b0b0 65%, #888 85%, #e0e0e0 100%);
+        color: #333333;
+        border: 2px solid #b0b0b0;
         border-radius: 50%;
-        box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.3);
+        box-shadow: 4px 4px 0 #e0e0e0;
         width: ${ENHANCED_UI_CONFIG.scrollFab.desktopSize}px;
         height: ${ENHANCED_UI_CONFIG.scrollFab.desktopSize}px;
         display: flex;
