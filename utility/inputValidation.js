@@ -320,6 +320,10 @@ export function displayValidationErrors(errors, formElement) {
 
 // Module-specific validation rules - flexible for natural language input
 export const MODULE_VALIDATION_RULES = {
+  shop: {
+    'product-names': { type: 'array', required: true, itemType: 'text', maxLength: 200 },
+    'user-price': { type: 'text', required: false, maxLength: 50 }
+  },
   calorie: {
     // Basic numeric validations
     'calorie-age': { type: 'number', required: false, min: 1, max: 120 },

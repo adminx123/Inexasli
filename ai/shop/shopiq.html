@@ -52,12 +52,15 @@
             </div> -->
             <!-- Manual Entry Mode (active) -->
             <div class="input-section active" id="manual-section">
+<!-- Stray textarea removed -->
                 <div class="manual-description">
-                    <p>Enter 1 product to analyze, or 2–3 to compare.</p>
+                    <p>Enter up to 3 products to analyze or compare. Example format: phone model, price, currency.</p>
                 </div>
-                <textarea id="product-name" rows="3" placeholder="Apple iPhone 15 Pro Max 256GB - $1399.99 CAD
-Samsung Galaxy S24 Ultra 512GB - $1799.99 CAD
-Google Pixel 8 Pro 256GB - $1199.99 CAD"></textarea>
+                <div id="product-inputs">
+                    <input type="text" class="product-input" name="product-name-1" placeholder="Apple iPhone 15 Pro Max 256GB - $1399.99 USD" />
+                    <input type="text" class="product-input" name="product-name-2" placeholder="Samsung Galaxy S24 Ultra 512GB - $1799.99 CAD" />
+                    <input type="text" class="product-input" name="product-name-3" placeholder="Google Pixel 8 Pro 256GB - $1199.99 USD" />
+                </div>
             </div>
         
 
