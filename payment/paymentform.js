@@ -891,6 +891,22 @@ async function initializePaymentProcessing() {
                     const data = await response.json();
 
                     if (data.success) {
+                        // Update localStorage with premium authentication
+                        localStorage.setItem("authenticated", "paid");
+                        
+                        // Update fingerprint data with premium status from response
+                        if (data.fingerprint) {
+                            const newFingerprintData = encodeURIComponent(JSON.stringify(data.fingerprint));
+                            localStorage.setItem("fingerprintData", newFingerprintData);
+                            console.log("[Recovery] Updated fingerprint with premium status");
+                        }
+                        
+                        // Update rate limit status if provided
+                        if (data.rateLimitStatus) {
+                            localStorage.setItem("rateLimitStatus", JSON.stringify(data.rateLimitStatus));
+                            console.log("[Recovery] Updated rate limit status to premium");
+                        }
+                        
                         payStatus.innerHTML = "Access restored! Reloading...";
                         setTimeout(() => {
                             // Reload or redirect to refresh premium features
