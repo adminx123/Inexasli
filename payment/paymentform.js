@@ -863,42 +863,13 @@ async function initializePaymentProcessing() {
                 recoverButton.disabled = true;
 
                 try {
-                    // Get fingerprint data - create if it doesn't exist or is invalid
-                    let fingerprintData = localStorage.getItem("_userFingerprint");
-                    let fingerprint = null;
-                    
-                    console.log("[Recovery Debug] Raw localStorage data:", fingerprintData);
-                    console.log("[Recovery Debug] Data type:", typeof fingerprintData);
-                    console.log("[Recovery Debug] Data length:", fingerprintData ? fingerprintData.length : 'null');
-                    
-                    if (fingerprintData) {
-                        try {
-                            fingerprint = JSON.parse(fingerprintData);
-                            console.log("[Recovery Debug] Parsed fingerprint:", fingerprint);
-                            console.log("[Recovery Debug] Has deviceId:", !!fingerprint?.deviceId);
-                            
-                            // Validate that it has required properties
-                            if (!fingerprint || !fingerprint.deviceId) {
-                                console.warn("[Recovery Debug] Fingerprint data is missing deviceId, recreating. Current data:", fingerprint);
-                                fingerprint = null;
-                            }
-                        } catch (parseError) {
-                            console.warn("[Recovery Debug] Failed to parse fingerprint data, recreating. Raw data:", fingerprintData, "Error:", parseError);
-                            fingerprint = null;
-                        }
-                    } else {
-                        console.log("[Recovery Debug] No fingerprint data found in localStorage");
+                    // Get fingerprint data
+                    const fingerprintData = localStorage.getItem("fingerprintData");
+                    if (!fingerprintData) {
+                        throw new Error("Unable to get device fingerprint");
                     }
-                    
-                    if (!fingerprint) {
-                        // Import rateLimiter to create fingerprint
-                        const { getFingerprint } = await import('../ai/rate-limiter/rateLimiter.js');
-                        fingerprint = getFingerprint();
-                        
-                        if (!fingerprint || !fingerprint.deviceId) {
-                            throw new Error("Unable to create valid device fingerprint");
-                        }
-                    }
+
+                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
 
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
