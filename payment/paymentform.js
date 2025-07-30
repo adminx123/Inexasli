@@ -864,12 +864,12 @@ async function initializePaymentProcessing() {
 
                 try {
                     // Get fingerprint data
-                    const fingerprintData = localStorage.getItem("fingerprintData");
+                    const fingerprintData = localStorage.getItem("_userFingerprint");
                     if (!fingerprintData) {
                         throw new Error("Unable to get device fingerprint");
                     }
 
-                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
+                    const fingerprint = JSON.parse(fingerprintData);
 
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
