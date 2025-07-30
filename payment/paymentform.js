@@ -891,6 +891,17 @@ async function initializePaymentProcessing() {
                     const data = await response.json();
 
                     if (data.success) {
+                        // Store the rateLimitStatus in localStorage before reloading
+                        if (data.rateLimitStatus) {
+                            localStorage.setItem('rateLimitStatus', JSON.stringify(data.rateLimitStatus));
+                            console.log('[PaymentForm] RateLimitStatus stored:', data.rateLimitStatus);
+                        }
+                        
+                        // Also store other relevant data for immediate use
+                        if (data.fingerprint) {
+                            localStorage.setItem('_userFingerprint', JSON.stringify(data.fingerprint));
+                        }
+                        
                         payStatus.innerHTML = "Access restored! Reloading...";
                         setTimeout(() => {
                             // Reload or redirect to refresh premium features
