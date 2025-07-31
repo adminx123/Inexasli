@@ -676,10 +676,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                 background-color: rgba(255, 255, 255, 0.97);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.7);
+                border: 1px solid rgba(49, 49, 49, 0.92);
                 border-bottom: none;
                 border-radius: 24px 24px 0 0;
-                box-shadow: 0 -8px 32px rgba(255, 255, 255, 0.15), 0 -4px 16px rgba(255, 255, 255, 0.1), 0 -1px 4px rgba(255, 255, 255, 0.08);
+                /* Strong shadow at the bottom, fading upward */
+                box-shadow:
+                  0 -2px 24px 8px rgba(49,49,49,0.38), /* darkest, tightest at edge */
+                  0 -12px 48px 16px rgba(49,49,49,0.22), /* mid fade */
+                  0 -32px 96px 32px rgba(49,49,49,0.10); /* far fade */
                 z-index: 1000;
                 font-family: "Inter", sans-serif;
                 display: flex;
