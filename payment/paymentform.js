@@ -863,13 +863,25 @@ async function initializePaymentProcessing() {
                 recoverButton.disabled = true;
 
                 try {
+                    // Debug: Importing getFingerprint
+                    console.log('[Recovery][Debug] Importing getFingerprint from rateLimiter.js...');
                     // Get fingerprint using centralized helper
                     const { getFingerprint } = await import('../ai/rate-limiter/rateLimiter.js');
-                    const fingerprint = await getFingerprint();
+                    console.log('[Recovery][Debug] getFingerprint imported:', typeof getFingerprint);
+                    let fingerprint;
+                    try {
+                        fingerprint = await getFingerprint();
+                        console.log('[Recovery][Debug] getFingerprint() result:', fingerprint);
+                    } catch (fpError) {
+                        console.error('[Recovery][Debug] Error calling getFingerprint():', fpError);
+                        throw new Error('getFingerprint threw an error: ' + fpError.message);
+                    }
                     if (!fingerprint) {
+                        console.error('[Recovery][Debug] Fingerprint is falsy:', fingerprint);
                         throw new Error("Unable to get device fingerprint");
                     }
 
+                    console.log('[Recovery][Debug] Calling addDeviceToAccount endpoint with:', { username, fingerprint });
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
 
@@ -887,7 +899,9 @@ async function initializePaymentProcessing() {
                         mode: "cors"
                     });
 
+                    console.log('[Recovery][Debug] Response from addDeviceToAccount:', response);
                     const data = await response.json();
+                    console.log('[Recovery][Debug] Parsed response data:', data);
 
                     if (data.success) {
                         // Store the rateLimitStatus in localStorage before reloading
@@ -895,32 +909,28 @@ async function initializePaymentProcessing() {
                             localStorage.setItem('rateLimitStatus', JSON.stringify(data.rateLimitStatus));
                             console.log('[PaymentForm] RateLimitStatus stored:', data.rateLimitStatus);
                         }
-                        
                         // Also store other relevant data for immediate use
                         if (data.fingerprint) {
                             localStorage.setItem('_userFingerprint', JSON.stringify(data.fingerprint));
                         }
-                        
                         payStatus.innerHTML = "Access restored! Reloading...";
                         setTimeout(() => {
                             // Reload or redirect to refresh premium features
                             window.location.reload();
                         }, 2000);
-
                     } else {
                         // Simple error sanitization - remove script tags and limit length
                         const errorMessage = data.error ? String(data.error).replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').substring(0, 200) : "Username verification failed. Please check your username or contact support.";
                         payStatus.innerHTML = errorMessage;
                     }
-
                 } catch (error) {
+                    console.error('[Recovery][Debug] Recovery error:', error);
                     console.error("Recovery error:", error);
                     payStatus.innerHTML = "Error occurred during recovery. Please try again or contact support.";
                 } finally {
                     recoverButton.disabled = false;
                 }
             });
-            
             console.log("Recover access button listener added");
         }
         
