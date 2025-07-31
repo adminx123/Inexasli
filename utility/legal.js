@@ -86,6 +86,9 @@ Privacy Policy Compliance:
 - Security depends on your browser and system. localStorage is not encrypted by default.
 - Payment data security is managed by our third-party payment provider, adhering to industry standards (e.g., PCI DSS).
 
+**Payment Data**
+- When you make a payment (e.g., for premium subscriptions), your payment information is processed securely via a third-party payment provider (Stripe). We do not store your full payment details on our servers; only minimal transactional data (e.g., username, transaction ID) is retained as required for billing and support purposes, in compliance with applicable laws.
+
 **International Users**
 - Since no data leaves your device for storage, local data protection laws (e.g., GDPR for European users) apply to your own management of the data.
 
@@ -103,7 +106,7 @@ Privacy Policy Compliance:
 
 **Centralized Rate Limiting System**
 - The Services utilize a centralized rate limiting system powered by Cloudflare Workers and KV storage to enforce fair usage limits across all AI modules.
-- Different AI tools have different usage limits based on processing complexity and resource requirements.
+- Different AI tools have different usage limits based on processing complexity and resource requirements (e.g., 2 requests per minute for income analysis, 1 request per minute for personality analysis).
 - The system monitors for rapid successive requests and other patterns that may indicate abuse.`
         },
 
@@ -118,6 +121,7 @@ Privacy Policy Compliance:
   - Unit Errors: Attributing an amount to the incorrect field within the specified time frame in IncomeIQ™.
   - Transposition Errors: Unintentional errors where numbers or letters are swapped or reversed.
   - Inaccurate vacation expenses (e.g., travel or lodging costs) in Vacation Worksheet.
+  - Incomplete data in AI-powered analysis tools affecting generated insights.
 - Consult with financial professionals before making any financial decisions.
 
 **Appropriate Use**
@@ -127,7 +131,15 @@ Privacy Policy Compliance:
 
 **Sensitive Data Warning**
 - You are strongly advised against entering sensitive personal data into the Services, including health information, financial details, or any GDPR-protected data.
-- Once data is processed by third-party AI systems, it becomes subject to those providers' privacy practices and security measures.`
+- Once data is processed by third-party AI systems, it becomes subject to those providers' privacy practices and security measures.
+
+**Confidentiality**
+- If you receive any confidential or proprietary information from the Developer or through the Services, you agree to maintain confidentiality and not disclose it to any third party.
+
+**Changes in Financial Situation**
+- As a user, you acknowledge that your financial situation may change over time.
+- It is your responsibility to update your information in the Services for accurate results.
+- Failure to update may result in inaccurate calculations.`
         },
 
         {
@@ -208,7 +220,9 @@ Privacy Policy Compliance:
 
 **Dispute Resolution**
 - Any dispute shall be resolved through negotiation, consultation, mediation, and/or arbitration.
+- Costs associated with dispute resolution are your responsibility.
 - The place of dispute resolution shall be British Columbia, Canada, and the language used shall be English.
+- All parties agree to submit to the jurisdiction of the courts of British Columbia for any disputes that cannot be resolved through mediation or arbitration.
 
 **Changes to Terms**
 - These Terms of Service may be updated from time to time.
