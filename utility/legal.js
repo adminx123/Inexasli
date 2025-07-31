@@ -7,7 +7,7 @@ console.log('[Legal] Script loading...');
 
 // Terms of Service content - structured for better readability
 const TERMS_OF_SERVICE = {
-    title: "Terms of Service for INEXASLI Platform and AI Services",
+    title: "Terms of Service for INEXASLI Platform, AI Services, and Business Automation",
     
     // Main disclaimer at the top
     disclaimer: `INEXASLI is a technology company that facilitates user AI interactions for educational purposes only, generating outputs from engineered prompts to support learning, not providing financial, medical, or professional advice. The Services utilize third-party AI providers for response generation. User input data is transmitted to these external services for processing. INEXASLI does not control, endorse, or assume responsibility for the outputs, accuracy, or privacy practices of these external AI systems. By using the Services, users acknowledge that their data is transmitted to third-party AI providers and is subject to those providers' terms, policies, and security measures, over which INEXASLI has no control.
@@ -17,24 +17,32 @@ const TERMS_OF_SERVICE = {
     sections: [
         {
             title: "Introduction",
-            content: `Note: This document outlines the terms of service for the use of the INEXASLI educational technology platform (referred to collectively as the "Services") provided by INEXASLI, a technology company (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
+            content: `Note: This document outlines the terms of service for the use of the INEXASLI educational technology platform and managed business automation services (referred to collectively as the "Services") provided by INEXASLI, a technology company (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader or business client, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
 
-Company Definition: INEXASLI is a technology company that provides educational AI interaction tools and prompt engineering services. We are not a financial services company, healthcare provider, legal services firm, or professional advisory business. Our core business is developing user interface technology and engineered prompts that facilitate educational interactions with third-party artificial intelligence systems.
+Company Definition: INEXASLI is a technology company that provides both educational AI interaction tools and managed business automation services (such as automated social media posting). We are not a financial services company, healthcare provider, legal services firm, or professional advisory business. Our core business is developing user interface technology, engineered prompts, and automation tools that facilitate educational and business interactions with third-party artificial intelligence systems.
 
-Description: The Services include educational technology interfaces designed to help users interact with third-party AI systems for learning and exploration across various domains. All AI-generated content originates from third-party providers through our engineered prompts and is intended as educational material to inform your discussions with qualified professionals, not as definitive guidance for decision-making.
+Description: The Services include educational technology interfaces for learning and exploration, as well as managed automation services for business clients. Businesses purchase access to managed services, not ownership of the technology or code. All AI-generated content originates from third-party providers through our engineered prompts and is intended as educational material or for business automation, not as definitive guidance for decision-making.
 
 Privacy Policy Compliance:
 - The Developer complies with the General Data Protection Regulation (GDPR) for users within the European Union and also adheres to the Personal Information Protection and Electronic Documents Act (PIPEDA) for users in Canada.`
         },
-        
         {
-            title: "Intellectual Property Rights",
-            content: `**Ownership**
-- All rights, title, and interest in and to the Services, including the website, software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the "IP Assets"), are and will remain the exclusive property of INEXASLI.
-- Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for their personal, non-commercial, educational purposes.
+            title: "Business Automation Services",
+            content: `**Managed Automation for Businesses**
+- INEXASLI offers managed automation services (such as automated social media posting) for business clients using proprietary AI technology.
+- Businesses purchase access to these managed services, not ownership of the underlying technology or code.
+- Businesses must comply with all applicable platform rules (e.g., social media terms) and provide accurate, lawful data for posting.
+- INEXASLI is not responsible for third-party platform restrictions, outages, or account actions.
+- Businesses are responsible for reviewing and approving automated posts. INEXASLI does not guarantee the accuracy, appropriateness, or compliance of AI-generated content.
+- Clients should monitor outputs and report any issues immediately. INEXASLI is not liable for reputational, legal, or financial consequences resulting from AI-generated content.`
+        },
+        {
+            title: "Intellectual Property",
+            content: `- All rights, title, and interest in and to the Services, including the website, software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the "IP Assets"), are and will remain the exclusive property of INEXASLI.
+- Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for their personal, non-commercial, educational purposes, or for business automation only as a managed service provided by INEXASLI.
 
 **User-Generated Content**
-- Any content, data, text, or information you submit or upload to the Services ("User Content") may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services.
+- Any content, data, text, or information you submit or upload to the Services ("User Content") may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services, or for business automation as managed by INEXASLI.
 - By submitting User Content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, store, display, reproduce, modify, create derivative works, and distribute such User Content as necessary to provide the Services.
 
 **Feedback**
@@ -42,10 +50,9 @@ Privacy Policy Compliance:
 - However, you will still maintain any ownership rights you have in your pre-existing intellectual property.
 
 **Restrictions**
-- You may not reproduce, duplicate, copy, sell, trade, or exploit for any commercial purposes any portion of the Services or their IP Assets without express written permission by the Developer.
+- Commercial/business use is permitted only through INEXASLI’s managed services; direct access, resale, or sublicensing of the technology is prohibited without express written permission by the Developer.
 - This includes reverse engineering or attempting to extract the source code of the Services or any part thereof, except as permitted by applicable law.`
         },
-
         {
             title: "Services Purpose",
             content: `**Educational Technology Platform**
@@ -71,7 +78,6 @@ Privacy Policy Compliance:
 - Educational Content: Any responses received through our platform originate from third-party AI providers and are intended for educational exploration only. They are not professional assessments, advice, or recommendations from INEXASLI.
 - For Learning and Exploration: Use AI-generated results to understand concepts, explore possibilities, and prepare questions for professional consultations. Always seek independent advice from qualified professionals for specific decisions in any field.`
         },
-
         {
             title: "Data Security & Privacy",
             content: `**Client-Side and Server-Side Processing**
@@ -95,7 +101,6 @@ Privacy Policy Compliance:
 **Reporting Concerns**
 - For questions about data security, AI processing, third-party data handling, or privacy practices, contact us at support@inexasli.com`
         },
-
         {
             title: "Rate Limiting and Device Fingerprinting",
             content: `**Privacy-Conscious Usage Monitoring**
@@ -109,7 +114,6 @@ Privacy Policy Compliance:
 - Different AI tools have different usage limits based on processing complexity and resource requirements (e.g., 2 requests per minute for income analysis, 1 request per minute for personality analysis).
 - The system monitors for rapid successive requests and other patterns that may indicate abuse.`
         },
-
         {
             title: "User Responsibility",
             content: `**Accuracy of Information**
@@ -140,7 +144,6 @@ Privacy Policy Compliance:
 - It is your responsibility to update your information in the Services for accurate results.
 - Failure to update may result in inaccurate calculations.`
         },
-
         {
             title: "Third-Party AI Content & Technology Limitations",
             content: `**Third-Party AI Content Disclaimers**
@@ -158,12 +161,15 @@ Privacy Policy Compliance:
 - INEXASLI shall not be liable for any damages, losses, or claims arising from technology platform issues, third-party AI errors, or any content generated through our Services.
 - Users acknowledge that technology platforms and AI systems have inherent risks and agree to use our Services at their own risk, relying on professional advice for critical decisions.`
         },
-
         {
             title: "Limitation of Liability",
             content: `**Third-Party AI Content Disclaimers**
 - No AI system is entirely free from errors, biases, or inaccuracies, and third-party AI-generated content should not be relied upon for actual decision-making without professional consultation.
-- Users acknowledge that our technology platform facilitates access to third-party AI-generated educational content only, and any decisions made based on this content are at their own discretion and risk.
+- Users acknowledge that our technology platform facilitates access to third-party AI-generated educational content and business automation only, and any decisions made based on this content are at their own discretion and risk.
+
+**Business Automation Liability**
+- INEXASLI is not liable for business losses, missed posts, reputational harm, or third-party platform actions (including account suspension or removal) resulting from use of the business automation services.
+- INEXASLI is not responsible for the content generated by third-party AI (e.g., XAI) and recommends that clients review and approve all automated posts.
 
 **Technology Platform Liability Cap**
 - The Developer's liability shall be limited to the greater of the amount paid by the user for the technology services in the 6 months preceding the claim, or a nominal sum of $100.
@@ -176,7 +182,6 @@ Privacy Policy Compliance:
 - The technology platform may experience downtime due to maintenance, updates, technical issues, or third-party provider outages.
 - The Developer does not guarantee uninterrupted access and shall not be liable for damages arising from platform downtime.`
         },
-
         {
             title: "Indemnification",
             content: `**User Holds Developer Harmless**
@@ -186,7 +191,6 @@ Privacy Policy Compliance:
 **Third-Party Claims**
 - You agree to indemnify the Developer against any third-party claims related to your use of our technology platform or any third-party AI content you access, save, share, or distribute through our platform.`
         },
-
         {
             title: "Force Majeure",
             content: `**Acts Beyond Control**
@@ -196,7 +200,6 @@ Privacy Policy Compliance:
 **Service Availability**
 - Users acknowledge that online services dependent on third-party infrastructure may experience interruptions, and the Developer makes no guarantees regarding continuous availability of the Services.`
         },
-
         {
             title: "Refund Policy",
             content: `**General Policy**
@@ -211,7 +214,6 @@ Privacy Policy Compliance:
 **Consumer Rights**
 - This refund policy does not affect your statutory rights under applicable consumer protection laws.`
         },
-
         {
             title: "Governing Law & Dispute Resolution",
             content: `**Governing Law**
@@ -230,13 +232,13 @@ Privacy Policy Compliance:
         }
     ],
 
-    acceptance: `By using our technology platform, or by indicating your acceptance through an electronic means (e.g., clicking "I Agree", checking a box), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+    acceptance: `By using our technology platform or managed business automation services, or by indicating your acceptance through an electronic means (e.g., clicking "I Agree", checking a box), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
 
-By using our technology platform, you confirm that you understand INEXASLI provides data organization tools, basic calculations, prompt engineering, and user interface technology to facilitate educational interactions with third-party AI systems.
+By using our technology platform, you confirm that you understand INEXASLI provides data organization tools, basic calculations, prompt engineering, user interface technology, and managed automation services to facilitate educational and business interactions with third-party AI systems.
 
 You consent to the collection, use, storage, and disposal of your information as outlined in these terms for the purpose of providing our technology services.
 
-You agree that your use of our technology platform is at your own risk, understanding that all analytical content is generated by third-party AI systems and is for educational purposes only.`
+You agree that your use of our technology platform and business automation services is at your own risk, understanding that all analytical and automated content is generated by third-party AI systems and is for educational or business purposes only.`
 };
 
 /**
