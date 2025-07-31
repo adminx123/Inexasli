@@ -66,20 +66,26 @@ function generateSessionId() {
  * @returns {Object} The fingerprint data object
  */
 export function getFingerprint() {
+    console.log('[rateLimiter][Debug] getFingerprint called');
     try {
         const stored = localStorage.getItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
+        console.log('[rateLimiter][Debug] localStorage value:', stored);
         let fingerprintData;
         if (stored) {
             fingerprintData = JSON.parse(stored);
+            console.log('[rateLimiter][Debug] Parsed fingerprintData:', fingerprintData);
             const sessionAge = Date.now() - fingerprintData.sessionCreated;
+            console.log('[rateLimiter][Debug] sessionAge:', sessionAge);
             if (sessionAge > 24 * 60 * 60 * 1000) {
                 fingerprintData.sessionId = generateSessionId();
                 fingerprintData.sessionCreated = Date.now();
                 fingerprintData.requestCounts = {};
                 fingerprintData.lastRequestTimes = [];
+                console.log('[rateLimiter][Debug] Session expired, new sessionId:', fingerprintData.sessionId);
             }
         }
         if (!stored || !fingerprintData || typeof fingerprintData.deviceId !== 'string' || !fingerprintData.deviceId) {
+            console.log('[rateLimiter][Debug] No valid fingerprint, generating new');
             localStorage.removeItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
             fingerprintData = {
                 deviceId: generateDeviceFingerprint(),
@@ -89,18 +95,21 @@ export function getFingerprint() {
                 lastRequestTimes: [],
                 rateLimitStatus: {}
             };
+            console.log('[rateLimiter][Debug] New fingerprintData:', fingerprintData);
         }
         if (!fingerprintData.deviceId || typeof fingerprintData.deviceId !== 'string') {
+            console.log('[rateLimiter][Debug] deviceId missing or invalid, regenerating');
             fingerprintData.deviceId = generateDeviceFingerprint();
         }
         if (!Array.isArray(fingerprintData.lastRequestTimes)) {
             fingerprintData.lastRequestTimes = [];
         }
         localStorage.setItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY, JSON.stringify(fingerprintData));
+        console.log('[rateLimiter][Debug] Returning fingerprintData:', fingerprintData);
         return fingerprintData;
     } catch (error) {
-        console.error('Error getting fingerprint:', error);
-        return {
+        console.error('[rateLimiter][Debug] Error getting fingerprint:', error);
+        const fallback = {
             deviceId: generateDeviceFingerprint(),
             sessionId: generateSessionId(),
             sessionCreated: Date.now(),
@@ -108,6 +117,8 @@ export function getFingerprint() {
             lastRequestTimes: [],
             rateLimitStatus: {}
         };
+        console.log('[rateLimiter][Debug] Returning fallback fingerprintData:', fallback);
+        return fallback;
     }
 }
 
