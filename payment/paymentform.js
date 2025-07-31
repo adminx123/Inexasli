@@ -863,13 +863,12 @@ async function initializePaymentProcessing() {
                 recoverButton.disabled = true;
 
                 try {
-                    // Get fingerprint data
-                    const fingerprintData = localStorage.getItem("fingerprintData");
-                    if (!fingerprintData) {
+                    // Get fingerprint using centralized helper
+                    const { getFingerprint } = await import('../ai/rate-limiter/rateLimiter.js');
+                    const fingerprint = await getFingerprint();
+                    if (!fingerprint) {
                         throw new Error("Unable to get device fingerprint");
                     }
-
-                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
 
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
