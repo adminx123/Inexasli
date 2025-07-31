@@ -4,6 +4,8 @@
  * Works with centralized rate-limiter worker for robust protection
  */
 
+console.log('[rateLimiter][Debug] rateLimiter.js loaded');
+
 // Configuration
 const RATE_LIMIT_CONFIG = {
   FINGERPRINT_KEY: '_userFingerprint',
