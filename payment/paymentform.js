@@ -1,5 +1,10 @@
 // paymentform.js
 document.addEventListener('DOMContentLoaded', async function() {
+    // Debug: Check if rateLimiter is available immediately
+    console.log('[PaymentForm][DEBUG] 🔍 DOMContentLoaded - checking window.rateLimiter availability');
+    console.log('[PaymentForm][DEBUG] 🔍 window.rateLimiter exists:', !!window.rateLimiter);
+    console.log('[PaymentForm][DEBUG] 🔍 window.rateLimiter value:', window.rateLimiter);
+    
     // Import sanitizeErrorMessage function
     const { sanitizeErrorMessage } = await import('../utility/inputValidation.js');
     // Skip external button creation - now integrated into datain.js
@@ -770,6 +775,25 @@ function waitForStripe() {
     });
 }
 
+// Wait for rateLimiter to be available (ES module timing issue fix)
+function waitForRateLimiter() {
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+        const checkRateLimiter = () => {
+            if (window.rateLimiter && typeof window.rateLimiter.getFingerprintForWorker === 'function') {
+                console.log('[PaymentForm][DEBUG] ✅ window.rateLimiter is now available');
+                resolve();
+            } else if (Date.now() - startTime > 10000) { // 10-second timeout
+                console.error('[PaymentForm][DEBUG] ❌ window.rateLimiter failed to load within 10 seconds');
+                reject(new Error("Rate limiter not available - please refresh the page"));
+            } else {
+                setTimeout(checkRateLimiter, 100);
+            }
+        };
+        checkRateLimiter();
+    });
+}
+
 // Combined payment initialization function
 async function initializePaymentProcessing() {
     console.log("initializePaymentProcessing called");
@@ -863,11 +887,14 @@ async function initializePaymentProcessing() {
                 recoverButton.disabled = true;
 
                 try {
+                    // Wait for rateLimiter to be available (fixes ES module timing issue)
+                    console.log('[PaymentForm][DEBUG] 🔍 Waiting for rateLimiter to be available...');
+                    await waitForRateLimiter();
+                    console.log('[PaymentForm][DEBUG] ✅ rateLimiter is now available, proceeding with recovery');
+                    
                     // Get fingerprint data using rateLimiter method only
-                    if (!window.rateLimiter) {
-                        throw new Error("Rate limiter not available - please refresh the page");
-                    }
                     const fingerprint = window.rateLimiter.getFingerprintForWorker();
+                    console.log('[PaymentForm][DEBUG] ✅ Fingerprint obtained:', fingerprint);
 
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
@@ -909,7 +936,7 @@ async function initializePaymentProcessing() {
 
                 } catch (error) {
                     console.error("Recovery error:", error);
-                    payStatus.innerHTML = "Error occurred during recovery. Please try again or contact support.";
+                    payStatus.innerHTML = error.message || "Error occurred during recovery. Please try again or contact support.";
                 } finally {
                     recoverButton.disabled = false;
                 }
