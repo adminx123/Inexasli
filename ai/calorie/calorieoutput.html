@@ -46,16 +46,7 @@
       margin-bottom: 25px;
     }
     
-    .nutrient-card {
-      background: #f2f9f3;
-      border: 1px solid #4a7c59;
-      border-radius: 5px;
-      padding: 15px;
-    }
-    
-    .nutrient-card:hover {
-      background-color: #eef7f0;
-    }
+    /* .nutrient-card styles removed; now using .main-card from outputstyles.css */
     
     .nutrient-name {
       font-weight: bold;
@@ -93,17 +84,6 @@
       margin-top: 25px;
     }
     
-    .meal-card {
-      background: #f2f9f3;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      border: 1px solid #4a7c59;
-    }
-    
-    .meal-card:hover {
-      background-color: #eef7f0;
-    }
     
     
     .meal-title {
@@ -280,7 +260,7 @@
         
         calorieData.nutrients.forEach(nutrient => {
           const card = document.createElement('div');
-          card.className = 'nutrient-card';
+          card.className = 'main-card';
           
           const percentage = parseInt(nutrient.percentage);
           let progressClass = 'percentage-good';
@@ -458,7 +438,7 @@
         
         calculatedDailyTotals.forEach(nutrient => {
           const card = document.createElement('div');
-          card.className = 'nutrient-card';
+          card.className = 'main-card';
           
           const percentage = parseInt(nutrient.percentage);
           let progressClass = 'percentage-good';
@@ -491,7 +471,7 @@
         
         calorieData.dailyTotals.forEach(nutrient => {
           const card = document.createElement('div');
-          card.className = 'nutrient-card';
+          card.className = 'main-card';
           
           const percentage = parseInt(nutrient.percentage);
           let progressClass = 'percentage-good';
@@ -715,7 +695,7 @@
         
         calorieData.nutrients.forEach(nutrient => {
           const card = document.createElement('div');
-          card.className = 'nutrient-card';
+          card.className = 'main-card';
           
           const percentage = parseInt(nutrient.percentage);
           let progressClass = 'percentage-good';
