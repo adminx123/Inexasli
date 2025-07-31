@@ -1,4 +1,5 @@
-// paymentform.js
+// paymentform.js - UPDATED VERSION WITH RATE LIMITER FIX - BUILD 2025-01-30-001
+console.log('[PaymentForm][CACHE-CHECK] 🚀 UPDATED paymentform.js is loading - BUILD 2025-01-30-001');
 document.addEventListener('DOMContentLoaded', async function() {
     // Debug: Check if rateLimiter is available immediately
     console.log('[PaymentForm][DEBUG] 🔍 DOMContentLoaded - checking window.rateLimiter availability');
