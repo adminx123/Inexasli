@@ -29,7 +29,7 @@
 
 
     <input id="age" type="text" placeholder="Age">
-    <select id="birth-control-type">
+    <select id="birthControlType">
       <option value="" disabled selected>Birth control type</option>
       <option value="pill">Birth Control Pill</option>
       <option value="iud">IUD</option>
@@ -42,36 +42,36 @@
       <option value="spermicide">Spermicide</option>
       <option value="none">None</option>
     </select>
-    <input id="birth-control-detail" type="text" placeholder="Specify brand/type" style="display: none;">
+    <input id="birthControlDetail" type="text" placeholder="Specify brand/type" style="display: none;">
 
     <!-- Natural Cycle Specific Fields -->
     <div id="natural-cycle-container" style="display: none;">
-      <input id="cycle-length-input" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
+      <input id="cycleLengthInput" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
     </div>
 
     <!-- Birth Control Pill Specific Fields -->
     <div id="pill-container" style="display: none;">
-      <label for="pill-start-date">Birth control pill restart date (after your last period):</label>
-      <input id="pill-start-date" type="date">
+      <label for="pillStartDate">Birth control pill restart date (after your last period):</label>
+      <input id="pillStartDate" type="date">
     </div>
 
     <!-- IUD Specific Fields -->
     <div id="iud-container" style="display: none;">
-      <label for="iud-insertion-date">IUD insertion date:</label>
-      <input id="iud-insertion-date" type="date">
+      <label for="iudInsertionDate">IUD insertion date:</label>
+      <input id="iudInsertionDate" type="date">
     </div>
 
     <!-- Other Hormonal Methods Container -->
     <div id="other-hormonal-container" style="display: none;">
-      <label for="method-start-date">Patch/Ring/Injectable/Implant start date:</label>
-      <input id="method-start-date" type="date">
+      <label for="methodStartDate">Patch/Ring/Injectable/Implant start date:</label>
+      <input id="methodStartDate" type="date">
     </div>
 
-    <label for="start-date">Last period start date:</label>
-    <input id="start-date" type="date" name="last-period-start-date">
+    <label for="startDate">Last period start date:</label>
+    <input id="startDate" type="date" name="last-period-start-date">
     
-    <label for="end-date">Last period end date:</label>
-    <input id="end-date" type="date" name="last-period-end-date">
+    <label for="endDate">Last period end date:</label>
+    <input id="endDate" type="date" name="last-period-end-date">
   </div>
 
   <div class="row1" data-step-label="Medical Information">
@@ -79,11 +79,11 @@
       Medical Information<span class="tooltip1-content"></span>
     </h3>
     
-    <textarea id="medical-conditions" placeholder="Medical conditions
+    <textarea id="medicalConditions" placeholder="Medical conditions
     
     (PCOS, endometriosis, thyroid issues, diabetes, etc.)"></textarea>
     
-    <textarea id="current-medications" placeholder="Other Medication & Supplements & Dosage
+    <textarea id="currentMedications" placeholder="Other Medication & Supplements & Dosage
 • Zoloft 50mg daily
 • Vitamin D
 • Iron supplement"></textarea>
@@ -96,7 +96,7 @@
     </h3>
 
     <label>Average cycle length</label>
-    <textarea id="cycle-length" placeholder="Average cycle length
+    <textarea id="cycleLength" placeholder="Average cycle length
 • 28 days (most common)
 • Varies 26-32 days
 • 25 days on birth control
@@ -104,7 +104,7 @@
 "></textarea>
 
     <label>How regular are your cycles?</label>
-    <div class="grid-items2" id="cycle-regularity-container">
+    <div class="grid-items2" id="cycleRegularityContainer">
       <div class="grid-item" data-value="very-regular">Very Regular (±1 day)</div>
       <div class="grid-item" data-value="mostly-regular">Mostly Regular (±2-3 days)</div>
       <div class="grid-item" data-value="irregular">Irregular (±4+ days)</div>
@@ -112,7 +112,7 @@
     </div>
 
     <label>Flow intensity</label>
-    <div class="grid-items2" id="flow-intensity-container">
+    <div class="grid-items2" id="flowIntensityContainer">
       <div class="grid-item" data-value="light">Light</div>
       <div class="grid-item" data-value="medium">Medium</div>
       <div class="grid-item" data-value="heavy">Heavy</div>
