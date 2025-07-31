@@ -863,13 +863,11 @@ async function initializePaymentProcessing() {
                 recoverButton.disabled = true;
 
                 try {
-                    // Get fingerprint data
-                    const fingerprintData = localStorage.getItem("fingerprintData");
-                    if (!fingerprintData) {
-                        throw new Error("Unable to get device fingerprint");
+                    // Get fingerprint data using rateLimiter method only
+                    if (!window.rateLimiter) {
+                        throw new Error("Rate limiter not available - please refresh the page");
                     }
-
-                    const fingerprint = JSON.parse(decodeURIComponent(fingerprintData));
+                    const fingerprint = window.rateLimiter.getFingerprintForWorker();
 
                     // Call the new addDeviceToAccount endpoint
                     const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
@@ -891,15 +889,10 @@ async function initializePaymentProcessing() {
                     const data = await response.json();
 
                     if (data.success) {
-                        // Store the rateLimitStatus in localStorage before reloading
+                        // Store only rateLimitStatus from backend
                         if (data.rateLimitStatus) {
                             localStorage.setItem('rateLimitStatus', JSON.stringify(data.rateLimitStatus));
                             console.log('[PaymentForm] RateLimitStatus stored:', data.rateLimitStatus);
-                        }
-                        
-                        // Also store other relevant data for immediate use
-                        if (data.fingerprint) {
-                            localStorage.setItem('_userFingerprint', JSON.stringify(data.fingerprint));
                         }
                         
                         payStatus.innerHTML = "Access restored! Reloading...";
