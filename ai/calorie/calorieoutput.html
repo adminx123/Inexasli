@@ -655,37 +655,37 @@
       const recommendationsSection = document.createElement('div');
       recommendationsSection.className = 'meals-section';
       recommendationsSection.innerHTML = '<h3 style="color: #333; margin: 25px 0 15px 0; display: flex; align-items: center;"><i class="fas fa-lightbulb" style="margin-right: 10px; color: #7a9b8a;"></i>Personalized Recommendations</h3>';
-      
+
       if (calorieData.mealRecommendations1) {
         const rec1 = document.createElement('div');
-        rec1.className = 'meal-card';
+        rec1.className = 'main-card';
         rec1.innerHTML = `
           <div class="meal-title" style="color: #a67c7c;"><i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>Priority Nutritional Needs</div>
           <div class="meal-content">${calorieData.mealRecommendations1}</div>
         `;
         recommendationsSection.appendChild(rec1);
       }
-      
+
       if (calorieData.mealRecommendations2) {
         const rec2 = document.createElement('div');
-        rec2.className = 'meal-card';
+        rec2.className = 'main-card';
         rec2.innerHTML = `
           <div class="meal-title" style="color: #b8956d;"><i class="fas fa-balance-scale" style="margin-right: 8px;"></i>Secondary Nutrient Goals</div>
           <div class="meal-content">${calorieData.mealRecommendations2}</div>
         `;
         recommendationsSection.appendChild(rec2);
       }
-      
+
       if (calorieData.mealRecommendations3) {
         const rec3 = document.createElement('div');
-        rec3.className = 'meal-card';
+        rec3.className = 'main-card';
         rec3.innerHTML = `
           <div class="meal-title" style="color: #7a9b8a;"><i class="fas fa-check-circle" style="margin-right: 8px;"></i>Complete Your Daily Goals</div>
           <div class="meal-content">${calorieData.mealRecommendations3}</div>
         `;
         recommendationsSection.appendChild(rec3);
       }
-      
+
       container.appendChild(recommendationsSection);
       
       // Legacy nutrients support (fallback)
