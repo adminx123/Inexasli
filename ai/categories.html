@@ -28,13 +28,14 @@
     font-size: 24px;
     color: #4a90e2;
     margin-right: 12px;
-    margin-left: 8px;
+    flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
-/* Product description left alignment */
+/* Product description center alignment */
 .product-description {
-    text-align: left;
-    flex: 1;
+    text-align: center;
+    flex: 1; /* Take remaining space and center within it */
+    margin-right: 12px; /* Balance space for icon on left */
 }
 
 
@@ -115,6 +116,51 @@
     padding: 8px;
     margin-bottom: 16px;
 }
+
+/* Product items - copy of grid-item styles but without :active state to prevent unwanted activation when favoriting */
+.product-item {
+  background-color: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #4b5563;
+  padding: 1rem;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.08), 0 2px 8px rgba(107, 114, 128, 0.06), 0 1px 3px rgba(107, 114, 128, 0.04);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+  position: relative; /* For absolute positioning of favorite icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-item:hover {
+  transform: translateY(-2px);
+  background-color: rgba(243, 244, 246, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 6px 24px rgba(107, 114, 128, 0.12), 0 3px 12px rgba(107, 114, 128, 0.08), 0 1px 4px rgba(107, 114, 128, 0.06);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  color: #4b5563;
+}
+
+/* No :active state to prevent activation when favoriting */
+
+.product-item.selected {
+  background-color: #e5e7eb;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #222;
+  box-shadow: 0 6px 24px rgba(107, 114, 128, 0.2), 0 3px 12px rgba(107, 114, 128, 0.15), 0 1px 4px rgba(107, 114, 128, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
 </style>
 
 <div class="device-container">
@@ -142,53 +188,53 @@
 <div class="row1" data-step-label="Products">
     <div class="grid-items1">
         <!-- Health Products -->
-        <div class="grid-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
+        <div class="product-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
             <i class="bx bx-calculator product-icon"></i>
             <span class="product-description">Personal nutrition educational tool</span>
         </div>
 
-        <div class="grid-item" data-category="health" data-value="/ai/period/periodiq.html">
+        <div class="product-item" data-category="health" data-value="/ai/period/periodiq.html">
             <i class="bx bx-calendar-heart product-icon"></i>
             <span class="product-description">Menstrual health educational tool</span>
         </div>
         
         <!-- Business Products -->
-        <div class="grid-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
+        <div class="product-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
             <i class="bx bx-brain product-icon"></i>
             <span class="product-description">Decision-making informational tool</span>
         </div>
 
-        <div class="grid-item" data-category="business,lifestyle" data-value="/ai/shop/shopiq.html">
+        <div class="product-item" data-category="business,lifestyle" data-value="/ai/shop/shopiq.html">
             <i class="bx bx-search-alt product-icon"></i>
             <span class="product-description">Product research informational tool</span>
         </div>
         
         <!-- Finance Products -->
-        <div class="grid-item" data-category="finance" data-value="/ai/income/incomeiq.html">
+        <div class="product-item" data-category="finance" data-value="/ai/income/incomeiq.html">
             <i class="bx bx-dollar-circle product-icon"></i>
             <span class="product-description">Personal finance informational tool</span>
         </div>
         
         <!-- Lifestyle Products -->
-        <div class="grid-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
+        <div class="product-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
             <i class="bx bx-calendar-event product-icon"></i>
             <span class="product-description">Event planning informational tool</span>
         </div>
-        <div class="grid-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
+        <div class="product-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
             <i class="bx bx-closet product-icon"></i>
             <span class="product-description">Style informational tool</span>
         </div>
-        <div class="grid-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
+        <div class="product-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
             <i class="bx bx-book-open product-icon"></i>
             <span class="product-description">Philosophy exploration tool</span>
         </div>
-        <div class="grid-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
+        <div class="product-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
             <i class="bx bx-user-circle product-icon"></i>
             <span class="product-description">Personality educational tool</span>
         </div>
         
         <!-- Learning Products -->
-        <div class="grid-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
+        <div class="product-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
             <i class="bx bx-question-mark product-icon"></i>
             <span class="product-description">Learning quiz tool</span>
         </div>
@@ -261,7 +307,7 @@ function toggleFavorite(url) {
 function updateFavoriteIcons() {
     const favorites = getFavorites();
     // This will update icons in both the main grid and the favorites grid
-    document.querySelectorAll('.grid-item[data-value]').forEach(item => {
+    document.querySelectorAll('.product-item[data-value]').forEach(item => {
         const icon = item.querySelector('.favorite-icon');
         if (icon) {
             if (favorites.includes(item.dataset.value)) {
@@ -274,7 +320,7 @@ function updateFavoriteIcons() {
 }
 
 function addFavoriteIcons() {
-    document.querySelectorAll('.grid-item[data-category]').forEach(product => {
+    document.querySelectorAll('.product-item[data-category]').forEach(product => {
         if (product.querySelector('.favorite-icon')) return; // Don't add twice
         const icon = document.createElement('span');
         icon.className = 'favorite-icon';
@@ -286,7 +332,7 @@ function addFavoriteIcons() {
 
 // Function to filter products using DIRECT INLINE STYLES (bypasses all CSS)
 function filterProducts(selectedCategory) {
-    const products = document.querySelectorAll('.grid-item[data-category]');
+    const products = document.querySelectorAll('.product-item[data-category]');
     console.log('[Categories] filterProducts called with:', selectedCategory, 'Found products:', products.length);
     
     products.forEach(product => {
@@ -330,7 +376,7 @@ setTimeout(function() {
         });
         
         console.log('[Categories] Initializing - hiding all products first');
-        document.querySelectorAll('.grid-item[data-category]').forEach(product => {
+        document.querySelectorAll('.product-item[data-category]').forEach(product => {
             product.style.display = 'none';
         });
     
@@ -371,7 +417,7 @@ if (deviceContainer) {
             return;
         }
 
-        const gridItem = e.target.closest('.grid-item');
+        const gridItem = e.target.closest('.grid-item, .product-item');
         if (!gridItem || !gridItem.dataset.value) return;
 
         // Handle favorite icon clicks
