@@ -14,6 +14,17 @@
   <script src="../../utility/enhancedUI.js"></script>
   
   <style>
+    /* Complete list reset - no bullets anywhere */
+    ul, ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    li {
+      list-style: none;
+    }
+    
     /* Add margin between product groups */
     .product-collapsible-group {
       margin-bottom: 32px;
@@ -246,28 +257,11 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Enhanced list styling - no more ugly bullets */
+    /* Enhanced list styling - using clean warning classes */
     .warning-list {
       list-style: none;
       padding: 0;
       margin: 0;
-    }
-
-    .warning-list li {
-      background: rgba(220, 53, 69, 0.1);
-      border-left: 4px solid #dc3545;
-      padding: 12px 16px;
-      margin: 8px 0;
-      border-radius: 8px;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      color: #000;
-    }
-
-    .warning-list li.critical {
-      background: rgba(220, 53, 69, 0.2);
-      border-left-color: #dc3545;
-      font-weight: 600;
     }
 
     /* General list improvements */
@@ -479,22 +473,9 @@
       padding: 16px;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 8px;
-      border-left: 4px solid rgba(13, 202, 240, 0.6);
     }
 
-    .red-flags-list {
-      margin-top: 12px;
-    }
-
-    .red-flags-list .red-flag {
-      background: rgba(220, 53, 69, 0.15);
-      border-left: 4px solid #dc3545;
-      padding: 12px 16px;
-      margin: 8px 0;
-      border-radius: 8px;
-      color: #000;
-      font-weight: 500;
-    }
+    /* Clean styling - using warning classes from outputstyles.css */
 
     /* Hidden Dangers specific styling */
     .hidden-dangers {
@@ -769,51 +750,7 @@
       margin: 12px 0;
     }
 
-    .hidden-costs-list li, .subscription-traps-list li, .price-manipulation-list li,
-    .supply-chain-list li, .environmental-damage-list li, .lawsuit-history-list li,
-    .lobbying-list li, .complaint-trends-list li, .user-experiences-list li,
-    .hidden-problems-list li, .deceptive-claims-list li, .scientific-misleading-list li,
-    .manipulated-comparisons-list li, .regulatory-warnings-list li,
-    .hidden-defects-list li, .failure-patterns-list li, .manufacturing-shortcuts-list li,
-    .immediate-actions-list li, .avoidance-reasons-list li,
-    .recall-list li, .violation-list li {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 6px;
-      padding: 12px 16px;
-      margin: 8px 0;
-      color: #000;
-      line-height: 1.5;
-      border-left: 3px solid rgba(255, 255, 255, 0.3);
-    }
-
     /* Specific accent colors for different list types */
-    .hidden-costs-list li, .subscription-traps-list li, .price-manipulation-list li {
-      border-left-color: rgba(255, 193, 7, 0.6);
-    }
-
-    .supply-chain-list li, .environmental-damage-list li, .lawsuit-history-list li {
-      border-left-color: rgba(108, 117, 125, 0.6);
-    }
-
-    .complaint-trends-list li, .user-experiences-list li, .hidden-problems-list li {
-      border-left-color: rgba(102, 16, 242, 0.6);
-    }
-
-    .deceptive-claims-list li, .scientific-misleading-list li, .regulatory-warnings-list li {
-      border-left-color: rgba(255, 107, 0, 0.6);
-    }
-
-    .immediate-actions-list li {
-      border-left-color: rgba(40, 167, 69, 0.6);
-      background: rgba(40, 167, 69, 0.1);
-      font-weight: 500;
-    }
-
-    .avoidance-reasons-list li, .recall-list li, .violation-list li {
-      border-left-color: rgba(220, 53, 69, 0.6);
-      background: rgba(220, 53, 69, 0.1);
-    }
-
     /* Mobile responsiveness for transparency analysis */
     @media (max-width: 768px) {
       .price-comparison {
@@ -1544,9 +1481,9 @@ console.log('Shop API Output script running');
           ${data.verdict.bottomLineTruth ? `<p class="bottom-line"><strong>Bottom Line:</strong> ${data.verdict.bottomLineTruth}</p>` : ''}
           ${data.verdict.keyRedFlags?.length > 0 ? `
             <h4>🚩 Key Red Flags</h4>
-            <ul class="red-flags-list">
-              ${data.verdict.keyRedFlags.map(flag => `<li class="red-flag">${flag}</li>`).join('')}
-            </ul>
+            <div class="warning">
+              ${data.verdict.keyRedFlags.map(flag => `<div class="red-warning">${flag}</div>`).join('')}
+            </div>
           ` : ''}
         </div>
       `;
@@ -1586,8 +1523,8 @@ console.log('Shop API Output script running');
           
           ${data.hiddenDangers.criticalWarnings?.length > 0 ? `
             <h4>⚠️ Critical Warnings</h4>
-            <ul class="warning-list">
-              ${data.hiddenDangers.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
+            <ul class="warning">
+              ${data.hiddenDangers.criticalWarnings.map(warning => `<li class="red-warning">${warning}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1607,15 +1544,15 @@ console.log('Shop API Output script running');
           
           ${data.hiddenDangers.recallHistory?.length > 0 ? `
             <h4>📋 Recall History</h4>
-            <ul class="recall-list">
-              ${data.hiddenDangers.recallHistory.map(recall => `<li class="recall-item">${recall}</li>`).join('')}
+            <ul class="warning">
+              ${data.hiddenDangers.recallHistory.map(recall => `<li class="red-warning">${recall}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.hiddenDangers.safetyViolations?.length > 0 ? `
             <h4>⚖️ Safety Violations</h4>
-            <ul class="violation-list">
-              ${data.hiddenDangers.safetyViolations.map(violation => `<li class="violation-item">${violation}</li>`).join('')}
+            <ul class="warning">
+              ${data.hiddenDangers.safetyViolations.map(violation => `<li class="red-warning">${violation}</li>`).join('')}
             </ul>
           ` : ''}
         </div>
@@ -1642,15 +1579,15 @@ console.log('Shop API Output script running');
           
           ${data.financialDeception.hiddenCosts?.length > 0 ? `
             <h4>💰 Hidden Costs</h4>
-            <ul class="hidden-costs-list">
-              ${data.financialDeception.hiddenCosts.map(cost => `<li class="hidden-cost">${cost}</li>`).join('')}
+            <ul class="warning">
+              ${data.financialDeception.hiddenCosts.map(cost => `<li class="yellow-warning">${cost}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.financialDeception.subscriptionTraps?.length > 0 ? `
             <h4>🪤 Subscription Traps</h4>
-            <ul class="subscription-traps-list">
-              ${data.financialDeception.subscriptionTraps.map(trap => `<li class="subscription-trap">${trap}</li>`).join('')}
+            <ul class="warning">
+              ${data.financialDeception.subscriptionTraps.map(trap => `<li class="red-warning">${trap}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1661,8 +1598,8 @@ console.log('Shop API Output script running');
           
           ${data.financialDeception.priceManipulation?.length > 0 ? `
             <h4>🎯 Price Manipulation Tactics</h4>
-            <ul class="price-manipulation-list">
-              ${data.financialDeception.priceManipulation.map(tactic => `<li class="manipulation-tactic">${tactic}</li>`).join('')}
+            <ul class="warning">
+              ${data.financialDeception.priceManipulation.map(tactic => `<li class="orange-warning">${tactic}</li>`).join('')}
             </ul>
           ` : ''}
         </div>
@@ -1684,29 +1621,29 @@ console.log('Shop API Output script running');
           
           ${data.corporateTransparency.supplyChainAbuses?.length > 0 ? `
             <h4>⛓️ Supply Chain Abuses</h4>
-            <ul class="supply-chain-list">
-              ${data.corporateTransparency.supplyChainAbuses.map(abuse => `<li class="supply-chain-abuse">${abuse}</li>`).join('')}
+            <ul class="warning">
+              ${data.corporateTransparency.supplyChainAbuses.map(abuse => `<li class="gray-warning">${abuse}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.corporateTransparency.environmentalDamage?.length > 0 ? `
             <h4>🌍 Environmental Damage</h4>
-            <ul class="environmental-damage-list">
-              ${data.corporateTransparency.environmentalDamage.map(damage => `<li class="environmental-damage">${damage}</li>`).join('')}
+            <ul class="warning">
+              ${data.corporateTransparency.environmentalDamage.map(damage => `<li class="red-warning">${damage}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.corporateTransparency.lawsuitHistory?.length > 0 ? `
             <h4>⚖️ Lawsuit History</h4>
-            <ul class="lawsuit-history-list">
-              ${data.corporateTransparency.lawsuitHistory.map(lawsuit => `<li class="lawsuit">${lawsuit}</li>`).join('')}
+            <ul class="warning">
+              ${data.corporateTransparency.lawsuitHistory.map(lawsuit => `<li class="red-warning">${lawsuit}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.corporateTransparency.lobbyingActivity?.length > 0 ? `
             <h4>🏛️ Anti-Consumer Lobbying</h4>
             <ul class="lobbying-list">
-              ${data.corporateTransparency.lobbyingActivity.map(activity => `<li class="lobbying-activity">${activity}</li>`).join('')}
+              ${data.corporateTransparency.lobbyingActivity.map(activity => `<li class="purple-warning">${activity}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1736,21 +1673,21 @@ console.log('Shop API Output script running');
           ${data.socialSentiment.complaintTrends?.length > 0 ? `
             <h4>📈 Trending Complaints</h4>
             <ul class="complaint-trends-list">
-              ${data.socialSentiment.complaintTrends.map(trend => `<li class="complaint-trend">${trend}</li>`).join('')}
+              ${data.socialSentiment.complaintTrends.map(trend => `<li class="orange-warning">${trend}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.socialSentiment.realUserExperiences?.length > 0 ? `
             <h4>💬 Real User Experiences</h4>
             <ul class="user-experiences-list">
-              ${data.socialSentiment.realUserExperiences.map(experience => `<li class="user-experience">${experience}</li>`).join('')}
+              ${data.socialSentiment.realUserExperiences.map(experience => `<li class="blue-warning">${experience}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${data.socialSentiment.hiddenProblems?.length > 0 ? `
             <h4>🙈 Hidden Problems Companies Ignore</h4>
             <ul class="hidden-problems-list">
-              ${data.socialSentiment.hiddenProblems.map(problem => `<li class="hidden-problem">${problem}</li>`).join('')}
+              ${data.socialSentiment.hiddenProblems.map(problem => `<li class="red-warning">${problem}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1771,7 +1708,7 @@ console.log('Shop API Output script running');
           ${data.marketingLies.deceptiveClaims?.length > 0 ? `
             <h4>🎭 False Advertising</h4>
             <ul class="deceptive-claims-list">
-              ${data.marketingLies.deceptiveClaims.map(claim => `<li class="deceptive-claim">${claim}</li>`).join('')}
+              ${data.marketingLies.deceptiveClaims.map(claim => `<li class="orange-warning">${claim}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1862,8 +1799,8 @@ console.log('Shop API Output script running');
           
           ${data.consumerProtection.immediateActions?.length > 0 ? `
             <h4>🚨 Immediate Actions to Protect Yourself</h4>
-            <ul class="immediate-actions-list">
-              ${data.consumerProtection.immediateActions.map(action => `<li class="immediate-action">${action}</li>`).join('')}
+            <ul class="warning">
+              ${data.consumerProtection.immediateActions.map(action => `<li class="green-warning">${action}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1978,8 +1915,8 @@ console.log('Shop API Output script running');
           
           ${product.hiddenDangers.criticalWarnings?.length > 0 ? `
             <h4>⚠️ Critical Warnings</h4>
-            <ul class="warning-list">
-              ${product.hiddenDangers.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
+            <ul class="warning">
+              ${product.hiddenDangers.criticalWarnings.map(warning => `<li class="red-warning">${warning}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -1999,15 +1936,15 @@ console.log('Shop API Output script running');
           
           ${product.hiddenDangers.recallHistory?.length > 0 ? `
             <h4>📋 Recall History</h4>
-            <ul class="recall-list">
-              ${product.hiddenDangers.recallHistory.map(recall => `<li class="recall-item">${recall}</li>`).join('')}
+            <ul class="warning">
+              ${product.hiddenDangers.recallHistory.map(recall => `<li class="red-warning">${recall}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.hiddenDangers.safetyViolations?.length > 0 ? `
             <h4>⚖️ Safety Violations</h4>
-            <ul class="violation-list">
-              ${product.hiddenDangers.safetyViolations.map(violation => `<li class="violation-item">${violation}</li>`).join('')}
+            <ul class="warning">
+              ${product.hiddenDangers.safetyViolations.map(violation => `<li class="red-warning">${violation}</li>`).join('')}
             </ul>
           ` : ''}
         </div>
@@ -2034,15 +1971,15 @@ console.log('Shop API Output script running');
           
           ${product.financialDeception.hiddenCosts?.length > 0 ? `
             <h4>💰 Hidden Costs</h4>
-            <ul class="hidden-costs-list">
-              ${product.financialDeception.hiddenCosts.map(cost => `<li class="hidden-cost">${cost}</li>`).join('')}
+            <ul class="warning">
+              ${product.financialDeception.hiddenCosts.map(cost => `<li class="yellow-warning">${cost}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.financialDeception.subscriptionTraps?.length > 0 ? `
             <h4>🪤 Subscription Traps</h4>
-            <ul class="subscription-traps-list">
-              ${product.financialDeception.subscriptionTraps.map(trap => `<li class="subscription-trap">${trap}</li>`).join('')}
+            <ul class="warning">
+              ${product.financialDeception.subscriptionTraps.map(trap => `<li class="red-warning">${trap}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -2053,8 +1990,8 @@ console.log('Shop API Output script running');
           
           ${product.financialDeception.priceManipulation?.length > 0 ? `
             <h4>🎯 Price Manipulation Tactics</h4>
-            <ul class="price-manipulation-list">
-              ${product.financialDeception.priceManipulation.map(tactic => `<li class="manipulation-tactic">${tactic}</li>`).join('')}
+            <ul class="warning">
+              ${product.financialDeception.priceManipulation.map(tactic => `<li class="orange-warning">${tactic}</li>`).join('')}
             </ul>
           ` : ''}
         </div>
@@ -2076,29 +2013,29 @@ console.log('Shop API Output script running');
           
           ${product.corporateTransparency.supplyChainAbuses?.length > 0 ? `
             <h4>⛓️ Supply Chain Abuses</h4>
-            <ul class="supply-chain-list">
-              ${product.corporateTransparency.supplyChainAbuses.map(abuse => `<li class="supply-chain-abuse">${abuse}</li>`).join('')}
+            <ul class="warning">
+              ${product.corporateTransparency.supplyChainAbuses.map(abuse => `<li class="gray-warning">${abuse}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.corporateTransparency.environmentalDamage?.length > 0 ? `
             <h4>🌍 Environmental Damage</h4>
-            <ul class="environmental-damage-list">
-              ${product.corporateTransparency.environmentalDamage.map(damage => `<li class="environmental-damage">${damage}</li>`).join('')}
+            <ul class="warning">
+              ${product.corporateTransparency.environmentalDamage.map(damage => `<li class="red-warning">${damage}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.corporateTransparency.lawsuitHistory?.length > 0 ? `
             <h4>⚖️ Lawsuit History</h4>
-            <ul class="lawsuit-history-list">
-              ${product.corporateTransparency.lawsuitHistory.map(lawsuit => `<li class="lawsuit">${lawsuit}</li>`).join('')}
+            <ul class="warning">
+              ${product.corporateTransparency.lawsuitHistory.map(lawsuit => `<li class="red-warning">${lawsuit}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.corporateTransparency.lobbyingActivities?.length > 0 ? `
             <h4>🏛️ Lobbying Activities</h4>
             <ul class="lobbying-list">
-              ${product.corporateTransparency.lobbyingActivities.map(activity => `<li class="lobbying-activity">${activity}</li>`).join('')}
+              ${product.corporateTransparency.lobbyingActivities.map(activity => `<li class="purple-warning">${activity}</li>`).join('')}
             </ul>
           ` : ''}
         </div>
@@ -2118,21 +2055,21 @@ console.log('Shop API Output script running');
           ${product.socialSentiment.complaintTrends?.length > 0 ? `
             <h4>📉 Complaint Trends</h4>
             <ul class="complaint-trends-list">
-              ${product.socialSentiment.complaintTrends.map(trend => `<li class="complaint-trend">${trend}</li>`).join('')}
+              ${product.socialSentiment.complaintTrends.map(trend => `<li class="orange-warning">${trend}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.socialSentiment.userExperiences?.length > 0 ? `
             <h4>👥 Real User Experiences</h4>
             <ul class="user-experiences-list">
-              ${product.socialSentiment.userExperiences.map(experience => `<li class="user-experience">${experience}</li>`).join('')}
+              ${product.socialSentiment.userExperiences.map(experience => `<li class="blue-warning">${experience}</li>`).join('')}
             </ul>
           ` : ''}
           
           ${product.socialSentiment.hiddenProblems?.length > 0 ? `
             <h4>� Hidden Problems</h4>
             <ul class="hidden-problems-list">
-              ${product.socialSentiment.hiddenProblems.map(problem => `<li class="hidden-problem">${problem}</li>`).join('')}
+              ${product.socialSentiment.hiddenProblems.map(problem => `<li class="red-warning">${problem}</li>`).join('')}
             </ul>
           ` : ''}
         </div>
@@ -2147,7 +2084,7 @@ console.log('Shop API Output script running');
           ${product.marketingLies.deceptiveClaims?.length > 0 ? `
             <h4>🎪 Deceptive Claims</h4>
             <ul class="deceptive-claims-list">
-              ${product.marketingLies.deceptiveClaims.map(claim => `<li class="deceptive-claim">${claim}</li>`).join('')}
+              ${product.marketingLies.deceptiveClaims.map(claim => `<li class="orange-warning">${claim}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -2224,8 +2161,8 @@ console.log('Shop API Output script running');
           
           ${product.consumerProtection.immediateActions?.length > 0 ? `
             <h4>� Immediate Actions</h4>
-            <ul class="immediate-actions-list">
-              ${product.consumerProtection.immediateActions.map(action => `<li class="immediate-action">${action}</li>`).join('')}
+            <ul class="warning">
+              ${product.consumerProtection.immediateActions.map(action => `<li class="green-warning">${action}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -2342,8 +2279,8 @@ console.log('Shop API Output script running');
           
           ${data.safetyAnalysis.criticalWarnings && data.safetyAnalysis.criticalWarnings.length > 0 ? `
             <h4>⚠️ Critical Warnings</h4>
-            <ul class="warning-list">
-              ${data.safetyAnalysis.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
+            <ul class="warning">
+              ${data.safetyAnalysis.criticalWarnings.map(warning => `<li class="red-warning">${warning}</li>`).join('')}
             </ul>
           ` : ''}
           
@@ -2438,7 +2375,7 @@ console.log('Shop API Output script running');
           
           ${data.priceAnalysis.priceWarnings && data.priceAnalysis.priceWarnings.length > 0 ? `
             <h4>💰 Price Warnings</h4>
-            <ul class="warning-list">
+            <ul class="warning">
               ${data.priceAnalysis.priceWarnings.map(warning => `<li>${warning}</li>`).join('')}
             </ul>
           ` : ''}
@@ -2500,7 +2437,7 @@ console.log('Shop API Output script running');
           
           ${data.misleadingClaims.deceptivePractices && data.misleadingClaims.deceptivePractices.length > 0 ? `
             <h4>🚫 Deceptive Practices</h4>
-            <ul class="warning-list">
+            <ul class="warning">
               ${data.misleadingClaims.deceptivePractices.map(practice => `<li>${practice}</li>`).join('')}
             </ul>
           ` : ''}
@@ -2754,7 +2691,7 @@ console.log('Shop API Output script running');
                   <h4>Violations</h4>
                   <div class="violations-list">
                     ${data.healthSafety.violations.map(v => `
-                      <div class="violation-item">
+                      <div class="red-warning">
                         <div class="violation-icon">⚠️</div>
                         <div class="violation-text">${v}</div>
                       </div>
@@ -2865,7 +2802,7 @@ console.log('Shop API Output script running');
                     `).join('')}
                   </div>
                 ` : ''}
-                ${data.privacySecurity.securityConcerns?.length > 0 ? `<h4>Security Concerns:</h4><ul class="warning-list">${data.privacySecurity.securityConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+                ${data.privacySecurity.securityConcerns?.length > 0 ? `<h4>Security Concerns:</h4><ul class="warning">${data.privacySecurity.securityConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
             </div>
         `;
     }
@@ -2881,8 +2818,8 @@ console.log('Shop API Output script running');
                     <span class="rating-number">${data.financialTransparency.costTransparency}/10</span>
                 </div>
                 <p><strong>Refund Policy:</strong> ${data.financialTransparency.refundPolicy || 'N/A'}</p>
-                ${data.financialTransparency.hiddenCosts?.length > 0 ? `<h4>Hidden Costs:</h4><ul class="warning-list">${data.financialTransparency.hiddenCosts.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
-                ${data.financialTransparency.subscriptionTraps?.length > 0 ? `<h4>Subscription Traps:</h4><ul class="warning-list">${data.financialTransparency.subscriptionTraps.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
+                ${data.financialTransparency.hiddenCosts?.length > 0 ? `<h4>Hidden Costs:</h4><ul class="warning">${data.financialTransparency.hiddenCosts.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+                ${data.financialTransparency.subscriptionTraps?.length > 0 ? `<h4>Subscription Traps:</h4><ul class="warning">${data.financialTransparency.subscriptionTraps.map(t => `<li>${t}</li>`).join('')}</ul>` : ''}
             </div>
         `;
     }
@@ -2898,7 +2835,7 @@ console.log('Shop API Output script running');
                     <span class="rating-number">${data.recommendation.overallRating}/10</span>
                 </div>
                 <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">${data.recommendation.verdict}</div>
-                ${data.recommendation.primaryConcerns?.length > 0 ? `<h4>Primary Concerns:</h4><ul class="warning-list">${data.recommendation.primaryConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+                ${data.recommendation.primaryConcerns?.length > 0 ? `<h4>Primary Concerns:</h4><ul class="warning">${data.recommendation.primaryConcerns.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
                 <p><strong>Bottom Line:</strong> ${data.recommendation.bottomLine || 'N/A'}</p>
             </div>
         `;
@@ -2935,7 +2872,7 @@ console.log('Shop API Output script running');
                 </div>
                 <p><strong>Cancellation Policy:</strong> ${data.contractTerms.cancellationPolicy || 'N/A'}</p>
                 <p><strong>Commitment Terms:</strong> ${data.contractTerms.commitmentTerms || 'N/A'}</p>
-                ${data.contractTerms.hiddenClauses?.length > 0 ? `<h4>Hidden Clauses:</h4><ul class="warning-list">${data.contractTerms.hiddenClauses.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
+                ${data.contractTerms.hiddenClauses?.length > 0 ? `<h4>Hidden Clauses:</h4><ul class="warning">${data.contractTerms.hiddenClauses.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
             </div>
         `;
     }
@@ -2951,7 +2888,7 @@ console.log('Shop API Output script running');
                     <span class="rating-number">${data.pricingAnalysis.transparencyRating}/10</span>
                 </div>
                 <p><strong>Price Stability:</strong> ${data.pricingAnalysis.priceStability || 'N/A'}</p>
-                ${data.pricingAnalysis.hiddenFees?.length > 0 ? `<h4>Hidden Fees:</h4><ul class="warning-list">${data.pricingAnalysis.hiddenFees.map(f => `<li>${f}</li>`).join('')}</ul>` : ''}
+                ${data.pricingAnalysis.hiddenFees?.length > 0 ? `<h4>Hidden Fees:</h4><ul class="warning">${data.pricingAnalysis.hiddenFees.map(f => `<li>${f}</li>`).join('')}</ul>` : ''}
             </div>
         `;
     }
@@ -2967,7 +2904,7 @@ console.log('Shop API Output script running');
                     <span class="rating-number">${data.recommendation.overallRating}/10</span>
                 </div>
                 <div class="verdict ${getVerdictClass(data.recommendation.verdict)}">${data.recommendation.verdict}</div>
-                ${data.recommendation.keyWarnings?.length > 0 ? `<h4>Key Warnings:</h4><ul class="warning-list">${data.recommendation.keyWarnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
+                ${data.recommendation.keyWarnings?.length > 0 ? `<h4>Key Warnings:</h4><ul class="warning">${data.recommendation.keyWarnings.map(w => `<li>${w}</li>`).join('')}</ul>` : ''}
                 <p><strong>Bottom Line:</strong> ${data.recommendation.bottomLine || 'N/A'}</p>
             </div>
         `;

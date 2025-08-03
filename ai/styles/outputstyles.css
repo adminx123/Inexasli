@@ -230,3 +230,80 @@ body {
 
 /* Custom styling placeholder - individual output files can add their own styles here */
 /* Each output.txt file can include additional CSS that works within the device-container constraints */
+
+/* ====================
+   Warning System - Attention Classes
+   ==================== */
+
+/* Base warning class - shared styles */
+.warning {
+  padding: 12px 16px;
+  margin: 8px 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Remove all list styling */
+.warning ul, .warning ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.warning li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Critical/Red warnings - high attention */
+.red-warning {
+  background: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.3);
+  color: #000;
+}
+
+/* Caution/Yellow warnings - medium attention */
+.yellow-warning {
+  background: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.3);
+  color: #000;
+}
+
+/* Success/Green warnings - positive attention */
+.green-warning {
+  background: rgba(40, 167, 69, 0.1);
+  border-color: rgba(40, 167, 69, 0.3);
+  color: #000;
+}
+
+/* Info/Blue warnings - informational attention */
+.blue-warning {
+  background: rgba(13, 202, 240, 0.1);
+  border-color: rgba(13, 202, 240, 0.3);
+  color: #000;
+}
+
+/* Purple warnings - special attention */
+.purple-warning {
+  background: rgba(102, 16, 242, 0.1);
+  border-color: rgba(102, 16, 242, 0.3);
+  color: #000;
+}
+
+/* Orange warnings - moderate attention */
+.orange-warning {
+  background: rgba(255, 107, 0, 0.1);
+  border-color: rgba(255, 107, 0, 0.3);
+  color: #000;
+}
+
+/* Gray warnings - neutral attention */
+.gray-warning {
+  background: rgba(108, 117, 125, 0.1);
+  border-color: rgba(108, 117, 125, 0.3);
+  color: #000;
+}
