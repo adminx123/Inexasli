@@ -398,6 +398,467 @@
       border-color: #ffd700;
     }
 
+    /* Enhanced transparency analysis styles */
+    .verdict-card {
+      border: 2px solid rgba(13, 202, 240, 0.3);
+      background: rgba(13, 202, 240, 0.1);
+    }
+
+    .verdict-card.critical {
+      border: 2px solid rgba(220, 53, 69, 0.5);
+      background: rgba(220, 53, 69, 0.15);
+      animation: pulse-critical 2s infinite;
+    }
+
+    .verdict-card.high {
+      border: 2px solid rgba(255, 107, 0, 0.4);
+      background: rgba(255, 107, 0, 0.12);
+    }
+
+    .verdict-card.medium {
+      border: 2px solid rgba(255, 193, 7, 0.4);
+      background: rgba(255, 193, 7, 0.12);
+    }
+
+    .verdict-card.low {
+      border: 2px solid rgba(40, 167, 69, 0.3);
+      background: rgba(40, 167, 69, 0.1);
+    }
+
+    @keyframes pulse-critical {
+      0%, 100% { box-shadow: 0 8px 32px rgba(220, 53, 69, 0.4); }
+      50% { box-shadow: 0 8px 32px rgba(220, 53, 69, 0.7); }
+    }
+
+    .verdict-display {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .overall-rating {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .recommendation-badge {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-align: center;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .recommendation-badge.buy {
+      background: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+      border: 2px solid rgba(40, 167, 69, 0.4);
+    }
+
+    .recommendation-badge.avoid {
+      background: rgba(220, 53, 69, 0.2);
+      color: #dc3545;
+      border: 2px solid rgba(220, 53, 69, 0.4);
+    }
+
+    .recommendation-badge.proceed-with-extreme-caution {
+      background: rgba(255, 107, 0, 0.2);
+      color: #ff6b00;
+      border: 2px solid rgba(255, 107, 0, 0.4);
+    }
+
+    .bottom-line {
+      font-size: 18px;
+      font-weight: 600;
+      color: #000;
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      border-left: 4px solid rgba(13, 202, 240, 0.6);
+    }
+
+    .red-flags-list {
+      margin-top: 12px;
+    }
+
+    .red-flags-list .red-flag {
+      background: rgba(220, 53, 69, 0.15);
+      border-left: 4px solid #dc3545;
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 8px;
+      color: #000;
+      font-weight: 500;
+    }
+
+    /* Hidden Dangers specific styling */
+    .hidden-dangers {
+      background: rgba(220, 53, 69, 0.08);
+      border: 1px solid rgba(220, 53, 69, 0.2);
+    }
+
+    .ingredient-warning {
+      background: rgba(220, 53, 69, 0.1);
+      border: 1px solid rgba(220, 53, 69, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    .ingredient-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .ingredient-name {
+      font-weight: 700;
+      color: #000;
+      font-size: 16px;
+    }
+
+    .severity-badge {
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .severity-badge.critical {
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+    }
+
+    .severity-badge.high {
+      background: rgba(255, 107, 0, 0.9);
+      color: white;
+    }
+
+    .severity-badge.medium {
+      background: rgba(255, 193, 7, 0.9);
+      color: #000;
+    }
+
+    .severity-badge.low {
+      background: rgba(40, 167, 69, 0.9);
+      color: white;
+    }
+
+    .health-risk {
+      color: #000;
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .why-hidden {
+      color: #000;
+      font-style: italic;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      border-radius: 4px;
+      margin-top: 8px;
+    }
+
+    /* Financial Deception styling */
+    .financial-deception {
+      background: rgba(255, 193, 7, 0.08);
+      border: 1px solid rgba(255, 193, 7, 0.2);
+    }
+
+    .price-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .advertised-price, .true-cost {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .advertised-price {
+      border: 2px solid rgba(40, 167, 69, 0.3);
+    }
+
+    .true-cost {
+      border: 2px solid rgba(220, 53, 69, 0.3);
+    }
+
+    .price-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #000;
+      opacity: 0.8;
+    }
+
+    .price-value {
+      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      color: #000;
+    }
+
+    /* Corporate Transparency styling */
+    .corporate-transparency {
+      background: rgba(108, 117, 125, 0.08);
+      border: 1px solid rgba(108, 117, 125, 0.2);
+    }
+
+    /* Social Sentiment styling */
+    .social-sentiment {
+      background: rgba(102, 16, 242, 0.08);
+      border: 1px solid rgba(102, 16, 242, 0.2);
+    }
+
+    .sentiment-display {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .sentiment-bar {
+      flex: 1;
+      height: 24px;
+      background: rgba(220, 53, 69, 0.2);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sentiment-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+      border-radius: 12px;
+      transition: width 0.5s ease;
+    }
+
+    .sentiment-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 700;
+      color: #000;
+      text-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+      font-size: 12px;
+    }
+
+    /* Marketing Lies styling */
+    .marketing-lies {
+      background: rgba(255, 107, 0, 0.08);
+      border: 1px solid rgba(255, 107, 0, 0.2);
+    }
+
+    /* Quality Reality styling */
+    .quality-reality {
+      background: rgba(13, 202, 240, 0.08);
+      border: 1px solid rgba(13, 202, 240, 0.2);
+    }
+
+    /* Consumer Protection styling */
+    .consumer-protection {
+      background: rgba(40, 167, 69, 0.08);
+      border: 1px solid rgba(40, 167, 69, 0.2);
+    }
+
+    .warning-level-display {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .warning-label {
+      font-weight: 600;
+      color: #000;
+    }
+
+    .warning-badge {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .warning-badge.critical {
+      background: rgba(220, 53, 69, 0.9);
+      color: white;
+    }
+
+    .warning-badge.high {
+      background: rgba(255, 107, 0, 0.9);
+      color: white;
+    }
+
+    .warning-badge.medium {
+      background: rgba(255, 193, 7, 0.9);
+      color: #000;
+    }
+
+    .warning-badge.low {
+      background: rgba(40, 167, 69, 0.9);
+      color: white;
+    }
+
+    .alternatives-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .alternative-item {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .alternative-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .alternative-name {
+      font-weight: 700;
+      color: #000;
+      font-size: 16px;
+    }
+
+    .alternative-brand {
+      font-size: 14px;
+      color: #000;
+      opacity: 0.8;
+    }
+
+    .alternative-benefits, .alternative-transparency {
+      color: #000;
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    /* Enhanced list styling for all transparency sections */
+    .hidden-costs-list, .subscription-traps-list, .price-manipulation-list,
+    .supply-chain-list, .environmental-damage-list, .lawsuit-history-list,
+    .lobbying-list, .complaint-trends-list, .user-experiences-list,
+    .hidden-problems-list, .deceptive-claims-list, .scientific-misleading-list,
+    .manipulated-comparisons-list, .regulatory-warnings-list,
+    .hidden-defects-list, .failure-patterns-list, .manufacturing-shortcuts-list,
+    .immediate-actions-list, .avoidance-reasons-list,
+    .recall-list, .violation-list {
+      list-style: none;
+      padding: 0;
+      margin: 12px 0;
+    }
+
+    .hidden-costs-list li, .subscription-traps-list li, .price-manipulation-list li,
+    .supply-chain-list li, .environmental-damage-list li, .lawsuit-history-list li,
+    .lobbying-list li, .complaint-trends-list li, .user-experiences-list li,
+    .hidden-problems-list li, .deceptive-claims-list li, .scientific-misleading-list li,
+    .manipulated-comparisons-list li, .regulatory-warnings-list li,
+    .hidden-defects-list li, .failure-patterns-list li, .manufacturing-shortcuts-list li,
+    .immediate-actions-list li, .avoidance-reasons-list li,
+    .recall-list li, .violation-list li {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin: 8px 0;
+      color: #000;
+      line-height: 1.5;
+      border-left: 3px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* Specific accent colors for different list types */
+    .hidden-costs-list li, .subscription-traps-list li, .price-manipulation-list li {
+      border-left-color: rgba(255, 193, 7, 0.6);
+    }
+
+    .supply-chain-list li, .environmental-damage-list li, .lawsuit-history-list li {
+      border-left-color: rgba(108, 117, 125, 0.6);
+    }
+
+    .complaint-trends-list li, .user-experiences-list li, .hidden-problems-list li {
+      border-left-color: rgba(102, 16, 242, 0.6);
+    }
+
+    .deceptive-claims-list li, .scientific-misleading-list li, .regulatory-warnings-list li {
+      border-left-color: rgba(255, 107, 0, 0.6);
+    }
+
+    .immediate-actions-list li {
+      border-left-color: rgba(40, 167, 69, 0.6);
+      background: rgba(40, 167, 69, 0.1);
+      font-weight: 500;
+    }
+
+    .avoidance-reasons-list li, .recall-list li, .violation-list li {
+      border-left-color: rgba(220, 53, 69, 0.6);
+      background: rgba(220, 53, 69, 0.1);
+    }
+
+    /* Mobile responsiveness for transparency analysis */
+    @media (max-width: 768px) {
+      .price-comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .alternatives-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .verdict-display {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .overall-rating {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .sentiment-display {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .warning-level-display {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .ingredient-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .alternative-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+    }
+
     .ranking-item.rank-2 .rank-number {
       background: linear-gradient(135deg, #c0c0c0, #e5e5e5);
       color: #333;
@@ -926,11 +1387,13 @@ console.log('Shop API Output script running');
       return;
     }
 
-    console.log('Displaying shop analysis data:', data);
+    console.log('Displaying transparency analysis data:', data);
 
     // Analysis type header
-    const analysisType = data.analysisType || 'product';
+    const analysisType = data.analysisType || 'transparency';
     const typeHeaders = {
+      'transparency': '🔍 Product Transparency Analysis',
+      'multi-product-transparency': '� Multi-Product Transparency Analysis',
       'product': '🛒 Product Analysis Results',
       'business': '🏪 Business Analysis Results', 
       'app': '📱 App Analysis Results',
@@ -949,8 +1412,13 @@ console.log('Shop API Output script running');
         <div class="shop-content">
     `;
 
-    // Collapsible for product or comparison
-    if (analysisType === 'comparison' && data.itemsCompared && Array.isArray(data.itemsCompared)) {
+    // Handle multi-product transparency analysis (new format)
+    if (analysisType === 'multi-product-transparency') {
+      html += generateMultiProductTransparencyDisplay(data);
+    // Handle transparency analysis (single product format)
+    } else if (analysisType === 'transparency') {
+      html += generateTransparencyDisplay(data);
+    } else if (analysisType === 'comparison' && data.itemsCompared && Array.isArray(data.itemsCompared)) {
       // Add recommendations (not per product) at the top
       if (data.recommendations) {
         html += `
@@ -1051,6 +1519,743 @@ console.log('Shop API Output script running');
       }
     }, 0);
     console.log('Data displayed successfully');
+  }
+
+  // NEW: Generate transparency analysis display
+  function generateTransparencyDisplay(data) {
+    let html = '';
+    
+    // Overall Verdict at the top with warning level styling
+    if (data.verdict) {
+      const warningLevel = data.consumerProtection?.warningLevel || 'MEDIUM';
+      const warningClass = warningLevel.toLowerCase();
+      
+      html += `
+        <div class="analysis-card verdict-card ${warningClass}">
+          <h3><i class="fas fa-gavel"></i> Final Verdict</h3>
+          <div class="verdict-display">
+            <div class="overall-rating">
+              <span>Overall Rating:</span>
+              <div class="rating-stars">${generateStars(data.verdict.overallRating || 0)}</div>
+              <span class="rating-number">${data.verdict.overallRating || 0}/10</span>
+            </div>
+            <div class="recommendation-badge ${data.verdict.recommendation?.toLowerCase().replace(/\s+/g, '-') || ''}">${data.verdict.recommendation || 'PROCEED WITH CAUTION'}</div>
+          </div>
+          ${data.verdict.bottomLineTruth ? `<p class="bottom-line"><strong>Bottom Line:</strong> ${data.verdict.bottomLineTruth}</p>` : ''}
+          ${data.verdict.keyRedFlags?.length > 0 ? `
+            <h4>🚩 Key Red Flags</h4>
+            <ul class="red-flags-list">
+              ${data.verdict.keyRedFlags.map(flag => `<li class="red-flag">${flag}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Product Information
+    if (data.productInfo) {
+      html += `
+        <div class="analysis-card product-info">
+          <h3><i class="fas fa-box"></i> Product Information</h3>
+          <div class="product-details">
+            <p><strong>Product:</strong> ${data.productInfo.name || 'Unknown'}</p>
+            <p><strong>Brand:</strong> ${data.productInfo.brand || 'Unknown'}</p>
+            <p><strong>Category:</strong> ${data.productInfo.productType || data.detectedCategory || 'Unknown'}</p>
+            ${data.productInfo.marketingName ? `<p><strong>Marketing Name:</strong> ${data.productInfo.marketingName}</p>` : ''}
+            ${data.productInfo.actualProduct ? `<p><strong>What It Really Is:</strong> ${data.productInfo.actualProduct}</p>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Hidden Dangers - Critical Section
+    if (data.hiddenDangers) {
+      const isCritical = data.hiddenDangers.overallSafetyRating <= 3 || 
+                        (data.hiddenDangers.criticalWarnings && data.hiddenDangers.criticalWarnings.length > 0);
+      
+      html += `
+        <div class="analysis-card hidden-dangers ${isCritical ? 'critical' : ''}">
+          <h3><i class="fas fa-exclamation-triangle"></i> Hidden Dangers & Safety Exposure</h3>
+          ${data.hiddenDangers.overallSafetyRating ? `
+            <div class="rating-display">
+              <span>Safety Rating:</span>
+              <div class="rating-stars">${generateStars(data.hiddenDangers.overallSafetyRating)}</div>
+              <span class="rating-number">${data.hiddenDangers.overallSafetyRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.hiddenDangers.criticalWarnings?.length > 0 ? `
+            <h4>⚠️ Critical Warnings</h4>
+            <ul class="warning-list">
+              ${data.hiddenDangers.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.hiddenDangers.hiddenIngredients?.length > 0 ? `
+            <h4>🧪 Hidden Dangerous Ingredients</h4>
+            ${data.hiddenDangers.hiddenIngredients.map(ingredient => `
+              <div class="ingredient-warning">
+                <div class="ingredient-header">
+                  <span class="ingredient-name">${ingredient.substance}</span>
+                  <span class="severity-badge severity-${ingredient.severity?.toLowerCase() || 'medium'}">${ingredient.severity || 'MEDIUM'}</span>
+                </div>
+                <p class="health-risk">${ingredient.hiddenRisk}</p>
+                ${ingredient.whyHidden ? `<p class="why-hidden"><strong>Why They Hide This:</strong> ${ingredient.whyHidden}</p>` : ''}
+              </div>
+            `).join('')}
+          ` : ''}
+          
+          ${data.hiddenDangers.recallHistory?.length > 0 ? `
+            <h4>📋 Recall History</h4>
+            <ul class="recall-list">
+              ${data.hiddenDangers.recallHistory.map(recall => `<li class="recall-item">${recall}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.hiddenDangers.safetyViolations?.length > 0 ? `
+            <h4>⚖️ Safety Violations</h4>
+            <ul class="violation-list">
+              ${data.hiddenDangers.safetyViolations.map(violation => `<li class="violation-item">${violation}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Financial Deception Analysis
+    if (data.financialDeception) {
+      html += `
+        <div class="analysis-card financial-deception">
+          <h3><i class="fas fa-dollar-sign"></i> Financial Deception Analysis</h3>
+          ${data.financialDeception.advertisedPrice && data.financialDeception.trueOwnershipCost ? `
+            <div class="price-comparison">
+              <div class="advertised-price">
+                <span class="price-label">Advertised Price:</span>
+                <span class="price-value">${data.financialDeception.advertisedPrice}</span>
+              </div>
+              <div class="true-cost">
+                <span class="price-label">True Cost:</span>
+                <span class="price-value">${data.financialDeception.trueOwnershipCost}</span>
+              </div>
+            </div>
+          ` : ''}
+          
+          ${data.financialDeception.hiddenCosts?.length > 0 ? `
+            <h4>💰 Hidden Costs</h4>
+            <ul class="hidden-costs-list">
+              ${data.financialDeception.hiddenCosts.map(cost => `<li class="hidden-cost">${cost}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.financialDeception.subscriptionTraps?.length > 0 ? `
+            <h4>🪤 Subscription Traps</h4>
+            <ul class="subscription-traps-list">
+              ${data.financialDeception.subscriptionTraps.map(trap => `<li class="subscription-trap">${trap}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.financialDeception.plannedObsolescence ? `
+            <h4>⏰ Planned Obsolescence</h4>
+            <p class="planned-obsolescence">${data.financialDeception.plannedObsolescence}</p>
+          ` : ''}
+          
+          ${data.financialDeception.priceManipulation?.length > 0 ? `
+            <h4>🎯 Price Manipulation Tactics</h4>
+            <ul class="price-manipulation-list">
+              ${data.financialDeception.priceManipulation.map(tactic => `<li class="manipulation-tactic">${tactic}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Corporate Transparency Investigation
+    if (data.corporateTransparency) {
+      html += `
+        <div class="analysis-card corporate-transparency">
+          <h3><i class="fas fa-building"></i> Corporate Transparency Investigation</h3>
+          ${data.corporateTransparency.ethicsRating ? `
+            <div class="rating-display">
+              <span>Ethics Rating:</span>
+              <div class="rating-stars">${generateStars(data.corporateTransparency.ethicsRating)}</div>
+              <span class="rating-number">${data.corporateTransparency.ethicsRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.corporateTransparency.supplyChainAbuses?.length > 0 ? `
+            <h4>⛓️ Supply Chain Abuses</h4>
+            <ul class="supply-chain-list">
+              ${data.corporateTransparency.supplyChainAbuses.map(abuse => `<li class="supply-chain-abuse">${abuse}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.corporateTransparency.environmentalDamage?.length > 0 ? `
+            <h4>🌍 Environmental Damage</h4>
+            <ul class="environmental-damage-list">
+              ${data.corporateTransparency.environmentalDamage.map(damage => `<li class="environmental-damage">${damage}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.corporateTransparency.lawsuitHistory?.length > 0 ? `
+            <h4>⚖️ Lawsuit History</h4>
+            <ul class="lawsuit-history-list">
+              ${data.corporateTransparency.lawsuitHistory.map(lawsuit => `<li class="lawsuit">${lawsuit}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.corporateTransparency.lobbyingActivity?.length > 0 ? `
+            <h4>🏛️ Anti-Consumer Lobbying</h4>
+            <ul class="lobbying-list">
+              ${data.corporateTransparency.lobbyingActivity.map(activity => `<li class="lobbying-activity">${activity}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.corporateTransparency.executiveGreed ? `
+            <h4>💼 Executive Greed</h4>
+            <p class="executive-greed">${data.corporateTransparency.executiveGreed}</p>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Social Sentiment & Real User Experiences
+    if (data.socialSentiment) {
+      html += `
+        <div class="analysis-card social-sentiment">
+          <h3><i class="fas fa-users"></i> Social Sentiment & Real User Experiences</h3>
+          ${data.socialSentiment.overallSentiment !== undefined ? `
+            <div class="sentiment-display">
+              <span>Overall Sentiment:</span>
+              <div class="sentiment-bar">
+                <div class="sentiment-fill" style="width: ${Math.max(0, (data.socialSentiment.overallSentiment + 100) / 2)}%"></div>
+                <span class="sentiment-number">${data.socialSentiment.overallSentiment}/100</span>
+              </div>
+            </div>
+          ` : ''}
+          
+          ${data.socialSentiment.complaintTrends?.length > 0 ? `
+            <h4>📈 Trending Complaints</h4>
+            <ul class="complaint-trends-list">
+              ${data.socialSentiment.complaintTrends.map(trend => `<li class="complaint-trend">${trend}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.socialSentiment.realUserExperiences?.length > 0 ? `
+            <h4>💬 Real User Experiences</h4>
+            <ul class="user-experiences-list">
+              ${data.socialSentiment.realUserExperiences.map(experience => `<li class="user-experience">${experience}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.socialSentiment.hiddenProblems?.length > 0 ? `
+            <h4>🙈 Hidden Problems Companies Ignore</h4>
+            <ul class="hidden-problems-list">
+              ${data.socialSentiment.hiddenProblems.map(problem => `<li class="hidden-problem">${problem}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.socialSentiment.sentimentVsMarketing ? `
+            <h4>📊 Reality vs Marketing</h4>
+            <p class="sentiment-vs-marketing">${data.socialSentiment.sentimentVsMarketing}</p>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Marketing Lies & Deceptive Practices
+    if (data.marketingLies) {
+      html += `
+        <div class="analysis-card marketing-lies">
+          <h3><i class="fas fa-mask"></i> Marketing Lies & Deceptive Practices</h3>
+          
+          ${data.marketingLies.deceptiveClaims?.length > 0 ? `
+            <h4>🎭 False Advertising</h4>
+            <ul class="deceptive-claims-list">
+              ${data.marketingLies.deceptiveClaims.map(claim => `<li class="deceptive-claim">${claim}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.marketingLies.scientificMisleading?.length > 0 ? `
+            <h4>🧬 Scientific-Sounding Nonsense</h4>
+            <ul class="scientific-misleading-list">
+              ${data.marketingLies.scientificMisleading.map(claim => `<li class="scientific-misleading">${claim}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.marketingLies.manipulatedComparisons?.length > 0 ? `
+            <h4>📊 Rigged Comparisons</h4>
+            <ul class="manipulated-comparisons-list">
+              ${data.marketingLies.manipulatedComparisons.map(comparison => `<li class="manipulated-comparison">${comparison}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.marketingLies.fakeReviews ? `
+            <h4>⭐ Review Manipulation</h4>
+            <p class="fake-reviews">${data.marketingLies.fakeReviews}</p>
+          ` : ''}
+          
+          ${data.marketingLies.regulatoryWarnings?.length > 0 ? `
+            <h4>🏛️ Government Warnings</h4>
+            <ul class="regulatory-warnings-list">
+              ${data.marketingLies.regulatoryWarnings.map(warning => `<li class="regulatory-warning">${warning}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Quality Reality vs Marketing Claims
+    if (data.qualityReality) {
+      html += `
+        <div class="analysis-card quality-reality">
+          <h3><i class="fas fa-microscope"></i> Quality Reality vs Marketing Claims</h3>
+          ${data.qualityReality.actualQualityRating ? `
+            <div class="rating-display">
+              <span>Actual Quality:</span>
+              <div class="rating-stars">${generateStars(data.qualityReality.actualQualityRating)}</div>
+              <span class="rating-number">${data.qualityReality.actualQualityRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${data.qualityReality.marketingVsReality ? `
+            <h4>🎭 Marketing vs Reality</h4>
+            <p class="marketing-vs-reality">${data.qualityReality.marketingVsReality}</p>
+          ` : ''}
+          
+          ${data.qualityReality.hiddenDefects?.length > 0 ? `
+            <h4>🔍 Hidden Defects</h4>
+            <ul class="hidden-defects-list">
+              ${data.qualityReality.hiddenDefects.map(defect => `<li class="hidden-defect">${defect}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.qualityReality.failurePatterns?.length > 0 ? `
+            <h4>💥 Common Failure Points</h4>
+            <ul class="failure-patterns-list">
+              ${data.qualityReality.failurePatterns.map(pattern => `<li class="failure-pattern">${pattern}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.qualityReality.manufacturingShortcuts?.length > 0 ? `
+            <h4>✂️ Manufacturing Shortcuts</h4>
+            <ul class="manufacturing-shortcuts-list">
+              ${data.qualityReality.manufacturingShortcuts.map(shortcut => `<li class="manufacturing-shortcut">${shortcut}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Consumer Protection & Alternatives
+    if (data.consumerProtection) {
+      const warningLevel = data.consumerProtection.warningLevel || 'MEDIUM';
+      const warningClass = warningLevel.toLowerCase();
+      
+      html += `
+        <div class="analysis-card consumer-protection ${warningClass}">
+          <h3><i class="fas fa-shield"></i> Consumer Protection & Alternatives</h3>
+          
+          <div class="warning-level-display">
+            <span class="warning-label">Warning Level:</span>
+            <span class="warning-badge ${warningClass}">${warningLevel}</span>
+          </div>
+          
+          ${data.consumerProtection.immediateActions?.length > 0 ? `
+            <h4>🚨 Immediate Actions to Protect Yourself</h4>
+            <ul class="immediate-actions-list">
+              ${data.consumerProtection.immediateActions.map(action => `<li class="immediate-action">${action}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${data.consumerProtection.betterAlternatives?.length > 0 ? `
+            <h4>✅ Better Alternatives</h4>
+            <div class="alternatives-grid">
+              ${data.consumerProtection.betterAlternatives.map(alt => `
+                <div class="alternative-item">
+                  <div class="alternative-header">
+                    <span class="alternative-name">${alt.name}</span>
+                    <span class="alternative-brand">${alt.brand}</span>
+                  </div>
+                  <p class="alternative-benefits">${alt.whyBetter}</p>
+                  <p class="alternative-transparency"><strong>Transparency:</strong> ${alt.transparency}</p>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          
+          ${data.consumerProtection.avoidanceReasons?.length > 0 ? `
+            <h4>🚫 Reasons to Avoid This Product</h4>
+            <ul class="avoidance-reasons-list">
+              ${data.consumerProtection.avoidanceReasons.map(reason => `<li class="avoidance-reason">${reason}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    return html;
+  }
+
+  // Multi-product transparency display
+  function generateMultiProductTransparencyDisplay(data) {
+    let html = '';
+    
+    // Comparative analysis at the top (if available)
+    if (data.comparativeAnalysis) {
+      html += `
+        <div class="analysis-card" style="background: rgba(13, 202, 240, 0.1); border: 1px solid rgba(13, 202, 240, 0.2);">
+          <h3><i class="fas fa-balance-scale"></i> Comparative Analysis</h3>
+          ${data.comparativeAnalysis.mostDangerous ? `<p><strong>⚠️ Most Dangerous:</strong> ${data.comparativeAnalysis.mostDangerous}</p>` : ''}
+          ${data.comparativeAnalysis.bestValue ? `<p><strong>✅ Best Value:</strong> ${data.comparativeAnalysis.bestValue}</p>` : ''}
+          ${data.comparativeAnalysis.overallRecommendation ? `<p><strong>💡 Overall Recommendation:</strong> ${data.comparativeAnalysis.overallRecommendation}</p>` : ''}
+          ${data.comparativeAnalysis.redFlags?.length > 0 ? `
+            <h4>🚩 Common Red Flags</h4>
+            <ul>
+              ${data.comparativeAnalysis.redFlags.map(flag => `<li>${flag}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Handle multiple products separately
+    if (data.products && Array.isArray(data.products)) {
+      data.products.forEach((product, index) => {
+        if (product && product.productInfo && product.productInfo.name) {
+          html += `
+            <div class="product-collapsible-group">
+              <button class="collapsible-btn" type="button" aria-expanded="false" aria-controls="product-${index + 1}-content" id="product-${index + 1}-toggle" onclick="toggleCollapse('product-${index + 1}-content', this)">
+                <i class="fas fa-search"></i> ${product.productInfo.name} - Transparency Analysis
+              </button>
+              <div id="product-${index + 1}-content" style="display:none;">
+                ${generateSingleProductTransparencyDisplay(product)}
+              </div>
+            </div>
+          `;
+        }
+      });
+    }
+
+    return html;
+  }
+
+  // Generate transparency display for a single product (used in multi-product view)
+  function generateSingleProductTransparencyDisplay(product) {
+    let html = '';
+
+    // Product Information
+    if (product.productInfo) {
+      html += `
+        <div class="analysis-card product-info">
+          <h3><i class="fas fa-box"></i> Product Information</h3>
+          <div class="product-details">
+            <p><strong>Product:</strong> ${product.productInfo.name || 'Unknown'}</p>
+            <p><strong>Detected Brand:</strong> ${product.productInfo.detectedBrand || 'Unknown'}</p>
+            <p><strong>Category:</strong> ${product.productInfo.detectedCategory || 'Unknown'}</p>
+            ${product.productInfo.realOwnership ? `<p><strong>Real Ownership:</strong> ${product.productInfo.realOwnership}</p>` : ''}
+            ${product.productInfo.marketingName ? `<p><strong>Marketing Name:</strong> ${product.productInfo.marketingName}</p>` : ''}
+            ${product.productInfo.actualProduct ? `<p><strong>What It Really Is:</strong> ${product.productInfo.actualProduct}</p>` : ''}
+          </div>
+        </div>
+      `;
+    }
+
+    // Hidden Dangers - Critical Section
+    if (product.hiddenDangers) {
+      const isCritical = product.hiddenDangers.overallSafetyRating <= 3 || 
+                        (product.hiddenDangers.criticalWarnings && product.hiddenDangers.criticalWarnings.length > 0);
+      
+      html += `
+        <div class="analysis-card hidden-dangers ${isCritical ? 'critical' : ''}">
+          <h3><i class="fas fa-exclamation-triangle"></i> Hidden Dangers & Safety Exposure</h3>
+          ${product.hiddenDangers.overallSafetyRating ? `
+            <div class="rating-display">
+              <span>Safety Rating:</span>
+              <div class="rating-stars">${generateStars(product.hiddenDangers.overallSafetyRating)}</div>
+              <span class="rating-number">${product.hiddenDangers.overallSafetyRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${product.hiddenDangers.criticalWarnings?.length > 0 ? `
+            <h4>⚠️ Critical Warnings</h4>
+            <ul class="warning-list">
+              ${product.hiddenDangers.criticalWarnings.map(warning => `<li class="critical">${warning}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.hiddenDangers.hiddenIngredients?.length > 0 ? `
+            <h4>🧪 Hidden Dangerous Ingredients</h4>
+            ${product.hiddenDangers.hiddenIngredients.map(ingredient => `
+              <div class="ingredient-warning">
+                <div class="ingredient-header">
+                  <span class="ingredient-name">${ingredient.substance}</span>
+                  <span class="severity-badge severity-${ingredient.severity?.toLowerCase() || 'medium'}">${ingredient.severity || 'MEDIUM'}</span>
+                </div>
+                <p class="health-risk">${ingredient.hiddenRisk}</p>
+                ${ingredient.whyHidden ? `<p class="why-hidden"><strong>Why They Hide This:</strong> ${ingredient.whyHidden}</p>` : ''}
+              </div>
+            `).join('')}
+          ` : ''}
+          
+          ${product.hiddenDangers.recallHistory?.length > 0 ? `
+            <h4>📋 Recall History</h4>
+            <ul class="recall-list">
+              ${product.hiddenDangers.recallHistory.map(recall => `<li class="recall-item">${recall}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.hiddenDangers.safetyViolations?.length > 0 ? `
+            <h4>⚖️ Safety Violations</h4>
+            <ul class="violation-list">
+              ${product.hiddenDangers.safetyViolations.map(violation => `<li class="violation-item">${violation}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Financial Deception Analysis
+    if (product.financialDeception) {
+      html += `
+        <div class="analysis-card financial-deception">
+          <h3><i class="fas fa-dollar-sign"></i> Financial Deception Analysis</h3>
+          ${product.financialDeception.advertisedPrice && product.financialDeception.trueOwnershipCost ? `
+            <div class="price-comparison">
+              <div class="advertised-price">
+                <span class="price-label">Advertised Price:</span>
+                <span class="price-value">${product.financialDeception.advertisedPrice}</span>
+              </div>
+              <div class="true-cost">
+                <span class="price-label">True Cost:</span>
+                <span class="price-value">${product.financialDeception.trueOwnershipCost}</span>
+              </div>
+            </div>
+          ` : ''}
+          
+          ${product.financialDeception.hiddenCosts?.length > 0 ? `
+            <h4>💰 Hidden Costs</h4>
+            <ul class="hidden-costs-list">
+              ${product.financialDeception.hiddenCosts.map(cost => `<li class="hidden-cost">${cost}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.financialDeception.subscriptionTraps?.length > 0 ? `
+            <h4>🪤 Subscription Traps</h4>
+            <ul class="subscription-traps-list">
+              ${product.financialDeception.subscriptionTraps.map(trap => `<li class="subscription-trap">${trap}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.financialDeception.plannedObsolescence ? `
+            <h4>⏰ Planned Obsolescence</h4>
+            <p class="planned-obsolescence">${product.financialDeception.plannedObsolescence}</p>
+          ` : ''}
+          
+          ${product.financialDeception.priceManipulation?.length > 0 ? `
+            <h4>🎯 Price Manipulation Tactics</h4>
+            <ul class="price-manipulation-list">
+              ${product.financialDeception.priceManipulation.map(tactic => `<li class="manipulation-tactic">${tactic}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Corporate Transparency Investigation
+    if (product.corporateTransparency) {
+      html += `
+        <div class="analysis-card corporate-transparency">
+          <h3><i class="fas fa-building"></i> Corporate Transparency Investigation</h3>
+          ${product.corporateTransparency.ethicsRating ? `
+            <div class="rating-display">
+              <span>Ethics Rating:</span>
+              <div class="rating-stars">${generateStars(product.corporateTransparency.ethicsRating)}</div>
+              <span class="rating-number">${product.corporateTransparency.ethicsRating}/10</span>
+            </div>
+          ` : ''}
+          
+          ${product.corporateTransparency.supplyChainAbuses?.length > 0 ? `
+            <h4>⛓️ Supply Chain Abuses</h4>
+            <ul class="supply-chain-list">
+              ${product.corporateTransparency.supplyChainAbuses.map(abuse => `<li class="supply-chain-abuse">${abuse}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.corporateTransparency.environmentalDamage?.length > 0 ? `
+            <h4>🌍 Environmental Damage</h4>
+            <ul class="environmental-damage-list">
+              ${product.corporateTransparency.environmentalDamage.map(damage => `<li class="environmental-damage">${damage}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.corporateTransparency.lawsuitHistory?.length > 0 ? `
+            <h4>⚖️ Lawsuit History</h4>
+            <ul class="lawsuit-history-list">
+              ${product.corporateTransparency.lawsuitHistory.map(lawsuit => `<li class="lawsuit">${lawsuit}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.corporateTransparency.lobbyingActivities?.length > 0 ? `
+            <h4>🏛️ Lobbying Activities</h4>
+            <ul class="lobbying-list">
+              ${product.corporateTransparency.lobbyingActivities.map(activity => `<li class="lobbying-activity">${activity}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Social Sentiment & Real User Experiences
+    if (product.socialSentiment) {
+      html += `
+        <div class="analysis-card social-sentiment">
+          <h3><i class="fas fa-users"></i> Social Sentiment & Real User Experiences</h3>
+          ${product.socialSentiment.manipulatedReviews ? `
+            <h4>🎭 Manipulated Reviews</h4>
+            <p>${product.socialSentiment.manipulatedReviews}</p>
+          ` : ''}
+          
+          ${product.socialSentiment.complaintTrends?.length > 0 ? `
+            <h4>📉 Complaint Trends</h4>
+            <ul class="complaint-trends-list">
+              ${product.socialSentiment.complaintTrends.map(trend => `<li class="complaint-trend">${trend}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.socialSentiment.userExperiences?.length > 0 ? `
+            <h4>👥 Real User Experiences</h4>
+            <ul class="user-experiences-list">
+              ${product.socialSentiment.userExperiences.map(experience => `<li class="user-experience">${experience}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.socialSentiment.hiddenProblems?.length > 0 ? `
+            <h4>� Hidden Problems</h4>
+            <ul class="hidden-problems-list">
+              ${product.socialSentiment.hiddenProblems.map(problem => `<li class="hidden-problem">${problem}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Marketing Lies & Deceptive Claims
+    if (product.marketingLies) {
+      html += `
+        <div class="analysis-card marketing-lies">
+          <h3><i class="fas fa-mask"></i> Marketing Lies & Deceptive Claims</h3>
+          ${product.marketingLies.deceptiveClaims?.length > 0 ? `
+            <h4>🎪 Deceptive Claims</h4>
+            <ul class="deceptive-claims-list">
+              ${product.marketingLies.deceptiveClaims.map(claim => `<li class="deceptive-claim">${claim}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.marketingLies.scientificMisleading?.length > 0 ? `
+            <h4>🧪 Scientific Misleading</h4>
+            <ul class="scientific-misleading-list">
+              ${product.marketingLies.scientificMisleading.map(misleading => `<li class="scientific-misleading">${misleading}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.marketingLies.manipulatedComparisons?.length > 0 ? `
+            <h4>📊 Manipulated Comparisons</h4>
+            <ul class="manipulated-comparisons-list">
+              ${product.marketingLies.manipulatedComparisons.map(comparison => `<li class="manipulated-comparison">${comparison}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.marketingLies.regulatoryWarnings?.length > 0 ? `
+            <h4>⚠️ Regulatory Warnings</h4>
+            <ul class="regulatory-warnings-list">
+              ${product.marketingLies.regulatoryWarnings.map(warning => `<li class="regulatory-warning">${warning}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Quality Reality vs Marketing Promises
+    if (product.qualityReality) {
+      html += `
+        <div class="analysis-card quality-reality">
+          <h3><i class="fas fa-star-half-alt"></i> Quality Reality vs Marketing Promises</h3>
+          ${product.qualityReality.hiddenDefects?.length > 0 ? `
+            <h4>🔍 Hidden Defects</h4>
+            <ul class="hidden-defects-list">
+              ${product.qualityReality.hiddenDefects.map(defect => `<li class="hidden-defect">${defect}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.qualityReality.failurePatterns?.length > 0 ? `
+            <h4>💔 Failure Patterns</h4>
+            <ul class="failure-patterns-list">
+              ${product.qualityReality.failurePatterns.map(pattern => `<li class="failure-pattern">${pattern}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.qualityReality.manufacturingShortcuts?.length > 0 ? `
+            <h4>⚡ Manufacturing Shortcuts</h4>
+            <ul class="manufacturing-shortcuts-list">
+              ${product.qualityReality.manufacturingShortcuts.map(shortcut => `<li class="manufacturing-shortcut">${shortcut}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.qualityReality.realDurability ? `
+            <h4>⏱️ Real Durability</h4>
+            <p class="real-durability">${product.qualityReality.realDurability}</p>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Consumer Protection Recommendations
+    if (product.consumerProtection) {
+      const warningLevel = product.consumerProtection.warningLevel || 'MEDIUM';
+      const warningClass = warningLevel.toLowerCase();
+      
+      html += `
+        <div class="analysis-card consumer-protection ${warningClass}">
+          <h3><i class="fas fa-shield-alt"></i> Consumer Protection Recommendations</h3>
+          <div class="warning-level-display">
+            <span class="warning-label">Warning Level:</span>
+            <span class="warning-badge ${warningClass}">${warningLevel}</span>
+          </div>
+          
+          ${product.consumerProtection.immediateActions?.length > 0 ? `
+            <h4>� Immediate Actions</h4>
+            <ul class="immediate-actions-list">
+              ${product.consumerProtection.immediateActions.map(action => `<li class="immediate-action">${action}</li>`).join('')}
+            </ul>
+          ` : ''}
+          
+          ${product.consumerProtection.alternatives?.length > 0 ? `
+            <h4>✅ Better Alternatives</h4>
+            <div class="alternatives-grid">
+              ${product.consumerProtection.alternatives.map(alt => `
+                <div class="alternative-item">
+                  <div class="alternative-header">
+                    <span class="alternative-name">${alt.name}</span>
+                    <span class="alternative-brand">${alt.brand || ''}</span>
+                  </div>
+                  <p class="alternative-benefits"><strong>Why Better:</strong> ${alt.whyBetter}</p>
+                  <p class="alternative-transparency"><strong>Transparency:</strong> ${alt.transparency}</p>
+                </div>
+              `).join('')}
+            </div>
+          ` : ''}
+          
+          ${product.consumerProtection.avoidanceReasons?.length > 0 ? `
+            <h4>🚫 Reasons to Avoid This Product</h4>
+            <ul class="avoidance-reasons-list">
+              ${product.consumerProtection.avoidanceReasons.map(reason => `<li class="avoidance-reason">${reason}</li>`).join('')}
+            </ul>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    return html;
   }
 
   // Helper for comparison: group all analysis for a product
