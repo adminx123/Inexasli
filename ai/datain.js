@@ -23,6 +23,37 @@ import { getCookie } from '/utility/getcookie.js';
 import { setCookie } from '/utility/setcookie.js';
 import { MixedScanner, initializeMixedScanner } from '/utility/mixedScanner.js';
 
+// ====================
+// DataIn.js - Centralized Animation & Container Management
+// ====================
+/**
+ * ANIMATION SYSTEM REFACTOR - ALL ANIMATIONS NOW CENTRALIZED
+ * 
+ * Issues Fixed:
+ * 1. ✅ Categories button (bx-grid-alt) animation now only triggers when container is collapsed
+ * 2. ✅ Right arrow animation properly filters out categories.html using lastGridItemUrl
+ * 3. ✅ Missing setLocal('lastGridItemUrl') added to loadStoredContent()
+ * 4. ✅ Swipe hint animations coordinated with centralized controller
+ * 
+ * New DataInAnimationController Features:
+ * - startCategoriesButtonHint(): Only when collapsed, auto-stops when expanded
+ * - startRightArrowAnimation(): Centralized right arrow animation with overlap prevention
+ * - stopAllAnimations(): Emergency stop for all animations
+ * - onContentLoaded(): Stops conflicting animations when new content loads
+ * - onContainerStateChange(): Manages animations based on container expand/collapse
+ * 
+ * State Management:
+ * - isAnimatingRightArrow: Prevents right arrow animation overlaps
+ * - isAnimatingCategoriesButton: Prevents categories button animation overlaps  
+ * - categoriesButtonHintInterval: Tracks categories button interval for cleanup
+ * 
+ * Integration Points:
+ * - toggleDataContainer(): Calls onContainerStateChange()
+ * - loadStoredContent(): Sets lastGridItemUrl for proper filtering
+ * - data-in-loaded event: Calls onContentLoaded()
+ * - Legacy wrapper functions maintained for compatibility
+ */
+
 // Import validation utilities
 import { 
     validateModuleData, 
@@ -73,6 +104,168 @@ window.utilityFunctions = {
 // Also expose individual functions directly to window for easier access
 window.getLocal = getLocal;
 window.setLocal = setLocal;
+
+// Track animation state to prevent overlaps
+let isAnimatingRightArrow = false;
+let isAnimatingCategoriesButton = false;
+let categoriesButtonHintInterval = null;
+
+/**
+ * Centralized Animation Controller for DataIn
+ */
+const DataInAnimationController = {
+    // Stop all running animations
+    stopAllAnimations() {
+        isAnimatingRightArrow = false;
+        isAnimatingCategoriesButton = false;
+        
+        if (categoriesButtonHintInterval) {
+            clearInterval(categoriesButtonHintInterval);
+            categoriesButtonHintInterval = null;
+        }
+        
+        // Reset any transforms on animated elements
+        const categoryBtn = document.getElementById('datain-category-btn');
+        if (categoryBtn) {
+            categoryBtn.style.transform = '';
+        }
+    },
+    
+    // Start categories button hint (only when collapsed)
+    startCategoriesButtonHint() {
+        const categoryBtn = document.getElementById('datain-category-btn');
+        if (!categoryBtn || isAnimatingCategoriesButton) return;
+        
+        // Only animate when container is collapsed
+        const dataContainer = document.querySelector('.data-container-in');
+        if (dataContainer && dataContainer.classList.contains('visible')) {
+            console.log('[DataIn] Skipping categories animation - container is expanded');
+            return;
+        }
+        
+        isAnimatingCategoriesButton = true;
+        let hintStopped = false;
+        
+        const doHoverEffect = () => {
+            if (hintStopped || !isAnimatingCategoriesButton) return;
+            
+            // Double-check container is still collapsed
+            if (dataContainer && dataContainer.classList.contains('visible')) {
+                this.stopCategoriesButtonHint();
+                return;
+            }
+            
+            // Simulate hover: move up
+            categoryBtn.style.transform = 'translateY(-2px)';
+            
+            setTimeout(() => {
+                if (hintStopped || !isAnimatingCategoriesButton) return;
+                // Simulate hover leave: move back down
+                categoryBtn.style.transform = '';
+            }, 250);
+        };
+        
+        const stopHint = () => {
+            if (!hintStopped) {
+                hintStopped = true;
+                isAnimatingCategoriesButton = false;
+                categoryBtn.style.transform = '';
+                if (categoriesButtonHintInterval) {
+                    clearInterval(categoriesButtonHintInterval);
+                    categoriesButtonHintInterval = null;
+                }
+            }
+        };
+        
+        // Start the hint cycle
+        doHoverEffect();
+        categoriesButtonHintInterval = setInterval(doHoverEffect, 1000);
+        
+        // Stop hint when user clicks or after 10 seconds
+        categoryBtn.addEventListener('click', stopHint, { once: true });
+        setTimeout(stopHint, 10000);
+    },
+    
+    // Stop categories button hint
+    stopCategoriesButtonHint() {
+        isAnimatingCategoriesButton = false;
+        const categoryBtn = document.getElementById('datain-category-btn');
+        if (categoryBtn) {
+            categoryBtn.style.transform = '';
+        }
+        if (categoriesButtonHintInterval) {
+            clearInterval(categoriesButtonHintInterval);
+            categoriesButtonHintInterval = null;
+        }
+    },
+    
+    // Start right arrow animation
+    startRightArrowAnimation(rightArrow) {
+        if (isAnimatingRightArrow || !rightArrow) return;
+        
+        isAnimatingRightArrow = true;
+        let animationCount = 0;
+        const maxAnimations = 40; // 10 seconds at 250ms intervals
+        
+        const animate = () => {
+            if (!isAnimatingRightArrow || animationCount >= maxAnimations) {
+                isAnimatingRightArrow = false;
+                if (rightArrow) {
+                    rightArrow.style.transform = 'scale(1) translateY(0px)';
+                }
+                return;
+            }
+            
+            rightArrow.style.transform = 'scale(1.1) translateY(-2px)';
+            
+            setTimeout(() => {
+                if (isAnimatingRightArrow && rightArrow) {
+                    rightArrow.style.transform = 'scale(1) translateY(0px)';
+                }
+            }, 125);
+            
+            animationCount++;
+            if (isAnimatingRightArrow) {
+                setTimeout(animate, 250);
+            }
+        };
+        
+        animate();
+    },
+    
+    // Coordinate with swipe functionality - called when content loads
+    onContentLoaded() {
+        // Stop categories hint when new content loads
+        this.stopCategoriesButtonHint();
+    },
+    
+    // Coordinate with container state changes
+    onContainerStateChange(isVisible) {
+        if (isVisible) {
+            // Container expanded - stop categories hint
+            this.stopCategoriesButtonHint();
+        } else {
+            // Container collapsed - potentially start categories hint for new users
+            const hasAcceptedTerms = window.termsConsentManager && window.termsConsentManager.checkStatus();
+            if (!hasAcceptedTerms) {
+                setTimeout(() => {
+                    this.startCategoriesButtonHint();
+                }, 500);
+            }
+        }
+    }
+};
+
+// Make animation controller globally accessible
+window.DataInAnimationController = DataInAnimationController;
+
+/**
+ * Start right arrow hint animation
+ * Legacy wrapper function for backward compatibility
+ */
+function startRightArrowAnimation(rightArrow) {
+    DataInAnimationController.startRightArrowAnimation(rightArrow);
+}
 window.getJSON = getJSON;
 window.setJSON = setJSON;
 window.getCookie = getCookie;
@@ -186,17 +379,7 @@ function validateFormDataForModule(moduleName, formData) {
     }
 }
 
-// REMOVED: Enhanced generate button handler that adds validation - was part of duplicate handler system
-// function wrapGenerateHandler(originalHandler, moduleName) { ... }
-console.log('[DataIn] *** DEBUG: wrapGenerateHandler function has been completely removed - was part of duplicate handler system ***');
-
-// REMOVED: Function to enhance generate buttons with validation - was causing duplicate event handlers
-// function enhanceGenerateButtons() { ... }
-console.log('[DataIn] *** DEBUG: enhanceGenerateButtons function has been completely removed ***');
-
-// REMOVED: Override addEventListener for generate buttons - was causing global event handler conflicts  
-// function enhanceEventListeners() { ... }
-console.log('[DataIn] *** DEBUG: enhanceEventListeners function has been completely removed ***');
+// Note: Legacy handler functions have been removed and replaced with centralized animation controller
 
 // Prevent zoom/pinch on content containers
 function preventZoom() {
@@ -213,8 +396,7 @@ function preventZoom() {
 }
 
 function initializeFormPersistence(url) {
-    console.log('[DataIn] *** CRITICAL DEBUG: initializeFormPersistence called for URL:', url);
-    console.log('[DataIn] *** DEBUG: Call stack:', new Error().stack);
+    console.log('[DataIn] Initializing FormPersistence for URL:', url);
     
     // Prevent zoom on load
     preventZoom();
@@ -472,10 +654,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     async function loadStoredContent(url) {
-        console.log('[DataIn] *** CRITICAL DEBUG: loadStoredContent called for URL:', url);
-        console.log('[DataIn] *** DEBUG: Call stack:', new Error().stack);
+        console.log('[DataIn] Loading content for URL:', url);
         
         try {
+            // Update lastGridItemUrl for proper animation filtering
+            setLocal('lastGridItemUrl', url);
+            
             // Load appropriate CSS based on the URL being loaded
             loadCSSForUrl(url);
             
@@ -934,8 +1118,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (lastState === 'visible' && hasAcceptedTerms) {
             toggleDataContainer();
         } else {
-            // Show hint animation on categories button for new users
-            showCategoriesButtonHint();
+            // Show hint animation on categories button for new users (only when collapsed)
+            DataInAnimationController.startCategoriesButtonHint();
         }
     }
 
@@ -984,6 +1168,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Dispatch state change event
             document.dispatchEvent(new CustomEvent('datain-state-changed', { detail: { state: 'hidden' } }));
         }
+        
+        // Notify animation controller of state change
+        DataInAnimationController.onContainerStateChange(isVisible);
     }
 
     // Update payment button display with usage information
@@ -1274,7 +1461,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                 prevIcon.style.opacity = state.canGoPrevious ? '1' : '0.3';
                 
                 // Update next icon
+                const wasNextIconVisible = nextIcon.style.opacity === '1';
                 nextIcon.style.opacity = state.canGoNext ? '1' : '0.3';
+                
+                // Trigger animation when arrow becomes visible on first step (but not on categories page)
+                const lastGridItemUrl = getLocal('lastGridItemUrl') || '';
+                const isCategoriesPage = lastGridItemUrl.includes('/ai/categories.html') || lastGridItemUrl.includes('%2Fai%2Fcategories.html');
+                
+                if (!wasNextIconVisible && nextIcon.style.opacity === '1' && state.currentStep === 0 && !isCategoriesPage) {
+                    startRightArrowAnimation(nextIcon);
+                }
                 
                 // Update button cursor and title
                 const canNavigate = state.canGoPrevious || state.canGoNext;
@@ -1326,59 +1522,40 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // After content load, rebind grid item events using FormPersistence
     document.addEventListener('data-in-loaded', function() {
-        console.log('[DataIn] *** CRITICAL DEBUG: data-in-loaded event fired - checking for duplicate event bindings ***');
+        // Notify animation controller about content load
+        DataInAnimationController.onContentLoaded();
         
         // Try to get the current FormPersistence instance and rebind events
         if (window.calorieFormPersistence && typeof window.calorieFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling calorieFormPersistence.rebindGridItemEvents ***');
             window.calorieFormPersistence.rebindGridItemEvents();
         }
         if (window.fitnessFormPersistence && typeof window.fitnessFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling fitnessFormPersistence.rebindGridItemEvents ***');
             window.fitnessFormPersistence.rebindGridItemEvents();
         }
         if (window.quizFormPersistence && typeof window.quizFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling quizFormPersistence.rebindGridItemEvents ***');
             window.quizFormPersistence.rebindGridItemEvents();
         }
         if (window.decisionFormPersistence && typeof window.decisionFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling decisionFormPersistence.rebindGridItemEvents ***');
             window.decisionFormPersistence.rebindGridItemEvents();
         }
         if (window.enneagramFormPersistence && typeof window.enneagramFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling enneagramFormPersistence.rebindGridItemEvents ***');
             window.enneagramFormPersistence.rebindGridItemEvents();
         }
         if (window.eventFormPersistence && typeof window.eventFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling eventFormPersistence.rebindGridItemEvents ***');
             window.eventFormPersistence.rebindGridItemEvents();
         }
         if (window.philosophyFormPersistence && typeof window.philosophyFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling philosophyFormPersistence.rebindGridItemEvents ***');
             window.philosophyFormPersistence.rebindGridItemEvents();
         }
         if (window.categoriesFormPersistence && typeof window.categoriesFormPersistence.rebindGridItemEvents === 'function') {
-            console.log('[DataIn] *** DEBUG: Calling categoriesFormPersistence.rebindGridItemEvents ***');
             window.categoriesFormPersistence.rebindGridItemEvents();
         }
         
         // Update guided forms button states after content loads
         setTimeout(() => {
-            console.log('[DataIn] *** CRITICAL DEBUG: setTimeout callback executing - this could be causing duplicate handlers ***');
-            updateGuidedButtonStates();
-            
-            // Set up periodic button state updates for guided forms
-            if (window.guidedFormsButtonUpdateInterval) {
-                clearInterval(window.guidedFormsButtonUpdateInterval);
-            }
-            
             window.guidedFormsButtonUpdateInterval = setInterval(() => {
                 updateGuidedButtonStates();
             }, 500); // Update every 500ms when guided forms are active
-            
-            // REMOVED: Re-enhance generate buttons after content loads - THIS WAS CAUSING DUPLICATE HANDLERS
-            // enhanceGenerateButtons();
-            console.log('[DataIn] *** REMOVED enhanceGenerateButtons() call - this was causing duplicate event handlers ***');
         }, 200);
     });
     
@@ -1634,10 +1811,7 @@ window.dataInContainerManager = {
 
 // Remove local rate limit display logic; use centralized logic from rateLimiter.js
 // On page load, show localStorage value first, then update from backend using centralized handler
-// (Assume dataContainer is available after initializeDataContainer)
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('[DataIn] *** CRITICAL DEBUG: DOMContentLoaded event fired - checking for duplicate initialization ***');
-    
     setTimeout(() => {
         const dataContainer = document.querySelector('.data-container-in');
         if (dataContainer) {
@@ -1646,89 +1820,5 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 500);
     
-    // REMOVED: Initialize validation enhancements - this was causing duplicate event handlers
-    // console.log('[DataIn] Initializing validation enhancements');
-    // enhanceEventListeners();
-    console.log('[DataIn] *** REMOVED enhanceEventListeners() call - this was likely causing duplicate handlers ***');
-    
-    // REMOVED: Add a slight delay to ensure all modules are loaded before enhancing buttons - this was causing duplicates
-    // setTimeout(() => {
-    //     enhanceGenerateButtons();
-    //     console.log('[DataIn] Validation enhancements complete');
-    // }, 1000);
-    console.log('[DataIn] *** REMOVED enhanceGenerateButtons() call from DOMContentLoaded - this was causing duplicate handlers ***');
-});    // Show simulated hover hint on categories button for new users
-    function showCategoriesButtonHint() {
-        const categoryBtn = document.getElementById('datain-category-btn');
-        if (!categoryBtn) return;
-        
-        let hintStopped = false;
-        let hintInterval;
-        
-        const doHoverEffect = () => {
-            if (hintStopped) return;
-            
-            // Simulate hover: move up
-            categoryBtn.style.transform = 'translateY(-2px)';
-            
-            setTimeout(() => {
-                if (hintStopped) return;
-                // Simulate hover leave: move back down
-                categoryBtn.style.transform = '';
-            }, 250); // Hold "hover" for 250ms (faster)
-        };
-        
-        const stopHint = () => {
-            if (!hintStopped) {
-                hintStopped = true;
-                categoryBtn.style.transform = '';
-                if (hintInterval) {
-                    clearInterval(hintInterval);
-                }
-            }
-        };
-        
-        // Start the hint cycle - repeat every 1 second (faster)
-        doHoverEffect(); // Do it once immediately
-        hintInterval = setInterval(doHoverEffect, 1000);
-        
-        // Stop hint when user clicks or after 10 seconds
-        categoryBtn.addEventListener('click', stopHint, { once: true });
-        setTimeout(stopHint, 10000); // Stop after 10 seconds
-    }
-
-    // DEBUG: Add global click listener to detect generate button clicks and potential duplicates
-document.addEventListener('click', function(e) {
-    if (e.target && e.target.id && e.target.id.includes('generate') && e.target.id.includes('btn')) {
-        console.log('[DataIn] *** CRITICAL DEBUG: Generate button clicked ***', {
-            buttonId: e.target.id,
-            timestamp: Date.now(),
-            target: e.target,
-            eventPhase: e.eventPhase,
-            bubbles: e.bubbles,
-            cancelable: e.cancelable
-        });
-        
-        // Check if button has multiple event listeners
-        const listeners = getEventListeners ? getEventListeners(e.target) : null;
-        if (listeners) {
-            console.log('[DataIn] *** DEBUG: Event listeners attached to button ***', listeners);
-        }
-    }
-}, true); // Use capture phase to catch early
-
-// DEBUG: Override addEventListener globally to track when event handlers are added to generate buttons
-const originalAddEventListener = EventTarget.prototype.addEventListener;
-EventTarget.prototype.addEventListener = function(type, listener, options) {
-    if (type === 'click' && this.id && this.id.includes('generate') && this.id.includes('btn')) {
-        console.log('[DataIn] *** CRITICAL DEBUG: addEventListener called on generate button ***', {
-            buttonId: this.id,
-            eventType: type,
-            listenerType: typeof listener,
-            timestamp: Date.now(),
-            stackTrace: new Error().stack
-        });
-    }
-    
-    return originalAddEventListener.call(this, type, listener, options);
-};
+    // Legacy handler functions have been replaced with centralized animation controller
+});
