@@ -23,6 +23,20 @@
 /* Category selection items (2 columns) */
 /* .category-selector now inherits .grid-item styles for unified look */
 
+/* Product icon styling */
+.product-icon {
+    font-size: 24px;
+    color: #4a90e2;
+    margin-right: 12px;
+    margin-left: 8px;
+}
+
+/* Product description left alignment */
+.product-description {
+    text-align: left;
+    flex: 1;
+}
+
 
 /* Removed legacy responsive CSS for old grid classes. Use grid-items1/grid-items2 for layout and responsiveness. */
 
@@ -77,6 +91,17 @@
     font-size: 1.2em;
     color: #333;
 }
+
+/* Favorites grid custom layout */
+#favorites-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 16px;
+}
 </style>
 
 <div class="device-container">
@@ -86,7 +111,7 @@
 
 
 
-    <div class="grid-items2" id="favorites-grid"></div>
+    <div id="favorites-grid"></div>
 
 
 <div class="grid-items2" id="category-selection">
@@ -105,54 +130,54 @@
     <div class="grid-items1">
         <!-- Health Products -->
         <div class="grid-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
-            <span class="product-name">CalorieIQ™</span>
-            <span class="product-description">Track calories & nutrition</span>
+            <i class="bx bx-calculator product-icon"></i>
+            <span class="product-description">Nutrition Calculator</span>
         </div>
 
         <div class="grid-item" data-category="health" data-value="/ai/period/periodiq.html">
-            <span class="product-name">PeriodIQ™</span>
-            <span class="product-description">Period tracking & insights</span>
+            <i class="bx bx-calendar-heart product-icon"></i>
+            <span class="product-description">Period Tracker</span>
         </div>
         
         <!-- Business Products -->
         <div class="grid-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
-            <span class="product-name">DecisionIQ™</span>
-            <span class="product-description">Smart decision making</span>
+            <i class="bx bx-brain product-icon"></i>
+            <span class="product-description">Decision Helper</span>
         </div>
 
         <div class="grid-item" data-category="business,lifestyle" data-value="/ai/shop/shopiq.html">
-            <span class="product-name">ShopIQ™</span>
-            <span class="product-description">Smart shopping decisions</span>
+            <i class="bx bx-search-alt product-icon"></i>
+            <span class="product-description">Product Research Tool</span>
         </div>
         
         <!-- Finance Products -->
         <div class="grid-item" data-category="finance" data-value="/ai/income/incomeiq.html">
-            <span class="product-name">IncomeIQ™</span>
-            <span class="product-description">Income optimization</span>
+            <i class="bx bx-dollar-circle product-icon"></i>
+            <span class="product-description">Financial Data Organizer</span>
         </div>
         
         <!-- Lifestyle Products -->
         <div class="grid-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
-            <span class="product-name">EventIQ™</span>
-            <span class="product-description">Event planning assistant</span>
+            <i class="bx bx-calendar-event product-icon"></i>
+            <span class="product-description">Event Planner</span>
         </div>
         <div class="grid-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
-            <span class="product-name">FashionIQ™</span>
-            <span class="product-description">Style & outfit advisor</span>
+            <i class="bx bx-closet product-icon"></i>
+            <span class="product-description">Style Advisor</span>
         </div>
         <div class="grid-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
-            <span class="product-name">PhilosophyIQ™</span>
-            <span class="product-description">Explore philosophical ideas</span>
+            <i class="bx bx-book-open product-icon"></i>
+            <span class="product-description">Philosophy Explorer</span>
         </div>
         <div class="grid-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
-            <span class="product-name">EnneagramIQ™</span>
-            <span class="product-description">Personality insights</span>
+            <i class="bx bx-user-circle product-icon"></i>
+            <span class="product-description">Personality Explorer</span>
         </div>
         
         <!-- Learning Products -->
         <div class="grid-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
-            <span class="product-name">QuizIQ™</span>
-            <span class="product-description">Interactive learning quizzes</span>
+            <i class="bx bx-question-mark product-icon"></i>
+            <span class="product-description">Learning Quiz Tool</span>
         </div>
     </div>
 </div>
@@ -191,16 +216,18 @@ function renderFavorites() {
     favorites.forEach(url => {
         const product = allProducts.find(p => p.dataset.value === url);
         if (product) {
-            const clone = product.cloneNode(true);
-            // Remove description from favorites - only keep name and premium tag
-            const description = clone.querySelector('.product-description');
-            if (description) {
-                description.remove();
+            // Get the icon from the original product
+            const originalIcon = product.querySelector('.product-icon');
+            if (originalIcon) {
+                // Create a new icon element (not wrapped in grid-item)
+                const iconClone = originalIcon.cloneNode(true);
+                iconClone.style.cursor = 'pointer';
+                iconClone.style.margin = '4px';
+                iconClone.style.fontSize = '24px';
+                iconClone.dataset.value = url; // Store the URL for clicking
+                iconClone.classList.add('favorite-clickable-icon');
+                favoritesGrid.appendChild(iconClone);
             }
-            // Ensure the favourite uses only grid-item for style
-            clone.classList.remove('grid-item2');
-            clone.classList.add('grid-item');
-            favoritesGrid.appendChild(clone);
         }
     });
 }
@@ -307,6 +334,30 @@ setTimeout(function() {
 // Consolidated event listener for both product selection and favorite toggling
 if (deviceContainer) {
     deviceContainer.addEventListener('click', function(e) {
+        // Handle favorite clickable icons (not in grid items)
+        if (e.target.classList.contains('favorite-clickable-icon')) {
+            e.stopPropagation();
+            const url = e.target.dataset.value;
+            if (url) {
+                // Set lastGridItemUrl so datain.js can remember the selection
+                localStorage.setItem('lastGridItemUrl', url);
+
+                // Check if we are inside the datain.js container
+                const datainContainer = e.target.closest('#data-in-container');
+                const eventDetail = { detail: { url: url } };
+                if (datainContainer) {
+                    console.log('[Categories] Dispatching event for datain.js from favorite icon');
+                    const gridItemEvent = new CustomEvent('promptGridItemSelected', eventDetail);
+                    datainContainer.dispatchEvent(gridItemEvent);
+                } else {
+                    console.log('[Categories] Dispatching event globally from favorite icon');
+                    const gridItemEvent = new CustomEvent('promptGridItemSelected', eventDetail);
+                    document.dispatchEvent(gridItemEvent);
+                }
+            }
+            return;
+        }
+
         const gridItem = e.target.closest('.grid-item');
         if (!gridItem || !gridItem.dataset.value) return;
 
