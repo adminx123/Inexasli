@@ -1333,8 +1333,8 @@ console.log('Shop API Output script running');
     // Analysis type header
     const analysisType = data.analysisType || 'transparency';
     const typeHeaders = {
-      'transparency': '🔍 Product Transparency Analysis',
-      'multi-product-transparency': '� Multi-Product Transparency Analysis',
+      'transparency': '🔍 Product Research Analysis',
+      'multi-product-transparency': '📋 Multi-Product Research Analysis',
       'product': '🛒 Product Analysis Results',
       'business': '🏪 Business Analysis Results', 
       'app': '📱 App Analysis Results',
@@ -1462,31 +1462,41 @@ console.log('Shop API Output script running');
     console.log('Data displayed successfully');
   }
 
-  // NEW: Generate transparency analysis display
+  // NEW: Generate research analysis display
   function generateTransparencyDisplay(data) {
     let html = '';
     
-    // Overall Verdict at the top with warning level styling
+    // Add disclaimer at the top
+    if (data.disclaimer) {
+      html += `
+        <div class="analysis-card disclaimer-card" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3);">
+          <h3><i class="fas fa-info-circle"></i> Important Notice</h3>
+          <p style="font-style: italic; margin: 0;">${data.disclaimer}</p>
+        </div>
+      `;
+    }
+    
+    // Overall Verdict at the top with guidance level styling
     if (data.verdict) {
-      const warningLevel = data.consumerProtection?.warningLevel || 'MEDIUM';
-      const warningClass = warningLevel.toLowerCase();
+      const researchConfidence = data.consumerGuidance?.researchConfidence || 'MEDIUM';
+      const confidenceClass = researchConfidence.toLowerCase();
       
       html += `
-        <div class="analysis-card verdict-card ${warningClass}">
-          <h3><i class="fas fa-gavel"></i> Final Verdict</h3>
+        <div class="analysis-card verdict-card ${confidenceClass}">
+          <h3><i class="fas fa-lightbulb"></i> Research Summary</h3>
           <div class="verdict-display">
             <div class="overall-rating">
-              <span>Overall Rating:</span>
-              <div class="rating-stars">${generateStars(data.verdict.overallRating || 0)}</div>
-              <span class="rating-number">${data.verdict.overallRating || 0}/10</span>
+              <span>Overall Guidance:</span>
+              <div class="rating-stars">${generateStars(data.verdict.overallGuidance || 0)}</div>
+              <span class="rating-number">${data.verdict.overallGuidance || 0}/10</span>
             </div>
-            <div class="recommendation-badge ${data.verdict.recommendation?.toLowerCase().replace(/\s+/g, '-') || ''}">${data.verdict.recommendation || 'PROCEED WITH CAUTION'}</div>
+            <div class="recommendation-badge ${data.verdict.recommendation?.toLowerCase().replace(/\s+/g, '-') || ''}">${data.verdict.recommendation || 'RESEARCH FURTHER'}</div>
           </div>
-          ${data.verdict.bottomLineTruth ? `<p class="bottom-line"><strong>Bottom Line:</strong> ${data.verdict.bottomLineTruth}</p>` : ''}
-          ${data.verdict.keyRedFlags?.length > 0 ? `
-            <h4>🚩 Key Red Flags</h4>
+          ${data.verdict.educationalSummary ? `<p class="bottom-line"><strong>Summary:</strong> ${data.verdict.educationalSummary}</p>` : ''}
+          ${data.verdict.keyConsiderations?.length > 0 ? `
+            <h4>� Key Considerations</h4>
             <div class="warning">
-              ${data.verdict.keyRedFlags.map(flag => `<div class="red-warning">${flag}</div>`).join('')}
+              ${data.verdict.keyConsiderations.map(consideration => `<div class="blue-warning">${consideration}</div>`).join('')}
             </div>
           ` : ''}
         </div>
@@ -1500,334 +1510,319 @@ console.log('Shop API Output script running');
           <h3><i class="fas fa-box"></i> Product Information</h3>
           <div class="product-details">
             <p><strong>Product:</strong> ${data.productInfo.name || 'Unknown'}</p>
-            <p><strong>Brand:</strong> ${data.productInfo.brand || 'Unknown'}</p>
-            <p><strong>Category:</strong> ${data.productInfo.productType || data.detectedCategory || 'Unknown'}</p>
-            ${data.productInfo.marketingName ? `<p><strong>Marketing Name:</strong> ${data.productInfo.marketingName}</p>` : ''}
-            ${data.productInfo.actualProduct ? `<p><strong>What It Really Is:</strong> ${data.productInfo.actualProduct}</p>` : ''}
+            <p><strong>Brand:</strong> ${data.productInfo.detectedBrand || 'Unknown'}</p>
+            <p><strong>Category:</strong> ${data.productInfo.basicClassification || data.detectedCategory || 'Unknown'}</p>
+            ${data.productInfo.marketingDescription ? `<p><strong>Marketing Description:</strong> ${data.productInfo.marketingDescription}</p>` : ''}
+            ${data.productInfo.publicOwnership ? `<p><strong>Public Ownership Info:</strong> ${data.productInfo.publicOwnership}</p>` : ''}
           </div>
         </div>
       `;
     }
 
-    // Hidden Dangers - Critical Section
-    if (data.hiddenDangers) {
-      const isCritical = data.hiddenDangers.overallSafetyRating <= 3 || 
-                        (data.hiddenDangers.criticalWarnings && data.hiddenDangers.criticalWarnings.length > 0);
+    // Safety Considerations - Educational Section
+    if (data.safetyConsiderations) {
+      const isImportant = data.safetyConsiderations.overallSafetyGuidance <= 5 || 
+                        (data.safetyConsiderations.generalWarnings && data.safetyConsiderations.generalWarnings.length > 0);
       
       html += `
-        <div class="analysis-card hidden-dangers ${isCritical ? 'critical' : ''}">
-          <h3><i class="fas fa-exclamation-triangle"></i> Hidden Dangers & Safety Exposure</h3>
-          ${data.hiddenDangers.overallSafetyRating ? `
+        <div class="analysis-card safety-considerations ${isImportant ? 'important' : ''}">
+          <h3><i class="fas fa-shield-alt"></i> Safety Considerations & Research</h3>
+          ${data.safetyConsiderations.overallSafetyGuidance ? `
             <div class="rating-display">
-              <span>Safety Rating:</span>
-              <div class="rating-stars">${generateStars(data.hiddenDangers.overallSafetyRating)}</div>
-              <span class="rating-number">${data.hiddenDangers.overallSafetyRating}/10</span>
+              <span>Safety Guidance Rating:</span>
+              <div class="rating-stars">${generateStars(data.safetyConsiderations.overallSafetyGuidance)}</div>
+              <span class="rating-number">${data.safetyConsiderations.overallSafetyGuidance}/10</span>
             </div>
           ` : ''}
           
-          ${data.hiddenDangers.criticalWarnings?.length > 0 ? `
-            <h4>⚠️ Critical Warnings</h4>
+          ${data.safetyConsiderations.generalWarnings?.length > 0 ? `
+            <h4>⚠️ General Safety Considerations</h4>
             <div class="warning">
-              ${data.hiddenDangers.criticalWarnings.map(warning => `<div class="red-warning">${warning}</div>`).join('')}
+              ${data.safetyConsiderations.generalWarnings.map(warning => `<div class="yellow-warning">${warning}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.hiddenDangers.hiddenIngredients?.length > 0 ? `
-            <h4>🧪 Hidden Dangerous Ingredients</h4>
-            ${data.hiddenDangers.hiddenIngredients.map(ingredient => `
-              <div class="ingredient-warning">
-                <div class="ingredient-header">
-                  <span class="ingredient-name">${ingredient.substance}</span>
-                  <span class="severity-badge severity-${ingredient.severity?.toLowerCase() || 'medium'}">${ingredient.severity || 'MEDIUM'}</span>
+          ${data.safetyConsiderations.materialComponents?.length > 0 ? `
+            <h4>🧪 Material Components & Considerations</h4>
+            ${data.safetyConsiderations.materialComponents.map(component => `
+              <div class="component-info">
+                <div class="component-header">
+                  <span class="component-name">${component.component}</span>
+                  <span class="severity-badge severity-${component.severity?.toLowerCase() || 'info'}">${component.severity || 'INFO'}</span>
                 </div>
-                <p class="health-risk">${ingredient.hiddenRisk}</p>
-                ${ingredient.whyHidden ? `<p class="why-hidden"><strong>Why They Hide This:</strong> ${ingredient.whyHidden}</p>` : ''}
+                <p class="component-considerations">${component.considerations}</p>
+                ${component.researchNote ? `<p class="research-note"><strong>Research Note:</strong> ${component.researchNote}</p>` : ''}
               </div>
             `).join('')}
           ` : ''}
           
-          ${data.hiddenDangers.recallHistory?.length > 0 ? `
-            <h4>📋 Recall History</h4>
-            <div class="warning">
-              ${data.hiddenDangers.recallHistory.map(recall => `<div class="red-warning">${recall}</div>`).join('')}
+          ${data.safetyConsiderations.regulatoryInformation?.length > 0 ? `
+            <h4>📋 Regulatory Information</h4>
+            <div class="regulatory-info">
+              ${data.safetyConsiderations.regulatoryInformation.map(info => `<div class="blue-warning">${info}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.hiddenDangers.safetyViolations?.length > 0 ? `
-            <h4>⚖️ Safety Violations</h4>
-            <div class="warning">
-              ${data.hiddenDangers.safetyViolations.map(violation => `<div class="red-warning">${violation}</div>`).join('')}
+          ${data.safetyConsiderations.recommendedPrecautions?.length > 0 ? `
+            <h4>🛡️ Recommended Precautions</h4>
+            <div class="precautions">
+              ${data.safetyConsiderations.recommendedPrecautions.map(precaution => `<div class="green-warning">${precaution}</div>`).join('')}
             </div>
           ` : ''}
         </div>
       `;
     }
 
-    // Financial Deception Analysis
-    if (data.financialDeception) {
+    // Cost Analysis & Value Assessment
+    if (data.costAnalysis) {
       html += `
-        <div class="analysis-card financial-deception">
-          <h3><i class="fas fa-dollar-sign"></i> Financial Deception Analysis</h3>
-          ${data.financialDeception.advertisedPrice && data.financialDeception.trueOwnershipCost ? `
+        <div class="analysis-card cost-analysis">
+          <h3><i class="fas fa-calculator"></i> Cost Analysis & Value Assessment</h3>
+          ${data.costAnalysis.typicalPriceRange && data.costAnalysis.estimatedTotalCost ? `
             <div class="price-comparison">
               <div class="advertised-price">
-                <span class="price-label">Advertised Price:</span>
-                <span class="price-value">${data.financialDeception.advertisedPrice}</span>
+                <span class="price-label">Typical Price Range:</span>
+                <span class="price-value">${data.costAnalysis.typicalPriceRange}</span>
               </div>
               <div class="true-cost">
-                <span class="price-label">True Cost:</span>
-                <span class="price-value">${data.financialDeception.trueOwnershipCost}</span>
+                <span class="price-label">Estimated Total Cost:</span>
+                <span class="price-value">${data.costAnalysis.estimatedTotalCost}</span>
               </div>
             </div>
           ` : ''}
           
-          ${data.financialDeception.hiddenCosts?.length > 0 ? `
-            <h4>💰 Hidden Costs</h4>
+          ${data.costAnalysis.potentialAdditionalCosts?.length > 0 ? `
+            <h4>💰 Potential Additional Costs</h4>
             <div class="warning">
-              ${data.financialDeception.hiddenCosts.map(cost => `<div class="yellow-warning">${cost}</div>`).join('')}
+              ${data.costAnalysis.potentialAdditionalCosts.map(cost => `<div class="yellow-warning">${cost}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.financialDeception.subscriptionTraps?.length > 0 ? `
-            <h4>🪤 Subscription Traps</h4>
+          ${data.costAnalysis.maintenanceConsiderations?.length > 0 ? `
+            <h4>🔧 Maintenance Considerations</h4>
             <div class="warning">
-              ${data.financialDeception.subscriptionTraps.map(trap => `<div class="red-warning">${trap}</div>`).join('')}
+              ${data.costAnalysis.maintenanceConsiderations.map(maintenance => `<div class="blue-warning">${maintenance}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.financialDeception.plannedObsolescence ? `
-            <h4>⏰ Planned Obsolescence</h4>
-            <p class="planned-obsolescence">${data.financialDeception.plannedObsolescence}</p>
+          ${data.costAnalysis.lifespanEstimate ? `
+            <h4>⏰ Estimated Lifespan</h4>
+            <p class="lifespan-estimate">${data.costAnalysis.lifespanEstimate}</p>
           ` : ''}
           
-          ${data.financialDeception.priceManipulation?.length > 0 ? `
-            <h4>🎯 Price Manipulation Tactics</h4>
+          ${data.costAnalysis.valueFactors?.length > 0 ? `
+            <h4>📊 Value Factors</h4>
             <div class="warning">
-              ${data.financialDeception.priceManipulation.map(tactic => `<div class="orange-warning">${tactic}</div>`).join('')}
+              ${data.costAnalysis.valueFactors.map(factor => `<div class="green-warning">${factor}</div>`).join('')}
             </div>
           ` : ''}
         </div>
       `;
     }
 
-    // Corporate Transparency Investigation
-    if (data.corporateTransparency) {
+    // Company Information & Public Records
+    if (data.companyInformation) {
       html += `
-        <div class="analysis-card corporate-transparency">
-          <h3><i class="fas fa-building"></i> Corporate Transparency Investigation</h3>
-          ${data.corporateTransparency.ethicsRating ? `
+        <div class="analysis-card company-information">
+          <h3><i class="fas fa-building"></i> Company Information & Public Records</h3>
+          ${data.companyInformation.ethicsAssessment ? `
             <div class="rating-display">
-              <span>Ethics Rating:</span>
-              <div class="rating-stars">${generateStars(data.corporateTransparency.ethicsRating)}</div>
-              <span class="rating-number">${data.corporateTransparency.ethicsRating}/10</span>
+              <span>Public Information Assessment:</span>
+              <div class="rating-stars">${generateStars(data.companyInformation.ethicsAssessment)}</div>
+              <span class="rating-number">${data.companyInformation.ethicsAssessment}/10</span>
             </div>
           ` : ''}
           
-          ${data.corporateTransparency.supplyChainAbuses?.length > 0 ? `
-            <h4>⛓️ Supply Chain Abuses</h4>
-            <div class="warning">
-              ${data.corporateTransparency.supplyChainAbuses.map(abuse => `<div class="gray-warning">${abuse}</div>`).join('')}
+          ${data.companyInformation.sustainabilityReports?.length > 0 ? `
+            <h4>🌱 Sustainability Reports</h4>
+            <div class="sustainability-info">
+              ${data.companyInformation.sustainabilityReports.map(report => `<div class="green-warning">${report}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.corporateTransparency.environmentalDamage?.length > 0 ? `
-            <h4>🌍 Environmental Damage</h4>
-            <div class="warning">
-              ${data.corporateTransparency.environmentalDamage.map(damage => `<div class="red-warning">${damage}</div>`).join('')}
+          ${data.companyInformation.publicCompliance?.length > 0 ? `
+            <h4>📋 Public Compliance Information</h4>
+            <div class="compliance-info">
+              ${data.companyInformation.publicCompliance.map(compliance => `<div class="blue-warning">${compliance}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.corporateTransparency.lawsuitHistory?.length > 0 ? `
-            <h4>⚖️ Lawsuit History</h4>
-            <div class="warning">
-              ${data.corporateTransparency.lawsuitHistory.map(lawsuit => `<div class="red-warning">${lawsuit}</div>`).join('')}
+          ${data.companyInformation.documentedPractices?.length > 0 ? `
+            <h4>📄 Documented Practices</h4>
+            <div class="practices-info">
+              ${data.companyInformation.documentedPractices.map(practice => `<div class="gray-warning">${practice}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.corporateTransparency.lobbyingActivity?.length > 0 ? `
-            <h4>🏛️ Anti-Consumer Lobbying</h4>
-            <div class="lobbying-list">
-              ${data.corporateTransparency.lobbyingActivity.map(activity => `<div class="purple-warning">${activity}</div>`).join('')}
+          ${data.companyInformation.publicInitiatives?.length > 0 ? `
+            <h4>� Public Initiatives</h4>
+            <div class="initiatives-info">
+              ${data.companyInformation.publicInitiatives.map(initiative => `<div class="purple-warning">${initiative}</div>`).join('')}
             </div>
-          ` : ''}
-          
-          ${data.corporateTransparency.executiveGreed ? `
-            <h4>💼 Executive Greed</h4>
-            <p class="executive-greed">${data.corporateTransparency.executiveGreed}</p>
           ` : ''}
         </div>
       `;
     }
 
-    // Social Sentiment & Real User Experiences
-    if (data.socialSentiment) {
+    // User Feedback Analysis & Community Insights
+    if (data.userFeedbackAnalysis) {
       html += `
-        <div class="analysis-card social-sentiment">
-          <h3><i class="fas fa-users"></i> Social Sentiment & Real User Experiences</h3>
-          ${data.socialSentiment.overallSentiment !== undefined ? `
-            <div class="sentiment-display">
-              <span>Overall Sentiment:</span>
-              <div class="sentiment-bar">
-                <div class="sentiment-fill" style="width: ${Math.max(0, (data.socialSentiment.overallSentiment + 100) / 2)}%"></div>
-                <span class="sentiment-number">${data.socialSentiment.overallSentiment}/100</span>
-              </div>
+        <div class="analysis-card user-feedback-analysis">
+          <h3><i class="fas fa-users"></i> User Feedback Analysis & Community Insights</h3>
+          ${data.userFeedbackAnalysis.aggregatedSentiment ? `
+            <h4>📊 Aggregated Sentiment</h4>
+            <p class="sentiment-summary">${data.userFeedbackAnalysis.aggregatedSentiment}</p>
+          ` : ''}
+          
+          ${data.userFeedbackAnalysis.commonFeedback?.length > 0 ? `
+            <h4>� Common User Feedback</h4>
+            <div class="feedback-list">
+              ${data.userFeedbackAnalysis.commonFeedback.map(feedback => `<div class="blue-warning">${feedback}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.socialSentiment.complaintTrends?.length > 0 ? `
-            <h4>📈 Trending Complaints</h4>
-            <div class="complaint-trends-list">
-              ${data.socialSentiment.complaintTrends.map(trend => `<div class="orange-warning">${trend}</div>`).join('')}
+          ${data.userFeedbackAnalysis.reportedExperiences?.length > 0 ? `
+            <h4>� Reported User Experiences</h4>
+            <div class="experiences-list">
+              ${data.userFeedbackAnalysis.reportedExperiences.map(experience => `<div class="green-warning">${experience}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.socialSentiment.realUserExperiences?.length > 0 ? `
-            <h4>💬 Real User Experiences</h4>
-            <div class="user-experiences-list">
-              ${data.socialSentiment.realUserExperiences.map(experience => `<div class="blue-warning">${experience}</div>`).join('')}
+          ${data.userFeedbackAnalysis.communityInsights?.length > 0 ? `
+            <h4>🧠 Community Insights</h4>
+            <div class="insights-list">
+              ${data.userFeedbackAnalysis.communityInsights.map(insight => `<div class="purple-warning">${insight}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.socialSentiment.hiddenProblems?.length > 0 ? `
-            <h4>🙈 Hidden Problems Companies Ignore</h4>
-            <div class="hidden-problems-list">
-              ${data.socialSentiment.hiddenProblems.map(problem => `<div class="red-warning">${problem}</div>`).join('')}
-            </div>
-          ` : ''}
-          
-          ${data.socialSentiment.sentimentVsMarketing ? `
-            <h4>📊 Reality vs Marketing</h4>
-            <p class="sentiment-vs-marketing">${data.socialSentiment.sentimentVsMarketing}</p>
+          ${data.userFeedbackAnalysis.satisfactionIndicators ? `
+            <h4>� Satisfaction Indicators</h4>
+            <p class="satisfaction-indicators">${data.userFeedbackAnalysis.satisfactionIndicators}</p>
           ` : ''}
         </div>
       `;
     }
 
-    // Marketing Lies & Deceptive Practices
-    if (data.marketingLies) {
+    // Marketing Claims Verification & Fact-Checking
+    if (data.claimsVerification) {
       html += `
-        <div class="analysis-card marketing-lies">
-          <h3><i class="fas fa-mask"></i> Marketing Lies & Deceptive Practices</h3>
+        <div class="analysis-card claims-verification">
+          <h3><i class="fas fa-search"></i> Marketing Claims Verification & Fact-Checking</h3>
           
-          ${data.marketingLies.deceptiveClaims?.length > 0 ? `
-            <h4>🎭 False Advertising</h4>
-            <div class="deceptive-claims-list">
-              ${data.marketingLies.deceptiveClaims.map(claim => `<div class="orange-warning">${claim}</div>`).join('')}
+          ${data.claimsVerification.marketingClaims?.length > 0 ? `
+            <h4>📢 Common Marketing Claims</h4>
+            <div class="claims-list">
+              ${data.claimsVerification.marketingClaims.map(claim => `<div class="blue-warning">${claim}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.marketingLies.scientificMisleading?.length > 0 ? `
-            <h4>🧬 Scientific-Sounding Nonsense</h4>
-            <div class="scientific-misleading-list">
-              ${data.marketingLies.scientificMisleading.map(claim => `<div class="scientific-misleading">${claim}</div>`).join('')}
+          ${data.claimsVerification.availableEvidence?.length > 0 ? `
+            <h4>🔍 Available Supporting Evidence</h4>
+            <div class="evidence-list">
+              ${data.claimsVerification.availableEvidence.map(evidence => `<div class="green-warning">${evidence}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.marketingLies.manipulatedComparisons?.length > 0 ? `
-            <h4>📊 Rigged Comparisons</h4>
-            <div class="manipulated-comparisons-list">
-              ${data.marketingLies.manipulatedComparisons.map(comparison => `<div class="manipulated-comparison">${comparison}</div>`).join('')}
+          ${data.claimsVerification.independentTesting?.length > 0 ? `
+            <h4>🧪 Independent Testing Results</h4>
+            <div class="testing-list">
+              ${data.claimsVerification.independentTesting.map(test => `<div class="purple-warning">${test}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.marketingLies.fakeReviews ? `
-            <h4>⭐ Review Manipulation</h4>
-            <p class="fake-reviews">${data.marketingLies.fakeReviews}</p>
+          ${data.claimsVerification.regulatoryGuidance?.length > 0 ? `
+            <h4>🏛️ Regulatory Guidance</h4>
+            <div class="regulatory-list">
+              ${data.claimsVerification.regulatoryGuidance.map(guidance => `<div class="gray-warning">${guidance}</div>`).join('')}
+            </div>
           ` : ''}
           
-          ${data.marketingLies.regulatoryWarnings?.length > 0 ? `
-            <h4>🏛️ Government Warnings</h4>
-            <div class="regulatory-warnings-list">
-              ${data.marketingLies.regulatoryWarnings.map(warning => `<div class="regulatory-warning">${warning}</div>`).join('')}
+          ${data.claimsVerification.verificationStatus?.length > 0 ? `
+            <h4>✅ Verification Status</h4>
+            <div class="verification-list">
+              ${data.claimsVerification.verificationStatus.map(status => `<div class="yellow-warning">${status}</div>`).join('')}
             </div>
           ` : ''}
         </div>
       `;
     }
 
-    // Quality Reality vs Marketing Claims
-    if (data.qualityReality) {
+    // Quality Insights & Durability Research
+    if (data.qualityInsights) {
       html += `
-        <div class="analysis-card quality-reality">
-          <h3><i class="fas fa-microscope"></i> Quality Reality vs Marketing Claims</h3>
-          ${data.qualityReality.actualQualityRating ? `
-            <div class="rating-display">
-              <span>Actual Quality:</span>
-              <div class="rating-stars">${generateStars(data.qualityReality.actualQualityRating)}</div>
-              <span class="rating-number">${data.qualityReality.actualQualityRating}/10</span>
+        <div class="analysis-card quality-insights">
+          <h3><i class="fas fa-star"></i> Quality Insights & Durability Research</h3>
+          
+          ${data.qualityInsights.reportedQuality?.length > 0 ? `
+            <h4>⭐ User-Reported Quality Experiences</h4>
+            <div class="quality-list">
+              ${data.qualityInsights.reportedQuality.map(quality => `<div class="blue-warning">${quality}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.qualityReality.marketingVsReality ? `
-            <h4>🎭 Marketing vs Reality</h4>
-            <p class="marketing-vs-reality">${data.qualityReality.marketingVsReality}</p>
-          ` : ''}
-          
-          ${data.qualityReality.hiddenDefects?.length > 0 ? `
-            <h4>🔍 Hidden Defects</h4>
-            <div class="hidden-defects-list">
-              ${data.qualityReality.hiddenDefects.map(defect => `<div class="hidden-defect">${defect}</div>`).join('')}
+          ${data.qualityInsights.commonIssues?.length > 0 ? `
+            <h4>⚠️ Frequently Reported Issues</h4>
+            <div class="issues-list">
+              ${data.qualityInsights.commonIssues.map(issue => `<div class="yellow-warning">${issue}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.qualityReality.failurePatterns?.length > 0 ? `
-            <h4>💥 Common Failure Points</h4>
-            <div class="failure-patterns-list">
-              ${data.qualityReality.failurePatterns.map(pattern => `<div class="failure-pattern">${pattern}</div>`).join('')}
+          ${data.qualityInsights.maintenanceRequirements?.length > 0 ? `
+            <h4>� Typical Maintenance Requirements</h4>
+            <div class="maintenance-list">
+              ${data.qualityInsights.maintenanceRequirements.map(requirement => `<div class="purple-warning">${requirement}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.qualityReality.manufacturingShortcuts?.length > 0 ? `
-            <h4>✂️ Manufacturing Shortcuts</h4>
-            <div class="manufacturing-shortcuts-list">
-              ${data.qualityReality.manufacturingShortcuts.map(shortcut => `<div class="manufacturing-shortcut">${shortcut}</div>`).join('')}
-            </div>
+          ${data.qualityInsights.durabilityReports ? `
+            <h4>⏱️ User-Reported Durability</h4>
+            <p class="durability-reports">${data.qualityInsights.durabilityReports}</p>
           ` : ''}
         </div>
       `;
     }
 
-    // Consumer Protection & Alternatives
-    if (data.consumerProtection) {
-      const warningLevel = data.consumerProtection.warningLevel || 'MEDIUM';
-      const warningClass = warningLevel.toLowerCase();
+    // Consumer Guidance & Alternatives
+    if (data.consumerGuidance) {
+      const researchConfidence = data.consumerGuidance.researchConfidence || 'MEDIUM';
+      const confidenceClass = researchConfidence.toLowerCase();
       
       html += `
-        <div class="analysis-card consumer-protection ${warningClass}">
-          <h3><i class="fas fa-shield"></i> Consumer Protection & Alternatives</h3>
+        <div class="analysis-card consumer-guidance ${confidenceClass}">
+          <h3><i class="fas fa-compass"></i> Consumer Guidance & Alternatives</h3>
           
-          <div class="warning-level-display">
-            <span class="warning-label">Warning Level:</span>
-            <span class="warning-badge ${warningClass}">${warningLevel}</span>
+          <div class="confidence-level-display">
+            <span class="confidence-label">Research Confidence Level:</span>
+            <span class="confidence-badge ${confidenceClass}">${researchConfidence}</span>
           </div>
           
-          ${data.consumerProtection.immediateActions?.length > 0 ? `
-            <h4>🚨 Immediate Actions to Protect Yourself</h4>
-            <div class="warning">
-              ${data.consumerProtection.immediateActions.map(action => `<div class="green-warning">${action}</div>`).join('')}
+          ${data.consumerGuidance.recommendedActions?.length > 0 ? `
+            <h4>🎯 Recommended Research Steps</h4>
+            <div class="actions-list">
+              ${data.consumerGuidance.recommendedActions.map(action => `<div class="blue-warning">${action}</div>`).join('')}
             </div>
           ` : ''}
           
-          ${data.consumerProtection.betterAlternatives?.length > 0 ? `
-            <h4>✅ Better Alternatives</h4>
+          ${data.consumerGuidance.alternativeOptions?.length > 0 ? `
+            <h4>🔄 Alternative Options for Comparison</h4>
             <div class="alternatives-grid">
-              ${data.consumerProtection.betterAlternatives.map(alt => `
+              ${data.consumerGuidance.alternativeOptions.map(alt => `
                 <div class="alternative-item">
                   <div class="alternative-header">
                     <span class="alternative-name">${alt.name}</span>
                     <span class="alternative-brand">${alt.brand}</span>
                   </div>
-                  <p class="alternative-benefits">${alt.whyBetter}</p>
-                  <p class="alternative-transparency"><strong>Transparency:</strong> ${alt.transparency}</p>
+                  <p class="alternative-advantages">${alt.advantages}</p>
+                  <p class="alternative-feedback"><strong>User Feedback:</strong> ${alt.userFeedback}</p>
                 </div>
               `).join('')}
             </div>
           ` : ''}
           
-          ${data.consumerProtection.avoidanceReasons?.length > 0 ? `
-            <h4>🚫 Reasons to Avoid This Product</h4>
-            <div class="avoidance-reasons-list">
-              ${data.consumerProtection.avoidanceReasons.map(reason => `<div class="avoidance-reason">${reason}</div>`).join('')}
+          ${data.consumerGuidance.researchSuggestions?.length > 0 ? `
+            <h4>� Additional Research Suggestions</h4>
+            <div class="research-suggestions-list">
+              ${data.consumerGuidance.researchSuggestions.map(suggestion => `<div class="green-warning">${suggestion}</div>`).join('')}
             </div>
           ` : ''}
         </div>
