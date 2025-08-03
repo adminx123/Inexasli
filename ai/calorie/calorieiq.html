@@ -208,42 +208,6 @@ Each session about 45 minutes"></textarea>
   if (typeof GuidedForms !== 'undefined' && GuidedForms.calorieiq) {
     new GuidedForms.calorieiq();
   }
-
-  // Function to handle jumping to the food log stage
-  function jumpToFoodLogStage() {
-    if (localStorage.getItem('calorieIqResponse')) {
-      console.log('[CalorieIQ] Conditions met, attempting to jump to Food Log stage');
-      // Wait for guided forms to initialize then jump to Food Log stage (step 5)
-      setTimeout(() => {
-        if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
-          console.log('[CalorieIQ] Jumping to Food Log stage (step 5)');
-          window.guidedForms.showStep(5);
-          // Do not forcibly hide the intro; guidedForms will handle step visibility
-        } else {
-          console.log('[CalorieIQ] Guided forms not ready, will not jump to stage.');
-        }
-      }, 500); // A small delay to ensure guidedForms is ready
-    }
-  }
-
-  // Try to jump immediately on load (for page refresh/reopen scenarios)
-  jumpToFoodLogStage();
-
-  // Listen for the promptGridItemSelected event to jump to the Food Log stage
-  document.addEventListener('promptGridItemSelected', function(e) {
-    console.log('[CalorieIQ] promptGridItemSelected event detected', e.detail);
-    if (e.detail.url && e.detail.url.includes('/ai/calorie/calorieiq.html')) {
-      jumpToFoodLogStage();
-    }
-  });
-
-  // Handle loading through datain.js - also check for jump condition
-  document.addEventListener('data-in-loaded', function(e) {
-    if (e.detail && e.detail.module === 'calorie') {
-      console.log("[CalorieIQ] Calorie module loaded through datain.js");
-      jumpToFoodLogStage();
-    }
-  });
 })();
 </script>
 
