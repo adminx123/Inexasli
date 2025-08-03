@@ -123,6 +123,7 @@
           </label>
         </div>
         <div style="display: flex; justify-content: center; gap: 10px; margin-top: 18px;">
+          <button id="decline-terms" style="background: rgba(75, 85, 99, 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; padding: 12px 20px; font-size: 1em; cursor: pointer; font-weight: bold; font-family: 'Geist', sans-serif; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(75, 85, 99, 0.15);">Decline</button>
           <button id="accept-both" disabled>Accept & Continue</button>
         </div>
       </div>
@@ -130,9 +131,11 @@
 
     const modal = window.openCustomModal(htmlContent, {
       maxWidth: '400px',
+      dismissible: false, // Prevent closing by clicking outside or pressing escape
       onOpen: (modal, modalContent) => {
         // Enable button only if both boxes checked
         const btn = modal.querySelector('#accept-both');
+        const declineBtn = modal.querySelector('#decline-terms');
         const box1 = modal.querySelector('#accept-terms');
         const box2 = modal.querySelector('#accept-consent');
         
@@ -150,6 +153,19 @@
             acceptedDate: new Date().toISOString()
           });
           window.closeModal();
+        };
+        
+        // Decline handler
+        declineBtn.onclick = function() {
+          // Save declined status
+          saveStatus({
+            termsAccepted: false,
+            consentGiven: false,
+            declinedDate: new Date().toISOString()
+          });
+          window.closeModal();
+          // Optionally show a message about limited functionality
+          alert('You have declined the terms. You will not be able to use the services until you accept the terms and consent.');
         };
         
         // View full terms link

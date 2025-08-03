@@ -1129,17 +1129,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     function toggleDataContainer() {
         if (!dataContainer) return;
 
+        // Check for terms and consent before any action
+        if (window.termsConsentManager && !window.termsConsentManager.checkStatus()) {
+            console.log('[DataIn] Terms/consent not accepted, showing modal instead of toggling');
+            window.termsConsentManager.show();
+            return; // Don't toggle container, just show terms modal
+        }
+
         isVisible = !isVisible;
         
         const topContainer = dataContainer.querySelector('#utility-buttons-top');
         const bottomContainer = dataContainer.querySelector('#utility-buttons-bottom');
         const buttons = Array.from(topContainer.children);
         if (isVisible) {
-            // Check for terms and consent before showing content
-            if (window.termsConsentManager && !window.termsConsentManager.checkStatus()) {
-                console.log('[DataIn] Terms/consent not accepted, showing modal');
-                window.termsConsentManager.show();
-            }
             // Move buttons to bottom
             buttons.forEach(btn => bottomContainer.appendChild(btn));
             bottomContainer.style.display = 'flex';
@@ -1171,6 +1173,16 @@ document.addEventListener('DOMContentLoaded', async function () {
         
         // Notify animation controller of state change
         DataInAnimationController.onContainerStateChange(isVisible);
+    }
+
+    // Central function to check terms consent before utility actions
+    function checkTermsConsentBeforeAction(action, actionName = 'action') {
+        if (window.termsConsentManager && !window.termsConsentManager.checkStatus()) {
+            console.log(`[DataIn] Terms/consent not accepted, showing modal instead of ${actionName}`);
+            window.termsConsentManager.show();
+            return false; // Block the action
+        }
+        return true; // Allow the action
     }
 
     // Update payment button display with usage information
@@ -1302,6 +1314,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Check terms consent before proceeding
+                if (!checkTermsConsentBeforeAction(() => {}, 'data overwrite')) {
+                    return;
+                }
+                
                 // Call the same modal functionality as dataOverwrite.js
                 if (window.openDataOverwriteModal) {
                     window.openDataOverwriteModal();
@@ -1336,6 +1353,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             copyBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                // Check terms consent before proceeding
+                if (!checkTermsConsentBeforeAction(() => {}, 'copy functionality')) {
+                    return;
+                }
                 
                 // Use the modal functionality from copy.js
                 if (window.copyUtil && window.copyUtil.openShareModal) {
@@ -1388,6 +1410,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Check terms consent before proceeding
+                if (!checkTermsConsentBeforeAction(() => {}, 'categories access')) {
+                    return;
+                }
+                
                 // Check if container is collapsed and expand it before loading content
                 if (!isVisible) {
                     // Expand the container first
@@ -1417,6 +1444,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 e.preventDefault();
                 e.stopPropagation();
                 
+                // Check terms consent before proceeding
+                if (!checkTermsConsentBeforeAction(() => {}, 'payment access')) {
+                    return;
+                }
+                
                 // Call the payment modal functionality
                 if (window.openPaymentModal) {
                     window.openPaymentModal();
@@ -1437,6 +1469,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             faqBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                // Check terms consent before proceeding
+                if (!checkTermsConsentBeforeAction(() => {}, 'FAQ access')) {
+                    return;
+                }
+                
                 if (window.openFaqModal) {
                     window.openFaqModal();
                 }

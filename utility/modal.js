@@ -220,13 +220,13 @@ function createModal() {
 }
 
 // Function to open the modal with specified content
-function openModal(contentSrc) {
+function openModal(contentSrc, options = {}) {
     // For all content, use the regular iframe modal
-    openModalWithIframe(contentSrc);
+    openModalWithIframe(contentSrc, options);
 }
 
 // Separate function for iframe-based modals
-function openModalWithIframe(contentSrc) {
+function openModalWithIframe(contentSrc, options = {}) {
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
     
@@ -244,21 +244,28 @@ function openModalWithIframe(contentSrc) {
     // Clean up previous event listeners if they exist
     removeExistingEventListeners();
 
-    // Close modal on Escape key
-    activeKeyDownHandler = (event) => {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    };
-    document.addEventListener('keydown', activeKeyDownHandler);
+    // Check dismissible option (default: true for backward compatibility)
+    const isDismissible = options.dismissible !== false;
 
-    // Close modal when clicking outside
-    activeClickOutsideHandler = (event) => {
-        if (event.target === modal) {
-            closeModal();
-        }
-    };
-    document.addEventListener('click', activeClickOutsideHandler);
+    // Close modal on Escape key (only if dismissible)
+    if (isDismissible) {
+        activeKeyDownHandler = (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        };
+        document.addEventListener('keydown', activeKeyDownHandler);
+    }
+
+    // Close modal when clicking outside (only if dismissible)
+    if (isDismissible) {
+        activeClickOutsideHandler = (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+        document.addEventListener('click', activeClickOutsideHandler);
+    }
 
     // Use device-container class for legal modals (legacy support)
     if (contentSrc === '/legal.txt') {
@@ -269,7 +276,7 @@ function openModalWithIframe(contentSrc) {
 }
 
 // Function to open the modal with auto height for generated prompts
-function openGeneratedPromptModal() {
+function openGeneratedPromptModal(options = {}) {
     const modal = createModal();
     const modalContent = modal.querySelector('.modal-content');
 
@@ -308,21 +315,28 @@ function openGeneratedPromptModal() {
     // Clean up previous event listeners if they exist
     removeExistingEventListeners();
 
-    // Close modal on Escape key
-    activeKeyDownHandler = (event) => {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    };
-    document.addEventListener('keydown', activeKeyDownHandler);
+    // Check dismissible option (default: true for backward compatibility)
+    const isDismissible = options.dismissible !== false;
 
-    // Close modal when clicking outside
-    activeClickOutsideHandler = (event) => {
-        if (event.target === modal) {
-            closeModal();
-        }
-    };
-    document.addEventListener('click', activeClickOutsideHandler);
+    // Close modal on Escape key (only if dismissible)
+    if (isDismissible) {
+        activeKeyDownHandler = (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        };
+        document.addEventListener('keydown', activeKeyDownHandler);
+    }
+
+    // Close modal when clicking outside (only if dismissible)
+    if (isDismissible) {
+        activeClickOutsideHandler = (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+        document.addEventListener('click', activeClickOutsideHandler);
+    }
 }
 
 // Function to open modal with custom HTML content
@@ -355,21 +369,28 @@ function openCustomModal(htmlContent, options = {}) {
     // Clean up previous event listeners if they exist
     removeExistingEventListeners();
 
-    // Close modal on Escape key
-    activeKeyDownHandler = (event) => {
-        if (event.key === 'Escape') {
-            closeModal();
-        }
-    };
-    document.addEventListener('keydown', activeKeyDownHandler);
+    // Check dismissible option (default: true for backward compatibility)
+    const isDismissible = options.dismissible !== false;
 
-    // Close modal when clicking outside
-    activeClickOutsideHandler = (event) => {
-        if (event.target === modal) {
-            closeModal();
-        }
-    };
-    document.addEventListener('click', activeClickOutsideHandler);
+    // Close modal on Escape key (only if dismissible)
+    if (isDismissible) {
+        activeKeyDownHandler = (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        };
+        document.addEventListener('keydown', activeKeyDownHandler);
+    }
+
+    // Close modal when clicking outside (only if dismissible)
+    if (isDismissible) {
+        activeClickOutsideHandler = (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+        document.addEventListener('click', activeClickOutsideHandler);
+    }
     
     // Execute callback if provided
     if (options.onOpen) {
