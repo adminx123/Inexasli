@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 input[type="datetime-local"] {
   width: 100%;
   max-width: 460px;
@@ -43,7 +45,6 @@ input[type="datetime-local"]:focus {
     gap: 8px;
   }
 }
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /* Global Reset and Base Styles */
 * {
@@ -892,41 +893,6 @@ button:hover {
 .split-calendar-text .delete-btn:focus {
   outline: none;
   box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
-}
-
-/* Add styles for date picker labels */
-label[for="start-date"],
-label[for="end-date"] {
-  display: block;
-  margin-bottom: 5px;
-  margin-top: 15px;
-  font-weight: 600;
-  color: #333;
-  font-size: 14px;
-}
-
-input[type="date"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 16px;
-  font-family: inherit;
-  background-color: white;
-  color: #333;
-  box-sizing: border-box;
-}
-
-input[type="date"]:focus {
-  outline: none;
-  border-color: #ff6b9d;
-  box-shadow: 0 0 0 2px rgba(255, 107, 157, 0.1);
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  background-color: #ff6b9d;
-  border-radius: 3px;
-  cursor: pointer;
 }
 
 /* Responsive design for mobile */
