@@ -665,7 +665,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             
             // Simply update content area - no DOM restructuring
             const dataContent = dataContainer.querySelector('.data-content');
-            dataContent.innerHTML = 'Loading...';
+            dataContent.innerHTML = '';
 
             const response = await fetch(url);
             if (!response.ok) {
