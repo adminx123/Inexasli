@@ -318,6 +318,12 @@ class FormPersistence {
      * Save all form data to localStorage under the module-wide key (e.g. calorieIqInput)
      */
     saveFormData() {
+        // Block saving when on categories page to prevent interference with other modules
+        const lastUrl = getLocal('lastGridItemUrl', null);
+        if (lastUrl && lastUrl.includes('/categories.html')) {
+            return;
+        }
+        
         const gridKey = this.getCurrentGridItemKey();
         if (!gridKey) {
             // [FormPersistence] No module key found, not saving form data.
