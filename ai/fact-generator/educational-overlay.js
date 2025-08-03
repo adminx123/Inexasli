@@ -231,6 +231,15 @@ function getFallbackFactsForModule(moduleName) {
             "Green tea boosts metabolism by 4-5%",
             "Eating slowly reduces overeating by 25%"
         ],
+        'shop': [
+            "Reading reviews from multiple sources improves purchase decisions",
+            "Price comparison sites can save 15-30% on purchases",
+            "Understanding return policies protects consumer rights",
+            "Product ingredients lists reveal hidden allergens and additives",
+            "Independent testing organizations provide unbiased product evaluations",
+            "Consumer reports help identify long-term product reliability",
+            "Warranty terms often vary significantly between similar products"
+        ],
         'period': [
             "The average menstrual cycle is 28 days, but normal can range from 21 to 35 days.",
             "Tracking your cycle can help identify patterns in mood, energy, and symptoms.",
