@@ -282,6 +282,10 @@ textarea {
   transition: height 0.1s ease; /* Smooth height transitions */
 }
 
+textarea::placeholder {
+  white-space: pre-line; /* Enable newline rendering in placeholders */
+}
+
 /* ====================
    Form Controls Focus State
    ==================== */
