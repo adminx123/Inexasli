@@ -55,9 +55,9 @@
                     <p>Enter up to 3 products to analyze or compare. Example format: phone model, price, currency.</p>
                 </div>
                 <div id="product-inputs">
-                    <input type="text" class="product-input" name="product-1" placeholder="Apple iPhone 15 Pro Max 256GB - $1399.99 USD" />
-                    <input type="text" class="product-input" name="product-2" placeholder="Samsung Galaxy S24 Ultra 512GB - $1799.99 CAD" />
-                    <input type="text" class="product-input" name="product-3" placeholder="Google Pixel 8 Pro 256GB - $1199.99 USD" />
+                    <input type="text" class="product-input" id="product-1" name="product-1" data-persist placeholder="Apple iPhone 15 Pro Max 256GB - $1399.99 USD" />
+                    <input type="text" class="product-input" id="product-2" name="product-2" data-persist placeholder="Samsung Galaxy S24 Ultra 512GB - $1799.99 CAD" />
+                    <input type="text" class="product-input" id="product-3" name="product-3" data-persist placeholder="Google Pixel 8 Pro 256GB - $1199.99 USD" />
                 </div>
             </div>
         
@@ -90,8 +90,10 @@
 
   let mixedScanner;
   
-  // Initialize the mixed scanner when DOM is ready
+  // Scanner disabled for now - skip initialization
   function initScanner() {
+    console.log('[ShopIQ] Scanner initialization skipped - scanning disabled due to UPC lookup issues');
+    /* Scanner code temporarily disabled due to UPC lookup issues
     if (typeof window.initializeMixedScannerWithLibrary === 'function') {
       window.initializeMixedScannerWithLibrary('mixed-scanner-container', {
         maxItems: 3,
@@ -174,6 +176,7 @@
       console.log('[ShopIQ] Waiting for initializeMixedScannerWithLibrary...');
       setTimeout(initScanner, 100);
     }
+    */
   }
   
   // Save form data using FormPersistence for manual inputs only
@@ -186,15 +189,14 @@
   
   // Listen for input changes and save to localStorage
   function attachFormListeners() {
-    const productNameInput = document.getElementById('product-name');
-    const userPriceInput = document.getElementById('user-price');
+    // Attach listeners to the product input fields
+    const productInputs = document.querySelectorAll('[id^="product-"]');
     
-    if (productNameInput) {
-      productNameInput.addEventListener('input', saveFormData);
-    }
-    if (userPriceInput) {
-      userPriceInput.addEventListener('input', saveFormData);
-    }
+    productInputs.forEach(input => {
+      input.addEventListener('input', saveFormData);
+    });
+    
+    console.log('[ShopIQ] Form listeners attached to', productInputs.length, 'product inputs');
   }
   
   // Setup input method toggle functionality
@@ -239,12 +241,15 @@
       return;
     }
 
-    // Validate that we have either product name or scanned items
-    const hasProductName = formData['product-name'] && formData['product-name'].trim();
+    // Validate that we have either product inputs or scanned items
+    const hasProduct1 = formData['product-1'] && formData['product-1'].trim();
+    const hasProduct2 = formData['product-2'] && formData['product-2'].trim();
+    const hasProduct3 = formData['product-3'] && formData['product-3'].trim();
+    const hasAnyProduct = hasProduct1 || hasProduct2 || hasProduct3;
     const hasScannedItems = formData['scanned-items'] && formData['scanned-items'].length > 0;
     
-    if (!hasProductName && !hasScannedItems) {
-      alert('Please either scan items or enter a product name.');
+    if (!hasAnyProduct && !hasScannedItems) {
+      alert('Please either scan items or enter at least one product.');
       return;
     }
 
