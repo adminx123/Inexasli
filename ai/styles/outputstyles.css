@@ -177,7 +177,56 @@ body {
   gap: 0; /* remove whitespace between cards */
 }
 
-
+/* ====================
+   Print/PDF Styles - Larger Layout for PDF Generation
+   ==================== */
+@media print {
+  .device-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .output-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 20px;
+  }
+  
+  .main-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    margin: 10px 0;
+    padding: 25px 30px;
+    page-break-inside: avoid;
+  }
+  
+  .output-content h1 {
+    font-size: 28px;
+  }
+  
+  .output-content h2 {
+    font-size: 24px;
+  }
+  
+  .output-content h3 {
+    font-size: 20px;
+  }
+  
+  .output-content p,
+  .output-content li {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+  
+  .output-content table {
+    font-size: 16px;
+  }
+  
+  .output-content th,
+  .output-content td {
+    padding: 10px 15px;
+  }
+}
 
 /* Custom styling placeholder - individual output files can add their own styles here */
 /* Each output.txt file can include additional CSS that works within the device-container constraints */
