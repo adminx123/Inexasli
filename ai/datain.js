@@ -707,8 +707,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 align-items: center;
                 justify-content: space-evenly;
                 width: 100%;
+                max-width: 480px; /* Match device-container width (not content) */
                 min-height: 36px;
-                padding: 0 10px;
+                padding: 0 2px; /* Minimal edge padding */
+                margin: 0 auto; /* Center within container */
                 box-sizing: border-box;
                 overflow: hidden;
                 flex-wrap: nowrap;
