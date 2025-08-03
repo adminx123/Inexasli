@@ -64,6 +64,14 @@
         top: 4px;
         right: 6px;
         font-size: 18px;
+        /* Expand touch area on mobile */
+        padding: 8px;
+        margin: -8px;
+        min-width: 34px;
+        min-height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .premium-tag {
@@ -81,6 +89,11 @@
     .favorite-icon {
         top: 3px;
         right: 6px;
+        /* Ensure expanded touch area on smaller screens */
+        padding: 10px;
+        margin: -10px;
+        min-width: 38px;
+        min-height: 38px;
     }
 }
 
