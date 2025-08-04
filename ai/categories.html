@@ -9,11 +9,6 @@
 }
 
 
-
-/* Category selection items (2 columns) */
-/* .category-selector now inherits .grid-item styles for unified look */
-
-/* Product icon styling */
 .product-icon {
     font-size: 24px;
     color: #4a90e2;
@@ -163,8 +158,7 @@
     <div id="favorites-grid"></div>
 
 
-<div class="grid-items1" id="category-selection">
-
+<div class="grid-items1" id="category-all">
     <div class="grid-item category-selector" data-value="all" style="font-weight: bold;">ALL PRODUCTS</div>
 </div>
 
@@ -349,39 +343,45 @@ setTimeout(function() {
     renderFavorites();
     updateFavoriteIcons();
     
+    // Handle both category containers
     const categoryContainer = document.getElementById('category-selection');
-    if (categoryContainer) {
-        categoryContainer.addEventListener('click', function(e) {
-            if (e.target.classList.contains('category-selector')) {
-                const selectedCategory = e.target.getAttribute('data-value');
-                e.stopPropagation();
-                
-                document.querySelectorAll('#category-selection .category-selector').forEach(item => {
-                    item.classList.remove('active');
-                });
-                e.target.classList.add('active');
-                
-                filterProducts(selectedCategory);
-                
-                if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
-                    window.guidedForms.showStep(1);
-                }
-            }
-        });
-        
-        console.log('[Categories] Initializing - hiding all products first');
-        document.querySelectorAll('.product-item[data-category]').forEach(product => {
-            product.style.display = 'none';
-        });
+    const categoryAllContainer = document.getElementById('category-all');
     
-        setTimeout(() => {
-            filterProducts('all');
-            const allCategoriesItem = document.querySelector('#category-selection .category-selector[data-value="all"]');
-            if (allCategoriesItem) {
-                allCategoriesItem.classList.add('active');
-            }
-        }, 100);
-    }
+    [categoryContainer, categoryAllContainer].forEach(container => {
+        if (container) {
+            container.addEventListener('click', function(e) {
+                if (e.target.classList.contains('category-selector')) {
+                    const selectedCategory = e.target.getAttribute('data-value');
+                    e.stopPropagation();
+                    
+                    // Remove active from ALL category selectors
+                    document.querySelectorAll('.category-selector').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                    
+                    filterProducts(selectedCategory);
+                    
+                    if (window.guidedForms && typeof window.guidedForms.showStep === 'function') {
+                        window.guidedForms.showStep(1);
+                    }
+                }
+            });
+        }
+    });
+        
+    console.log('[Categories] Initializing - hiding all products first');
+    document.querySelectorAll('.product-item[data-category]').forEach(product => {
+        product.style.display = 'none';
+    });
+
+    setTimeout(() => {
+        filterProducts('all');
+        const allCategoriesItem = document.querySelector('#category-all .category-selector[data-value="all"]');
+        if (allCategoriesItem) {
+            allCategoriesItem.classList.add('active');
+        }
+    }, 100);
 }, 100);
 
 // Consolidated event listener for both product selection and favorite toggling
