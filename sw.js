@@ -3,39 +3,51 @@ const urlsToCache = [
   '/budget/index.html'
 ];
 
+console.log('[ServiceWorker] Service worker script loaded with cache version:', CACHE_NAME);
+
 // Install event
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing.');
+  console.log('[ServiceWorker] Installing with cache version:', CACHE_NAME);
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Caching static assets');
+        console.log('[ServiceWorker] Caching static assets');
         return cache.addAll(urlsToCache);
       })
-      .then(() => self.skipWaiting()) // Skip waiting to activate immediately
-      .catch(err => console.error('Cache failed:', err))
+      .then(() => {
+        console.log('[ServiceWorker] Skip waiting to activate immediately');
+        return self.skipWaiting(); // Skip waiting to activate immediately
+      })
+      .catch(err => console.error('[ServiceWorker] Cache failed:', err))
   );
 });
 
 // Activate event
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating.');
+  console.log('[ServiceWorker] Activating with cache version:', CACHE_NAME);
   event.waitUntil(
     caches.keys().then((cacheNames) => {
+      console.log('[ServiceWorker] Found existing caches:', cacheNames);
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('Deleting old cache:', cache);
+            console.log('[ServiceWorker] Deleting old cache:', cache);
             return caches.delete(cache);
           }
         })
       );
     })
-    .then(() => self.clients.claim()) // Take control of clients immediately
     .then(() => {
+      console.log('[ServiceWorker] Taking control of all clients');
+      return self.clients.claim(); // Take control of clients immediately
+    })
+    .then(() => {
+      console.log('[ServiceWorker] New version activated, notifying clients to reload');
       // Notify all clients to reload for fresh content
       return self.clients.matchAll({ type: 'window' }).then(clients => {
+        console.log('[ServiceWorker] Found', clients.length, 'clients to notify');
         clients.forEach(client => {
+          console.log('[ServiceWorker] Sending reload message to client');
           client.postMessage({ action: 'reload', reason: 'new-version' });
         });
       });
