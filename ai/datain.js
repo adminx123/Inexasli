@@ -569,6 +569,19 @@ function initializeCategoryModule() {
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
+    // Service worker reload listener for fresh content
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('message', (event) => {
+            if (event.data && event.data.action === 'reload') {
+                console.log('[DataIn] Service worker requesting reload for fresh content');
+                // Small delay to allow any pending operations to complete
+                setTimeout(() => {
+                    window.location.reload();
+                }, 100);
+            }
+        });
+    }
+
     // Load BoxIcons if not already loaded
     if (!document.querySelector('link[href*="boxicons"]')) {
         const boxIconsLink = document.createElement('link');

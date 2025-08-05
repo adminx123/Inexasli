@@ -32,6 +32,14 @@ self.addEventListener('activate', (event) => {
       );
     })
     .then(() => self.clients.claim()) // Take control of clients immediately
+    .then(() => {
+      // Notify all clients to reload for fresh content
+      return self.clients.matchAll({ type: 'window' }).then(clients => {
+        clients.forEach(client => {
+          client.postMessage({ action: 'reload', reason: 'new-version' });
+        });
+      });
+    })
   );
 });
 
