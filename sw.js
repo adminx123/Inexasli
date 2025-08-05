@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inexasli-v15'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v16'; //#CHANGEVERSION with each major update
 const urlsToCache = [
   '/budget/index.html'
 ];
