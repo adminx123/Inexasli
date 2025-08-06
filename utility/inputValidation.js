@@ -369,6 +369,49 @@ export const MODULE_VALIDATION_RULES = {
   },
   
   income: {
+    // Intro data fields
+    'country': { type: 'text', required: false, maxLength: 100 },
+    'subregion': { type: 'text', required: false, maxLength: 100 },
+    'residency': { type: 'text', required: false, maxLength: 100 },
+    'filingStatus': { type: 'text', required: false, maxLength: 100 },
+    'ageSelf': { type: 'number', required: false, min: 0, max: 120 },
+    'employmentStatus': { type: 'text', required: false, maxLength: 100 },
+    'ageSpouse': { type: 'number', required: false, min: 0, max: 120 },
+    'employmentStatusSpouse': { type: 'text', required: false, maxLength: 100 },
+    'birthYearDisabledDependants': { type: 'text', required: false, maxLength: 500 },
+    
+    // Income data fields - all types of income
+    'income-salary-wages': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-tips': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-bonuses': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-sole-prop': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-federal-pension': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-provincial-pension': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-private-pension': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-old-age-security': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-employment-insurance': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-social-security': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-investment-property': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-capital-gains-losses': { type: 'number', required: false, min: -10000000, max: 10000000 },
+    'income-venture-capital': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-public-dividend': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-owner-dividend': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-interest': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-royalties': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-peer-to-peer-lending': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-trust': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-alimony': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-scholarships-grants': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-tax-free-income': { type: 'number', required: false, min: 0, max: 10000000 },
+    'income-gambling-winnings': { type: 'number', required: false, min: 0, max: 10000000 },
+    
+    // Housing and expense fields that appeared in search
+    'housing-property-tax': { type: 'number', required: false, min: 0, max: 10000000 },
+    'expenses-tax-arrears-payment': { type: 'number', required: false, min: 0, max: 10000000 },
+    'liabilities-tax-arrears': { type: 'number', required: false, min: 0, max: 10000000 },
+    'liabilities-tax-arrears-percent': { type: 'number', required: false, min: 0, max: 100 },
+    
+    // Legacy fields for backwards compatibility
     'income-current': { type: 'text', required: false, maxLength: 100 },
     'income-desired': { type: 'text', required: false, maxLength: 100 },
     'income-skills': { type: 'text', required: false, maxLength: 2000 },

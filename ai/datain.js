@@ -1988,6 +1988,18 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
     // Create worker payload with fingerprint and email for paid users
     const workerPayload = window.rateLimiter.createWorkerPayload(moduleName, formData);
     
+    // Debug logging for income module
+    if (moduleName === 'income') {
+        console.log('[DataIn] Income module debug:', {
+            formDataFromLocalStorage: formData,
+            hasIntroData: !!formData?.introData,
+            hasIncomeData: !!formData?.incomeData,
+            introDataFields: formData?.introData ? Object.keys(formData.introData) : [],
+            incomeDataFields: formData?.incomeData ? Object.keys(formData.incomeData) : [],
+            workerPayload: workerPayload
+        });
+    }
+    
     const dataContainer = document.querySelector('.data-container-in');
     let backendResponse = null;
     

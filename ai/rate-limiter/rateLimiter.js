@@ -397,6 +397,16 @@ export function ensureRateLimitStatusForPaidUser() {
  * @returns {Object} Complete payload ready for API call
  */
 export function createWorkerPayload(module, formData) {
+    // Debug logging for income module
+    if (module === 'income') {
+        console.log('[RateLimit] Creating payload for income module:', {
+            formData: formData,
+            hasIntroData: !!formData?.introData,
+            hasIncomeData: !!formData?.incomeData,
+            formDataType: typeof formData
+        });
+    }
+    
     // Get fingerprint data for rate limiting
     const fingerprintData = getFingerprintForWorker();
     
