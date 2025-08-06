@@ -2402,20 +2402,20 @@
         try {
             // Collect all Tax Residency & Personal Details fields
             const taxResidencyFields = [
-                'income-country',
-                'income-subregion',
-                'income-residency',
-                'income-filingStatus',
-                'income-ageSelf',
-                'income-employmentStatus',
-                'income-ageSpouse',
-                'income-employmentStatusSpouse',
-                'income-birthYearDisabledDependants'
+                'country',
+                'subregion',
+                'residency',
+                'filingStatus',
+                'ageSelf',
+                'employmentStatus',
+                'ageSpouse',
+                'employmentStatusSpouse',
+                'birthYearDisabledDependants'
             ];
             const taxResidencyData = {};
             taxResidencyFields.forEach(id => {
                 const el = document.getElementById(id);
-                if (el) taxResidencyData[id.replace('income-', '')] = el.value;
+                if (el) taxResidencyData[id] = el.value;
             });
 
             // Save to localStorage in the correct structure for the worker
