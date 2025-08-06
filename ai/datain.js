@@ -62,7 +62,7 @@ import {
 } from '/utility/inputValidation.js';
 
 // Import rate limiting utilities centrally
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, handleRateLimitResponse, createWorkerPayload } from '/ai/rate-limiter/rateLimiter.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, canSendRequest, handleRateLimitResponse, createWorkerPayload } from '/ai/rate-limiter/rateLimiter.js';
 
 // Import image upload utility
 import '/utility/piexif.js';
@@ -480,6 +480,7 @@ function initializeFormPersistence(url) {
             getFingerprintForWorker,
             incrementRequestCount,
             isRateLimited,
+            canSendRequest,
             handleRateLimitResponse,
             createWorkerPayload
         };
@@ -1846,6 +1847,176 @@ window.dataInContainerManager = {
     calculateOptimalContainerHeight,
     adjustContainerSize,
     config: containerSizingConfig
+};
+
+// ====================
+// Centralized Generate Request Handler
+// ====================
+
+/**
+ * Centralized function to handle generate requests for all AI modules
+ * Replaces duplicate handleGenerate...Iq functions across modules
+ * @param {string} moduleName - The module name (e.g., 'income', 'calorie', 'fashion')
+ * @param {Object} options - Optional configuration
+ * @param {string} options.buttonId - ID of the generate button (defaults to 'generate-{module}-btn')
+ * @param {string} options.alertMessage - Custom alert message for empty form data
+ * @param {Object} options.customFormData - Use custom form data instead of form persistence
+ * @param {Function} options.onSuccess - Custom success handler
+ * @param {Function} options.onError - Custom error handler
+ * @returns {Promise} Result of the API call
+ */
+window.handleGenerateRequest = async function(moduleName, options = {}) {
+    const {
+        buttonId = `generate-${moduleName}-btn`,
+        alertMessage = `Please complete the form before generating a ${moduleName} analysis.`,
+        customFormData,
+        onSuccess,
+        onError
+    } = options;
+
+    let formData;
+    
+    // Handle special case for income module which uses normalized data
+    if (moduleName === 'income' && !customFormData) {
+        const incomeIqinput1Raw = localStorage.getItem('incomeIqinput1');
+        if (!incomeIqinput1Raw) {
+            console.error(`[${moduleName}] No normalized data found in incomeIqinput1`);
+            alert(alertMessage);
+            return;
+        }
+        try {
+            formData = JSON.parse(incomeIqinput1Raw);
+            console.log(`[${moduleName}] ✅ Using normalized data from incomeIqinput1`);
+        } catch (e) {
+            console.error(`[${moduleName}] Error parsing incomeIqinput1:`, e);
+            alert('Error processing normalized data. Please try again.');
+            return;
+        }
+    } else if (customFormData) {
+        // Use provided custom form data
+        formData = customFormData;
+    } else {
+        // Get form persistence instance for this module
+        const formPersistence = window[`${moduleName}FormPersistence`];
+        if (!formPersistence) {
+            console.error(`[${moduleName}] FormPersistence instance not found.`);
+            alert('Form system not initialized. Please refresh the page.');
+            return;
+        }
+
+        // Get form data
+        formData = formPersistence.getSavedFormData();
+        if (!formData) {
+            console.error(`[${moduleName}] No input data found in localStorage.`);
+            alert(alertMessage);
+            return;
+        }
+    }
+
+    // Check client-side rate limiting before proceeding  
+    const rateLimitAllowed = window.rateLimiter.canSendRequest();
+    if (!rateLimitAllowed) {
+        // Rate limit check failed - if it's a free user, payment modal should already be triggered
+        console.log(`[${moduleName}] Client-side rate limit check failed`);
+        return;
+    }
+
+    // Create worker payload with fingerprint and email for paid users
+    const workerPayload = window.rateLimiter.createWorkerPayload(moduleName, formData);
+    
+    const dataContainer = document.querySelector('.data-container-in');
+    let backendResponse = null;
+    
+    try {
+        backendResponse = await window.enhancedLoading(
+            buttonId,
+            moduleName,
+            async () => {
+                // Send data to worker
+                const apiUrl = 'https://inexasli.com/api/generate';
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(workerPayload)
+                });
+
+                let responseData;
+                try {
+                    responseData = await response.json();
+                } catch (e) {
+                    responseData = { 
+                        error: 'Invalid JSON', 
+                        message: 'Invalid response from server.' 
+                    };
+                }
+
+                // Store backend response for error handling
+                backendResponse = responseData;
+
+                // Always call handleRateLimitResponse with backend response
+                window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, moduleName);
+
+                if (!response.ok) {
+                    throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
+                }
+
+                if (responseData.message !== 'Success') {
+                    throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
+                }
+                
+                // Store the response (only if form persistence is available)
+                const formPersistence = window[`${moduleName}FormPersistence`];
+                if (formPersistence) {
+                    formPersistence.saveResponseData(responseData);
+                }
+                
+                // Dispatch an event to notify dataout.js that a response was received
+                const event = new CustomEvent('api-response-received', {
+                    detail: {
+                        module: `${moduleName}iq`,
+                        type: 'worker-response',
+                        timestamp: Date.now()
+                    }
+                });
+                document.dispatchEvent(event);
+                
+                // Call custom success handler if provided
+                if (onSuccess && typeof onSuccess === 'function') {
+                    onSuccess(responseData);
+                }
+                
+                return responseData;
+            }
+        );
+
+        // Increment request count after successful API call
+        window.rateLimiter.incrementRequestCount();
+        
+        return backendResponse;
+
+    } catch (error) {
+        // Call custom error handler if provided
+        if (onError && typeof onError === 'function') {
+            onError(error, backendResponse);
+        } else {
+            // Default error handling - check if this is a rate limit error for free users
+            const authenticated = localStorage.getItem('authenticated');
+            const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
+            
+            if (backendResponse && backendResponse.error === 'Rate limit exceeded' && !isPaidUser) {
+                // Rate limit error for free user - payment modal should already be triggered by handleRateLimitResponse
+                console.log(`[${moduleName}] Rate limit exceeded for free user - payment modal should be shown`);
+            } else {
+                // Generic error - show alert
+                console.error(`[${moduleName}] Error:`, error);
+                alert(`An error occurred while generating your ${moduleName} analysis. Please try again later.`);
+            }
+        }
+        
+        throw error;
+    }
 };
 
 // Remove local rate limit display logic; use centralized logic from rateLimiter.js

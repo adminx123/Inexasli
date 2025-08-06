@@ -105,69 +105,15 @@ I prefer working alone on complex problems"></textarea>
 
 (function() {
   // Generate button handler - IMPLEMENTING COMPLETE CALORIEIQ ARCHITECTURE
+  // Handle the generate button click - Use centralized handler
   async function handleGenerateEnneagramIq() {
     try {
-      const formData = window.enneagramFormPersistence.getSavedFormData();
-      if (!formData) { 
-        alert('Please complete the form before generating an enneagram analysis.'); 
-        return;
-      }
-      // Check rate limiting before proceeding
-      if (window.rateLimiter.isRateLimited('enneagram', 5, 60 * 60 * 1000)) { // 5 requests per hour (as per rate-limiter config)
-        alert('You have exceeded the request limit for enneagram analysis. Please try again later.');
-        return;
-      }
-      // Create worker payload with email for paid users (DRY function)
-      const workerPayload = window.rateLimiter.createWorkerPayload('enneagram', formData);
-      const dataContainer = document.querySelector('.device-container');
-      let backendResponse = null;
-      try {
-        backendResponse = await window.enhancedLoading(
-          'generate-enneagram-btn',
-          'enneagram',
-          async () => {
-            const apiUrl = 'https://inexasli.com/api/generate';
-            const response = await fetch(apiUrl, { 
-              method: 'POST', 
-              headers: {'Content-Type':'application/json'}, 
-              body: JSON.stringify(workerPayload)
-            });
-            let responseData;
-            try {
-              responseData = await response.json();
-            } catch (e) {
-              responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-            }
-            // Always call handleRateLimitResponse with backend response
-            window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'EnneagramIQ');
-            if (!response.ok) {
-              throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-            }
-            if (responseData.message !== 'Success') {
-              throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-            }
-            return responseData;
-          }
-        );
-        window.rateLimiter.incrementRequestCount('enneagram');
-        window.enneagramFormPersistence.saveResponseData(backendResponse);
-        const event = new CustomEvent('api-response-received', {
-          detail: {
-            module: 'enneagramiq',
-            type: 'worker-response',
-            timestamp: Date.now()
-          }
-        });
-        document.dispatchEvent(event);
-      } catch (error) {
-        if (backendResponse && dataContainer) {
-          window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'EnneagramIQ');
-        }
-        console.error('[EnneagramIQ] Error generating enneagram analysis:', error);
-      }
+      await window.handleGenerateRequest('enneagram', {
+        alertMessage: 'Please complete the form before generating an enneagram analysis.'
+      });
     } catch (error) {
-      console.error('[EnneagramIQ] Error generating enneagram analysis:', error);
-      alert('An error occurred while generating your enneagram analysis. Please try again later.');
+      // Error is already handled by centralized function
+      console.error('[EnneagramIQ] Error in enneagram generation wrapper:', error);
     }
   }
 

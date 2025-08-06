@@ -59,79 +59,15 @@ Finding inner peace during times of uncertainty"></textarea>
         // UI behavior only - persistence handled centrally
     }
 
-    // Handle the generate button click
+    // Handle the generate button click - Use centralized handler
     async function handleGeneratePhilosophyIq() {
-        const formData = window.philosophyFormPersistence.getSavedFormData();
-        if (!formData) {
-            console.error('[PhilosophyIQ] No input data found in localStorage.');
-            alert('Please enter what you\'re seeking wisdom on before proceeding.');
-            return;
-        }
-
-        // Check rate limiting before proceeding
-        if (window.rateLimiter.isRateLimited('philosophy', 6, 60 * 60 * 1000)) { // 6 requests per hour (as per rate-limiter config)
-            alert('You have exceeded the request limit for philosophy analysis. Please try again later.');
-            return;
-        }
-
-        // Create worker payload with email for paid users (DRY function)
-        const workerPayload = window.rateLimiter.createWorkerPayload('philosophy', formData);
-        
-        const dataContainer = document.querySelector('.data-container-in');
-        let backendResponse = null;
         try {
-            backendResponse = await window.enhancedLoading(
-                'generate-philosophy-btn',
-                'philosophy',
-                async () => {
-                    // Send data to worker
-                    const apiUrl = 'https://inexasli.com/api/generate';
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(workerPayload)
-                    });
-                    let responseData;
-                    try {
-                        responseData = await response.json();
-                    } catch (e) {
-                        responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-                    }
-                    // Always call handleRateLimitResponse with backend response
-                    window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
-                    if (!response.ok) {
-                        throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-                    }
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    // Store the response
-                    window.philosophyFormPersistence.saveResponseData(responseData);
-                    
-                    // Dispatch an event to notify dataout.js that a response was received
-                    const event = new CustomEvent('api-response-received', {
-                        detail: {
-                            module: 'philosophyiq',
-                            type: 'worker-response',
-                            timestamp: Date.now()
-                        }
-                    });
-                    document.dispatchEvent(event);
-                    
-                    return responseData;
-                }
-            );
-            window.rateLimiter.incrementRequestCount('philosophy');
+            await window.handleGenerateRequest('philosophy', {
+                alertMessage: 'Please enter what you\'re seeking wisdom on before proceeding.'
+            });
         } catch (error) {
-            // If backendResponse is available, update rate limit display and show error
-            if (backendResponse && dataContainer) {
-                window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
-            }
-            // Optionally, show a toast/modal here for generic errors
-            console.error('[PhilosophyIQ] Error:', error);
+            // Error is already handled by centralized function
+            console.error('[PhilosophyIQ] Error in philosophy generation wrapper:', error);
         }
     }
 

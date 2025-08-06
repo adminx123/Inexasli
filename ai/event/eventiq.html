@@ -175,92 +175,15 @@ Need accommodations for 3 wheelchair users."></textarea>
         // UI behavior only - persistence handled centrally
     }
 
-    // Handle the generate button click
+    // Handle the generate button click - Use centralized handler
     async function handleGenerateEventIq() {
-        const formData = window.eventFormPersistence.getSavedFormData();
-        if (!formData) {
-            console.error('[EventIQ] No input data found in localStorage.');
-            alert('Please complete the form before generating an event plan.');
-            return;
-        }
-
-        // Check rate limiting before proceeding
-        if (window.rateLimiter.isRateLimited('event', 8, 60 * 60 * 1000)) { // 8 requests per hour (as per rate-limiter config)
-            alert('You have exceeded the request limit for event planning. Please try again later.');
-            return;
-        }
-
-        // Create worker payload with email for paid users (DRY function)
-        const workerPayload = window.rateLimiter.createWorkerPayload('event', formData);
-        
-        const dataContainer = document.querySelector('.device-container') || document.body;
-        let backendResponse = null;
-        
         try {
-            const result = await window.enhancedLoading(
-                'generate-event-btn',
-                'event',
-                async () => {
-                    // Send data to worker
-                    const apiUrl = 'https://inexasli.com/api/generate';
-                    
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(workerPayload)
-                    });
-                    
-                    let responseData;
-                    try {
-                        responseData = await response.json();
-                    } catch (e) {
-                        responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-                    }
-                    
-                    // Store backend response for error handling
-                    backendResponse = responseData;
-                    
-                    // Always call handleRateLimitResponse with backend response
-                    window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'EventIQ');
-                    
-                    if (!response.ok) {
-                        throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-                    }
-                    
-                    if (responseData.message !== 'Success') {
-                        throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                    }
-                    
-                    // Store the response
-                    window.eventFormPersistence.saveResponseData(responseData);
-                    
-                    // Dispatch an event to notify dataout.js that a response was received
-                    const event = new CustomEvent('api-response-received', {
-                        detail: {
-                            module: 'eventiq',
-                            type: 'worker-response',
-                            timestamp: Date.now()
-                        }
-                    });
-                    document.dispatchEvent(event);
-                    
-                    return responseData;
-                }
-            );
-            
-            // Increment request count after successful response
-            window.rateLimiter.incrementRequestCount('event');
-            
-            // Enhanced loading either returns result or throws error - no need to check result.success
+            await window.handleGenerateRequest('event', {
+                alertMessage: 'Please complete the form before generating an event plan.'
+            });
         } catch (error) {
-            // If backendResponse is available, update rate limit display and show error
-            if (backendResponse && dataContainer) {
-                window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'EventIQ');
-            }
-            // Optionally, show a toast/modal here for generic errors
-            console.error('[EventIQ] Error:', error);
+            // Error is already handled by centralized function
+            console.error('[EventIQ] Error in event generation wrapper:', error);
         }
     }
 

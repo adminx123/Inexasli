@@ -280,93 +280,15 @@ Birth control pill"></textarea>
   }, 200);
 
   // Handle the generate button click
+  // Handle the generate button click - Use centralized handler
   async function handleGeneratePeriodIq() {
-    const formData = window.periodFormPersistence.getSavedFormData();
-    console.debug('[PeriodIQ][DEBUG] Retrieved formData:', formData);
-    if (!formData) {
-      console.error('[PeriodIQ] No input data found in localStorage.');
-      alert('Please complete the form before generating a period analysis.');
-      return;
-    }
-
-    // Check rate limiting before proceeding
-    const isLimited = window.rateLimiter.isRateLimited('period', 8, 60 * 60 * 1000);
-    console.debug('[PeriodIQ][DEBUG] Rate limit check:', isLimited);
-    if (isLimited) {
-      alert('You have exceeded the request limit for period analysis. Please try again later.');
-      return;
-    }
-
-    // Create worker payload with email for paid users (DRY function)
-    const workerPayload = window.rateLimiter.createWorkerPayload('period', formData);
-    console.debug('[PeriodIQ][DEBUG] Worker payload:', workerPayload);
-
-    const dataContainer = document.querySelector('.data-container-in');
-    let backendResponse = null;
     try {
-      backendResponse = await window.enhancedLoading(
-        'generate-period-btn',
-        'period',
-        async () => {
-          // Send data to worker
-          const apiUrl = 'https://inexasli.com/api/generate';
-          console.debug('[PeriodIQ][DEBUG] Sending POST request to:', apiUrl);
-          console.debug('[PeriodIQ][DEBUG] POST body:', workerPayload);
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(workerPayload)
-          });
-          console.debug('[PeriodIQ][DEBUG] Response status:', response.status);
-          let responseData;
-          try {
-            responseData = await response.json();
-            console.debug('[PeriodIQ][DEBUG] Response JSON:', responseData);
-          } catch (e) {
-            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-            console.error('[PeriodIQ][DEBUG] Error parsing JSON:', e);
-          }
-          // Always call handleRateLimitResponse with backend response
-          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
-          if (!response.ok) {
-            console.error('[PeriodIQ][DEBUG] Response not OK:', responseData);
-            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-          }
-          if (responseData.message !== 'Success') {
-            console.error('[PeriodIQ][DEBUG] Response message not Success:', responseData);
-            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-          }
-
-          // Store the response
-          window.periodFormPersistence.saveResponseData(responseData);
-          console.debug('[PeriodIQ][DEBUG] Response data saved.');
-
-          // Dispatch an event to notify dataout.js that a response was received
-          const event = new CustomEvent('api-response-received', {
-            detail: {
-              module: 'period',
-              type: 'worker-response',
-              timestamp: Date.now()
-            }
-          });
-          document.dispatchEvent(event);
-          console.debug('[PeriodIQ][DEBUG] api-response-received event dispatched.');
-
-          return responseData;
-        }
-      );
-      window.rateLimiter.incrementRequestCount('period');
-      console.debug('[PeriodIQ][DEBUG] Request count incremented.');
+      await window.handleGenerateRequest('period', {
+        alertMessage: 'Please complete the form before generating a period analysis.'
+      });
     } catch (error) {
-      // If backendResponse is available, update rate limit display and show error
-      if (backendResponse && dataContainer) {
-        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
-        console.debug('[PeriodIQ][DEBUG] handleRateLimitResponse called with error.');
-      }
-      // Optionally, show a toast/modal here for generic errors
-      console.error('[PeriodIQ] Error:', error);
+      // Error is already handled by centralized function
+      console.error('[PeriodIQ] Error in period generation wrapper:', error);
     }
   }
 

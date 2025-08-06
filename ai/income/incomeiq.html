@@ -2064,7 +2064,7 @@
         }
     }
 
-    // Generate IncomeIQ report - ONLY send normalized incomeIqinput1 data
+    // Generate IncomeIQ report - Use centralized handler with income-specific logic
     async function handleGenerateIncomeIq() {
         try {
             // Force normalization to ensure we have fresh normalized data
@@ -2084,12 +2084,6 @@
                 return;
             }
 
-            // Check rate limiting before proceeding
-            if (window.rateLimiter.isRateLimited('income', 10, 60 * 60 * 1000)) { // 10 requests per hour
-                alert('You have exceeded the request limit for income analysis. Please try again later.');
-                return;
-            }
-
             let payloadToSend;
             try {
                 payloadToSend = JSON.parse(incomeIqinput1Raw);
@@ -2100,101 +2094,34 @@
                 return;
             }
 
-            // Create worker payload with email for paid users (DRY function)
-            const workerPayload = window.rateLimiter.createWorkerPayload('income', payloadToSend);
-            
-            // DEBUG: Log the final payload (hide sensitive fingerprint details)
-            console.log("[IncomeIQ] Final payload being sent to worker:", JSON.stringify({
-                module: workerPayload.module,
-                email: workerPayload.email || 'not provided',
-                formData: payloadToSend,
-                fingerprint: { 
-                    deviceId: workerPayload.fingerprint.deviceId.slice(0, 8) + '...', 
-                    sessionId: workerPayload.fingerprint.sessionId.slice(0, 8) + '...',
-                    requestCount: Object.keys(workerPayload.fingerprint.requestCounts).length 
-                }
-            }, null, 2));
-
-            // Use enhanced loading with educational facts
-            const dataContainer = document.querySelector('.device-container') || document.body;
-            let backendResponse = null;
-            
-            try {
-                const result = await window.enhancedLoading(
-                    'generate-income-btn',
-                    'income',
-                    async () => {
-                        // Use the proper Cloudflare-secured API endpoint
-                        const apiUrl = 'https://inexasli.com/api/generate';
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(workerPayload)
-                        });
-
-                        let responseData;
-                        try {
-                            responseData = await response.json();
-                        } catch (e) {
-                            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-                        }
-                        
-                        // Store backend response for error handling
-                        backendResponse = responseData;
-                        
-                        // Always call handleRateLimitResponse with backend response
-                        window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok, 'IncomeIQ');
-
-                        if (!response.ok) {
-                            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-                        }
-
-                        if (responseData.message !== 'Success') {
-                            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-                        }
-
-                        return responseData;
+            // Use centralized generate handler with income-specific success callback
+            await window.handleGenerateRequest('income', {
+                alertMessage: 'No normalized data available. Please fill out the form and try again.',
+                onSuccess: (responseData) => {
+                    // Clear stale tax calculations flag
+                    localStorage.removeItem('taxCalculationsStale');
+                    localStorage.removeItem('taxCalculationsStaleTimestamp');
+                    console.log("[IncomeIQ] ✅ Tax calculations are now fresh");
+                    console.log('[IncomeIQ] Income report generated successfully');
+                },
+                onError: (error, backendResponse) => {
+                    console.error('[IncomeIQ] Error generating income report:', error);
+                    // Check if this is a rate limit error for free users
+                    const authenticated = localStorage.getItem('authenticated');
+                    const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
+                    
+                    if (backendResponse && backendResponse.error === 'Rate limit exceeded' && !isPaidUser) {
+                        // Rate limit error for free user - payment modal should already be triggered by handleRateLimitResponse
+                        console.log('[IncomeIQ] Rate limit exceeded for free user - payment modal should be shown');
+                    } else {
+                        // Generic error - show alert
+                        alert('An error occurred while generating your income report. Please try again later.');
                     }
-                );
-                
-                // Increment request count after successful response
-                window.rateLimiter.incrementRequestCount('income');
-
-                // Store the response using centralized system
-                if (window.incomeFormPersistence) {
-                    window.incomeFormPersistence.saveResponseData(result);
                 }
-
-                // Clear stale tax calculations flag
-                localStorage.removeItem('taxCalculationsStale');
-                localStorage.removeItem('taxCalculationsStaleTimestamp');
-                console.log("[IncomeIQ] ✅ Tax calculations are now fresh");
-
-                // Dispatch an event to notify dataout.js that a response was received
-                const event = new CustomEvent('api-response-received', {
-                    detail: {
-                        module: 'incomeiq',
-                        type: 'worker-response',
-                        timestamp: Date.now()
-                    }
-                });
-                document.dispatchEvent(event);
-                console.log('[IncomeIQ] Dispatched api-response-received event');
-                
-                console.log('[IncomeIQ] Income report generated successfully');
-            } catch (error) {
-                // If backendResponse is available, update rate limit display and show error
-                if (backendResponse && dataContainer) {
-                    window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true, 'IncomeIQ');
-                }
-                console.error('[IncomeIQ] Error generating income report:', error);
-                alert('An error occurred while generating your income report. Please try again later.');
-            }
+            });
 
         } catch (error) {
-            console.error('[IncomeIQ] Error generating income report:', error);
+            console.error('[IncomeIQ] Error in income generation wrapper:', error);
             alert('An error occurred while generating your income report. Please try again later.');
         }
     }

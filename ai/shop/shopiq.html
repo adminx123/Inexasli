@@ -253,71 +253,11 @@
       return;
     }
 
-    // Check rate limiting before proceeding
-    if (window.rateLimiter.isRateLimited('shop', 6, 60 * 60 * 1000)) { // 6 requests per hour
-      alert('You have exceeded the request limit for shop analysis. Please try again later.');
-      return;
-    }
-
-    // Create worker payload with email for paid users (DRY function)
-    const workerPayload = window.rateLimiter.createWorkerPayload('shop', formData);
-    
-    const dataContainer = document.querySelector('.data-container-in');
-    let backendResponse = null;
-    try {
-      backendResponse = await window.enhancedLoading(
-        'generate-shop-btn',
-        'shop',
-        async () => {
-          // Send data to worker
-          const apiUrl = 'https://inexasli.com/api/generate';
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(workerPayload)
-          });
-          let responseData;
-          try {
-            responseData = await response.json();
-          } catch (e) {
-            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-          }
-          // Always call handleRateLimitResponse with backend response
-          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
-          if (!response.ok) {
-            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-          }
-          if (responseData.message !== 'Success') {
-            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-          }
-          
-          // Store the response using FormPersistence (same as calorie module)
-          window.shopFormPersistence.saveResponseData(responseData);
-          
-          // Dispatch an event to notify dataout.js that a response was received
-          const event = new CustomEvent('api-response-received', {
-            detail: {
-              module: 'shopiq',
-              type: 'worker-response',
-              timestamp: Date.now()
-            }
-          });
-          document.dispatchEvent(event);
-          
-          return responseData;
-        }
-      );
-      window.rateLimiter.incrementRequestCount('shop');
-    } catch (error) {
-      // If backendResponse is available, update rate limit display and show error
-      if (backendResponse && dataContainer) {
-        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
-      }
-      // Optionally, show a toast/modal here for generic errors
-      console.error('[ShopIQ] Error:', error);
-    }
+    // Use centralized handler
+    await window.handleGenerateRequest('shop', {
+      alertMessage: 'Please either scan items or enter at least one product.',
+      rateLimitParams: { limit: 6, timeWindow: 60 * 60 * 1000 } // 6 requests per hour
+    });
   }
 
   // Set up event listener

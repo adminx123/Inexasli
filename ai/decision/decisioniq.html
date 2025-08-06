@@ -98,79 +98,15 @@ Option 3: Build custom solution in-house"></textarea>
 
 (function() {
 
-  // Generate button handler - simplified to match calorie module pattern
+  // Generate button handler - Use centralized handler
   async function handleGenerateDecisionIq() {
-    const formData = window.decisionFormPersistence.getSavedFormData();
-    if (!formData) {
-      console.error('[DecisionIQ] No input data found in localStorage.');
-      alert('Please complete the form before generating a decision analysis.');
-      return;
-    }
-
-    // Check rate limiting before proceeding
-    if (window.rateLimiter.isRateLimited('decision', 10, 60 * 60 * 1000)) { // 10 requests per hour
-      alert('You have exceeded the request limit for decision analysis. Please try again later.');
-      return;
-    }
-
-    // Create worker payload with email for paid users (DRY function)
-    const workerPayload = window.rateLimiter.createWorkerPayload('decision', formData);
-    
-    const dataContainer = document.querySelector('.data-container-in');
-    let backendResponse = null;
     try {
-      backendResponse = await window.enhancedLoading(
-        'generate-decision-btn',
-        'decision',
-        async () => {
-          // Send data to worker
-          const apiUrl = 'https://inexasli.com/api/generate';
-          const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(workerPayload)
-          });
-          let responseData;
-          try {
-            responseData = await response.json();
-          } catch (e) {
-            responseData = { error: 'Invalid JSON', message: 'Invalid response from server.' };
-          }
-          // Always call handleRateLimitResponse with backend response
-          window.rateLimiter.handleRateLimitResponse(dataContainer, responseData, !response.ok);
-          if (!response.ok) {
-            throw new Error(responseData.message || `HTTP error! Status: ${response.status}`);
-          }
-          if (responseData.message !== 'Success') {
-            throw new Error(`An error occurred: ${responseData.message || responseData.error || ''}`);
-          }
-          
-          // Store the response
-          window.decisionFormPersistence.saveResponseData(responseData);
-          
-          // Dispatch an event to notify dataout.js that a response was received
-          const event = new CustomEvent('api-response-received', {
-            detail: {
-              module: 'decisioniq',
-              type: 'worker-response',
-              timestamp: Date.now()
-            }
-          });
-          document.dispatchEvent(event);
-          
-          return responseData;
-        }
-      );
-      window.rateLimiter.incrementRequestCount('decision');
+      await window.handleGenerateRequest('decision', {
+        alertMessage: 'Please complete the form before generating a decision analysis.'
+      });
     } catch (error) {
-      // If backendResponse is available, update rate limit display and show error
-      if (backendResponse && dataContainer) {
-        window.rateLimiter.handleRateLimitResponse(dataContainer, backendResponse, true);
-      }
-      // Optionally, show a toast/modal here for generic errors
-      console.error('[DecisionIQ] Error:', error);
+      // Error is already handled by centralized function
+      console.error('[DecisionIQ] Error in decision generation wrapper:', error);
     }
   }
 

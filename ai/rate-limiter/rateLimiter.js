@@ -137,7 +137,7 @@ export function isRateLimited() {
             fingerprint.lastRequestTimes = recentRequests;
             
             // Check if over limit
-            if (recentRequests.length >= RATE_LIMIT_CONFIG.MAX_REQUESTS_PER_MINUTE) {
+            if (recentRequests.length > RATE_LIMIT_CONFIG.MAX_REQUESTS_PER_MINUTE) {
                 return true;
             }
         }
@@ -275,7 +275,7 @@ export function canSendRequest() {
     }
     // Remove timestamps older than 1 minute
     timestamps = timestamps.filter(ts => now - ts < windowMs);
-    if (timestamps.length >= maxPerMinute) {
+    if (timestamps.length > maxPerMinute) {
         alert('Too many requests. Please wait a minute before trying again.');
         return false;
     }
