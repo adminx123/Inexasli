@@ -1,9 +1,17 @@
-const CACHE_NAME = 'inexasli-v16'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v17'; //#CHANGEVERSION with each major update
 const urlsToCache = [
-  '/budget/index.html'
+  // Empty array to avoid cache failures on non-existent files
 ];
 
 console.log('[ServiceWorker] Service worker script loaded with cache version:', CACHE_NAME);
+
+// Force immediate installation for testing
+try {
+  console.log('[ServiceWorker] Attempting to skip waiting immediately');
+  self.skipWaiting();
+} catch (err) {
+  console.error('[ServiceWorker] Error in skipWaiting:', err);
+}
 
 // Install event
 self.addEventListener('install', (event) => {
@@ -11,14 +19,23 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[ServiceWorker] Caching static assets');
-        return cache.addAll(urlsToCache);
+        console.log('[ServiceWorker] Cache opened successfully');
+        if (urlsToCache.length > 0) {
+          console.log('[ServiceWorker] Caching static assets:', urlsToCache);
+          return cache.addAll(urlsToCache);
+        } else {
+          console.log('[ServiceWorker] No static assets to cache');
+          return Promise.resolve();
+        }
       })
       .then(() => {
         console.log('[ServiceWorker] Skip waiting to activate immediately');
         return self.skipWaiting(); // Skip waiting to activate immediately
       })
-      .catch(err => console.error('[ServiceWorker] Cache failed:', err))
+      .catch(err => {
+        console.error('[ServiceWorker] Install failed:', err);
+        throw err;
+      })
   );
 });
 
