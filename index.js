@@ -1,18 +1,9 @@
 if ('serviceWorker' in navigator) {
   console.log('[ServiceWorker] Browser supports service workers');
   
-  // Force unregister all service workers first
-  navigator.serviceWorker.getRegistrations().then(registrations => {
-    registrations.forEach(registration => {
-      console.log('[ServiceWorker] Unregistering old service worker');
-      registration.unregister();
-    });
-    
-    // Wait a moment then register new one
-    setTimeout(() => {
-      // Register the service worker
-      navigator.serviceWorker.register('/sw.js', { scope: '/' }) // Explicit scope
-        .then((registration) => {
+  // Register the service worker
+  navigator.serviceWorker.register('/sw.js', { scope: '/' })
+    .then((registration) => {
           console.log('[ServiceWorker] Registration successful:', registration);
           console.log('[ServiceWorker] Scope:', registration.scope);
           console.log('[ServiceWorker] Active:', registration.active);
@@ -36,8 +27,6 @@ if ('serviceWorker' in navigator) {
         .catch((error) => {
           console.error('[ServiceWorker] Registration failed:', error);
         });
-    }, 100);
-  });
 
   // Listen for the "controllerchange" event
   navigator.serviceWorker.addEventListener('controllerchange', () => {
