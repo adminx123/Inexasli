@@ -762,6 +762,12 @@ function toggleGuidedMode() {
  * Navigate to previous step - called by datain.js buttons
  */
 function guidedFormsPrevious() {
+    // Check if content is loading (prevent navigation during load)
+    if (window.isLoadingContent) {
+        console.log('[GuidedForms] Navigation blocked - content loading');
+        return false;
+    }
+    
     if (window.guidedForms && window.guidedForms.isInitialized && window.guidedForms.currentStep > 0) {
         window.guidedForms.showStep(window.guidedForms.currentStep - 1);
         return true;
@@ -773,6 +779,12 @@ function guidedFormsPrevious() {
  * Navigate to next step - called by datain.js buttons
  */
 function guidedFormsNext() {
+    // Check if content is loading (prevent navigation during load)
+    if (window.isLoadingContent) {
+        console.log('[GuidedForms] Navigation blocked - content loading');
+        return false;
+    }
+    
     if (window.guidedForms && window.guidedForms.isInitialized && window.guidedForms.steps && window.guidedForms.currentStep < window.guidedForms.steps.length - 1) {
         window.guidedForms.showStep(window.guidedForms.currentStep + 1);
         return true;

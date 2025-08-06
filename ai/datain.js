@@ -105,10 +105,21 @@ window.utilityFunctions = {
 window.getLocal = getLocal;
 window.setLocal = setLocal;
 
+// Expose loading state for other modules to check
+Object.defineProperty(window, 'isLoadingContent', {
+    get() { return isLoadingContent; },
+    enumerable: true
+});
+
 // Track animation state to prevent overlaps
 let isAnimatingRightArrow = false;
 let isAnimatingCategoriesButton = false;
 let categoriesButtonHintInterval = null;
+
+// Track loading state to prevent race conditions
+let isLoadingContent = false;
+let currentLoadController = null;
+let lastNavigationTime = 0;
 
 /**
  * Centralized Animation Controller for DataIn
@@ -658,6 +669,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function loadStoredContent(url) {
         console.log('[DataIn] Loading content for URL:', url);
         
+        // Prevent race conditions by checking if content is already loading
+        if (isLoadingContent) {
+            console.log('[DataIn] Content already loading, cancelling previous request');
+            if (currentLoadController) {
+                currentLoadController.abort();
+            }
+        }
+        
+        // Set loading state and create new abort controller
+        isLoadingContent = true;
+        currentLoadController = new AbortController();
+        
         try {
             // Update lastGridItemUrl for proper animation filtering
             setLocal('lastGridItemUrl', url);
@@ -669,12 +692,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             const dataContent = dataContainer.querySelector('.data-content');
             dataContent.innerHTML = '';
 
-            const response = await fetch(url);
+            const response = await fetch(url, { 
+                signal: currentLoadController.signal 
+            });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const content = await response.text();
+            
+            // Check if this request was cancelled
+            if (currentLoadController.signal.aborted) {
+                console.log('[DataIn] Request was cancelled, not updating content');
+                return;
+            }
             
             // Check if content contains form elements that need guided forms
             const tempDiv = document.createElement('div');
@@ -712,12 +743,28 @@ document.addEventListener('DOMContentLoaded', async function () {
                         // Initialize both left and right swipe handlers with a single call
                         initializeBidirectionalSwipe(dataContent, {
                             right: () => {
+                                // Add debouncing for swipe navigation
+                                const currentTime = Date.now();
+                                if (currentTime - lastNavigationTime < 300 || isLoadingContent) {
+                                    console.log('[DataIn] Swipe navigation debounced or blocked');
+                                    return;
+                                }
+                                lastNavigationTime = currentTime;
+                                
                                 if (window.guidedForms && window.guidedForms.currentStep > 0) {
                                     console.log('[DataIn] Swipe Right detected, going to previous step.');
                                     window.guidedForms.showStep(window.guidedForms.currentStep - 1);
                                 }
                             },
                             left: () => {
+                                // Add debouncing for swipe navigation
+                                const currentTime = Date.now();
+                                if (currentTime - lastNavigationTime < 300 || isLoadingContent) {
+                                    console.log('[DataIn] Swipe navigation debounced or blocked');
+                                    return;
+                                }
+                                lastNavigationTime = currentTime;
+                                
                                 if (window.guidedForms && window.guidedForms.steps && window.guidedForms.currentStep < window.guidedForms.steps.length - 1) {
                                     console.log('[DataIn] Swipe Left detected, going to next step.');
                                     window.guidedForms.showStep(window.guidedForms.currentStep + 1);
@@ -839,9 +886,18 @@ document.addEventListener('DOMContentLoaded', async function () {
               window.enablePremiumFeatures();
             }
         } catch (error) {
-            console.error('Error loading content:', error);
-            const dataContent = dataContainer.querySelector('.data-content');
-            dataContent.innerHTML = 'Error loading content. Please try again.';
+            // Only log error if request wasn't cancelled
+            if (!currentLoadController?.signal?.aborted) {
+                console.error('Error loading content:', error);
+                const dataContent = dataContainer.querySelector('.data-content');
+                if (dataContent) {
+                    dataContent.innerHTML = 'Error loading content. Please try again.';
+                }
+            }
+        } finally {
+            // Reset loading state
+            isLoadingContent = false;
+            currentLoadController = null;
         }
     }
 
@@ -1277,6 +1333,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             guidedNavBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                
+                // Debounce rapid clicks (prevent navigation faster than 300ms)
+                const currentTime = Date.now();
+                if (currentTime - lastNavigationTime < 300) {
+                    console.log('[DataIn] Navigation debounced - too fast');
+                    return;
+                }
+                lastNavigationTime = currentTime;
+                
+                // Prevent navigation during content loading
+                if (isLoadingContent) {
+                    console.log('[DataIn] Navigation blocked - content loading');
+                    return;
+                }
                 
                 const rect = guidedNavBtn.getBoundingClientRect();
                 const clickX = e.clientX - rect.left;
