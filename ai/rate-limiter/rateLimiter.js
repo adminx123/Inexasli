@@ -447,3 +447,19 @@ if (typeof window !== 'undefined') {
         createWorkerPayload
     };
 }
+
+/*equence when clicking Generate button:
+
+Button Click - User clicks generate/submit button in form
+Rate Limit Check - canSendRequest() or isRateLimited() is called first
+Check Request Count - Looks at localStorage timestamps for recent requests
+Rate Limit Logic - If user has made 2+ requests in last minute:
+timestamps.length >= maxPerMinute (where maxPerMinute = 2)
+Shows "Too many requests" alert
+Returns false to block request
+Add Timestamp - If allowed, adds current timestamp to localStorage
+Create Payload - createWorkerPayload() builds request with form data + fingerprint
+Send to Worker - Fetch request sent to master.js worker
+Worker Processing - Master.js handles request and calls AI API
+Response Handling - handleRateLimitResponse() processes backend response
+Update UI - Payment button updated with usage count */
