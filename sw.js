@@ -45,22 +45,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  // Bypass cache for local development
-  if (self.location.hostname === '127.0.0.1' || self.location.hostname === 'localhost') {
-    event.respondWith(fetch(event.request));
-  } else {
-    event.respondWith(
-      fetch(event.request) // Always try the network first
-        .then((networkResponse) => {
-          // Cache the new response
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME)
-            .then((cache) => cache.put(event.request, responseToCache));
-          return networkResponse;
-        })
-        .catch(() => caches.match(event.request)) // Fallback to cache if network fails
-    );
-  }
+  event.respondWith(
+    fetch(event.request) // Always try the network first
+      .then((networkResponse) => {
+        // Cache the new response
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME)
+          .then((cache) => cache.put(event.request, responseToCache));
+        return networkResponse;
+      })
+      .catch(() => caches.match(event.request)) // Fallback to cache if network fails
+  );
 });
 
 // Handle messages from clients (e.g., skipWaiting)
