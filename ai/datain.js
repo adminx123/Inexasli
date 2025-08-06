@@ -1952,10 +1952,18 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
     } else {
         // Special case for income module - use structured data from incomeIqinput1
         if (moduleName === 'income') {
-            formData = getLocal('incomeIqinput1');
-            if (!formData) {
+            const rawData = getLocal('incomeIqinput1');
+            if (!rawData) {
                 console.error(`[${moduleName}] No structured input data found in localStorage.`);
                 alert(alertMessage);
+                return;
+            }
+            // Parse the JSON string to object (since getLocal returns the raw string)
+            try {
+                formData = JSON.parse(rawData);
+            } catch (e) {
+                console.error(`[${moduleName}] Failed to parse form data:`, e);
+                alert('Invalid form data. Please refresh and try again.');
                 return;
             }
         } else {
