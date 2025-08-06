@@ -1946,40 +1946,34 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
 
     let formData;
     
-    // Handle special case for income module which uses normalized data
-    if (moduleName === 'income' && !customFormData) {
-        const incomeIqinput1Raw = localStorage.getItem('incomeIqinput1');
-        if (!incomeIqinput1Raw) {
-            console.error(`[${moduleName}] No normalized data found in incomeIqinput1`);
-            alert(alertMessage);
-            return;
-        }
-        try {
-            formData = JSON.parse(incomeIqinput1Raw);
-            console.log(`[${moduleName}] ✅ Using normalized data from incomeIqinput1`);
-        } catch (e) {
-            console.error(`[${moduleName}] Error parsing incomeIqinput1:`, e);
-            alert('Error processing normalized data. Please try again.');
-            return;
-        }
-    } else if (customFormData) {
+    if (customFormData) {
         // Use provided custom form data
         formData = customFormData;
     } else {
-        // Get form persistence instance for this module
-        const formPersistence = window[`${moduleName}FormPersistence`];
-        if (!formPersistence) {
-            console.error(`[${moduleName}] FormPersistence instance not found.`);
-            alert('Form system not initialized. Please refresh the page.');
-            return;
-        }
+        // Special case for income module - use structured data from incomeIqinput1
+        if (moduleName === 'income') {
+            formData = getLocal('incomeIqinput1');
+            if (!formData) {
+                console.error(`[${moduleName}] No structured input data found in localStorage.`);
+                alert(alertMessage);
+                return;
+            }
+        } else {
+            // Get form persistence instance for this module
+            const formPersistence = window[`${moduleName}FormPersistence`];
+            if (!formPersistence) {
+                console.error(`[${moduleName}] FormPersistence instance not found.`);
+                alert('Form system not initialized. Please refresh the page.');
+                return;
+            }
 
-        // Get form data
-        formData = formPersistence.getSavedFormData();
-        if (!formData) {
-            console.error(`[${moduleName}] No input data found in localStorage.`);
-            alert(alertMessage);
-            return;
+            // Get form data
+            formData = formPersistence.getSavedFormData();
+            if (!formData) {
+                console.error(`[${moduleName}] No input data found in localStorage.`);
+                alert(alertMessage);
+                return;
+            }
         }
     }
 

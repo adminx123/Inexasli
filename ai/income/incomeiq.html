@@ -1666,6 +1666,14 @@
                         console.log(`[IntroSectionController] Event '${event.type}' on ${elementId}, value:`, event.target.value);
                         this.stateManager.updateState(stateField, event.target.value);
                         this.saveFormData();
+                        
+                        // Also update normalized data for makeChanges.js monitoring
+                        if (typeof window.normalizeIncomeExpenses === 'function') {
+                            const result = window.normalizeIncomeExpenses();
+                            if (result.success) {
+                                console.log(`[IntroSectionController] Updated incomeIqinput1 after ${elementId} change`);
+                            }
+                        }
                     };
                     element.addEventListener('change', handler);
                     element.addEventListener('input', handler);
@@ -2067,36 +2075,18 @@
     // Generate IncomeIQ report - Use centralized handler with income-specific logic
     async function handleGenerateIncomeIq() {
         try {
-            // Force normalization to ensure we have fresh normalized data
-            console.log("[IncomeIQ] Running normalization before sending to worker");
+            // Update normalized data for makeChanges.js monitoring (but don't use for sending)
+            console.log("[IncomeIQ] Running normalization for makeChanges.js monitoring");
             const normalizationResult = window.normalizeIncomeExpenses();
             if (!normalizationResult.success) {
                 console.error("[IncomeIQ] Failed to normalize data:", normalizationResult.error);
                 alert('Failed to process your form data. Please check your inputs and try again.');
                 return;
             }
-            
-            // Get ONLY the normalized data from localStorage
-            const incomeIqinput1Raw = localStorage.getItem('incomeIqinput1');
-            if (!incomeIqinput1Raw) {
-                console.error("[IncomeIQ] No normalized data found in incomeIqinput1");
-                alert('No normalized data available. Please fill out the form and try again.');
-                return;
-            }
 
-            let payloadToSend;
-            try {
-                payloadToSend = JSON.parse(incomeIqinput1Raw);
-                console.log("[IncomeIQ] ✅ Using ONLY normalized data from incomeIqinput1");
-            } catch (e) {
-                console.error("[IncomeIQ] Error parsing incomeIqinput1:", e);
-                alert('Error processing normalized data. Please try again.');
-                return;
-            }
-
-            // Use centralized generate handler with income-specific success callback
+            // Use centralized generate handler which will pull from FormPersistence (incomeIqInput)
             await window.handleGenerateRequest('income', {
-                alertMessage: 'No normalized data available. Please fill out the form and try again.',
+                alertMessage: 'Please complete the form before generating an income analysis.',
                 onSuccess: (responseData) => {
                     // Clear stale tax calculations flag
                     localStorage.removeItem('taxCalculationsStale');
