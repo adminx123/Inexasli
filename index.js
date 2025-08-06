@@ -27,13 +27,6 @@ if ('serviceWorker' in navigator) {
         .catch((error) => {
           console.error('[ServiceWorker] Registration failed:', error);
         });
-
-  // Listen for the "controllerchange" event
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    console.log('[ServiceWorker] New service worker is controlling the page - page will reload');
-    // Force a reload to ensure the updated app is loaded
-    window.location.reload();
-  });
 } else {
   console.log('[ServiceWorker] Service workers not supported in this browser');
 }
