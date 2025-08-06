@@ -2419,14 +2419,14 @@
                 expenseData: normalizedExpenses
             };
             
-            localStorage.setItem('incomeIqinput1', JSON.stringify(incomeIqinput1));
-            localStorage.setItem('incomeIqInput2', JSON.stringify(incomeIqInput2));
+            window.setJSON('incomeIqinput1', incomeIqinput1);
+            window.setJSON('incomeIqInput2', incomeIqInput2);
             // Keep the original for backward compatibility
-            localStorage.setItem('incomeIqExpense', JSON.stringify(normalizedExpenses));
+            window.setJSON('incomeIqExpense', normalizedExpenses);
             
             // Store assets and liabilities separately
-            localStorage.setItem('incomeIqAssets', JSON.stringify(assetsData));
-            localStorage.setItem('incomeIqLiabilities', JSON.stringify(liabilitiesData));
+            window.setJSON('incomeIqAssets', assetsData);
+            window.setJSON('incomeIqLiabilities', liabilitiesData);
 
             console.log("[IncomeIQ] ✅ Successfully saved normalized data to localStorage");
             console.log("Income data saved to 'incomeIqinput1':", incomeIqinput1);
