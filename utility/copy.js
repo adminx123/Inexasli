@@ -518,12 +518,24 @@ function captureOutputContainer(outputContainer, progressToast) {
     
     // Prepare the output container for capture
     prepareOutputContainerForCapture(outputContainer);
-    
+
+    // Clone the output container and remove device-container class from the clone
+    const clone = outputContainer.cloneNode(true);
+    clone.id = 'pdf-capture-temp';
+    clone.classList.remove('device-container');
+    clone.style.position = 'fixed';
+    clone.style.left = '-9999px';
+    clone.style.top = '0';
+    clone.style.width = '100vw';
+    clone.style.maxWidth = '100vw';
+    clone.style.zIndex = '-1';
+    document.body.appendChild(clone);
+
     // Wait a moment for any transitions to complete
     setTimeout(() => {
-        console.log('🎯 Executing html2canvas on output container');
-        
-        html2canvas(outputContainer, {
+        console.log('🎯 Executing html2canvas on cloned output container');
+
+        html2canvas(clone, {
             scale: 2, // Good quality
             useCORS: true,
             allowTaint: true,
@@ -532,7 +544,7 @@ function captureOutputContainer(outputContainer, progressToast) {
             imageTimeout: 15000,
             onclone: function(clonedDoc) {
                 // Clean up the cloned document
-                const clonedContainer = clonedDoc.querySelector('#main-content.device-container');
+                const clonedContainer = clonedDoc.querySelector('#pdf-capture-temp');
                 if (clonedContainer) {
                     // Remove any unwanted elements
                     const elementsToRemove = clonedContainer.querySelectorAll(
@@ -542,9 +554,11 @@ function captureOutputContainer(outputContainer, progressToast) {
                 }
             }
         }).then(canvas => {
+            // Remove the clone after capture
+            document.body.removeChild(clone);
             console.log('✅ Output container captured successfully');
             window.enhancedUI.closeToast(captureToast);
-            
+
             // Validate canvas has content
             if (canvas.width === 0 || canvas.height === 0) {
                 console.error('❌ Canvas is empty');
@@ -552,11 +566,13 @@ function captureOutputContainer(outputContainer, progressToast) {
                 generateSimpleTextPDF();
                 return;
             }
-            
+
             // Create PDF with captured image
             createPDFFromCanvas(canvas);
-            
+
         }).catch(error => {
+            // Remove the clone after error
+            document.body.removeChild(clone);
             console.error('❌ html2canvas failed:', error);
             window.enhancedUI.closeToast(captureToast);
             window.enhancedUI.showToast('❌ Visual capture failed. Using text fallback...', 'warning');
