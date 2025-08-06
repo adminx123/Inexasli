@@ -1,4 +1,4 @@
-const CACHE_NAME = 'inexasli-v17'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v18'; //#CHANGEVERSION with each major update
 const urlsToCache = [
   // Empty array to avoid cache failures on non-existent files
 ];
