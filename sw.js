@@ -1,74 +1,37 @@
-const CACHE_NAME = 'inexasli-v18'; //#CHANGEVERSION with each major update
+const CACHE_NAME = 'inexasli-v15'; //#CHANGEVERSION with each major update
 const urlsToCache = [
-  // Empty array to avoid cache failures on non-existent files
+  '/budget/index.html'
 ];
-
-console.log('[ServiceWorker] Service worker script loaded with cache version:', CACHE_NAME);
-
-// Force immediate installation for testing
-try {
-  console.log('[ServiceWorker] Attempting to skip waiting immediately');
-  self.skipWaiting();
-} catch (err) {
-  console.error('[ServiceWorker] Error in skipWaiting:', err);
-}
 
 // Install event
 self.addEventListener('install', (event) => {
-  console.log('[ServiceWorker] Installing with cache version:', CACHE_NAME);
+  console.log('Service Worker installing.');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('[ServiceWorker] Cache opened successfully');
-        if (urlsToCache.length > 0) {
-          console.log('[ServiceWorker] Caching static assets:', urlsToCache);
-          return cache.addAll(urlsToCache);
-        } else {
-          console.log('[ServiceWorker] No static assets to cache');
-          return Promise.resolve();
-        }
+        console.log('Caching static assets');
+        return cache.addAll(urlsToCache);
       })
-      .then(() => {
-        console.log('[ServiceWorker] Skip waiting to activate immediately');
-        return self.skipWaiting(); // Skip waiting to activate immediately
-      })
-      .catch(err => {
-        console.error('[ServiceWorker] Install failed:', err);
-        throw err;
-      })
+      .then(() => self.skipWaiting()) // Skip waiting to activate immediately
+      .catch(err => console.error('Cache failed:', err))
   );
 });
 
 // Activate event
 self.addEventListener('activate', (event) => {
-  console.log('[ServiceWorker] Activating with cache version:', CACHE_NAME);
+  console.log('Service Worker activating.');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
-      console.log('[ServiceWorker] Found existing caches:', cacheNames);
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('[ServiceWorker] Deleting old cache:', cache);
+            console.log('Deleting old cache:', cache);
             return caches.delete(cache);
           }
         })
       );
     })
-    .then(() => {
-      console.log('[ServiceWorker] Taking control of all clients');
-      return self.clients.claim(); // Take control of clients immediately
-    })
-    .then(() => {
-      console.log('[ServiceWorker] New version activated, notifying clients to reload');
-      // Notify all clients to reload for fresh content
-      return self.clients.matchAll({ type: 'window' }).then(clients => {
-        console.log('[ServiceWorker] Found', clients.length, 'clients to notify');
-        clients.forEach(client => {
-          console.log('[ServiceWorker] Sending reload message to client');
-          client.postMessage({ action: 'reload', reason: 'new-version' });
-        });
-      });
-    })
+    .then(() => self.clients.claim()) // Take control of clients immediately
   );
 });
 
