@@ -409,15 +409,9 @@ export const MODULE_VALIDATION_RULES = {
     'housing-property-tax': { type: 'number', required: false, min: 0, max: 10000000 },
     'expenses-tax-arrears-payment': { type: 'number', required: false, min: 0, max: 10000000 },
     'liabilities-tax-arrears': { type: 'number', required: false, min: 0, max: 10000000 },
-    'liabilities-tax-arrears-percent': { type: 'number', required: false, min: 0, max: 100 },
+    'liabilities-tax-arrears-percent': { type: 'number', required: false, min: 0, max: 100 }
     
-    // Legacy fields for backwards compatibility
-    'income-current': { type: 'text', required: false, maxLength: 100 },
-    'income-desired': { type: 'text', required: false, maxLength: 100 },
-    'income-skills': { type: 'text', required: false, maxLength: 2000 },
-    'income-industry': { type: 'text', required: false, maxLength: 200 },
-    'skills': { type: 'text', required: false, maxLength: 2000 },
-    'industry': { type: 'text', required: false, maxLength: 200 }
+  
   },
   
   enneagram: {
