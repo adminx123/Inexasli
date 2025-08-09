@@ -69,33 +69,30 @@ export function getFingerprint() {
     try {
         const stored = localStorage.getItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
         let fingerprintData;
+        
         if (stored) {
             fingerprintData = JSON.parse(stored);
-            const sessionAge = Date.now() - fingerprintData.sessionCreated;
-            if (sessionAge > 24 * 60 * 60 * 1000) {
-                fingerprintData.sessionId = generateSessionId();
-                fingerprintData.sessionCreated = Date.now();
-                fingerprintData.requestCounts = {};
-                fingerprintData.lastRequestTimes = [];
-            }
+            // Remove session age check and reset - let server handle all timing
         }
+        
         if (!stored || !fingerprintData || typeof fingerprintData.deviceId !== 'string' || !fingerprintData.deviceId) {
             localStorage.removeItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY);
             fingerprintData = {
                 deviceId: generateDeviceFingerprint(),
                 sessionId: generateSessionId(),
-                sessionCreated: Date.now(),
                 requestCounts: {},
                 lastRequestTimes: [],
                 rateLimitStatus: {}
             };
         }
+        
         if (!fingerprintData.deviceId || typeof fingerprintData.deviceId !== 'string') {
             fingerprintData.deviceId = generateDeviceFingerprint();
         }
         if (!Array.isArray(fingerprintData.lastRequestTimes)) {
             fingerprintData.lastRequestTimes = [];
         }
+        
         localStorage.setItem(RATE_LIMIT_CONFIG.FINGERPRINT_KEY, JSON.stringify(fingerprintData));
         return fingerprintData;
     } catch (error) {
@@ -103,7 +100,6 @@ export function getFingerprint() {
         return {
             deviceId: generateDeviceFingerprint(),
             sessionId: generateSessionId(),
-            sessionCreated: Date.now(),
             requestCounts: {},
             lastRequestTimes: [],
             rateLimitStatus: {}
@@ -136,7 +132,7 @@ export function isRateLimited() {
             const recentRequests = fingerprint.lastRequestTimes.filter(time => time > windowStart);
             fingerprint.lastRequestTimes = recentRequests;
             
-            // Check if over limit
+            // Check if over limit (basic client-side check only)
             if (recentRequests.length > RATE_LIMIT_CONFIG.MAX_REQUESTS_PER_MINUTE) {
                 return true;
             }
@@ -260,28 +256,12 @@ export function handleRateLimitResponse(container, response, showError = true, m
 }
 
 /**
- * Simple per-minute rate limit check (client-side only, not secure)
+ * Simple request validation (no client-side timing - server handles all rate limiting)
  * @returns {boolean} True if request can be sent
  */
 export function canSendRequest() {
-    const now = Date.now();
-    const windowMs = 60000; // 1 minute
-    const maxPerMinute = 2; // You can use RATE_LIMIT_CONFIG.MAX_REQUESTS_PER_MINUTE if you want
-    let timestamps = [];
-    try {
-        timestamps = JSON.parse(localStorage.getItem('rateLimitTimestamps') || '[]');
-    } catch (e) {
-        timestamps = [];
-    }
-    // Remove timestamps older than 1 minute
-    timestamps = timestamps.filter(ts => now - ts < windowMs);
-    if (timestamps.length > maxPerMinute) {
-        alert('Too many requests. Please wait a minute before trying again.');
-        return false;
-    }
-    // Add current timestamp and save
-    timestamps.push(now);
-    localStorage.setItem('rateLimitTimestamps', JSON.stringify(timestamps));
+    // Remove all client-side timestamp tracking
+    // Server-side handles all rate limiting with 12:00 UTC reset
     return true;
 }
 
