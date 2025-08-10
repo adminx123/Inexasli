@@ -656,7 +656,15 @@ function addPaymentModalStyles() {
  */
 function setupPaymentModalFunctionality(modal) {
     // Function to open payment modal
-    window.openPaymentModal = function() {
+    window.openPaymentModal = function(customMessage = null) {
+        // If custom message is provided, add it to the status div
+        if (customMessage) {
+            const statusDiv = modal.querySelector('#status');
+            if (statusDiv) {
+                statusDiv.innerHTML = `<div style="color: #e74c3c; font-weight: 500; margin-bottom: 15px; text-align: center; padding: 10px; background-color: #fdf2f2; border-radius: 5px; border: 1px solid #fecaca;">${customMessage}</div>`;
+            }
+        }
+        
         modal.style.display = 'flex';
         document.body.classList.add('modal-open');
         addPaymentModalEventListeners(modal);
@@ -665,6 +673,12 @@ function setupPaymentModalFunctionality(modal) {
 
     // Function to close payment modal
     window.closePaymentModal = function() {
+        // Clear any custom message when closing
+        const statusDiv = modal.querySelector('#status');
+        if (statusDiv) {
+            statusDiv.innerHTML = '';
+        }
+        
         modal.style.display = 'none';
         document.body.classList.remove('modal-open');
         removePaymentModalEventListeners(modal);

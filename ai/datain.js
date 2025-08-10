@@ -2081,55 +2081,12 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
         if (onError && typeof onError === 'function') {
             onError(error, backendResponse);
         } else {
-            // Enhanced error handling based on HTTP status and response data
-            const authenticated = localStorage.getItem('authenticated');
-            const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
-            
-            // Check if this is a 429 rate limit error
+            // Generic error handling - rate limits handled by rateLimiter.js
             if (httpStatus === 429) {
-                // Rate limit exceeded - create enhanced user message
-                const rateLimitStatus = localStorage.getItem('rateLimitStatus');
-                let usageInfo = '';
-                let resetTimeInfo = '';
-                
-                try {
-                    if (rateLimitStatus) {
-                        const status = JSON.parse(rateLimitStatus);
-                        const used = status.limits?.perDay - status.remaining?.perDay || 0;
-                        const total = status.limits?.perDay || 3;
-                        usageInfo = `(${used}/${total} used)`;
-                    }
-                    
-                    // Calculate local reset time (12:00 UTC converted to user's timezone)
-                    const now = new Date();
-                    
-                    // Create a date for today at 12:00 UTC
-                    let resetDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 12, 0, 0));
-                    
-                    // If it's past 12:00 UTC today, reset is tomorrow at 12:00 UTC
-                    if (now.getUTCHours() >= 12) {
-                        resetDate = new Date(resetDate.getTime() + 24 * 60 * 60 * 1000);
-                    }
-                    
-                    const localResetTime = resetDate.toLocaleTimeString([], { 
-                        hour: 'numeric', 
-                        minute: '2-digit',
-                        timeZoneName: 'short'
-                    });
-                    resetTimeInfo = ` Limits reset at ${localResetTime}.`;
-                } catch (e) {
-                    console.error('Error calculating reset time:', e);
-                }
-                
-                const enhancedMessage = `Daily limit reached ${usageInfo}.${resetTimeInfo}`;
-                console.error(`[${moduleName}] Rate limit exceeded:`, enhancedMessage);
-                alert(enhancedMessage);
-                
-            } else if (backendResponse && backendResponse.error === 'Rate limit exceeded' && !isPaidUser) {
-                // Legacy rate limit error for free user - payment modal should already be triggered by handleRateLimitResponse
-                console.log(`[${moduleName}] Rate limit exceeded for free user - payment modal should be shown`);
+                // Rate limit errors are fully handled by rateLimiter.js
+                console.log(`[${moduleName}] Rate limit error - handled by rate limiter`);
             } else {
-                // Generic error - show appropriate message based on status
+                // Handle non-rate-limit errors
                 console.error(`[${moduleName}] Error:`, error);
                 let errorMessage = `An error occurred while generating your ${moduleName} analysis. Please try again later.`;
                 

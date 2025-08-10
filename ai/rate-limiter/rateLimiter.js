@@ -248,10 +248,69 @@ export function handleRateLimitResponse(container, response, showError = true, m
         console.log('[RateLimit] No backend rate limit data - displaying placeholder until backend provides status');
     }
     // Don't create extra badges - let updatePaymentButtonDisplay handle the display
-    // Show error if present (but let main error handler deal with detailed messages)
-    if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
-        // Rate limit error detected - main error handler will show detailed message
-        console.log('[RateLimit] Rate limit exceeded - main error handler will display user message');
+    // Handle rate limit errors - different behavior for free vs paid users
+    if (showError && response && (response.error || response.message) && (response.error && response.error.includes('limit'))) {
+        // Check payment status from rateLimitStatus instead of authenticated
+        let isPaidUser = false;
+        try {
+            const rateLimitStatus = JSON.parse(localStorage.getItem('rateLimitStatus') || '{}');
+            isPaidUser = rateLimitStatus.isPaid === true;
+            console.log('[RateLimit] Payment status check:', { isPaidUser, rateLimitStatus });
+        } catch (e) {
+            console.log('[RateLimit] Could not parse rateLimitStatus, defaulting to free user');
+            isPaidUser = false;
+        }
+        
+        if (!isPaidUser) {
+            // Free user - open payment modal with rate limit message
+            console.log('[RateLimit] Rate limit exceeded for free user - opening payment modal');
+            
+            // Close any existing modals first for clean UX
+            const existingModals = document.querySelectorAll('.modal, [id*="modal"]');
+            existingModals.forEach(modal => {
+                if (modal.style.display !== 'none') {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Open payment modal with custom rate limit message
+            if (window.openPaymentModal) {
+                const rateLimitMessage = "You've reached your daily limit. Upgrade to continue generating content!";
+                window.openPaymentModal(rateLimitMessage);
+            } else {
+                console.error('[RateLimit] Payment modal function not available');
+            }
+        } else {
+            // Paid user - show enhanced alert with reset time
+            console.log('[RateLimit] Rate limit exceeded for paid user - showing enhanced alert');
+            
+            try {
+                const rateLimitStatus = JSON.parse(localStorage.getItem('rateLimitStatus') || '{}');
+                const used = rateLimitStatus.dailyUsage || 0;
+                const total = rateLimitStatus.limits?.perDay || 3;
+                
+                // Calculate local reset time (12:00 UTC converted to user's timezone)
+                const now = new Date();
+                let resetDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 12, 0, 0));
+                
+                // If it's past 12:00 UTC today, reset is tomorrow at 12:00 UTC
+                if (now.getUTCHours() >= 12) {
+                    resetDate = new Date(resetDate.getTime() + 24 * 60 * 60 * 1000);
+                }
+                
+                const localResetTime = resetDate.toLocaleTimeString([], { 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    timeZoneName: 'short'
+                });
+                
+                const enhancedMessage = `Daily limit reached (${used}/${total} used). Limits reset at ${localResetTime}.`;
+                alert(enhancedMessage);
+            } catch (e) {
+                console.error('[RateLimit] Error calculating reset time:', e);
+                alert('Daily limit reached. Limits reset at 12:00 UTC daily.');
+            }
+        }
     }
 }
 
