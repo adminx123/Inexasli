@@ -286,8 +286,8 @@ export function handleRateLimitResponse(container, response, showError = true, m
             
             try {
                 const rateLimitStatus = JSON.parse(localStorage.getItem('rateLimitStatus') || '{}');
-                const used = rateLimitStatus.dailyUsage || 0;
                 const total = rateLimitStatus.limits?.perDay || 3;
+                const used = Math.min(rateLimitStatus.dailyUsage || 0, total);
                 
                 // Calculate local reset time (12:00 UTC converted to user's timezone)
                 const now = new Date();
@@ -308,7 +308,7 @@ export function handleRateLimitResponse(container, response, showError = true, m
                 alert(enhancedMessage);
             } catch (e) {
                 console.error('[RateLimit] Error calculating reset time:', e);
-                alert('Daily limit reached. Limits reset at 12:00 UTC daily.');
+                alert('Daily limit reached. Limits reset daily at 12:00 UTC (check your local timezone).');
             }
         }
     }
@@ -327,7 +327,7 @@ export function canSendRequest() {
 /**
  * Render the RateLimit display in a container
  * @param {HTMLElement} container - The container to inject the display into
- * @param {string} rateLimiterUrl - The endpoint for the rate limiter worker (unused)
+ * @param {string} rateLimiterUrl - The endpoint for the rate limiter worker (legacy parameter, not used)
  * @param {string} moduleName - The display name for the module (e.g., 'PhilosophyIQ', 'CalorieIQ')
  */
 export function renderRateLimitDisplay(container, rateLimiterUrl, moduleName = 'Module') {
