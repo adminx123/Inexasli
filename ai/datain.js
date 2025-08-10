@@ -2002,6 +2002,7 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
     
     const dataContainer = document.querySelector('.data-container-in');
     let backendResponse = null;
+    let httpStatus = null;
     
     try {
         backendResponse = await window.enhancedLoading(
@@ -2017,6 +2018,9 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
                     },
                     body: JSON.stringify(workerPayload)
                 });
+
+                // Store HTTP status for error handling
+                httpStatus = response.status;
 
                 let responseData;
                 try {
@@ -2077,17 +2081,67 @@ window.handleGenerateRequest = async function(moduleName, options = {}) {
         if (onError && typeof onError === 'function') {
             onError(error, backendResponse);
         } else {
-            // Default error handling - check if this is a rate limit error for free users
+            // Enhanced error handling based on HTTP status and response data
             const authenticated = localStorage.getItem('authenticated');
             const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
             
-            if (backendResponse && backendResponse.error === 'Rate limit exceeded' && !isPaidUser) {
-                // Rate limit error for free user - payment modal should already be triggered by handleRateLimitResponse
+            // Check if this is a 429 rate limit error
+            if (httpStatus === 429) {
+                // Rate limit exceeded - create enhanced user message
+                const rateLimitStatus = localStorage.getItem('rateLimitStatus');
+                let usageInfo = '';
+                let resetTimeInfo = '';
+                
+                try {
+                    if (rateLimitStatus) {
+                        const status = JSON.parse(rateLimitStatus);
+                        const used = status.limits?.perDay - status.remaining?.perDay || 0;
+                        const total = status.limits?.perDay || 3;
+                        usageInfo = `(${used}/${total} used)`;
+                    }
+                    
+                    // Calculate local reset time (12:00 UTC converted to user's timezone)
+                    const now = new Date();
+                    
+                    // Create a date for today at 12:00 UTC
+                    let resetDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 12, 0, 0));
+                    
+                    // If it's past 12:00 UTC today, reset is tomorrow at 12:00 UTC
+                    if (now.getUTCHours() >= 12) {
+                        resetDate = new Date(resetDate.getTime() + 24 * 60 * 60 * 1000);
+                    }
+                    
+                    const localResetTime = resetDate.toLocaleTimeString([], { 
+                        hour: 'numeric', 
+                        minute: '2-digit',
+                        timeZoneName: 'short'
+                    });
+                    resetTimeInfo = ` Limits reset at ${localResetTime}.`;
+                } catch (e) {
+                    console.error('Error calculating reset time:', e);
+                }
+                
+                const enhancedMessage = `Daily limit reached ${usageInfo}.${resetTimeInfo}`;
+                console.error(`[${moduleName}] Rate limit exceeded:`, enhancedMessage);
+                alert(enhancedMessage);
+                
+            } else if (backendResponse && backendResponse.error === 'Rate limit exceeded' && !isPaidUser) {
+                // Legacy rate limit error for free user - payment modal should already be triggered by handleRateLimitResponse
                 console.log(`[${moduleName}] Rate limit exceeded for free user - payment modal should be shown`);
             } else {
-                // Generic error - show alert
+                // Generic error - show appropriate message based on status
                 console.error(`[${moduleName}] Error:`, error);
-                alert(`An error occurred while generating your ${moduleName} analysis. Please try again later.`);
+                let errorMessage = `An error occurred while generating your ${moduleName} analysis. Please try again later.`;
+                
+                if (httpStatus === 500) {
+                    errorMessage = 'Server error occurred. Please try again in a few moments.';
+                } else if (httpStatus === 400) {
+                    errorMessage = 'Invalid request. Please check your input and try again.';
+                } else if (error.message && (error.message.includes('fetch') || error.message.includes('network'))) {
+                    errorMessage = 'Network error. Please check your connection and try again.';
+                }
+                
+                alert(errorMessage);
             }
         }
         

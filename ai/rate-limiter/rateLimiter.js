@@ -248,10 +248,10 @@ export function handleRateLimitResponse(container, response, showError = true, m
         console.log('[RateLimit] No backend rate limit data - displaying placeholder until backend provides status');
     }
     // Don't create extra badges - let updatePaymentButtonDisplay handle the display
-    // Show error if present
+    // Show error if present (but let main error handler deal with detailed messages)
     if (showError && response && (response.error || response.message) && response.error === 'Rate limit exceeded') {
-        // Only show a minimal alert if needed, no warning message or extra UI
-        alert(response.message || 'You have reached your rate limit. Please try again later.');
+        // Rate limit error detected - main error handler will show detailed message
+        console.log('[RateLimit] Rate limit exceeded - main error handler will display user message');
     }
 }
 
