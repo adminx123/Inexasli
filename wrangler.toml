@@ -8,7 +8,7 @@ name = "x-worker"
 main = "./ai/x.js"
 
 [env.x.triggers]
-crons = ["58 16 * * *"]
+crons = ["11 19 * * *"]
 
 # CENTRALIZED MASTER WORKER ARCHITECTURE
 # This project uses a master worker that imports all individual modules.
