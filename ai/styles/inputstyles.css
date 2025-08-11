@@ -746,7 +746,7 @@ button:hover {
 /* Product description container */
 .product-description-container {
   background-color: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: none;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
