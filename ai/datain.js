@@ -718,6 +718,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Update content directly without opacity transitions
                 dataContent.innerHTML = content;
                 
+                // Hide content immediately to prevent flash while guided forms processes
+                dataContent.style.opacity = '0';
+                dataContent.style.transition = 'none'; // No transition on hide
+                
+                // Restore visibility with smooth transition after 200ms
+                setTimeout(() => {
+                    dataContent.style.transition = 'opacity 0.3s ease-in-out';
+                    dataContent.style.opacity = '1';
+                }, 200);
+                
                 // Initialize auto-expand textareas immediately after content is loaded
                 console.log('[DataIn] Initializing auto-expand textareas immediately after content load');
                 initAutoExpandTextareas();
