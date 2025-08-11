@@ -1,4 +1,6 @@
 compatibility_date = "2025-07-22"
+account_id = "b70c309587ed8ba2bfa06320792ea457"
+workers_dev = true
 
 # --- X Poster Worker (Standalone) ---
 [env.x]
@@ -6,7 +8,7 @@ name = "x-worker"
 main = "./ai/x.js"
 
 [env.x.triggers]
-crons = ["11 18 * * *"]
+crons = ["58 16 * * *"]
 
 # CENTRALIZED MASTER WORKER ARCHITECTURE
 # This project uses a master worker that imports all individual modules.
@@ -27,9 +29,6 @@ crons = ["11 18 * * *"]
 #
 # NO individual worker deployments needed - master handles everything!
 
-
-account_id = "b70c309587ed8ba2bfa06320792ea457"
-workers_dev = true
 
 # Global build configuration that applies to all workers
 [build]
