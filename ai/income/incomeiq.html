@@ -2100,26 +2100,12 @@
                     localStorage.removeItem('taxCalculationsStaleTimestamp');
                     console.log("[IncomeIQ] ✅ Tax calculations are now fresh");
                     console.log('[IncomeIQ] Income report generated successfully');
-                },
-                onError: (error, backendResponse) => {
-                    console.error('[IncomeIQ] Error generating income report:', error);
-                    // Check if this is a rate limit error for free users
-                    const authenticated = localStorage.getItem('authenticated');
-                    const isPaidUser = authenticated && decodeURIComponent(authenticated) === 'paid';
-                    
-                    if (backendResponse && backendResponse.error === 'Rate limit exceeded' && !isPaidUser) {
-                        // Rate limit error for free user - payment modal should already be triggered by handleRateLimitResponse
-                        console.log('[IncomeIQ] Rate limit exceeded for free user - payment modal should be shown');
-                    } else {
-                        // Generic error - show alert
-                        alert('An error occurred while generating your income report. Please try again later.');
-                    }
                 }
             });
 
         } catch (error) {
+            // Error is already handled by centralized function
             console.error('[IncomeIQ] Error in income generation wrapper:', error);
-            alert('An error occurred while generating your income report. Please try again later.');
         }
     }
 
