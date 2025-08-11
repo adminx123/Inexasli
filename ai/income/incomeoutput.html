@@ -1320,7 +1320,7 @@
         
         <div class="dashboard-card">
           <h3><i class="fas fa-receipt"></i>Calculated Taxes</h3>
-          <div class="metric-card ${taxesCalculated > 0 ? 'negative' : 'warning'}">
+          <div class="metric-card ${taxesCalculated > 0 ? 'red-warning' : 'yellow-warning'}">
             <div class="metric-label">AI Estimated Taxes (<span id="taxesTimeframe">Annual</span>)</div>
             <div class="metric-value" id="taxesValue">${currencySymbol}${taxesCalculated.toLocaleString()}</div>
             <div class="metric-description">Educational estimate only</div>
@@ -1329,7 +1329,7 @@
         
         <div class="dashboard-card">
           <h3><i class="fas fa-hands-helping"></i>Contributions</h3>
-          <div class="metric-card ${contributionsCalculated > 0 ? 'warning' : 'positive'}">
+          <div class="metric-card ${contributionsCalculated > 0 ? 'yellow-warning' : 'green-warning'}">
             <div class="metric-label">Social Security & Benefits (<span id="contributionsTimeframe">Annual</span>)</div>
             <div class="metric-value" id="contributionsValue">${currencySymbol}${contributionsCalculated.toLocaleString()}</div>
             <div class="metric-description">Mandatory contributions</div>
@@ -1355,7 +1355,7 @@
         
         <div class="dashboard-card">
           <h3><i class="fas fa-piggy-bank"></i>Savings Rate</h3>
-          <div class="metric-card ${savingsRate >= 0.15 ? 'positive' : savingsRate >= 0.05 ? 'warning' : 'negative'}">
+          <div class="metric-card ${savingsRate >= 0.15 ? 'green-warning' : savingsRate >= 0.05 ? 'yellow-warning' : 'red-warning'}">
             <div class="metric-label">Annual Savings</div>
             <div class="metric-value">${(savingsRate * 100).toFixed(1)}%</div>
             <div class="metric-description">
@@ -1378,7 +1378,7 @@
         
         <div class="dashboard-card">
           <h3><i class="fas fa-fire"></i>FIRE Progress</h3>
-          <div class="metric-card ${financialMetrics.fireRatio >= 0.25 ? 'positive' : financialMetrics.fireRatio >= 0.1 ? 'warning' : 'negative'}">
+          <div class="metric-card ${financialMetrics.fireRatio >= 0.25 ? 'green-warning' : financialMetrics.fireRatio >= 0.1 ? 'yellow-warning' : 'red-warning'}">
             <div class="metric-label">Financial Independence</div>
             <div class="metric-value">${(financialMetrics.fireRatio * 100).toFixed(1)}%</div>
             <div class="progress-container">
@@ -1483,7 +1483,7 @@
         <div class="dashboard-grid">
           <div class="dashboard-card">
             <h3><i class="fas fa-percentage"></i>Debt to Income</h3>
-            <div class="metric-card ${financialMetrics.debtToIncome <= 0.20 ? 'positive' : financialMetrics.debtToIncome <= 0.36 ? 'warning' : 'negative'}">
+            <div class="metric-card ${financialMetrics.debtToIncome <= 0.20 ? 'green-warning' : financialMetrics.debtToIncome <= 0.36 ? 'yellow-warning' : 'red-warning'}">
               <div class="metric-label">Monthly Debt / Monthly Income</div>
               <div class="metric-value">${(financialMetrics.debtToIncome * 100).toFixed(1)}%</div>
               <div class="metric-description">
@@ -1496,7 +1496,7 @@
           
           <div class="dashboard-card">
             <h3><i class="fas fa-home"></i>Housing Ratio</h3>
-            <div class="metric-card ${financialMetrics.housingToIncome <= 0.28 ? 'positive' : financialMetrics.housingToIncome <= 0.35 ? 'warning' : 'negative'}">
+            <div class="metric-card ${financialMetrics.housingToIncome <= 0.28 ? 'green-warning' : financialMetrics.housingToIncome <= 0.35 ? 'yellow-warning' : 'red-warning'}">
               <div class="metric-label">Housing Costs / Income</div>
               <div class="metric-value">${(financialMetrics.housingToIncome * 100).toFixed(1)}%</div>
               <div class="metric-description">
@@ -1509,7 +1509,7 @@
           
           <div class="dashboard-card">
             <h3><i class="fas fa-shield-alt"></i>Savings to Debt</h3>
-            <div class="metric-card ${financialMetrics.savingsToDebt >= 2.0 ? 'positive' : financialMetrics.savingsToDebt >= 1.0 ? 'warning' : 'negative'}">
+            <div class="metric-card ${financialMetrics.savingsToDebt >= 2.0 ? 'green-warning' : financialMetrics.savingsToDebt >= 1.0 ? 'yellow-warning' : 'red-warning'}">
               <div class="metric-label">Savings / Total Debt</div>
               <div class="metric-value">${financialMetrics.savingsToDebt.toFixed(2)}</div>
               <div class="metric-description">
