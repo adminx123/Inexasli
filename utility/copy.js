@@ -692,6 +692,14 @@ function getAnalysisTypeFromPage() {
             console.log('[PDF] Matched fashion pattern');
             return { analysisType: 'fashion-analysis', title: 'Fashion Analysis' };
         }
+        if (url.includes('/shop/') || url.includes('shop')) {
+            console.log('[PDF] Matched shop pattern');
+            return { analysisType: 'shop-analysis', title: 'Shop Analysis' };
+        }
+        if (url.includes('/income/') || url.includes('income')) {
+            console.log('[PDF] Matched income pattern');
+            return { analysisType: 'income-analysis', title: 'Income Analysis' };
+        }
         
         console.log('[PDF] No pattern matched for URL:', url);
         return null;
