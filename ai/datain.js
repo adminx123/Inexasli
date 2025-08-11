@@ -1262,9 +1262,29 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (!paymentSpan) return;
         
         try {
-            const rateLimitStatus = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null');
+            let rateLimitStatus = JSON.parse(localStorage.getItem('rateLimitStatus') || 'null');
             
-            if (rateLimitStatus && rateLimitStatus.remaining && rateLimitStatus.limits) {
+            if (rateLimitStatus && rateLimitStatus.remaining && rateLimitStatus.limits && rateLimitStatus.lastUpdated) {
+                // Check if 12:00 UTC has passed since lastUpdated and reset if needed
+                const now = new Date();
+                const lastUpdated = new Date(rateLimitStatus.lastUpdated);
+                
+                // Calculate next 12:00 UTC after lastUpdated
+                let nextReset = new Date(Date.UTC(lastUpdated.getUTCFullYear(), lastUpdated.getUTCMonth(), lastUpdated.getUTCDate(), 12, 0, 0));
+                
+                // If lastUpdated was already past 12:00 UTC on that day, reset is next day
+                if (lastUpdated.getUTCHours() >= 12) {
+                    nextReset = new Date(nextReset.getTime() + 24 * 60 * 60 * 1000);
+                }
+                
+                // If current time is past the next reset time, reset the usage
+                if (now.getTime() > nextReset.getTime()) {
+                    rateLimitStatus.remaining.perDay = rateLimitStatus.limits.perDay;
+                    rateLimitStatus.lastUpdated = now.getTime();
+                    localStorage.setItem('rateLimitStatus', JSON.stringify(rateLimitStatus));
+                    console.log('[DataIn] Rate limit reset applied - 12:00 UTC passed');
+                }
+                
                 const usesLeft = rateLimitStatus.remaining.perDay || 0;
                 const usesTotal = rateLimitStatus.limits.perDay || 0;
                 paymentSpan.textContent = `${usesLeft}|${usesTotal}`;
