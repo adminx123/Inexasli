@@ -285,7 +285,21 @@
           try {
             const mermaidDiv = document.createElement('div');
             mermaidDiv.className = 'mermaid';
-            mermaidDiv.textContent = data.mermaidSyntax.replace(/\\n/g, '\n');
+            
+            // Clean and sanitize the mermaid syntax
+            let cleanSyntax = data.mermaidSyntax
+              .replace(/\\n/g, '\n')
+              .replace(/[""]/g, '"')
+              .replace(/['']/g, "'")
+              .replace(/[\u2018\u2019]/g, "'")
+              .replace(/[\u201C\u201D]/g, '"')
+              .replace(/&/g, 'and')
+              .replace(/[()]/g, '');
+            
+            // Remove any problematic characters that could cause syntax errors
+            cleanSyntax = cleanSyntax.replace(/[^\w\s\[\]\-\>\:\n]/g, '');
+            
+            mermaidDiv.textContent = cleanSyntax;
             container.appendChild(mermaidDiv);
             
             // Re-initialize mermaid for new content
