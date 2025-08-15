@@ -215,6 +215,111 @@ Privacy Policy Compliance:
 - This refund policy does not affect your statutory rights under applicable consumer protection laws.`
         },
         {
+            title: "Privacy Policy",
+            content: `**Information We Collect**
+- Account information provided during OAuth authorization (username, profile data)
+- Content you authorize us to post (text, images, scheduling preferences)
+- Technical information (IP address, browser type, device identifiers for rate limiting)
+- Usage analytics (features used, error logs, performance metrics)
+
+**How We Use Your Information**
+- To provide social media automation services as requested
+- To authenticate with third-party platforms (X, Instagram) on your behalf
+- To generate AI-powered content using third-party providers (XAI/Grok)
+- To monitor service performance and prevent abuse through rate limiting
+- To communicate with you about service updates or issues
+
+**Information Sharing**
+- **Third-Party AI Providers:** Content data is transmitted to XAI for AI generation
+- **Social Media Platforms:** Authorized content is posted to X, Instagram per your instructions
+- **Service Providers:** Cloudflare Workers for hosting, Stripe for payment processing
+- **Legal Requirements:** When required by law or to protect our rights
+
+**Data Retention and Security**
+- OAuth tokens stored securely and can be revoked by you at any time
+- Generated content temporarily processed, not permanently stored by us
+- Industry-standard security measures including encrypted data transmission
+- You can delete your account and associated data by contacting support
+
+**Your Rights and Choices**
+- Revoke social media platform access through their settings
+- Request data deletion by contacting support@inexasli.com
+- Opt out of AI content generation by discontinuing service use
+- Update your preferences through our service interface
+
+**Third-Party Privacy Practices**
+- X/Twitter: Subject to X Privacy Policy and Developer Agreement
+- Instagram/Meta: Subject to Meta Privacy Policy and Platform Terms
+- XAI: Subject to XAI Privacy Policy for AI content generation
+- We are not responsible for third-party privacy practices
+
+**Contact Information**
+- Email: support@inexasli.com
+- We will respond to privacy inquiries within 30 days
+- For data deletion requests, we will process within 30 days where technically feasible
+
+**International Data Transfers**
+- Data may be processed in United States, Canada, and other jurisdictions
+- We comply with GDPR for EU users and PIPEDA for Canadian users
+- Adequate safeguards in place for international transfers`
+        },
+        {
+            title: "Social Media Platform Integration",
+            content: `**General Integration Principles**
+- All social media integrations use OAuth 2.0 authorization for secure access
+- Users must explicitly authorize each platform connection and can revoke access at any time
+- We comply with all applicable platform developer agreements and policies
+- Automated posting is performed only with explicit user consent and within platform guidelines
+
+**User Authorization and Consent**
+- Clear disclosure of what content will be posted and where
+- Explicit consent required before any automated posting actions
+- Users shown preview of content before publication when possible
+- Respect for user's platform settings (private accounts, blocking, etc.)
+
+**Content and Data Handling**
+- AI-generated content is created using third-party providers (XAI/Grok)
+- Content is temporarily processed for posting, not stored long-term
+- Users retain ownership of their original content and account data
+- Platform-specific content requirements and restrictions are followed
+
+**Rate Limiting and Usage**
+- Automated actions performed within platform rate limits
+- Fair usage policies prevent spam and abuse
+- Graceful handling of platform outages or restrictions
+- Users notified of any posting failures or limitations
+
+**Platform-Specific Terms:**
+
+**X/Twitter Integration**
+- Full compliance with X Developer Agreement and Automation Rules
+- Respect for X's rate limits and usage guidelines
+- Proper attribution of X as content source when required
+- Users must authorize posting actions and can revoke access via X settings
+- Content must comply with X Rules and community guidelines
+- No circumvention of X's spam detection or security measures
+
+**Instagram/Meta Integration**
+- Full compliance with Meta Platform Terms and Instagram API Terms
+- Respect for Instagram's content policies and community guidelines
+- Proper handling of Instagram business account requirements
+- Users authorize through Instagram's OAuth flow with appropriate scopes
+- Content published only to accounts user has authorized access to
+- Compliance with Meta's data use policies and privacy requirements
+- Support for Instagram's content review and moderation systems
+
+**Service Limitations**
+- Platform outages or restrictions may affect service availability
+- Changes to platform APIs may require service modifications
+- We are not liable for platform-specific restrictions or account actions
+- Users responsible for compliance with platform terms of service
+
+**Data Portability**
+- Users can export their data by contacting support
+- Platform connections can be managed through respective platform settings
+- Content history available through platform's own data export tools`
+        },
+        {
             title: "Governing Law & Dispute Resolution",
             content: `**Governing Law**
 - These terms will be governed by and construed in accordance with the laws of British Columbia, Canada.
