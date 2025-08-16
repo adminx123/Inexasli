@@ -7,6 +7,7 @@
   <title>INEXASLI - Social Media Automation</title>
   <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
   <link rel="stylesheet" href="/style/styles.css"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     /* Custom Quote Page Styling - Black, Grey, White Theme */
@@ -165,6 +166,36 @@
     /* Make the last grid item span two columns if the number of items is odd */
     .grid-container .grid-item:last-child:nth-child(odd) {
       grid-column: span 2;
+    }
+
+    /* Social Media Platform Icons */
+    .platform-icon {
+      font-size: 2em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .fa-instagram {
+      background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .fa-x-twitter, .fa-x {
+      color: #ffffff;
+    }
+
+    .fa-twitter {
+      color: #ffffff;
+    }
+
+    .fa-facebook {
+      color: #1877f2;
+    }
+
+    .fa-linkedin {
+      color: #0077b5;
     }
 
     /* Input Fields */
@@ -345,10 +376,22 @@
       <div class="form-section">
         <h3>Select Social Media Platforms</h3>
         <div class="grid-container" id="platforms">
-          <div class="grid-item" data-value="Instagram">Instagram</div>
-          <div class="grid-item" data-value="X (Twitter)">X (Twitter)</div>
-          <div class="grid-item" data-value="Facebook">Facebook</div>
-          <div class="grid-item" data-value="LinkedIn">LinkedIn</div>
+          <div class="grid-item" data-value="Instagram">
+            <i class="fab fa-instagram platform-icon"></i>
+            Instagram
+          </div>
+          <div class="grid-item" data-value="X (Twitter)">
+            <span class="platform-icon" style="font-weight: bold; font-family: Arial, sans-serif;">𝕏</span>
+            X (Twitter)
+          </div>
+          <div class="grid-item" data-value="Facebook">
+            <i class="fab fa-facebook platform-icon"></i>
+            Facebook
+          </div>
+          <div class="grid-item" data-value="LinkedIn">
+            <i class="fab fa-linkedin platform-icon"></i>
+            LinkedIn
+          </div>
         </div>
       </div>
 
@@ -356,16 +399,14 @@
       <div class="form-section">
         <h3>Choose Content Features</h3>
         <div class="grid-container" id="contentFeatures">
-          <div class="grid-item" data-value="Auto Quote Creation">Auto Quote Creation</div>
+          <div class="grid-item" data-value="Auto Text Posts">Auto Text Posts</div>
           <div class="grid-item" data-value="Auto Image Creation">Auto Image Creation</div>
-          <div class="grid-item" data-value="Store Your Images">Store Your Images</div>
-          <div class="grid-item" data-value="Store Your Videos">Store Your Videos</div>
           <div class="grid-item" data-value="Brand Logo Library">Brand Logo Library</div>
-          <div class="grid-item" data-value="Smart Hashtags">Smart Hashtags</div>
           <div class="grid-item" data-value="Custom Captions">Custom Captions</div>
           <div class="grid-item" data-value="Post Scheduling">Post Scheduling</div>
           <div class="grid-item" data-value="Performance Reports">Performance Reports</div>
           <div class="grid-item" data-value="Like/Comment Tracking">Like/Comment Tracking</div>
+          <div class="grid-item" data-value="Auto Posting">Auto Posting</div>
         </div>
       </div>
 
@@ -384,10 +425,12 @@
       <div class="form-section">
         <h3>Storage Requirements</h3>
         <div class="grid-container" id="storage">
-          <div class="grid-item" data-value="Basic (100 images)">Basic (100 images)</div>
-          <div class="grid-item" data-value="Standard (500 images)">Standard (500 images)</div>
-          <div class="grid-item" data-value="Premium (1000+ images)">Premium (1000+ images)</div>
-          <div class="grid-item" data-value="Need video storage">Need video storage</div>
+          <div class="grid-item" data-value="Basic (25 images)">Basic (25 images)</div>
+          <div class="grid-item" data-value="Standard (50 images)">Standard (50 images)</div>
+          <div class="grid-item" data-value="Premium (100 images)">Premium (100 images)</div>
+          <div class="grid-item" data-value="Basic (10 videos)">Basic (10 videos)</div>
+          <div class="grid-item" data-value="Standard (25 videos)">Standard (25 videos)</div>
+          <div class="grid-item" data-value="Premium (50 videos)">Premium (50 videos)</div>
         </div>
       </div>
       
