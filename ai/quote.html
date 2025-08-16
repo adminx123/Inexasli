@@ -87,6 +87,30 @@
     /* Form Styling */
     #websiteDesignForm {
       margin-top: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 20px;
+    }
+
+    /* Form sections with consistent spacing */
+    .form-section {
+      margin: 30px 0;
+    }
+
+    .form-section h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    /* Grid Container */
+    .grid-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 20px 0;
+      max-width: 100%;
     }
 
     /* Grid Items - Adapted from inputstyles.css */
@@ -150,10 +174,28 @@
       color: #ffffff;
       padding: 12px;
       border-radius: 6px;
-      margin: 8px;
-      width: calc(100% - 24px);
+      margin: 8px 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       font-size: 14px;
       transition: border-color 0.3s ease;
+    }
+
+    /* Industry select specific styling */
+    #industry {
+      display: block;
+      margin: 0 auto;
+      text-align-last: center;
+      max-width: 400px;
+      padding: 18px 12px;
+      height: 56px;
+    }
+
+    /* Form fields container */
+    .form-fields {
+      max-width: 600px;
+      margin: 0 auto;
     }
 
     input:focus, select:focus, textarea:focus {
@@ -202,6 +244,24 @@
 
     .last {
       margin: 20px 0;
+    }
+
+    /* Inline form fields */
+    .form-row {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-row input {
+      flex: 1;
+      min-width: 200px;
+      margin: 8px 0;
+      width: auto;
     }
 
     /* Responsive Design */
@@ -265,21 +325,20 @@
     <h2 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Get Your Custom Website Design Quote</h2>
     <br>
     <form id="websiteDesignForm">
-      <br>
-      <select id="industry" required style="display: flex; margin: 0 auto; text-align-last: center; padding: 10px;">
-        <option value="">Select Your Industry</option>
-        <option value="Retail">Retail</option>
-        <option value="Healthcare">Healthcare</option>
-        <option value="Finance">Finance</option>
-        <option value="Technology">Technology</option>
-        <option value="Other">Other</option>
-      </select>
+      <div class="form-fields">
+        <select id="industry" required>
+          <option value="">Select Your Industry</option>
+          <option value="Retail">Retail</option>
+          <option value="Healthcare">Healthcare</option>
+          <option value="Finance">Finance</option>
+          <option value="Technology">Technology</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
 
       <!-- Website Type -->
-      <br>
-      <div class="section">
-        <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Select Your Website Type</h3>
-        <br>
+      <div class="form-section">
+        <h3>Select Your Website Type</h3>
         <div class="grid-container" id="websiteType">
           <div class="grid-item" data-value="Business">Business/Landing Page</div>
           <div class="grid-item" data-value="E-commerce">E-commerce</div>
@@ -289,10 +348,8 @@
       </div>
 
       <!-- Features Section -->
-      <br>
-      <div class="section">
-        <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Choose Desired Features</h3>
-        <br>
+      <div class="form-section">
+        <h3>Choose Desired Features</h3>
         <div class="grid-container" id="features">
           <div class="grid-item" data-value="Contact Form">Contact Form</div>
           <div class="grid-item" data-value="Mobile Responsiveness">Mobile Responsiveness</div>
@@ -313,29 +370,39 @@
           <div class="grid-item" data-value="Web App">Web App</div>
           <div class="grid-item" data-value="Event Calendar">Event Calendar</div>
         </div>
-      </div>  
-      <br>
-      <div class="last" style="text-align: center;">
-        <input type="text" id="name" placeholder="Your Name" required>
-        <input type="email" id="email" placeholder="Your Email" required>
-        <input type="text" id="company" placeholder="Your Company" required>
       </div>
-      <br>
-      <div class="last" style="text-align: center;">
-        <input type="number" id="pages" placeholder="Number of Pages">
-        <h3 style="text-align: center; display: block; margin: 0 auto; max-width: 600px;">Desired Project Deadline</h3>
-        <input type="date" required style="width: 100%;" value="2025-01-01" id="deadline" placeholder="Select Deadline">
-      </div>
-      <br>
-      <div class="last">
-        <textarea id="objectives" placeholder="Describe questions, objectives, number of products/services, any other features needed not listed above, etc." rows="4" required style="padding: 10px; resize: none; border: 1px solid #858585; outline: none;"></textarea>
-      </div>
-      <div class="last" style="text-align: center;">
-        <input type="number" id="budget" placeholder="Budget">
-        <br>
-        <div class="last" style="text-align: center;"> 
-          <button class="form-sumbit-btn" type="submit">Get Your Website Design Quote</button>
+      
+      <!-- Contact Information -->
+      <div class="form-section">
+        <div class="form-row">
+          <input type="text" id="name" placeholder="Your Name" required>
+          <input type="email" id="email" placeholder="Your Email" required>
         </div>
+        <div class="form-fields">
+          <input type="text" id="company" placeholder="Your Company" required>
+        </div>
+      </div>
+      <!-- Project Details -->
+      <div class="form-section">
+        <div class="form-row">
+          <input type="number" id="pages" placeholder="Number of Pages">
+          <input type="number" id="budget" placeholder="Budget">
+        </div>
+        <h3>Desired Project Deadline</h3>
+        <div class="form-fields">
+          <input type="date" required value="2025-01-01" id="deadline" placeholder="Select Deadline">
+        </div>
+      </div>
+      <!-- Project Objectives -->
+      <div class="form-section">
+        <div class="form-fields">
+          <textarea id="objectives" placeholder="Describe questions, objectives, number of products/services, any other features needed not listed above, etc." rows="4" required></textarea>
+        </div>
+      </div>
+      
+      <!-- Submit Button -->
+      <div class="form-section" style="text-align: center;">
+        <button class="form-sumbit-btn" type="submit">Get Your Website Design Quote</button>
       </div>
     </form>
   </div>
