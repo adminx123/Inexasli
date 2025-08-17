@@ -91,7 +91,7 @@ body {
     backdrop-filter: blur(20px);
     border-radius: 25px;
     padding: 40px;
-    color: #1e293b;
+    color: white;
     border: 1px solid rgba(255,255,255,0.3);
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     margin: 0;
@@ -100,7 +100,7 @@ body {
 /* Ensure text elements within form-page are readable */
 .form-page p,
 .form-page div:not(.grid-item):not([style*="color"]) {
-    color: #1e293b;
+    color: white;
 }
 
 /* Typography Hierarchy */
@@ -113,12 +113,12 @@ body {
 }
 
 .page-title.dark {
-    color: #1e293b;
+    color: white;
 }
 
 .page-subtitle {
     font-size: 1.1em;
-    color: #94a3b8;
+    color: white;
     margin-bottom: 30px;
     max-width: 600px;
     margin-left: auto;
@@ -126,11 +126,7 @@ body {
 }
 
 /* Make h2 and h3 white by default */
-h2 {
-    color: white;
-}
-
-h3 {
+h1, h2, h3, h4, h5, h6 {
     color: white;
 }
 
@@ -249,18 +245,13 @@ p {
 
 .info-card.dark {
     background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    color: #1e293b;
+    border: 1px solid white;
+    color: white;
 }
 
 .info-card h4 {
-    color: white;
     margin-bottom: 10px;
     font-size: 1.1em;
-}
-
-.info-card.dark h4 {
-    color: #1e293b;
 }
 
 .info-card p {
@@ -271,7 +262,7 @@ p {
 }
 
 .info-card.dark p {
-    color: #64748b;
+    color: white;
 }
 
 /* Form Styling */
@@ -281,7 +272,6 @@ p {
 }
 
 .form-section h3 {
-    color: #1e293b;
     margin-bottom: 15px;
     text-align: center;
     font-size: 1.3em;
@@ -349,7 +339,7 @@ textarea {
 
 .grid-item {
     background: #f8f9fa;
-    border: 2px solid #e2e8f0;
+    border: 2px solid white;
     border-radius: 10px;
     padding: 15px;
     text-align: center;
@@ -540,7 +530,6 @@ textarea {
 }
 
 .benefit-card h3 {
-    color: white;
     margin-bottom: 15px;
     font-size: 1.2em;
 }
@@ -637,7 +626,7 @@ textarea {
 
 .hero-subtitle {
     font-size: 1.4em;
-    color: #6b7280;
+    color: white;
     margin-bottom: 30px;
     max-width: 100%;
     margin-left: auto;
@@ -645,7 +634,7 @@ textarea {
 }
 
 .hero-strong {
-    color: #0f172a;
+    color: white;
 }
 
 /* Stats Section */
@@ -672,7 +661,7 @@ textarea {
 }
 
 .stat-label {
-    color: #e2e8f0;
+    color: white;
     font-size: 14px;
     font-weight: 500;
 }
@@ -710,7 +699,7 @@ textarea {
 }
 
 .problem-text {
-    color: #94a3b8;
+    color: white;
 }
 
 /* Solution Section */
@@ -718,7 +707,7 @@ textarea {
     text-align: center;
     font-size: 2.5em;
     margin-bottom: 40px;
-    color: #0f172a;
+    color: white;
 }
 
 .benefit-card-enhanced {
@@ -753,13 +742,13 @@ textarea {
 }
 
 .urgency-title {
-    color: #0f172a;
+    color: white;
     margin-bottom: 15px;
     font-size: 2.2em;
 }
 
 .urgency-text {
-    color: #94a3b8;
+    color: white;
     font-size: 1.2em;
     margin-bottom: 20px;
 }
@@ -773,13 +762,13 @@ textarea {
 }
 
 .urgency-timing-main {
-    color: #1e293b;
+    color: white;
     font-weight: bold;
     font-size: 18px;
 }
 
 .urgency-timing-sub {
-    color: #94a3b8;
+    color: white;
     font-size: 14px;
 }
 
@@ -791,13 +780,13 @@ textarea {
 
 .cta-title {
     font-size: 2.8em;
-    color: #0f172a;
+    color: white;
     margin-bottom: 15px;
 }
 
 .cta-subtitle {
     font-size: 1.3em;
-    color: #94a3b8;
+    color: white;
     margin-bottom: 20px;
 }
 
@@ -868,13 +857,13 @@ textarea {
 }
 
 .final-cta-main {
-    color: #1e293b;
+    color: white;
     font-size: 18px;
     margin-bottom: 10px;
 }
 
 .final-cta-sub {
-    color: #6b7280;
+    color: white;
     font-size: 14px;
 }
 
@@ -892,7 +881,7 @@ textarea {
 /* Final disclaimer text */
 .final-disclaimer {
     margin-top: 15px;
-    color: #64748b;
+    color: white;
     font-size: 13px;
 }
 
@@ -917,7 +906,7 @@ textarea {
 }
 
 .quote-subtitle {
-    color: #64748b;
+    color: white;
     font-size: 18px;
 }
 
@@ -1011,14 +1000,14 @@ textarea {
 }
 
 .next-steps-list {
-    color: #6b7280;
+    color: white;
     text-align: left;
     padding-left: 20px;
 }
 
 .payment-disclaimer {
     margin-top: 20px;
-    color: #64748b;
+    color: white;
     font-size: 14px;
 }
 
