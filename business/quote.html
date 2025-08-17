@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Your Quote - INEXASLI</title>
+    <link rel="stylesheet" href="salesflow.css">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="splash-container" id="splashContainer">
+        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo">
+        <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
+        <div class="splash-empowering">EMPOWERING YOUR VISION</div>
+    </div>
+
+    <div class="main-content" id="mainContent" style="opacity: 0; display: none;">
+        <div class="splash-container">
+            <!-- Content Container -->
+            <div class="content-container wide">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <span>Choose Base</span>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">2</div>
+                    <span>Add Enhancements</span>
+                </div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <span>Review Order</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <span>Payment</span>
+                </div>
+            </div>
+
+            <!-- Quote Results Container -->
+            <div class="quote-results-container">
+                <div class="quote-header">
+                    <h1 class="quote-title">Review Your Order</h1>
+                    <p class="quote-subtitle">Confirm your base package and enhancements before proceeding to payment</p>
+                </div>
+
+                <!-- Quote Box -->
+                <div class="quote-box">
+                    <h3 class="quote-box-title">Order Summary</h3>
+                    
+                    <!-- Package Line -->
+                    <div class="quote-line">
+                        <span class="quote-line-label" id="packageLine">Professional Package (Setup + Month 1)</span>
+                        <span class="quote-line-amount" id="packageAmount">$597</span>
+                    </div>
+
+                    <!-- Add-ons Lines -->
+                    <div id="addonsLines">
+                        <!-- Add-on lines will be inserted here -->
+                    </div>
+
+                    <!-- Monthly Ongoing -->
+                    <div class="quote-line-monthly">
+                        <span class="quote-line-label">Monthly Ongoing (Month 2+)</span>
+                        <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="quote-total">
+                        <span class="quote-total-label">Total Setup + First Month</span>
+                        <span class="quote-total-amount" id="totalAmount">$597</span>
+                    </div>
+                </div>
+
+                <!-- Package Details -->
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>What's Included</h4>
+                        <div id="packageFeatures">
+                            <!-- Features will be loaded here -->
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <h4>Platforms Covered</h4>
+                        <div id="packagePlatforms">
+                            <!-- Platforms will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    <h4>What Happens Next</h4>
+                    <div class="timeline-item">
+                        <div class="timeline-time">Day 1</div>
+                        <div class="timeline-content">Payment processed & welcome email sent</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">Day 2-3</div>
+                        <div class="timeline-content">Brand analysis & content strategy development</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">Day 4-7</div>
+                        <div class="timeline-content">Content creation & account setup</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-time">Day 8+</div>
+                        <div class="timeline-content">Daily posting begins across all platforms</div>
+                    </div>
+                </div>
+
+                <!-- Proceed Button -->
+                <button class="proceed-button" onclick="proceedToPayment()">Proceed to Payment</button>
+
+                <!-- Next Steps -->
+                <div class="next-steps-box">
+                    <div class="next-steps-title">Secure Payment Processing</div>
+                    <ul class="next-steps-list">
+                        <li>Secure checkout powered by Stripe</li>
+                        <li>Immediate order confirmation via email</li>
+                        <li>Setup begins within 24 hours</li>
+                        <li>30-day satisfaction guarantee</li>
+                    </ul>
+                </div>
+
+                <!-- Payment Disclaimer -->
+                <div class="payment-disclaimer">
+                    By proceeding, you agree to our <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>.
+                    Your payment information is secured with bank-level encryption.
+                </div>
+
+                <!-- Back Button -->
+                <a href="addons.html" class="btn-back">← Back to Enhancements</a>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Splash screen transition
+        setTimeout(() => {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Fade out splash
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1s ease-out';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                main.style.display = 'block';
+                main.style.opacity = '1';
+                main.style.transition = 'opacity 1s ease-in';
+            }, 1000);
+        }, 2500); // Show splash for 2.5 seconds
+
+        // Load quote data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuoteData();
+        });
+
+        let quoteData = null;
+
+        function loadQuoteData() {
+            const data = localStorage.getItem('quoteData');
+            if (data) {
+                quoteData = JSON.parse(data);
+                displayQuote();
+            } else {
+                // Redirect back if no quote data
+                window.location.href = 'packages.html';
+            }
+        }
+
+        function displayQuote() {
+            if (!quoteData) return;
+
+            const { package: pkg, addons, total } = quoteData;
+
+            // Update package line
+            document.getElementById('packageLine').textContent = 
+                `${pkg.name} Package (Setup + Month 1)`;
+            document.getElementById('packageAmount').textContent = `$${pkg.price}`;
+
+            // Add addon lines
+            const addonsContainer = document.getElementById('addonsLines');
+            addonsContainer.innerHTML = '';
+            
+            addons.forEach(addon => {
+                const addonLine = document.createElement('div');
+                addonLine.className = 'quote-line';
+                addonLine.innerHTML = `
+                    <span class="quote-line-label">${addon.name}</span>
+                    <span class="quote-line-amount">+$${addon.price}</span>
+                `;
+                addonsContainer.appendChild(addonLine);
+            });
+
+            // Update total
+            document.getElementById('totalAmount').textContent = `$${total}`;
+
+            // Update monthly amount (base monthly fee)
+            const monthlyFee = getMonthlyFee(pkg.type);
+            document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
+
+            // Update package features
+            const featuresContainer = document.getElementById('packageFeatures');
+            featuresContainer.innerHTML = pkg.features.map(feature => 
+                `<p style="color: white; margin: 5px 0;">• ${feature}</p>`
+            ).join('');
+
+            // Update platforms
+            const platformsContainer = document.getElementById('packagePlatforms');
+            platformsContainer.innerHTML = pkg.platforms.map(platform => 
+                `<p style="color: white; margin: 5px 0;">• ${platform}</p>`
+            ).join('');
+        }
+
+        function getMonthlyFee(packageType) {
+            const fees = { starter: 97, professional: 197, enterprise: 297 };
+            return fees[packageType] || 197;
+        }
+
+        function proceedToPayment() {
+            if (!quoteData) {
+                alert('Quote data not found');
+                return;
+            }
+
+            // Store final order data
+            const orderData = {
+                ...quoteData,
+                monthlyFee: getMonthlyFee(quoteData.package.type),
+                orderDate: new Date().toISOString(),
+                orderId: 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+            };
+
+            localStorage.setItem('orderData', JSON.stringify(orderData));
+
+            // Redirect to payment page
+            window.location.href = 'payment.html';
+        }
+
+        function showTerms() {
+            alert('Terms of Service would open here');
+        }
+
+        function showPrivacy() {
+            alert('Privacy Policy would open here');
+        }
+    </script>
+    <script src="step-navigation.js"></script>
+</body>
+</html>

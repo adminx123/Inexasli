@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<htm            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <span>Choose Base</span>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">2</div>
+                    <span>Add Enhancements</span>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">3</div>
+                    <span>Review Order</span>
+                </div>
+                <div class="step active">
+                    <div class="step-number">4</div>
+                    <span>Payment</span>
+                </div>
+            </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - INEXASLI Social Media Automation</title>
+    <link rel="stylesheet" href="salesflow.css">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body>
+    <div class="splash-container">
+        <!-- INEXASLI Splash Elements -->
+        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo">
+        <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
+        <div class="splash-empowering">EMPOWERING YOUR VISION</div>
+
+        <!-- Content Container -->
+        <div class="content-container wide">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <span>Choose Package</span>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">2</div>
+                    <span>Add-ons</span>
+                </div>
+                <div class="step completed">
+                    <div class="step-number">3</div>
+                    <span>Review Quote</span>
+                </div>
+                <div class="step active">
+                    <div class="step-number">4</div>
+                    <span>Payment</span>
+                </div>
+            </div>
+
+            <!-- Payment Section -->
+            <div class="quote-results-container" id="paymentSection">
+                <div class="quote-header">
+                    <h1 class="quote-title">Complete Your Order</h1>
+                    <p class="quote-subtitle">Secure payment processing powered by Stripe</p>
+                </div>
+                
+                <!-- Order Summary -->
+                <div class="quote-box" id="orderSummary">
+                    <h3 class="quote-box-title">Order Summary</h3>
+                    <!-- Order details will be populated by JavaScript -->
+                </div>
+
+                <!-- Customer Information -->
+                <div class="form-section" style="max-width: 500px; margin: 30px auto;">
+                    <h3>Billing Information</h3>
+                    <div class="form-fields">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                        <input type="text" id="fullName" placeholder="Full Name" required>
+                        <input type="text" id="company" placeholder="Company Name (Optional)">
+                    </div>
+                </div>
+                
+                <!-- Payment Information -->
+                <div class="form-section" style="max-width: 500px; margin: 30px auto;">
+                    <h3>Payment Information</h3>
+                    <div id="card-element">
+                        <!-- Stripe Elements will create form elements here -->
+                    </div>
+                    <div id="card-errors" role="alert"></div>
+                </div>
+                
+                <!-- Buttons -->
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 30px 0;">
+                    <button onclick="goBack()" class="btn-back">
+                        ← Back to Quote
+                    </button>
+                    <button id="submit-payment" class="proceed-button">
+                        Complete Payment
+                    </button>
+                </div>
+                
+                <div class="payment-disclaimer">
+                    <strong>Secure payment by Stripe</strong> • SSL encrypted • 30-day satisfaction guarantee<br>
+                    You will receive an email confirmation with your order details and Stripe receipt
+                </div>
+            </div>
+            
+            <!-- Success Section -->
+            <div class="quote-results-container" id="successSection" style="display: none;">
+                <div class="quote-header">
+                    <h1 class="quote-title" style="color: #10b981;">Payment Successful!</h1>
+                    <p class="quote-subtitle">Your automation setup is in progress</p>
+                </div>
+                
+                <div class="alert-box success">
+                    <h3>What happens next:</h3>
+                    <ol style="text-align: left; margin-top: 15px;">
+                        <li>You'll receive an email confirmation within 5 minutes</li>
+                        <li>Our team will set up your automation within 24-48 hours</li>
+                        <li>We'll email you when setup is complete</li>
+                        <li>Monthly billing begins after setup completion</li>
+                    </ol>
+                </div>
+                
+                <div class="next-steps-box">
+                    <div class="next-steps-title">Questions?</div>
+                    <p style="color: white;">
+                        Reply to your confirmation email or contact us directly.
+                        We're here to help!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize EmailJS
+        emailjs.init("YOUR_EMAILJS_USER_ID"); // Replace with your EmailJS user ID
+        
+        // Initialize Stripe
+        const stripe = Stripe('YOUR_STRIPE_PUBLISHABLE_KEY'); // Replace with your Stripe publishable key
+        const elements = stripe.elements();
+        
+        // Create card element
+        const cardElement = elements.create('card', {
+            style: {
+                base: {
+                    fontSize: '16px',
+                    color: '#1e293b',
+                    '::placeholder': {
+                        color: '#94a3b8',
+                    },
+                },
+            },
+        });
+        
+        // Mount card element
+        cardElement.mount('#card-element');
+        
+        // Handle real-time validation errors from the card Element
+        cardElement.on('change', ({error}) => {
+            const displayError = document.getElementById('card-errors');
+            if (error) {
+                displayError.textContent = error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+        
+        let orderData = null;
+        
+        // Load order data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderData();
+            setupPaymentHandler();
+        });
+        
+        function loadOrderData() {
+            const data = localStorage.getItem('orderData');
+            if (data) {
+                orderData = JSON.parse(data);
+                displayOrderSummary();
+            } else {
+                // Redirect back if no order data
+                window.location.href = 'packages.html';
+            }
+        }
+        
+        function displayOrderSummary() {
+            if (!orderData) return;
+            
+            const { package: pkg, addons, total, monthlyFee, orderId } = orderData;
+            
+            let orderHTML = `
+                <h3 class="quote-box-title">Order #${orderId}</h3>
+                <div class="quote-line">
+                    <span class="quote-line-label">${pkg.name} Package (Setup + Month 1)</span>
+                    <span class="quote-line-amount">$${pkg.price}</span>
+                </div>
+            `;
+            
+            // Add addon lines
+            addons.forEach(addon => {
+                orderHTML += `
+                    <div class="quote-line">
+                        <span class="quote-line-label">${addon.name}</span>
+                        <span class="quote-line-amount">+$${addon.price}</span>
+                    </div>
+                `;
+            });
+            
+            orderHTML += `
+                <div class="quote-line-monthly">
+                    <span class="quote-line-label">Monthly Service (Month 2+)</span>
+                    <span class="quote-line-amount">$${monthlyFee}/month</span>
+                </div>
+                <div class="quote-total">
+                    <span class="quote-total-label">Total Due Today</span>
+                    <span class="quote-total-amount">$${total}</span>
+                </div>
+            `;
+            
+            document.getElementById('orderSummary').innerHTML = orderHTML;
+        }
+        
+        function setupPaymentHandler() {
+            document.getElementById('submit-payment').addEventListener('click', async function() {
+                const button = this;
+                const email = document.getElementById('email').value;
+                const fullName = document.getElementById('fullName').value;
+                const company = document.getElementById('company').value;
+                
+                // Validate required fields
+                if (!email || !fullName) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                button.disabled = true;
+                button.textContent = 'Processing...';
+                
+                try {
+                    // Create payment method
+                    const {token, error} = await stripe.createToken(cardElement);
+                    
+                    if (error) {
+                        throw new Error(error.message);
+                    }
+                    
+                    // Process payment (you'll need to implement server-side processing)
+                    const paymentResult = await processPayment(token, {
+                        ...orderData,
+                        customerEmail: email,
+                        customerName: fullName,
+                        company: company
+                    });
+                    
+                    if (paymentResult.success) {
+                        // Send confirmation emails
+                        await sendConfirmationEmails({
+                            ...orderData,
+                            customerEmail: email,
+                            customerName: fullName,
+                            company: company
+                        }, paymentResult.transactionId);
+                        
+                        // Show success
+                        showSuccessPage();
+                        
+                        // Clear stored data
+                        localStorage.removeItem('orderData');
+                        localStorage.removeItem('quoteData');
+                        localStorage.removeItem('selectedPackage');
+                    } else {
+                        throw new Error(paymentResult.error || 'Payment failed');
+                    }
+                    
+                } catch (error) {
+                    alert('Payment failed: ' + error.message);
+                    button.disabled = false;
+                    button.textContent = 'Complete Payment';
+                }
+            });
+        }
+        
+        async function processPayment(token, orderDetails) {
+            // This is where you'd call your server to process the payment
+            // For now, simulate success for demo purposes
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        success: true,
+                        transactionId: 'pi_' + Math.random().toString(36).substr(2, 9)
+                    });
+                }, 2000);
+            });
+        }
+        
+        async function sendConfirmationEmails(orderDetails, transactionId) {
+            const orderDate = new Date().toLocaleDateString();
+            const { package: pkg, addons, total, monthlyFee, orderId } = orderDetails;
+            
+            // Build addon list for email
+            const addonsList = addons.length > 0 
+                ? addons.map(addon => `- ${addon.name}: +$${addon.price}`).join('\n    ')
+                : 'None';
+            
+            // Email to customer
+            const customerEmailParams = {
+                to_email: orderDetails.customerEmail,
+                to_name: orderDetails.customerName,
+                subject: `Order Confirmation #${orderId} - INEXASLI Social Media Automation`,
+                message: `
+Hi ${orderDetails.customerName},
+
+Thank you for choosing INEXASLI! Your order has been confirmed.
+
+ORDER DETAILS:
+Order ID: ${orderId}
+Package: ${pkg.name}
+Company: ${orderDetails.company || 'Not provided'}
+Add-ons: 
+    ${addonsList}
+
+BILLING:
+Total Paid Today: $${total}
+Monthly Service (Starting Month 2): $${monthlyFee}
+Transaction ID: ${transactionId}
+Order Date: ${orderDate}
+
+WHAT'S INCLUDED:
+${pkg.features.map(feature => `- ${feature}`).join('\n')}
+
+PLATFORMS:
+${pkg.platforms.map(platform => `- ${platform}`).join('\n')}
+
+WHAT HAPPENS NEXT:
+1. Our team will contact you within 24 hours
+2. We'll set up your automation within 2-3 business days
+3. You'll receive setup completion confirmation
+4. Monthly billing begins after setup completion
+
+QUESTIONS?
+Just reply to this email and we'll help you out!
+
+Best regards,
+The INEXASLI Team
+
+---
+This is your Stripe receipt. Keep this for your records.
+                `
+            };
+            
+            // Email to you (business owner)
+            const businessEmailParams = {
+                to_email: 'your-email@domain.com', // Replace with your email
+                to_name: 'Dallas',
+                subject: `🎉 New Order: ${pkg.name} Package - ${orderDetails.company || orderDetails.customerName}`,
+                message: `
+NEW CUSTOMER ORDER RECEIVED!
+
+CUSTOMER INFO:
+Name: ${orderDetails.customerName}
+Email: ${orderDetails.customerEmail}
+Company: ${orderDetails.company || 'Not provided'}
+
+ORDER DETAILS:
+Order ID: ${orderId}
+Package: ${pkg.name} ($${pkg.price})
+Add-ons: ${addonsList}
+Total: $${total}
+Monthly: $${monthlyFee}
+Transaction: ${transactionId}
+Date: ${orderDate}
+
+PLATFORMS TO SET UP:
+${pkg.platforms.map(platform => `- ${platform}`).join('\n')}
+
+ACTION REQUIRED:
+1. Contact customer within 24 hours
+2. Begin automation setup process
+3. Complete setup within 2-3 days
+4. Send completion confirmation
+
+Customer is expecting contact soon!
+                `
+            };
+            
+            try {
+                // Send emails (replace with your EmailJS service and template IDs)
+                await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', customerEmailParams);
+                await emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', businessEmailParams);
+            } catch (error) {
+                console.error('Email sending failed:', error);
+                // Don't fail the payment if email fails
+            }
+        }
+        
+        function showSuccessPage() {
+            document.getElementById('paymentSection').style.display = 'none';
+            document.getElementById('successSection').style.display = 'block';
+        }
+        
+        function goBack() {
+            window.location.href = 'quote.html';
+        }
+    </script>
+    <script src="step-navigation.js"></script>
+</body>
+</html>

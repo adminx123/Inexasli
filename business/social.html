@@ -123,12 +123,33 @@
 
     <!-- CTA Header -->
     <div class="cta-header">
-      <h2 class="cta-title" style="font-size: 2.2em; line-height: 1.2;">Get Your Custom Quote in 60 Seconds</h2>
+      <h2 class="cta-title" style="font-size: 2.2em; line-height: 1.2;">Get Started in 3 Easy Steps</h2>
       <p class="cta-subtitle">
-        Choose your features below and the system will calculate your exact setup cost + monthly fee
+        Pick your base package, add enhancements, and complete your order
       </p>
       <div class="guarantee-box">
         <div class="guarantee-text">No contracts • Cancel anytime • 30-day money-back guarantee</div>
+      </div>
+
+      <!-- Single Clear Path -->
+      <div style="margin: 30px 0; text-align: center;">
+        <a href="packages.html" class="btn-primary" style="font-size: 1.3em; padding: 22px 60px; text-decoration: none; display: inline-block; background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);">
+          🚀 Start Your Setup
+        </a>
+        <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap;">
+          <div style="text-align: center; color: #ccc; font-size: 14px;">
+            <div style="color: #10b981; font-weight: bold; margin-bottom: 5px;">Step 1</div>
+            Choose Base Package
+          </div>
+          <div style="text-align: center; color: #ccc; font-size: 14px;">
+            <div style="color: #10b981; font-weight: bold; margin-bottom: 5px;">Step 2</div>
+            Add Enhancements
+          </div>
+          <div style="text-align: center; color: #ccc; font-size: 14px;">
+            <div style="color: #10b981; font-weight: bold; margin-bottom: 5px;">Step 3</div>
+            Complete Order
+          </div>
+        </div>
       </div>
     </div>
 
@@ -419,25 +440,68 @@
     const storage = Array.from(document.querySelectorAll('#storage .grid-item.selected')).map(el => el.dataset.value);
     const contentTypes = Array.from(document.querySelectorAll('#contentTypes .grid-item.selected')).map(el => el.dataset.value);
 
-    // Calculate quote
-    let setupFee = 497;
+    // Calculate quote based on tier system
+    let setupFee = 397;
     let monthlyFee = 197;
+    let packageName = "Basic";
     
-    // Adjust pricing based on selections
-    if (accounts > 5) setupFee += 200;
-    if (frequency.length > 2) monthlyFee += 100;
-    if (contentFeatures.length > 4) monthlyFee += 50;
+    // Determine tier based on storage selections (images + videos)
+    const imageSelection = storage.find(s => s.includes('images'));
+    const videoSelection = storage.find(s => s.includes('videos'));
+    
+    // Basic Tier: 25 images + 10 videos
+    if (imageSelection && imageSelection.includes('Basic') && videoSelection && videoSelection.includes('Basic')) {
+      setupFee = 397;
+      monthlyFee = 197;
+      packageName = "Basic";
+    }
+    // Standard Tier: 50 images + 25 videos  
+    else if (imageSelection && imageSelection.includes('Standard') && videoSelection && videoSelection.includes('Standard')) {
+      setupFee = 597;
+      monthlyFee = 297;
+      packageName = "Standard";
+    }
+    // Premium Tier: 100+ images + 50+ videos
+    else if (imageSelection && imageSelection.includes('Premium') && videoSelection && videoSelection.includes('Premium')) {
+      setupFee = 997;
+      monthlyFee = 497;
+      packageName = "Premium";
+    }
+    // Mixed selections - use highest tier
+    else if ((imageSelection && imageSelection.includes('Premium')) || (videoSelection && videoSelection.includes('Premium'))) {
+      setupFee = 997;
+      monthlyFee = 497;
+      packageName = "Premium (Mixed)";
+    }
+    else if ((imageSelection && imageSelection.includes('Standard')) || (videoSelection && videoSelection.includes('Standard'))) {
+      setupFee = 597;
+      monthlyFee = 297;
+      packageName = "Standard (Mixed)";
+    }
+    
+    // Platform multiplier
+    const platformCount = platforms.length;
+    let platformMultiplier = 1.0;
+    if (platformCount === 3) platformMultiplier = 1.2;
+    else if (platformCount === 4) platformMultiplier = 1.5;
+    
+    // Apply platform multiplier
+    setupFee = Math.round(setupFee * platformMultiplier);
+    monthlyFee = Math.round(monthlyFee * platformMultiplier);
 
     // Show payment section
-    showPaymentSection(name, email, company, setupFee, monthlyFee);
+    showPaymentSection(name, email, company, setupFee, monthlyFee, packageName, platforms, imageSelection, videoSelection);
     
     // Clear saved form data after successful submission
     businessFormPersistence.clearSavedData();
   });
 
-  function showPaymentSection(name, email, company, setupFee, monthlyFee) {
+  function showPaymentSection(name, email, company, setupFee, monthlyFee, packageName, platforms, imageSelection, videoSelection) {
+    // Format platform list
+    const platformList = platforms.map(p => `• ${p}`).join('<br>');
+    
     // Hide form and show payment
-    document.querySelector('.container').innerHTML = `
+    document.querySelector('.form-page').innerHTML = `
       <div class="quote-results-container">
         <div class="quote-header">
           <h1 class="quote-title">Quote Generated!</h1>
@@ -445,13 +509,23 @@
         </div>
         
         <div class="quote-box">
-          <h3 class="quote-box-title">Your Custom Quote - ${company}</h3>
+          <h3 class="quote-box-title">${packageName} Package - ${company}</h3>
+          <div style="margin-bottom: 20px; text-align: left; color: white;">
+            <strong>Platforms:</strong><br>
+            ${platformList}<br><br>
+            <strong>Content:</strong><br>
+            • ${imageSelection || '25 images'}<br>
+            • ${videoSelection || '10 videos'}<br>
+            • AI content generation<br>
+            • Automated posting<br>
+            • Performance tracking
+          </div>
           <div class="quote-line">
-            <span class="quote-line-label">Setup Fee</span>
+            <span class="quote-line-label">Setup Fee (One-time)</span>
             <span class="quote-line-amount">$${setupFee}</span>
           </div>
           <div class="quote-line-monthly">
-            <span class="quote-line-label">Monthly Automation</span>
+            <span class="quote-line-label">Monthly Service</span>
             <span class="quote-line-amount">$${monthlyFee}/month</span>
           </div>
           <div class="quote-total">
@@ -460,38 +534,45 @@
           </div>
         </div>
         
-        <button onclick="proceedToOAuth()" class="proceed-button">
-          Pay $${setupFee} & Connect Instagram
+        <button onclick="proceedToPayment('${setupFee}', '${monthlyFee}', '${packageName}', '${name}', '${email}', '${company}')" class="proceed-button">
+          Pay $${setupFee} & Start Setup
         </button>
         
         <div class="next-steps-box">
           <div class="next-steps-title">What happens next:</div>
           <ol class="next-steps-list">
-            <li>Secure payment processing (Stripe)</li>
-            <li>Connect your Instagram Business account</li>
-            <li>We set up automation within 24-48 hours</li>
-            <li>Start receiving automated posts!</li>
+            <li>Secure payment processing via Stripe</li>
+            <li>Email confirmation with service details</li>
+            <li>Account setup within 24-48 hours</li>
+            <li>Monthly billing starts after setup</li>
           </ol>
         </div>
         
         <div class="payment-disclaimer">
-          Secure payment by Stripe • No stored payment info<br>
+          Secure payment by Stripe • Email receipt included<br>
           <a href="https://inexasli.com/?terms=true">Terms</a> • 
           <a href="https://inexasli.com/?privacy=true">Privacy</a>
         </div>
       </div>
-    </div>
-    </div>
-    
     `;
   }
 
-  function proceedToOAuth() {
-    if (confirm('This will process your payment and connect Instagram. Continue?')) {
-      // In production: redirect to Stripe checkout
-      alert('Payment simulation - In production this would be Stripe checkout');
-      window.location.href = '../oauth-connect.html?payment_success=true';
-    }
+  function proceedToPayment(setupFee, monthlyFee, packageName, name, email, company) {
+    // In production: Create Stripe checkout session with line items
+    const orderDetails = {
+      package: packageName,
+      setupFee: setupFee,
+      monthlyFee: monthlyFee,
+      customerName: name,
+      customerEmail: email,
+      company: company
+    };
+    
+    // Store order details for Stripe
+    localStorage.setItem('pendingOrder', JSON.stringify(orderDetails));
+    
+    // Redirect to payment page with order details
+    window.location.href = `/business/payment.html?amount=${setupFee}&package=${encodeURIComponent(packageName)}&email=${encodeURIComponent(email)}`;
   }
 
   // Splash screen transition

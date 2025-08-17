@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhance Your Package - INEXASLI</title>
+    <link rel="stylesheet" href="salesflow.css">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="splash-container" id="splashContainer">
+        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo">
+        <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
+        <div class="splash-empowering">EMPOWERING YOUR VISION</div>
+    </div>
+
+    <div class="main-content" id="mainContent" style="opacity: 0; display: none;">
+        <div class="splash-container">
+            <!-- Content Container -->
+            <div class="content-container wide">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step completed">
+                    <div class="step-number">1</div>
+                    <span>Choose Base</span>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <span>Add Enhancements</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Review Order</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <span>Payment</span>
+                </div>
+            </div>
+
+            <!-- Selected Package Summary -->
+            <div class="selected-package-summary">
+                <div class="selected-package-title" id="selectedPackageName">Professional Base Package Selected</div>
+                <div class="selected-package-details" id="selectedPackageDetails">
+                    25 Photos • 10 Videos • Instagram, X, Facebook • $597
+                </div>
+            </div>
+
+            <!-- Add-ons Section -->
+            <div class="addons-container">
+                <h1 class="addons-title">Add Enhancements</h1>
+                <p class="addons-subtitle">Boost your base package with extra content and premium features (all optional)</p>
+
+                <div class="addons-grid">
+                    <!-- Extra Photos -->
+                    <div class="addon-card" data-addon="photos-10" data-price="50">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">+10 Photos</div>
+                        <div class="addon-description">Additional high-quality, professionally edited photos for your content library</div>
+                        <div class="addon-price">+$50</div>
+                    </div>
+
+                    <!-- Extra Videos -->
+                    <div class="addon-card" data-addon="videos-5" data-price="75">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">+5 Videos</div>
+                        <div class="addon-description">Extra engaging video content to boost your social media performance</div>
+                        <div class="addon-price">+$75</div>
+                    </div>
+
+                    <!-- Extra Platform -->
+                    <div class="addon-card" data-addon="platform-extra" data-price="100">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">Extra Platform</div>
+                        <div class="addon-description">Add LinkedIn or TikTok to expand your reach across additional networks</div>
+                        <div class="addon-price">+$100</div>
+                    </div>
+
+                    <!-- Stories Package -->
+                    <div class="addon-card" data-addon="stories-30" data-price="60">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">30 Stories</div>
+                        <div class="addon-description">Daily Instagram/Facebook Stories to keep your audience engaged throughout the month</div>
+                        <div class="addon-price">+$60</div>
+                    </div>
+
+                    <!-- Content Optimization -->
+                    <div class="addon-card" data-addon="content-optimization" data-price="40">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">AI Content Boost</div>
+                        <div class="addon-description">Advanced AI optimization for higher engagement and natural language discovery</div>
+                        <div class="addon-price">+$40</div>
+                    </div>
+
+                    <!-- Analytics Report -->
+                    <div class="addon-card" data-addon="analytics-detailed" data-price="30">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">Detailed Analytics</div>
+                        <div class="addon-description">Comprehensive monthly analytics report with insights and recommendations</div>
+                        <div class="addon-price">+$30</div>
+                    </div>
+                </div>
+
+                <!-- Total Display -->
+                <div class="addons-total">
+                    <div class="addons-total-label">Package Total</div>
+                    <div class="addons-total-amount" id="totalAmount">$597</div>
+                </div>
+
+                <!-- Continue Button -->
+                <button class="btn-continue-to-quote" onclick="generateQuote()">Continue to Order Review</button>
+
+                <!-- Back Button -->
+                <a href="packages.html" class="btn-back">← Back to Base Packages</a>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Splash screen transition
+        setTimeout(() => {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Fade out splash
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1s ease-out';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                main.style.display = 'block';
+                main.style.opacity = '1';
+                main.style.transition = 'opacity 1s ease-in';
+            }, 1000);
+        }, 2500); // Show splash for 2.5 seconds
+
+        // Load selected package on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSelectedPackage();
+            setupAddonListeners();
+            updateTotal();
+        });
+
+        let selectedPackage = null;
+        let selectedAddons = [];
+
+        function loadSelectedPackage() {
+            const packageData = localStorage.getItem('selectedPackage');
+            if (packageData) {
+                selectedPackage = JSON.parse(packageData);
+                
+                // Update display
+                document.getElementById('selectedPackageName').textContent = `${selectedPackage.name} Base Package Selected`;
+                
+                const features = [
+                    `${getPackagePhotos(selectedPackage.type)} Photos`,
+                    `${getPackageVideos(selectedPackage.type)} Videos`,
+                    selectedPackage.platforms.join(', '),
+                    `$${selectedPackage.price}`
+                ];
+                
+                document.getElementById('selectedPackageDetails').textContent = features.join(' • ');
+            } else {
+                // Redirect back if no package selected
+                window.location.href = 'packages.html';
+            }
+        }
+
+        function getPackagePhotos(type) {
+            const photos = { starter: 15, professional: 25, enterprise: 40 };
+            return photos[type] || 25;
+        }
+
+        function getPackageVideos(type) {
+            const videos = { starter: 5, professional: 10, enterprise: 15 };
+            return videos[type] || 10;
+        }
+
+        function setupAddonListeners() {
+            const addonCards = document.querySelectorAll('.addon-card');
+            
+            addonCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const addonId = this.dataset.addon;
+                    const addonPrice = parseInt(this.dataset.price);
+                    const addonName = this.querySelector('.addon-name').textContent;
+                    
+                    if (this.classList.contains('selected')) {
+                        // Remove addon
+                        this.classList.remove('selected');
+                        selectedAddons = selectedAddons.filter(addon => addon.id !== addonId);
+                    } else {
+                        // Add addon
+                        this.classList.add('selected');
+                        selectedAddons.push({
+                            id: addonId,
+                            name: addonName,
+                            price: addonPrice
+                        });
+                    }
+                    
+                    updateTotal();
+                });
+            });
+        }
+
+        function updateTotal() {
+            if (!selectedPackage) return;
+            
+            const addonTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+            const grandTotal = selectedPackage.price + addonTotal;
+            
+            document.getElementById('totalAmount').textContent = `$${grandTotal}`;
+        }
+
+        function generateQuote() {
+            if (!selectedPackage) {
+                alert('Please select a package first');
+                return;
+            }
+            
+            // Store quote data
+            const quoteData = {
+                package: selectedPackage,
+                addons: selectedAddons,
+                total: selectedPackage.price + selectedAddons.reduce((sum, addon) => sum + addon.price, 0),
+                timestamp: new Date().toISOString()
+            };
+            
+            localStorage.setItem('quoteData', JSON.stringify(quoteData));
+            
+            // Redirect to quote page
+            window.location.href = 'quote.html';
+        }
+    </script>
+    <script src="step-navigation.js"></script>
+</body>
+</html>
