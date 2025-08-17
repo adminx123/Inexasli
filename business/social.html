@@ -123,9 +123,9 @@
 
     <!-- CTA Header -->
     <div class="cta-header">
-      <h2 class="cta-title" style="font-size: 2.2em; line-height: 1.2;">Get Started in 3 Easy Steps</h2>
+      <h2 class="cta-title" style="font-size: 2.2em; line-height: 1.2;">Get Started in 4 Easy Steps</h2>
       <p class="cta-subtitle">
-        Pick your base package, add enhancements, and complete your order
+        Pick your base package, add enhancements, review your order, and complete payment
       </p>
       <div class="guarantee-box">
         <div class="guarantee-text">No contracts • Cancel anytime • 30-day money-back guarantee</div>
@@ -136,7 +136,7 @@
         <a href="packages.html" class="btn-primary" style="font-size: 1.3em; padding: 22px 60px; text-decoration: none; display: inline-block; background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);">
           🚀 Start Your Setup
         </a>
-        <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px; flex-wrap: wrap;">
           <div style="text-align: center; color: #ccc; font-size: 14px;">
             <div style="color: #10b981; font-weight: bold; margin-bottom: 5px;">Step 1</div>
             Choose Base Package
@@ -147,433 +147,42 @@
           </div>
           <div style="text-align: center; color: #ccc; font-size: 14px;">
             <div style="color: #10b981; font-weight: bold; margin-bottom: 5px;">Step 3</div>
-            Complete Order
+            Review Order
+          </div>
+          <div style="text-align: center; color: #ccc; font-size: 14px;">
+            <div style="color: #10b981; font-weight: bold; margin-bottom: 5px;">Step 4</div>
+            Payment
           </div>
         </div>
       </div>
     </div>
 
-    <form id="socialAutomationForm">
-      <!-- Contact Information -->
-      <div class="form-section">
-        <div class="form-row">
-          <input type="text" id="name" placeholder="Your Name" required>
-          <input type="email" id="email" placeholder="Your Email" required>
-        </div>
-        <div class="form-row">
-          <input type="text" id="company" placeholder="Your Company" required>
-          <select id="industry" required>
-            <option value="">Select Your Industry</option>
-            <option value="Fitness/Wellness">Fitness/Wellness</option>
-            <option value="Business/Motivational">Business/Motivational</option>
-            <option value="Lifestyle/Personal Development">Lifestyle/Personal Development</option>
-            <option value="Spiritual/Inspirational">Spiritual/Inspirational</option>
-            <option value="Health/Medical">Health/Medical</option>
-            <option value="Education">Education</option>
-            <option value="Real Estate">Real Estate</option>
-            <option value="Finance/Investment">Finance/Investment</option>
-            <option value="Technology">Technology</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <div class="form-fields">
-          <input type="text" id="instagramHandle" placeholder="Instagram Business Handle (e.g., @yourbusiness)" required>
-        </div>
-      </div>
-
-      <!-- Social Media Platforms -->
-      <div class="form-section">
-        <h3>Select Social Media Platforms</h3>
-        <div class="grid-container" id="platforms">
-          <div class="grid-item" data-value="Instagram">
-            <i class="fab fa-instagram platform-icon"></i>
-            Instagram
-          </div>
-          <div class="grid-item" data-value="X">
-            <i class="platform-icon platform-icon-x">𝕏</i>
-           
-          </div>
-          <div class="grid-item" data-value="Facebook">
-            <i class="fab fa-facebook platform-icon"></i>
-            Facebook
-          </div>
-          <div class="grid-item" data-value="LinkedIn">
-            <i class="fab fa-linkedin platform-icon"></i>
-            LinkedIn
-          </div>
-        </div>
-      </div>
-
-      <!-- Content Features -->
-      <div class="form-section">
-        <h3>Choose Content Features</h3>
-        <div class="grid-container" id="contentFeatures">
-          <div class="grid-item" data-value="Auto Text Posts">Auto Text Posts</div>
-          <div class="grid-item" data-value="Auto Image Creation">Auto Image Creation</div>
-          <div class="grid-item" data-value="Brand Logo Library">Brand Logo Library</div>
-          <div class="grid-item" data-value="Custom Captions">Custom Captions</div>
-          <div class="grid-item" data-value="Post Scheduling">Post Scheduling</div>
-          <div class="grid-item" data-value="Performance Reports">Performance Reports</div>
-          <div class="grid-item" data-value="Like/Comment Tracking">Like/Comment Tracking</div>
-          <div class="grid-item" data-value="Auto Posting">Auto Posting</div>
-        </div>
-      </div>
-
-      <!-- Posting Frequency -->
-      <div class="form-section">
-        <h3>Posting Frequency</h3>
-        <div class="grid-container" id="frequency">
-          <div class="grid-item" data-value="1 post per day">1 post per day</div>
-          <div class="grid-item" data-value="2 posts per day">2 posts per day</div>
-          <div class="grid-item" data-value="3 posts per day">3 posts per day</div>
-          <div class="grid-item" data-value="Custom schedule">Custom schedule</div>
-        </div>
-      </div>
-
-      <!-- Storage Requirements -->
-      <div class="form-section">
-        <h3>Storage Requirements</h3>
-        <div class="storage-grid">
-          <h4 class="storage-header">Images</h4>
-          <h4 class="storage-header">Videos</h4>
-        </div>
-        <div class="grid-container storage-grid-container" id="storage">
-          <div class="grid-item" data-value="Basic 25 images">Basic 25 images</div>
-          <div class="grid-item" data-value="Basic 10 videos">Basic 10 videos</div>
-          <div class="grid-item" data-value="Standard 50+ images">Standard 50 images</div>
-          <div class="grid-item" data-value="Standard 25 videos">Standard 25 videos</div>
-          <div class="grid-item" data-value="Premium 100+ images">Premium 100+ images</div>
-          <div class="grid-item" data-value="Premium 50+ videos">Premium 50+ videos</div>
-        </div>
-      </div>
-      
-      <!-- Business Details -->
-      <div class="form-section">
-        <h3>Business Information</h3>
-        <div class="form-fields">
-          <textarea id="businessDescription" placeholder="Brief description of your business to help AI create relevant content..." rows="3" required></textarea>
-        </div>
-      </div>
-
-      <!-- Posting Schedule -->
-      <div class="form-section">
-        <h3>Posting Schedule Preferences</h3>
-        <div class="form-row">
-          <select id="postTime" required>
-            <option value="">Preferred posting time</option>
-            <option value="9am">9:00 AM</option>
-            <option value="12pm">12:00 PM</option>
-            <option value="3pm">3:00 PM</option>
-            <option value="6pm">6:00 PM</option>
-            <option value="9pm">9:00 PM</option>
-          </select>
-          <select id="timezone" required>
-            <option value="">Your timezone</option>
-            <option value="EST">Eastern Time (EST)</option>
-            <option value="CST">Central Time (CST)</option>
-            <option value="MST">Mountain Time (MST)</option>
-            <option value="PST">Pacific Time (PST)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Content Preferences -->
-      <div class="form-section">
-        <h3>Content Type Preferences</h3>
-        <div class="grid-container" id="contentTypes">
-          <div class="grid-item" data-value="product-showcase">Product Showcases</div>
-          <div class="grid-item" data-value="behind-scenes">Behind the Scenes</div>
-          <div class="grid-item" data-value="tips-advice">Tips & Advice</div>
-          <div class="grid-item" data-value="inspirational">Inspirational Quotes</div>
-          <div class="grid-item" data-value="industry-news">Industry News</div>
-          <div class="grid-item" data-value="customer-features">Customer Features</div>
-        </div>
-        
-        <div class="form-fields form-fields-spaced">
-          <select id="brandVoice" required>
-            <option value="">Select brand voice/tone</option>
-            <option value="professional">Professional</option>
-            <option value="friendly">Friendly & Casual</option>
-            <option value="enthusiastic">Enthusiastic & Energetic</option>
-            <option value="sophisticated">Sophisticated</option>
-            <option value="humorous">Humorous & Fun</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Project Details -->
-      <div class="form-section">
-        <div class="form-row">
-          <input type="number" id="accounts" placeholder="Number of Social Accounts">
-          <input type="number" id="budget" placeholder="Monthly Budget ($)">
-        </div>
-        <h3>Desired Launch Date</h3>
-        <div class="form-fields">
-          <input type="date" required value="2025-01-01" id="launchDate" placeholder="Select Launch Date">
-        </div>
-      </div>
-      
-      <!-- Additional Requirements -->
-      <div class="form-section">
-        <div class="form-fields">
-          <textarea id="objectives" placeholder="Any specific requirements, content themes, existing social media accounts, or special requests..." rows="4"></textarea>
-        </div>
-      </div>
-      
-      <!-- Submit Button -->
-      <div class="form-section form-section-center">
-        <!-- Final CTA Push -->
-        <div class="final-cta-box">
-          <div class="final-cta-main"><strong>Ready to 10x Your Social Media Results?</strong></div>
-          <div class="final-cta-sub">Join our growing client base of automated businesses</div>
-        </div>
-        
-        <button class="form-sumbit-btn form-submit-btn-enhanced" type="submit">
-          ⚡ Get Quote & Start Setup
-        </button>
-        
-        <!-- Form Persistence Controls -->
-        <div style="margin-top: 15px; text-align: center;">
-          <button type="button" onclick="clearFormData()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; cursor: pointer;">
-            Clear Saved Data
-          </button>
-          <div id="persistenceStatus" style="font-size: 11px; color: #ccc; margin-top: 5px;"></div>
-        </div>
-        
-        <div class="final-disclaimer">
-          Response within 2 hours • Free consultation included<br>
-          <a href="https://inexasli.com/?terms=true">Terms of Service</a> • 
-          <a href="https://inexasli.com/?privacy=true">Privacy Policy</a>
-        </div>
-      </div>
-    </form>
   </div>
 </body>
-<script type="module">
-    import { businessFormPersistence } from './businessFormPersistence.js';
+<script>
+  // Counter animation for stats
+  function animateCounters() {
+    const counters = document.querySelectorAll('.stat-number');
     
-    // Handle grid item clicks
-    function toggleSelection(event) {
-      const item = event.target;
-      item.classList.toggle('selected');
-    }
-
-    document.querySelectorAll('.grid-item').forEach(item => {
-      item.addEventListener('click', toggleSelection);
-    });
-
-    // Form persistence functions
-    window.clearFormData = function() {
-      if (confirm('Clear all saved form data? This cannot be undone.')) {
-        businessFormPersistence.clearSavedData();
-        location.reload(); // Refresh to show cleared form
-      }
-    }
-
-    // Show persistence status
-    function updatePersistenceStatus() {
-      const savedData = businessFormPersistence.getSavedData();
-      const statusEl = document.getElementById('persistenceStatus');
-      if (statusEl) {
-        if (savedData && savedData.lastSaved) {
-          const date = new Date(savedData.lastSaved);
-          statusEl.textContent = `Last saved: ${date.toLocaleString()}`;
-        } else {
-          statusEl.textContent = 'No saved data';
-        }
-      }
-    }
-
-    // Update status periodically
-    setInterval(updatePersistenceStatus, 2000);
-    setTimeout(updatePersistenceStatus, 1000); // Initial update
-
-    // Counter animation for stats
-    function animateCounters() {
-      const counters = document.querySelectorAll('.stat-number');
+    counters.forEach(counter => {
+      const target = parseInt(counter.getAttribute('data-target'));
+      const increment = target / 100; // Animate over 100 steps
+      let current = 0;
       
-      counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-target'));
-        const increment = target / 100; // Animate over 100 steps
-        let current = 0;
-        
-        const timer = setInterval(() => {
-          current += increment;
-          if (current >= target) {
-            counter.textContent = target + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
-            clearInterval(timer);
-          } else {
-            counter.textContent = Math.floor(current) + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
-          }
-        }, 20);
-      });
-    }
-
-    // Start counter animation after page loads
-    setTimeout(animateCounters, 2000);
-
-  document.getElementById('socialAutomationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const company = document.getElementById('company').value;
-    const instagramHandle = document.getElementById('instagramHandle').value;
-    const industry = document.getElementById('industry').value;
-    const businessDescription = document.getElementById('businessDescription').value;
-    const postTime = document.getElementById('postTime').value;
-    const timezone = document.getElementById('timezone').value;
-    const brandVoice = document.getElementById('brandVoice').value;
-    const accounts = document.getElementById('accounts').value;
-    const objectives = document.getElementById('objectives').value;
-    const launchDate = document.getElementById('launchDate').value;
-    const budget = document.getElementById('budget').value;
-
-    // Function to format multi-select items
-    const formatMultiSelect = (items) => {
-      return items.length > 0 ? items.map(item => `• ${item}`).join('\n') : 'None';
-    };
-
-    const platforms = Array.from(document.querySelectorAll('#platforms .grid-item.selected')).map(el => el.dataset.value);
-    const contentFeatures = Array.from(document.querySelectorAll('#contentFeatures .grid-item.selected')).map(el => el.dataset.value);
-    const frequency = Array.from(document.querySelectorAll('#frequency .grid-item.selected')).map(el => el.dataset.value);
-    const storage = Array.from(document.querySelectorAll('#storage .grid-item.selected')).map(el => el.dataset.value);
-    const contentTypes = Array.from(document.querySelectorAll('#contentTypes .grid-item.selected')).map(el => el.dataset.value);
-
-    // Calculate quote based on tier system
-    let setupFee = 397;
-    let monthlyFee = 197;
-    let packageName = "Basic";
-    
-    // Determine tier based on storage selections (images + videos)
-    const imageSelection = storage.find(s => s.includes('images'));
-    const videoSelection = storage.find(s => s.includes('videos'));
-    
-    // Basic Tier: 25 images + 10 videos
-    if (imageSelection && imageSelection.includes('Basic') && videoSelection && videoSelection.includes('Basic')) {
-      setupFee = 397;
-      monthlyFee = 197;
-      packageName = "Basic";
-    }
-    // Standard Tier: 50 images + 25 videos  
-    else if (imageSelection && imageSelection.includes('Standard') && videoSelection && videoSelection.includes('Standard')) {
-      setupFee = 597;
-      monthlyFee = 297;
-      packageName = "Standard";
-    }
-    // Premium Tier: 100+ images + 50+ videos
-    else if (imageSelection && imageSelection.includes('Premium') && videoSelection && videoSelection.includes('Premium')) {
-      setupFee = 997;
-      monthlyFee = 497;
-      packageName = "Premium";
-    }
-    // Mixed selections - use highest tier
-    else if ((imageSelection && imageSelection.includes('Premium')) || (videoSelection && videoSelection.includes('Premium'))) {
-      setupFee = 997;
-      monthlyFee = 497;
-      packageName = "Premium (Mixed)";
-    }
-    else if ((imageSelection && imageSelection.includes('Standard')) || (videoSelection && videoSelection.includes('Standard'))) {
-      setupFee = 597;
-      monthlyFee = 297;
-      packageName = "Standard (Mixed)";
-    }
-    
-    // Platform multiplier
-    const platformCount = platforms.length;
-    let platformMultiplier = 1.0;
-    if (platformCount === 3) platformMultiplier = 1.2;
-    else if (platformCount === 4) platformMultiplier = 1.5;
-    
-    // Apply platform multiplier
-    setupFee = Math.round(setupFee * platformMultiplier);
-    monthlyFee = Math.round(monthlyFee * platformMultiplier);
-
-    // Show payment section
-    showPaymentSection(name, email, company, setupFee, monthlyFee, packageName, platforms, imageSelection, videoSelection);
-    
-    // Clear saved form data after successful submission
-    businessFormPersistence.clearSavedData();
-  });
-
-  function showPaymentSection(name, email, company, setupFee, monthlyFee, packageName, platforms, imageSelection, videoSelection) {
-    // Format platform list
-    const platformList = platforms.map(p => `• ${p}`).join('<br>');
-    
-    // Hide form and show payment
-    document.querySelector('.form-page').innerHTML = `
-      <div class="quote-results-container">
-        <div class="quote-header">
-          <h1 class="quote-title">Quote Generated!</h1>
-          <p class="quote-subtitle">Ready to start your automation, ${name}?</p>
-        </div>
-        
-        <div class="quote-box">
-          <h3 class="quote-box-title">${packageName} Package - ${company}</h3>
-          <div style="margin-bottom: 20px; text-align: left; color: white;">
-            <strong>Platforms:</strong><br>
-            ${platformList}<br><br>
-            <strong>Content:</strong><br>
-            • ${imageSelection || '25 images'}<br>
-            • ${videoSelection || '10 videos'}<br>
-            • AI content generation<br>
-            • Automated posting<br>
-            • Performance tracking
-          </div>
-          <div class="quote-line">
-            <span class="quote-line-label">Setup Fee (One-time)</span>
-            <span class="quote-line-amount">$${setupFee}</span>
-          </div>
-          <div class="quote-line-monthly">
-            <span class="quote-line-label">Monthly Service</span>
-            <span class="quote-line-amount">$${monthlyFee}/month</span>
-          </div>
-          <div class="quote-total">
-            <span class="quote-total-label">Pay Today</span>
-            <span class="quote-total-amount">$${setupFee}</span>
-          </div>
-        </div>
-        
-        <button onclick="proceedToPayment('${setupFee}', '${monthlyFee}', '${packageName}', '${name}', '${email}', '${company}')" class="proceed-button">
-          Pay $${setupFee} & Start Setup
-        </button>
-        
-        <div class="next-steps-box">
-          <div class="next-steps-title">What happens next:</div>
-          <ol class="next-steps-list">
-            <li>Secure payment processing via Stripe</li>
-            <li>Email confirmation with service details</li>
-            <li>Account setup within 24-48 hours</li>
-            <li>Monthly billing starts after setup</li>
-          </ol>
-        </div>
-        
-        <div class="payment-disclaimer">
-          Secure payment by Stripe • Email receipt included<br>
-          <a href="https://inexasli.com/?terms=true">Terms</a> • 
-          <a href="https://inexasli.com/?privacy=true">Privacy</a>
-        </div>
-      </div>
-    `;
+      const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          counter.textContent = target + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
+          clearInterval(timer);
+        } else {
+          counter.textContent = Math.floor(current) + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
+        }
+      }, 20);
+    });
   }
 
-  function proceedToPayment(setupFee, monthlyFee, packageName, name, email, company) {
-    // In production: Create Stripe checkout session with line items
-    const orderDetails = {
-      package: packageName,
-      setupFee: setupFee,
-      monthlyFee: monthlyFee,
-      customerName: name,
-      customerEmail: email,
-      company: company
-    };
-    
-    // Store order details for Stripe
-    localStorage.setItem('pendingOrder', JSON.stringify(orderDetails));
-    
-    // Redirect to payment page with order details
-    window.location.href = `/business/payment.html?amount=${setupFee}&package=${encodeURIComponent(packageName)}&email=${encodeURIComponent(email)}`;
-  }
+  // Start counter animation after page loads
+  setTimeout(animateCounters, 2000);
 
   // Splash screen transition
   document.addEventListener('DOMContentLoaded', function() {
