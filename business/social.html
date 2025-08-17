@@ -19,8 +19,8 @@
         <div class="particle" style="top: 10%; left: 60%; width: 7px; height: 7px; animation-delay: 3s;"></div>
     </div>
     
-    <div class="splash-container">
-        <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+    <div class="splash-container" style="padding-top: 40px;">
+        <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo" style="margin-top: 20px;">
         <div class="splash-inexasli">INEXASLI</div>
         <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
         
@@ -33,7 +33,7 @@
           🔥 LIMITED TIME: 50% OFF SETUP FEE
         </div>
       </div>
-      <h1 class="hoead-1 hero-title">
+      <h1 class="hoead-1 hero-title" style="font-size: 2.4em;">
         Automate Your Social Media<br>While You Sleep
       </h1>
       <p class="hoead-2 hero-subtitle">
@@ -44,15 +44,15 @@
       <!-- Urgency & Social Proof -->
       <div class="stats-container">
         <div class="stat-item">
-          <div class="stat-number">1+</div>
-          <div class="stat-label">Business Automated</div>
+          <div class="stat-number" data-target="5">0</div>
+          <div class="stat-label">Businesses Automated</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">10+</div>
+          <div class="stat-number" data-target="50">0</div>
           <div class="stat-label">Posts Generated</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number">90%</div>
+          <div class="stat-number" data-target="85">0</div>
           <div class="stat-label">Time Saved</div>
         </div>
       </div>
@@ -60,19 +60,19 @@
 
     <!-- Problem/Pain Points Section -->
     <div class="problem-section">
-      <h2 class="problem-title">Tired of This Daily Struggle?</h2>
+      <h2 class="problem-title">Struggling With These Daily Challenges?</h2>
       <div class="problem-grid">
         <div class="problem-item">
-          <div class="problem-emoji">😰</div>
-          <div class="problem-text">Spending 3-5 hours daily creating content</div>
+          <div class="problem-emoji">⏰</div>
+          <div class="problem-text">Hours spent creating content instead of growing your business</div>
         </div>
         <div class="problem-item">
           <div class="problem-emoji">📉</div>
-          <div class="problem-text">Inconsistent posting killing your engagement</div>
+          <div class="problem-text">Inconsistent posting hurting your online presence</div>
         </div>
         <div class="problem-item">
           <div class="problem-emoji">💸</div>
-          <div class="problem-text">Paying $2000+/month for social media managers</div>
+          <div class="problem-text">High costs for social media management services</div>
         </div>
       </div>
     </div>
@@ -83,39 +83,39 @@
       <div class="benefit-card benefit-card-enhanced">
         <div class="most-popular-badge">MOST POPULAR</div>
         <h3>🤖 AI Content Generation</h3>
-        <p><strong>Save 4+ hours daily</strong> - AI creates engaging posts, captions, and quotes tailored to your brand voice</p>
+        <p><strong>Save hours daily</strong> - AI creates engaging posts, captions, and quotes tailored to your brand voice</p>
       </div>
       <div class="benefit-card">
         <h3>🎨 Auto Visual Creation</h3>
-        <p><strong>Professional graphics instantly</strong> - AI generates stunning images or uses your branded content library</p>
+        <p><strong>Professional graphics made easy</strong> - AI generates quality images or uses your branded content library</p>
       </div>
       <div class="benefit-card">
         <h3>📱 Multi-Platform Posting</h3>
-        <p><strong>I'll post everywhere at once</strong> - Instagram, X, Facebook, LinkedIn with platform-specific optimization</p>
+        <p><strong>Reach more platforms efficiently</strong> - Instagram, X, Facebook, LinkedIn with platform-specific optimization</p>
       </div>
       <div class="benefit-card">
         <h3>⏰ Smart Scheduling</h3>
-        <p><strong>Posts at peak engagement times</strong> - Automated posting when your audience is most active</p>
+        <p><strong>Consistent posting schedule</strong> - Automated posting during optimal engagement times</p>
       </div>
       <div class="benefit-card">
         <h3>📊 Performance Analytics</h3>
-        <p><strong>Track what works</strong> - Detailed reports on engagement, reach, and ROI to optimize strategy</p>
+        <p><strong>Track your growth</strong> - Monitor engagement, reach, and performance across all platforms</p>
       </div>
       <div class="benefit-card">
-        <h3>🛠️ Done-For-You Setup</h3>
-        <p><strong>I handle everything</strong> - From initial setup to ongoing maintenance and optimization</p>
+        <h3>🛠️ Professional Setup</h3>
+        <p><strong>We handle the technical work</strong> - From initial setup to ongoing maintenance and optimization</p>
       </div>
     </div>
     
     <!-- Urgency/Scarcity Section -->
     <div class="urgency-section">
-      <h2 class="urgency-title">⚡ Don't Wait - Your Competitors Are Already Automating</h2>
+      <h2 class="urgency-title">⚡ Ready to Streamline Your Social Media?</h2>
       <p class="urgency-text">
-        Every day you delay costs you <strong>hundreds of potential customers</strong> and <strong>20+ hours of manual work</strong>
+        Every day spent on manual posting is time you could invest in growing your business
       </p>
       <div class="urgency-timing-box">
-        <div class="urgency-timing-main">⏱️ Your automation will be ready in 5-7 days</div>
-        <div class="urgency-timing-sub">Start seeing results next week</div>
+        <div class="urgency-timing-main">⏱️ Your automation setup typically takes 5-7 business days</div>
+        <div class="urgency-timing-sub">Start posting consistently within a week</div>
       </div>
     </div>
 
@@ -365,6 +365,30 @@
     // Update status periodically
     setInterval(updatePersistenceStatus, 2000);
     setTimeout(updatePersistenceStatus, 1000); // Initial update
+
+    // Counter animation for stats
+    function animateCounters() {
+      const counters = document.querySelectorAll('.stat-number');
+      
+      counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const increment = target / 100; // Animate over 100 steps
+        let current = 0;
+        
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            counter.textContent = target + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
+            clearInterval(timer);
+          } else {
+            counter.textContent = Math.floor(current) + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
+          }
+        }, 20);
+      });
+    }
+
+    // Start counter animation after page loads
+    setTimeout(animateCounters, 2000);
 
   document.getElementById('socialAutomationForm').addEventListener('submit', function(e) {
     e.preventDefault();

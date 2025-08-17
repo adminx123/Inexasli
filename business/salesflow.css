@@ -514,6 +514,20 @@ textarea {
     .grid-container {
         grid-template-columns: 1fr;
     }
+    
+    .stats-container {
+        gap: 15px;
+    }
+    
+    .stat-item {
+        min-width: 120px;
+        max-width: 140px;
+        padding: 12px 15px;
+    }
+    
+    .stat-number {
+        font-size: 20px;
+    }
 }
 
 /* Benefits Cards Grid */
@@ -653,17 +667,27 @@ textarea {
 .stats-container {
     display: flex;
     justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
+    gap: 20px;
+    flex-wrap: nowrap;
     margin-bottom: 30px;
+    align-items: center;
 }
 
 .stat-item {
     background: rgba(255,255,255,0.1);
-    padding: 15px 20px;
+    padding: 12px 15px;
     border-radius: 10px;
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
+    flex: 1;
+    max-width: 200px;
+    min-width: 160px;
+    text-align: center;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .stat-number {
@@ -674,8 +698,10 @@ textarea {
 
 .stat-label {
     color: white;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 500;
+    line-height: 1.2;
+    margin-top: 5px;
 }
 
 /* Problem Section */
@@ -835,7 +861,7 @@ textarea {
 .storage-header {
     text-align: center;
     margin: 0;
-    color: #1e293b;
+    color: white;
     font-size: 1.1em;
     font-weight: 600;
 }
