@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choose Your Social Media Package - INEXASLI</title>
     <link rel="stylesheet" href="salesflow.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -74,10 +75,23 @@
                     </div>
 
                     <div class="package-platforms">
-                        <div class="package-platforms-title">Platforms Included:</div>
-                        <div class="package-platforms-list">
-                            <span class="platform-badge">Instagram</span>
-                            <span class="platform-badge">X (Twitter)</span>
+                        <div class="package-platforms-title">Choose Any 2 Platforms:</div>
+                        <div class="platform-selection-grid">
+                            <div class="platform-option" data-platform="instagram">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="platform-option" data-platform="x">
+                                <i class="platform-icon-x">𝕏</i>
+                            </div>
+                            <div class="platform-option" data-platform="facebook">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <div class="platform-option" data-platform="linkedin">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                        </div>
+                        <div class="platform-selection-counter">
+                            <span class="selected-count">0</span> of 2 platforms selected
                         </div>
                     </div>
 
@@ -119,11 +133,23 @@
                     </div>
 
                     <div class="package-platforms">
-                        <div class="package-platforms-title">Platforms Included:</div>
-                        <div class="package-platforms-list">
-                            <span class="platform-badge">Instagram</span>
-                            <span class="platform-badge">X (Twitter)</span>
-                            <span class="platform-badge">Facebook</span>
+                        <div class="package-platforms-title">Choose Any 3 Platforms:</div>
+                        <div class="platform-selection-grid">
+                            <div class="platform-option" data-platform="instagram">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="platform-option" data-platform="x">
+                                <i class="platform-icon-x">𝕏</i>
+                            </div>
+                            <div class="platform-option" data-platform="facebook">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <div class="platform-option" data-platform="linkedin">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                        </div>
+                        <div class="platform-selection-counter">
+                            <span class="selected-count">0</span> of 3 platforms selected
                         </div>
                     </div>
 
@@ -168,12 +194,23 @@
                     </div>
 
                     <div class="package-platforms">
-                        <div class="package-platforms-title">Platforms Included:</div>
-                        <div class="package-platforms-list">
-                            <span class="platform-badge">Instagram</span>
-                            <span class="platform-badge">X (Twitter)</span>
-                            <span class="platform-badge">Facebook</span>
-                            <span class="platform-badge">LinkedIn</span>
+                        <div class="package-platforms-title">Choose Any 4 Platforms:</div>
+                        <div class="platform-selection-grid">
+                            <div class="platform-option" data-platform="instagram">
+                                <i class="fab fa-instagram"></i>
+                            </div>
+                            <div class="platform-option" data-platform="x">
+                                <i class="platform-icon-x">𝕏</i>
+                            </div>
+                            <div class="platform-option" data-platform="facebook">
+                                <i class="fab fa-facebook"></i>
+                            </div>
+                            <div class="platform-option" data-platform="linkedin">
+                                <i class="fab fa-linkedin"></i>
+                            </div>
+                        </div>
+                        <div class="platform-selection-counter">
+                            <span class="selected-count">0</span> of 4 platforms selected
                         </div>
                     </div>
 
@@ -225,26 +262,144 @@
         document.addEventListener('DOMContentLoaded', function() {
             const packageCards = document.querySelectorAll('.package-card');
             
+            // Initialize platform selection for each package
             packageCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    const packageType = this.dataset.package;
-                    const packagePrice = this.dataset.price;
-                    
-                    // Store selected package in localStorage
-                    const selectedPackage = {
-                        type: packageType,
-                        price: parseInt(packagePrice),
-                        name: this.querySelector('.package-name').textContent,
-                        features: Array.from(this.querySelectorAll('.package-feature')).map(f => f.textContent.trim()),
-                        platforms: Array.from(this.querySelectorAll('.platform-badge')).map(p => p.textContent)
-                    };
-                    
-                    localStorage.setItem('selectedPackage', JSON.stringify(selectedPackage));
-                    
-                    // Redirect to add-ons page
-                    window.location.href = 'addons.html';
+                const packageType = card.dataset.package;
+                const maxPlatforms = getMaxPlatforms(packageType);
+                const platformOptions = card.querySelectorAll('.platform-option');
+                const selectedCountElement = card.querySelector('.selected-count');
+                const selectButton = card.querySelector('.btn-select-package');
+                let selectedPlatforms = [];
+                
+                // Platform selection logic
+                platformOptions.forEach(option => {
+                    option.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const platform = this.dataset.platform;
+                        
+                        if (this.classList.contains('selected')) {
+                            // Deselect platform
+                            this.classList.remove('selected');
+                            selectedPlatforms = selectedPlatforms.filter(p => p !== platform);
+                        } else if (selectedPlatforms.length < maxPlatforms) {
+                            // Select platform
+                            this.classList.add('selected');
+                            selectedPlatforms.push(platform);
+                        }
+                        
+                        // Update counter
+                        selectedCountElement.textContent = selectedPlatforms.length;
+                        
+                        // Update button state
+                        updateSelectButton(selectButton, selectedPlatforms.length, maxPlatforms);
+                    });
                 });
+                
+                // Package card click (only if platforms are selected)
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking platform options
+                    if (e.target.closest('.platform-option')) return;
+                    
+                    if (selectedPlatforms.length === maxPlatforms) {
+                        selectPackage(this, selectedPlatforms);
+                    } else {
+                        showPlatformValidationMessage(maxPlatforms);
+                    }
+                });
+                
+                // Select button click
+                selectButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (selectedPlatforms.length === maxPlatforms) {
+                        selectPackage(card, selectedPlatforms);
+                    } else {
+                        showPlatformValidationMessage(maxPlatforms);
+                    }
+                });
+                
+                // Initialize button state
+                updateSelectButton(selectButton, 0, maxPlatforms);
             });
+            
+            function getMaxPlatforms(packageType) {
+                const platformCounts = {
+                    'starter': 2,
+                    'professional': 3,
+                    'enterprise': 4
+                };
+                return platformCounts[packageType] || 2;
+            }
+            
+            function updateSelectButton(button, selectedCount, maxCount) {
+                if (selectedCount === maxCount) {
+                    button.textContent = 'Select Base + Add Enhancements';
+                    button.style.opacity = '1';
+                    button.style.cursor = 'pointer';
+                } else {
+                    button.textContent = `Select ${selectedCount}/${maxCount} Platforms First`;
+                    button.style.opacity = '0.6';
+                    button.style.cursor = 'not-allowed';
+                }
+            }
+            
+            function selectPackage(card, selectedPlatforms) {
+                const packageType = card.dataset.package;
+                const packagePrice = card.dataset.price;
+                
+                // Store selected package with platforms
+                const selectedPackage = {
+                    type: packageType,
+                    price: parseInt(packagePrice),
+                    name: card.querySelector('.package-name').textContent,
+                    features: Array.from(card.querySelectorAll('.package-feature')).map(f => f.textContent.trim()),
+                    platforms: selectedPlatforms
+                };
+                
+                localStorage.setItem('selectedPackage', JSON.stringify(selectedPackage));
+                
+                // Visual feedback
+                card.style.transform = 'scale(0.98)';
+                card.style.transition = 'transform 0.2s ease';
+                
+                setTimeout(() => {
+                    window.location.href = 'addons.html';
+                }, 200);
+            }
+            
+            function showPlatformValidationMessage(requiredCount) {
+                // Remove existing message
+                const existingMessage = document.querySelector('.platform-validation-message');
+                if (existingMessage) existingMessage.remove();
+                
+                // Create validation message
+                const message = document.createElement('div');
+                message.className = 'platform-validation-message';
+                message.textContent = `Please select exactly ${requiredCount} platforms to continue`;
+                message.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(245, 158, 11, 0.95);
+                    color: white;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    z-index: 10000;
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(245, 158, 11, 0.3);
+                `;
+                
+                document.body.appendChild(message);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        message.remove();
+                    }
+                }, 3000);
+            }
         });
     </script>
     <script src="step-navigation.js"></script>
