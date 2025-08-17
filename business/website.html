@@ -403,11 +403,25 @@
       <!-- Submit Button -->
       <div class="form-section" style="text-align: center;">
         <button class="form-sumbit-btn" type="submit">Get Your Website Design Quote</button>
+        
+        <!-- Form Persistence Controls -->
+        <div style="margin-top: 15px; text-align: center;">
+          <button type="button" onclick="clearFormData()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; cursor: pointer;">
+            🗑️ Clear Saved Data
+          </button>
+          <div id="persistenceStatus" style="font-size: 11px; color: #ccc; margin-top: 5px;"></div>
+        </div>
       </div>
     </form>
   </div>
 </body>
-<script>
+<script type="module">
+    import { BusinessFormPersistence } from './businessFormPersistence.js';
+    
+    // Initialize form persistence for website form
+    const websiteFormPersistence = new BusinessFormPersistence('websiteDesignForm', 'business-website-form-data');
+    websiteFormPersistence.init();
+    
     // Handle grid item clicks
     function toggleSelection(event) {
       const item = event.target;
@@ -417,6 +431,32 @@
     document.querySelectorAll('.grid-item').forEach(item => {
       item.addEventListener('click', toggleSelection);
     });
+
+    // Form persistence functions
+    window.clearFormData = function() {
+      if (confirm('Clear all saved form data? This cannot be undone.')) {
+        websiteFormPersistence.clearSavedData();
+        location.reload(); // Refresh to show cleared form
+      }
+    }
+
+    // Show persistence status
+    function updatePersistenceStatus() {
+      const savedData = websiteFormPersistence.getSavedData();
+      const statusEl = document.getElementById('persistenceStatus');
+      if (statusEl) {
+        if (savedData && savedData.lastSaved) {
+          const date = new Date(savedData.lastSaved);
+          statusEl.textContent = `💾 Last saved: ${date.toLocaleString()}`;
+        } else {
+          statusEl.textContent = '💾 No saved data';
+        }
+      }
+    }
+
+    // Update status periodically
+    setInterval(updatePersistenceStatus, 2000);
+    setTimeout(updatePersistenceStatus, 1000); // Initial update
 
 
 
@@ -479,6 +519,9 @@ Budget: $ ${budget}
 Visit our quote page for more details: https://inexasli.com/client/website/quote.html`;
 
     window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    // Clear saved form data after successful submission
+    websiteFormPersistence.clearSavedData();
   });
 </script>
 </html>

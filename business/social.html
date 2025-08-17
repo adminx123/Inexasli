@@ -310,6 +310,14 @@
           ⚡ Get Quote & Start Setup
         </button>
         
+        <!-- Form Persistence Controls -->
+        <div style="margin-top: 15px; text-align: center;">
+          <button type="button" onclick="clearFormData()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 20px; font-size: 12px; cursor: pointer;">
+            🗑️ Clear Saved Data
+          </button>
+          <div id="persistenceStatus" style="font-size: 11px; color: #ccc; margin-top: 5px;"></div>
+        </div>
+        
         <div class="final-disclaimer">
           ⚡ Response within 2 hours • 💬 Free consultation included<br>
           <a href="https://inexasli.com/?terms=true">Terms of Service</a> • 
@@ -319,7 +327,9 @@
     </form>
   </div>
 </body>
-<script>
+<script type="module">
+    import { businessFormPersistence } from './businessFormPersistence.js';
+    
     // Handle grid item clicks
     function toggleSelection(event) {
       const item = event.target;
@@ -329,6 +339,32 @@
     document.querySelectorAll('.grid-item').forEach(item => {
       item.addEventListener('click', toggleSelection);
     });
+
+    // Form persistence functions
+    window.clearFormData = function() {
+      if (confirm('Clear all saved form data? This cannot be undone.')) {
+        businessFormPersistence.clearSavedData();
+        location.reload(); // Refresh to show cleared form
+      }
+    }
+
+    // Show persistence status
+    function updatePersistenceStatus() {
+      const savedData = businessFormPersistence.getSavedData();
+      const statusEl = document.getElementById('persistenceStatus');
+      if (statusEl) {
+        if (savedData && savedData.lastSaved) {
+          const date = new Date(savedData.lastSaved);
+          statusEl.textContent = `💾 Last saved: ${date.toLocaleString()}`;
+        } else {
+          statusEl.textContent = '💾 No saved data';
+        }
+      }
+    }
+
+    // Update status periodically
+    setInterval(updatePersistenceStatus, 2000);
+    setTimeout(updatePersistenceStatus, 1000); // Initial update
 
   document.getElementById('socialAutomationForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -369,6 +405,9 @@
 
     // Show payment section
     showPaymentSection(name, email, company, setupFee, monthlyFee);
+    
+    // Clear saved form data after successful submission
+    businessFormPersistence.clearSavedData();
   });
 
   function showPaymentSection(name, email, company, setupFee, monthlyFee) {

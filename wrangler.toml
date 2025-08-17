@@ -5,7 +5,7 @@ workers_dev = true
 # --- X Poster Worker (Standalone) ---
 [env.x]
 name = "x-worker"
-main = "./ai/x.js"
+main = "./business/x.js"
 
 [env.x.triggers]
 crons = ["11 19 * * *"]
