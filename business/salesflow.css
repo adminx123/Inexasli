@@ -97,6 +97,12 @@ body {
     margin: 0;
 }
 
+/* Ensure text elements within form-page are readable */
+.form-page p,
+.form-page div:not(.grid-item):not([style*="color"]) {
+    color: #1e293b;
+}
+
 /* Typography Hierarchy */
 .page-title {
     font-size: 2.2em;
@@ -111,14 +117,25 @@ body {
 }
 
 .page-subtitle {
-    font-size: 1.2em;
-    color: #ccc;
+    font-size: 1.1em;
+    color: #94a3b8;
     margin-bottom: 30px;
-    line-height: 1.5;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.page-subtitle.dark {
-    color: #64748b;
+/* Make h2 and h3 white by default */
+h2 {
+    color: white;
+}
+
+h3 {
+    color: white;
+}
+
+p {
+    color: white;
 }
 
 /* Step Indicators */
@@ -293,6 +310,8 @@ input, select, textarea {
     transition: border-color 0.3s;
     font-family: inherit;
     margin: 8px 0;
+    background: white;
+    color: #1e293b;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -308,6 +327,11 @@ input::placeholder, textarea::placeholder {
 
 select {
     cursor: pointer;
+}
+
+select option {
+    color: #1e293b;
+    background: white;
 }
 
 textarea {
@@ -332,6 +356,7 @@ textarea {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: 500;
+    color: #1e293b;
 }
 
 .grid-item:hover {
@@ -574,4 +599,429 @@ textarea {
 
 .legal-links a:hover {
     text-decoration: underline;
+}
+
+/* Social Media Page Specific Classes */
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.promo-badge-outer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 3px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.promo-badge-inner {
+    background: linear-gradient(135deg, #4f46e5, #3730a3);
+    padding: 8px 20px;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hero-title {
+    font-size: 3.2em;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 1.4em;
+    color: #6b7280;
+    margin-bottom: 30px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-strong {
+    color: #0f172a;
+}
+
+/* Stats Section */
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.stat-item {
+    background: rgba(255,255,255,0.1);
+    padding: 15px 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.stat-number {
+    color: #a855f7;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.stat-label {
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Problem Section */
+.problem-section {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
+    backdrop-filter: blur(15px);
+}
+
+.problem-title {
+    color: #dc2626;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.problem-item {
+    text-align: center;
+}
+
+.problem-emoji {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.problem-text {
+    color: #94a3b8;
+}
+
+/* Solution Section */
+.solution-title {
+    text-align: center;
+    font-size: 2.5em;
+    margin-bottom: 40px;
+    color: #0f172a;
+}
+
+.benefit-card-enhanced {
+    border: 2px solid #28a745;
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.most-popular-badge {
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: #10b981;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Urgency Section */
+.urgency-section {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    margin: 40px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.urgency-title {
+    color: #0f172a;
+    margin-bottom: 15px;
+    font-size: 2.2em;
+}
+
+.urgency-text {
+    color: #94a3b8;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.urgency-timing-box {
+    background: rgba(255,255,255,0.2);
+    padding: 15px;
+    border-radius: 10px;
+    display: inline-block;
+    backdrop-filter: blur(5px);
+}
+
+.urgency-timing-main {
+    color: #1e293b;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.urgency-timing-sub {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+/* CTA Section */
+.cta-header {
+    text-align: center;
+    margin: 50px 0 30px 0;
+}
+
+.cta-title {
+    font-size: 2.8em;
+    color: #0f172a;
+    margin-bottom: 15px;
+}
+
+.cta-subtitle {
+    font-size: 1.3em;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.guarantee-box {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid #10b981;
+    padding: 15px;
+    border-radius: 10px;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+}
+
+.guarantee-text {
+    color: #10b981;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Platform Icons */
+.platform-icon-x {
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    font-style: normal;
+}
+
+/* Storage Grid */
+.storage-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 13px;
+}
+
+.storage-header {
+    text-align: center;
+    margin: 0;
+    color: #1e293b;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+/* Particle styles are already defined in the existing CSS */
+
+/* Storage grid specific override */
+.storage-grid-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+}
+
+/* Form fields margin */
+.form-fields-spaced {
+    margin-top: 20px;
+}
+
+/* Centered form section */
+.form-section-center {
+    text-align: center;
+}
+
+/* Final CTA box */
+.final-cta-box {
+    background: rgba(148, 163, 184, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.final-cta-main {
+    color: #1e293b;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.final-cta-sub {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Enhanced submit button */
+.form-submit-btn-enhanced {
+    background: linear-gradient(135deg, #10b981, #059669);
+    font-size: 18px;
+    padding: 18px 40px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    border: none;
+}
+
+/* Final disclaimer text */
+.final-disclaimer {
+    margin-top: 15px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.final-disclaimer a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+/* Quote Results Section */
+.quote-results-container {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.quote-header {
+    margin-bottom: 30px;
+}
+
+.quote-title {
+    color: #10b981;
+    margin-bottom: 10px;
+}
+
+.quote-subtitle {
+    color: #64748b;
+    font-size: 18px;
+}
+
+.quote-box {
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 2px solid rgba(16, 185, 129, 0.2);
+}
+
+.quote-box-title {
+    color: #059669;
+    margin-bottom: 20px;
+}
+
+.quote-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.quote-line-label {
+    color: #374151;
+    font-size: 16px;
+}
+
+.quote-line-amount {
+    color: #059669;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.quote-line-monthly {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.quote-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    background: rgba(16, 185, 129, 0.15);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.quote-total-label {
+    color: #059669;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.quote-total-amount {
+    color: #059669;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.proceed-button {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 20px 50px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.next-steps-box {
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.next-steps-title {
+    color: #1d4ed8;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.next-steps-list {
+    color: #6b7280;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.payment-disclaimer {
+    margin-top: 20px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.payment-disclaimer a {
+    color: #667eea;
 }
