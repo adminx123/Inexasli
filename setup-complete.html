@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Complete - INEXASLI Automation Active</title>
+    <link rel="stylesheet" href="/styles/salesflow.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            min-height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            padding: 20px 0;
+        }
+        
+        .splash-logo {
+            width: 60px;
+            height: 60px;
+            opacity: 0;
+            animation: rotateImage 2.1675s linear 1;
+            animation-delay: 0.180625s;
+            animation-fill-mode: forwards;
+            margin-bottom: 10px;
+        }
+        
+        .splash-inexasli {
+            font-family: Arial, sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            opacity: 1;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        
+        .splash-empowering {
+            color: rgb(49, 49, 49);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 1.2em;
+            margin: 0;
+            opacity: 0;
+            animation: fadeIn 1.445s ease-in forwards;
+            animation-delay: 0.7225s;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tm {
+            font-size: 0.5em;
+            position: relative;
+            top: -0.2em;
+            vertical-align: top;
+        }
+        
+        .completion-content {
+            opacity: 0;
+            animation: fadeInContent 1s ease-in forwards;
+            animation-delay: 2.5s;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+            width: 90%;
+        }
+        
+        .completion-container {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .success-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .main-title {
+            font-size: 2.2em;
+            color: #1e293b;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #64748b;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: rgba(40, 167, 69, 0.2);
+            border-radius: 25px;
+            font-size: 14px;
+            color: #28a745;
+            border: 1px solid #28a745;
+        }
+        
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #28a745;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .info-card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .info-card h4 {
+            color: #1e293b;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .info-card p {
+            color: #64748b;
+            margin: 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .timeline {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .timeline h4 {
+            color: #155724;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3em;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .timeline-time {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .timeline-content {
+            color: #155724;
+            font-size: 0.95em;
+        }
+        
+        .contact-info {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .contact-info h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .contact-info p {
+            color: #4c51bf;
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(0px) translateX(-10px); }
+            75% { transform: translateY(10px) translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles">
+        <div class="particle" style="top: 20%; left: 20%; width: 6px; height: 6px; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 60%; left: 80%; width: 4px; height: 4px; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 80%; left: 30%; width: 8px; height: 8px; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 40%; left: 70%; width: 5px; height: 5px; animation-delay: 1s;"></div>
+        <div class="particle" style="top: 10%; left: 60%; width: 7px; height: 7px; animation-delay: 3s;"></div>
+    </div>
+    
+    <div class="completion-container">
+        <div class="success-icon">🎉</div>
+        <div class="logo">INEXASLI</div>
+        <h1 class="main-title">Setup Complete!</h1>
+        <p class="subtitle">Your Instagram automation is now configured and ready to launch. Our AI system will begin creating and posting content according to your preferences.</p>
+        
+        <div class="step-indicator">
+            <div class="step">
+                <div class="step-number">✓</div>
+                <span>Payment Complete</span>
+            </div>
+            <div class="step">
+                <div class="step-number">✓</div>
+                <span>Instagram Connected</span>
+            </div>
+            <div class="step">
+                <div class="step-number">✓</div>
+                <span>Setup Complete</span>
+            </div>
+        </div>
+        
+        <div class="info-grid">
+            <div class="info-card">
+                <h4>🤖 AI Content Engine</h4>
+                <p>Our advanced AI will analyze your business and create engaging, brand-appropriate content tailored to your audience.</p>
+            </div>
+            <div class="info-card">
+                <h4>📅 Smart Scheduling</h4>
+                <p>Posts will be automatically scheduled at optimal times based on your audience engagement patterns.</p>
+            </div>
+            <div class="info-card">
+                <h4>📊 Performance Tracking</h4>
+                <p>We monitor post performance and continuously optimize content strategy for maximum engagement.</p>
+            </div>
+            <div class="info-card">
+                <h4>🔄 Continuous Learning</h4>
+                <p>The AI learns from your brand voice and audience response to improve content quality over time.</p>
+            </div>
+        </div>
+        
+        <div class="timeline">
+            <h4>📅 What Happens Next</h4>
+            <div class="timeline-item">
+                <div class="timeline-time">Next 24hrs</div>
+                <div class="timeline-content">Our team configures your automation settings and creates your first batch of content</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">48-72hrs</div>
+                <div class="timeline-content">Your first automated posts go live! You'll receive notifications for each post</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">Week 1</div>
+                <div class="timeline-content">We monitor performance and optimize posting strategy based on engagement data</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">Ongoing</div>
+                <div class="timeline-content">Continuous AI-powered content creation and posting with monthly performance reports</div>
+            </div>
+        </div>
+        
+        <div class="contact-info">
+            <h4>📞 Need Support?</h4>
+            <p><strong>Email:</strong> support@inexasli.com</p>
+            <p><strong>Response Time:</strong> Within 4 hours during business hours</p>
+            <p><strong>Emergency:</strong> Text "URGENT" to our support line for immediate assistance</p>
+        </div>
+        
+        <a href="https://inexasli.com" class="btn-secondary">Return to INEXASLI Dashboard</a>
+        
+        <div style="margin-top: 30px; padding: 20px; background: rgba(59, 130, 246, 0.1); border-radius: 15px; border: 1px solid #3b82f6;">
+            <h4 style="color: #1e40af; margin-bottom: 10px;">🔒 Your Data is Secure</h4>
+            <p style="color: #1e40af; margin: 0; font-size: 0.9em;">We use enterprise-grade encryption and never store your Instagram credentials. You can revoke access anytime through your Instagram settings.</p>
+        </div>
+    </div>
+    
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('user');
+        const instagramStatus = urlParams.get('instagram');
+        
+        // Log successful completion
+        console.log('Setup completed for user:', userId);
+        
+        // Optional: Send completion analytics
+        if (userId) {
+            // You could send this data to your analytics or backend
+            fetch('/api/setup-complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, timestamp: new Date().toISOString() })
+            }).catch(e => console.log('Analytics logging failed:', e));
+        }
+        
+        // Show personalized message if we have user data
+        if (userId) {
+            const subtitle = document.querySelector('.subtitle');
+            subtitle.innerHTML = `Your automation is configured for Instagram User ID: ${userId}. Our AI will begin creating and posting content according to your preferences.`;
+        }
+    </script>
+</body>
+</html>

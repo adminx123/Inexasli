@@ -6,377 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>INEXASLI - Social Media Automation</title>
   <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
-  <link rel="stylesheet" href="/style/styles.css"> 
+  <link rel="stylesheet" href="/styles/salesflow.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <style>
-    /* Modern Professional Color Scheme - Fibonacci Proportions */
-    body {
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      color: #1e293b;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      margin: 0;
-      padding: 20px;
-      line-height: 1.618; /* Golden ratio */
-      min-height: 100vh;
-    }
-
-    .container {
-      max-width: 987px; /* Fibonacci number */
-      margin: 0 auto;
-      padding: 34px; /* Fibonacci number */
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      border-radius: 21px; /* Fibonacci number */
-      box-shadow: 0 13px 55px rgba(0, 0, 0, 0.08); /* Fibonacci numbers */
-      color: #1e293b;
-    }
-
-    /* Headings - Professional Typography */
-    h1 {
-      font-size: 2.618em; /* Golden ratio */
-      margin: 21px 0 13px 0; /* Fibonacci spacing */
-      line-height: 1.618;
-      color: #0f172a;
-      font-weight: 700;
-    }
-
-    h2, h3 {
-      color: #1e293b;
-      margin: 21px 0 13px 0; /* Fibonacci spacing */
-      text-align: center;
-      line-height: 1.618;
-      font-weight: 600;
-    }
-
-    h2 {
-      font-size: 1.618em; /* Golden ratio */
-    }
-
-    h3 {
-      font-size: 1.272em; /* Fibonacci ratio */
-    }
-
-    .hoead-1 {
-      font-size: 2.618em;
-      font-weight: 700;
-      margin-bottom: 13px;
-      line-height: 1.618;
-      color: #0f172a;
-    }
-
-    .hoead-2 {
-      font-size: 1.272em;
-      color: #64748b;
-      margin-bottom: 34px;
-      line-height: 1.618;
-    }
-
-    /* Benefits Section - Modern Cards */
-    .benefits {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(233px, 1fr)); /* Fibonacci number */
-      gap: 21px; /* Fibonacci number */
-      margin: 55px 0; /* Fibonacci number */
-    }
-
-    .benefit-card {
-      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      backdrop-filter: blur(15px);
-      padding: 21px; /* Fibonacci number */
-      border-radius: 13px; /* Fibonacci number */
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      transition: all 0.3s ease;
-      text-align: center;
-      min-height: 144px; /* Fibonacci number */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .benefit-card:hover {
-      background: linear-gradient(135deg, #ddd6fe 0%, #c7d2fe 100%);
-      border-color: rgba(139, 92, 246, 0.3);
-      transform: translateY(-5px);
-      box-shadow: 0 13px 34px rgba(139, 92, 246, 0.15); /* Fibonacci numbers */
-    }
-
-    .benefit-card h3 {
-      color: #1e293b;
-      margin-bottom: 8px; /* Fibonacci number */
-      font-size: 1.272em;
-      font-weight: 600;
-    }
-
-    .benefit-card p {
-      color: #475569;
-      margin: 0;
-      font-size: 0.95em;
-      line-height: 1.618;
-    }
-
-    /* Form Styling - Full Width Consistency */
-    #socialAutomationForm {
-      margin-top: 55px; /* Fibonacci number */
-      max-width: 100%; /* Use full container width */
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0; /* Remove side padding */
-    }
-
-    /* Form sections with Fibonacci spacing */
-    .form-section {
-      margin: 34px 0; /* Fibonacci number */
-    }
-
-    .form-section h3 {
-      text-align: center;
-      margin-bottom: 21px; /* Fibonacci number */
-      color: #1e293b;
-      font-weight: 600;
-    }
-
-    /* Grid Container - Fibonacci proportions */
-    .grid-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 13px; /* Fibonacci number */
-      margin: 21px 0; /* Fibonacci number */
-      max-width: 100%;
-    }
-
-    /* Grid Items - Modern Interactive Elements */
-    .grid-item {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: #1e293b;
-      padding: 13px; /* Fibonacci number */
-      border-radius: 8px; /* Fibonacci number */
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      box-shadow: 0 3px 13px rgba(0, 0, 0, 0.05); /* Fibonacci numbers */
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: "Inter", sans-serif;
-      box-sizing: border-box;
-      overflow-wrap: break-word;
-      white-space: normal;
-      width: 100%;
-      min-height: 89px; /* Fibonacci number */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-weight: 500;
-    }
-
-    .grid-item:hover {
-      transform: translateY(-2px);
-      background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 5px 21px rgba(79, 70, 229, 0.15); /* Fibonacci numbers */
-      border: 1px solid rgba(79, 70, 229, 0.3);
-      color: #3730a3;
-    }
-
-    .grid-item:active {
-      transform: translateY(1px);
-      background: linear-gradient(135deg, #ddd6fe 0%, #c4b5fd 100%);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
-      border: 1px solid rgba(79, 70, 229, 0.4);
-    }
-
-    .grid-item.selected {
-      background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #ffffff;
-      box-shadow: 0 5px 21px rgba(79, 70, 229, 0.4); /* Fibonacci numbers */
-      border: 1px solid #3730a3;
-      font-weight: 600;
-    }
-
-    /* Make the last grid item span two columns if the number of items is odd */
-    .grid-container .grid-item:last-child:nth-child(odd) {
-      grid-column: span 2;
-    }
-
-    /* Social Media Platform Icons */
-    .platform-icon {
-      font-size: 2em;
-      margin-bottom: 8px;
-      display: block;
-      height: 1em;
-      line-height: 1em;
-    }
-
-    .fa-instagram {
-      background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .fa-x-twitter, .fa-x {
-      color: #ffffff;
-    }
-
-    .fa-twitter {
-      color: #ffffff;
-    }
-
-    .fa-facebook {
-      color: #1877f2;
-    }
-
-    .fa-linkedin {
-      color: #0077b5;
-    }
-
-    /* Input Fields - Modern Styling */
-    input, select, textarea {
-      background: rgba(148, 163, 184, 0.05);
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      color: #1e293b;
-      padding: 13px; /* Fibonacci number */
-      border-radius: 8px; /* Fibonacci number */
-      margin: 8px 0; /* Fibonacci number */
-      width: 100%;
-      max-width: 100%;
-      box-sizing: border-box;
-      font-size: 14px;
-      transition: border-color 0.3s ease;
-      line-height: 1.618;
-      font-family: "Inter", sans-serif;
-    }
-
-    /* Industry select specific styling */
-    #industry {
-      display: block;
-      margin: 0 auto;
-      text-align-last: center;
-      max-width: 100%; /* Use full width */
-      padding: 21px 13px; /* Fibonacci numbers */
-      height: 55px; /* Fibonacci number */
-    }
-
-    /* Form fields container */
-    .form-fields {
-      max-width: 100%; /* Use full width */
-      margin: 0 auto;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #4f46e5;
-      background: rgba(79, 70, 229, 0.05);
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-    }
-
-    input::placeholder, textarea::placeholder {
-      color: #94a3b8;
-    }
-
-    select {
-      text-align-last: center;
-      cursor: pointer;
-    }
-
-    input::placeholder, textarea::placeholder {
-      color: #94a3b8;
-    }
-
-    select {
-      text-align-last: center;
-      cursor: pointer;
-    }
-
-    /* Form Submit Button - Modern Design */
-    .form-sumbit-btn {
-      background: linear-gradient(135deg, #4f46e5, #3730a3);
-      color: #ffffff;
-      border: none;
-      padding: 21px 34px; /* Fibonacci numbers */
-      border-radius: 13px; /* Fibonacci number */
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin: 34px 0; /* Fibonacci number */
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 8px 21px rgba(79, 70, 229, 0.25); /* Fibonacci numbers */
-    }
-
-    .form-sumbit-btn:hover {
-      background: linear-gradient(135deg, #3730a3, #312e81);
-      transform: translateY(-2px);
-      box-shadow: 0 13px 34px rgba(79, 70, 229, 0.35); /* Fibonacci numbers */
-    }
-
-    /* Sections */
-    .section {
-      margin: 40px 0;
-      padding: 20px;
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-      border-radius: 8px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-    }
-
-    .last {
-      margin: 20px 0;
-    }
-
-    /* Inline form fields */
-    .form-row {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      max-width: 100%; /* Use full width */
-      margin: 0 auto;
-    }
-
-    .form-row input {
-      flex: 1;
-      min-width: 200px;
-      margin: 8px 0;
-      width: auto;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      .container {
-        padding: 15px;
-        margin: 10px;
-      }
-      
-      .hoead-1 {
-        font-size: 1.8em;
-      }
-      
-      .benefits {
-        grid-template-columns: 1fr;
-      }
-      
-      .grid-container {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 </head>
-  
 <body>
-  <!-- Social Media Automation Content -->
-  <div class="container">
+    <div class="floating-particles">
+        <div class="particle" style="top: 20%; left: 20%; width: 6px; height: 6px; animation-delay: 0s;"></div>
+        <div class="particle" style="top: 60%; left: 80%; width: 4px; height: 4px; animation-delay: 2s;"></div>
+        <div class="particle" style="top: 80%; left: 30%; width: 8px; height: 8px; animation-delay: 4s;"></div>
+        <div class="particle" style="top: 40%; left: 70%; width: 5px; height: 5px; animation-delay: 1s;"></div>
+        <div class="particle" style="top: 10%; left: 60%; width: 7px; height: 7px; animation-delay: 3s;"></div>
+    </div>
     
-    <!-- Hero Section with Social Proof -->
+    <div class="splash-container">
+        <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+        <div class="splash-inexasli">INEXASLI</div>
+        <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+        
+        <div class="device-container">
+            <div class="form-page">
+                <!-- Hero Section with Social Proof -->
     <div style="text-align: center; margin-bottom: 40px;">
       <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 3px; border-radius: 50px; display: inline-block; margin-bottom: 20px;">
         <div style="background: linear-gradient(135deg, #4f46e5, #3730a3); padding: 8px 20px; border-radius: 50px; color: #fff; font-size: 14px; font-weight: bold;">
@@ -571,23 +221,80 @@
         </div>
         <div class="form-fields">
           <input type="text" id="company" placeholder="Your Company" required>
+          <input type="text" id="instagramHandle" placeholder="Instagram Business Handle (e.g., @yourbusiness)" required>
         </div>
       </div>
+
+      <!-- Business Details -->
+      <div class="form-section">
+        <h3>Business Information</h3>
+        <div class="form-fields">
+          <textarea id="businessDescription" placeholder="Brief description of your business to help AI create relevant content..." rows="3" required></textarea>
+        </div>
+      </div>
+
+      <!-- Posting Schedule -->
+      <div class="form-section">
+        <h3>Posting Schedule Preferences</h3>
+        <div class="form-row">
+          <select id="postTime" required>
+            <option value="">Preferred posting time</option>
+            <option value="9am">9:00 AM</option>
+            <option value="12pm">12:00 PM</option>
+            <option value="3pm">3:00 PM</option>
+            <option value="6pm">6:00 PM</option>
+            <option value="9pm">9:00 PM</option>
+          </select>
+          <select id="timezone" required>
+            <option value="">Your timezone</option>
+            <option value="EST">Eastern Time (EST)</option>
+            <option value="CST">Central Time (CST)</option>
+            <option value="MST">Mountain Time (MST)</option>
+            <option value="PST">Pacific Time (PST)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Content Preferences -->
+      <div class="form-section">
+        <h3>Content Type Preferences</h3>
+        <div class="grid-container" id="contentTypes">
+          <div class="grid-item" data-value="product-showcase">Product Showcases</div>
+          <div class="grid-item" data-value="behind-scenes">Behind the Scenes</div>
+          <div class="grid-item" data-value="tips-advice">Tips & Advice</div>
+          <div class="grid-item" data-value="inspirational">Inspirational Quotes</div>
+          <div class="grid-item" data-value="industry-news">Industry News</div>
+          <div class="grid-item" data-value="customer-features">Customer Features</div>
+        </div>
+        
+        <div class="form-fields" style="margin-top: 20px;">
+          <select id="brandVoice" required>
+            <option value="">Select brand voice/tone</option>
+            <option value="professional">Professional</option>
+            <option value="friendly">Friendly & Casual</option>
+            <option value="enthusiastic">Enthusiastic & Energetic</option>
+            <option value="sophisticated">Sophisticated</option>
+            <option value="humorous">Humorous & Fun</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Project Details -->
       <div class="form-section">
         <div class="form-row">
           <input type="number" id="accounts" placeholder="Number of Social Accounts">
-          <input type="number" id="budget" placeholder="Monthly Budget">
+          <input type="number" id="budget" placeholder="Monthly Budget ($)">
         </div>
         <h3>Desired Launch Date</h3>
         <div class="form-fields">
           <input type="date" required value="2025-01-01" id="launchDate" placeholder="Select Launch Date">
         </div>
       </div>
-      <!-- Project Objectives -->
+      
+      <!-- Additional Requirements -->
       <div class="form-section">
         <div class="form-fields">
-          <textarea id="objectives" placeholder="Describe your brand voice, target audience, content themes, any specific requirements, existing social media accounts to connect, etc." rows="4" required></textarea>
+          <textarea id="objectives" placeholder="Any specific requirements, content themes, existing social media accounts, or special requests..." rows="4"></textarea>
         </div>
       </div>
       
@@ -600,11 +307,13 @@
         </div>
         
         <button class="form-sumbit-btn" type="submit" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 18px; padding: 18px 40px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3); border: none;">
-          🚀 Get Your Custom Quote Now
+          � Get Quote & Start Setup
         </button>
         
         <div style="margin-top: 15px; color: #64748b; font-size: 13px;">
-          ⚡ Response within 2 hours • 💬 Free consultation included
+          ⚡ Response within 2 hours • 💬 Free consultation included<br>
+          <a href="https://inexasli.com/?terms=true" style="color: #667eea; text-decoration: none;">Terms of Service</a> • 
+          <a href="https://inexasli.com/?privacy=true" style="color: #667eea; text-decoration: none;">Privacy Policy</a>
         </div>
       </div>
     </form>
@@ -627,7 +336,12 @@
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const company = document.getElementById('company').value;
+    const instagramHandle = document.getElementById('instagramHandle').value;
     const industry = document.getElementById('industry').value;
+    const businessDescription = document.getElementById('businessDescription').value;
+    const postTime = document.getElementById('postTime').value;
+    const timezone = document.getElementById('timezone').value;
+    const brandVoice = document.getElementById('brandVoice').value;
     const accounts = document.getElementById('accounts').value;
     const objectives = document.getElementById('objectives').value;
     const launchDate = document.getElementById('launchDate').value;
@@ -635,44 +349,85 @@
 
     // Function to format multi-select items
     const formatMultiSelect = (items) => {
-      return items.length > 0 ? items.map(item => `${item}`).join('\n') : 'None';
+      return items.length > 0 ? items.map(item => `• ${item}`).join('\n') : 'None';
     };
 
     const platforms = Array.from(document.querySelectorAll('#platforms .grid-item.selected')).map(el => el.dataset.value);
     const contentFeatures = Array.from(document.querySelectorAll('#contentFeatures .grid-item.selected')).map(el => el.dataset.value);
     const frequency = Array.from(document.querySelectorAll('#frequency .grid-item.selected')).map(el => el.dataset.value);
     const storage = Array.from(document.querySelectorAll('#storage .grid-item.selected')).map(el => el.dataset.value);
+    const contentTypes = Array.from(document.querySelectorAll('#contentTypes .grid-item.selected')).map(el => el.dataset.value);
 
-    const subject = 'Social Media Automation Quote Request from ' + company;
-    const body = `Name: ${name}
-Email: ${email}
-Company: ${company}
+    // Calculate quote
+    let setupFee = 497;
+    let monthlyFee = 197;
+    
+    // Adjust pricing based on selections
+    if (accounts > 5) setupFee += 200;
+    if (frequency.length > 2) monthlyFee += 100;
+    if (contentFeatures.length > 4) monthlyFee += 50;
 
-Industry: ${industry}
-
-Social Media Platforms:
-${formatMultiSelect(platforms)}
-
-Content Features:
-${formatMultiSelect(contentFeatures)}
-
-Posting Frequency:
-${formatMultiSelect(frequency)}
-
-Storage Requirements:
-${formatMultiSelect(storage)}
-
-Number of Social Accounts: ${accounts}
-
-Launch Date: ${launchDate}
-
-Brand Voice & Requirements: ${objectives}
-
-Monthly Budget: $ ${budget}
-
-Visit our social automation page for more details: https://inexasli.com/ai/social.html`;
-
-    window.location.href = `mailto:quote@inexasli.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // Show payment section
+    showPaymentSection(name, email, company, setupFee, monthlyFee);
   });
+
+  function showPaymentSection(name, email, company, setupFee, monthlyFee) {
+    // Hide form and show payment
+    document.querySelector('.container').innerHTML = `
+      <div style="text-align: center; padding: 40px 20px;">
+        <div style="margin-bottom: 30px;">
+          <h1 style="color: #10b981; margin-bottom: 10px;">✅ Quote Generated!</h1>
+          <p style="color: #64748b; font-size: 18px;">Ready to start your automation, ${name}?</p>
+        </div>
+        
+        <div style="background: rgba(16, 185, 129, 0.1); border-radius: 20px; padding: 30px; margin-bottom: 30px; border: 2px solid rgba(16, 185, 129, 0.2);">
+          <h3 style="color: #059669; margin-bottom: 20px;">Your Custom Quote - ${company}</h3>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 15px; padding: 10px 0; border-bottom: 1px solid rgba(16, 185, 129, 0.3);">
+            <span style="color: #374151; font-size: 16px;">Setup Fee</span>
+            <span style="color: #059669; font-weight: bold; font-size: 16px;">$${setupFee}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 10px 0; border-bottom: 1px solid rgba(16, 185, 129, 0.3);">
+            <span style="color: #374151; font-size: 16px;">Monthly Automation</span>
+            <span style="color: #059669; font-weight: bold; font-size: 16px;">$${monthlyFee}/month</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 15px 0; background: rgba(16, 185, 129, 0.15); border-radius: 10px; padding: 15px;">
+            <span style="color: #059669; font-weight: bold; font-size: 18px;">Pay Today</span>
+            <span style="color: #059669; font-weight: bold; font-size: 18px;">$${setupFee}</span>
+          </div>
+        </div>
+        
+        <button onclick="proceedToOAuth()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 20px 50px; border-radius: 50px; font-size: 18px; font-weight: 600; cursor: pointer; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3); text-transform: uppercase; letter-spacing: 1px;">
+          💳 Pay $${setupFee} & Connect Instagram
+        </button>
+        
+        <div style="background: rgba(59, 130, 246, 0.1); border-radius: 15px; padding: 20px; margin-top: 30px;">
+          <div style="color: #1d4ed8; font-weight: bold; margin-bottom: 10px;">🔒 What happens next:</div>
+          <ol style="color: #475569; text-align: left; padding-left: 20px;">
+            <li>Secure payment processing (Stripe)</li>
+            <li>Connect your Instagram Business account</li>
+            <li>We set up automation within 24-48 hours</li>
+            <li>Start receiving automated posts!</li>
+          </ol>
+        </div>
+        
+        <div style="margin-top: 20px; color: #64748b; font-size: 14px;">
+          🔐 Secure payment by Stripe • No stored payment info<br>
+          <a href="https://inexasli.com/?terms=true" style="color: #667eea;">Terms</a> • 
+          <a href="https://inexasli.com/?privacy=true" style="color: #667eea;">Privacy</a>
+        </div>
+      </div>
+    `;
+  }
+
+  function proceedToOAuth() {
+    if (confirm('This will process your payment and connect Instagram. Continue?')) {
+      // In production: redirect to Stripe checkout
+      alert('Payment simulation - In production this would be Stripe checkout');
+      window.location.href = '../oauth-connect.html?payment_success=true';
+    }
+  }
 </script>
 </html>
+
+
+

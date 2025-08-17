@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Your Instagram - INEXASLI</title>
+    <link rel="stylesheet" href="/styles/salesflow.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        .splash-logo {
+            width: 60px;
+            height: 60px;
+            opacity: 0;
+            animation: rotateImage 2.1675s linear 1;
+            animation-delay: 0.180625s;
+            animation-fill-mode: forwards;
+            margin-bottom: 10px;
+        }
+        
+        .splash-inexasli {
+            font-family: Arial, sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            opacity: 1;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+        
+        .splash-empowering {
+            color: rgb(49, 49, 49);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 1.2em;
+            margin: 0;
+            opacity: 0;
+            animation: fadeIn 1.445s ease-in forwards;
+            animation-delay: 0.7225s;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tm {
+            font-size: 0.5em;
+            position: relative;
+            top: -0.2em;
+            vertical-align: top;
+        }
+        
+        .oauth-content {
+            opacity: 0;
+            animation: fadeInContent 1s ease-in forwards;
+            animation-delay: 2.5s;
+            text-align: center;
+            max-width: 500px;
+            padding: 0 20px;
+        }
+        
+        .oauth-title {
+            color: white;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        
+        .oauth-subtitle {
+            color: #ccc;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .oauth-button {
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+        
+        .oauth-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(64, 93, 230, 0.4);
+        }
+        
+        .oauth-steps {
+            color: #888;
+            font-size: 0.9em;
+            line-height: 1.6;
+            text-align: left;
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-top: 30px;
+        }
+        
+        .oauth-steps h4 {
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .oauth-steps ol {
+            padding-left: 20px;
+        }
+        
+        .oauth-steps li {
+            margin-bottom: 8px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        .step.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .step.completed {
+            background: rgba(40, 167, 69, 0.3);
+            color: #90ee90;
+        }
+        
+        .step-number {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes rotateImage {
+            0% { transform: rotate(0deg); opacity: 0; }
+            100% { transform: rotate(180deg); opacity: 1; }
+        }
+        
+        @keyframes fadeInContent {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+    <div class="splash-inexasli">INEXASLI</div>
+    <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+    
+    <div class="oauth-content">
+        <div class="device-container">
+            <div class="step-indicator">
+                <div class="step completed">
+                    <div class="step-number">✓</div>
+                    <span>Payment</span>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <span>Connect Instagram</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Launch</span>
+                </div>
+            </div>
+            
+            <div class="oauth-title">Connect Your Instagram Business Account</div>
+            <div class="oauth-subtitle">
+                Securely authorize INEXASLI to create and post content to your Instagram account using our AI automation system.
+            </div>
+            
+            <a href="#" id="oauthButton" class="oauth-button">
+                📱 Connect Instagram Account
+            </a>
+            
+            <div class="oauth-steps">
+                <h4>What happens next:</h4>
+                <ol>
+                    <li>You'll be redirected to Instagram's secure authorization page</li>
+                    <li>Log in with your Instagram Business account</li>
+                    <li>Grant permissions for content posting</li>
+                    <li>Return here for final setup completion</li>
+                    <li>We'll configure your automation within 24-48 hours</li>
+                </ol>
+                <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #888;">
+                    <a href="https://inexasli.com/?terms=true" style="color: #ccc; text-decoration: none;">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Instagram OAuth configuration
+        const INSTAGRAM_APP_ID = '765153222726242';
+        const REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/instagram/callback';
+        const SCOPE = 'instagram_basic,instagram_content_publish';
+        
+        // Build OAuth URL
+        const oauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPE}&response_type=code&state=production_oauth_flow`;
+        
+        // Set up OAuth button
+        document.getElementById('oauthButton').href = oauthUrl;
+        
+        // Log OAuth URL for debugging
+        console.log('Instagram OAuth URL:', oauthUrl);
+        
+        // Handle payment success parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('payment_success') === 'true') {
+            // Show payment success message
+            const subtitle = document.querySelector('.oauth-subtitle');
+            subtitle.innerHTML = '✅ <strong>Payment confirmed!</strong> Now connect your Instagram account to complete the setup.';
+            subtitle.style.color = '#90ee90';
+        }
+    </script>
+</body>
+</html>
