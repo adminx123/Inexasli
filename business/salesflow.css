@@ -286,6 +286,13 @@ p {
     margin: 15px 0;
 }
 
+.form-row input,
+.form-row select {
+    flex: 1;
+    min-width: 200px;
+    width: auto;
+}
+
 .form-fields {
     width: 100%;
     margin: 0 auto;
@@ -302,6 +309,8 @@ input, select, textarea {
     margin: 8px 0;
     background: white;
     color: #1e293b;
+    height: 54px;
+    box-sizing: border-box;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -339,6 +348,7 @@ select option:hover {
 textarea {
     resize: vertical;
     min-height: 80px;
+    height: auto;
 }
 
 /* Grid Selection Items */
