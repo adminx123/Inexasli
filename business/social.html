@@ -211,6 +211,14 @@
         main.style.display = 'block';
         main.style.opacity = '1';
         main.style.transition = 'opacity 1s ease-in';
+        
+        // Check for URL parameters to auto-open modals
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('terms') === 'true') {
+          setTimeout(() => showSocialTerms(), 500);
+        } else if (urlParams.get('privacy') === 'true') {
+          setTimeout(() => showSocialPrivacy(), 500);
+        }
       }, 1000);
     }, 2500); // Show splash for 2.5 seconds
   });
