@@ -8,14 +8,16 @@
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="splash-container">
-        <!-- INEXASLI Splash Elements -->
+    <div class="splash-container" id="splashContainer">
         <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo">
         <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
-        <div class="splash-empowering">EMPOWERING YOUR VISION</div>
+        <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+    </div>
 
-        <!-- Content Container -->
-        <div class="content-container wide">
+    <div class="main-content" id="mainContent" style="opacity: 0; display: none;">
+        <div class="splash-container">
+            <!-- Content Container -->
+            <div class="content-container wide">
             <!-- Step Indicator -->
             <div class="step-indicator">
                 <div class="step completed">
@@ -88,6 +90,23 @@
     </div>
 
     <script>
+        // Splash screen transition
+        setTimeout(() => {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Fade out splash
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1s ease-out';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                main.style.display = 'block';
+                main.style.opacity = '1';
+                main.style.transition = 'opacity 1s ease-in';
+            }, 1000);
+        }, 2500);
+
         // Load order data from localStorage
         function loadOrderData() {
             const orderData = localStorage.getItem('orderData');
