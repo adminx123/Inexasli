@@ -411,9 +411,20 @@
           </button>
           <div id="persistenceStatus" style="font-size: 11px; color: #ccc; margin-top: 5px;"></div>
         </div>
+        
+        <!-- Legal Footer -->
+        <div style="text-align: center; margin: 30px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <p style="color: #ccc; font-size: 12px; margin: 0;">
+            <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
+            • 
+            <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
+          </p>
+        </div>
       </div>
     </form>
   </div>
+  <script src="/utility/modal.js"></script>
+  <script src="/business/legalSocial.js"></script>
 </body>
 <script type="module">
     import { BusinessFormPersistence } from './businessFormPersistence.js';

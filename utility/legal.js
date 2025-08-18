@@ -1,5 +1,11 @@
 /**
- * Legal Modal System - Professional Terms of Service Display
+ * Legal Modal System - Professional - Howev- The Services are intended for personal, educational use only. Commercial use, resale, or sublicensing of the technology is prohibited without express written permission by the Developer.r, you will still maintain any ownership rights you have in your pre-existing intellectual property.
+
+**Restrictions**
+- The Services are intended for personal, educational use only. Commercial use, resale, or sublicensing of the technology is prohibited without express written permission by the Developer.
+- This includes reverse engineering or attempting to extract the source code of the Services or any part thereof, except as permitted by applicable law.`trictions**
+- The Services are intended for personal, educational use only. Commercial use, resale, or sublicensing of the technology is prohibited without express written permission by the Developer.
+- This includes reverse engineering or attempting to extract the source code of the Services or any part thereof, except as permitted by applicable law.`The Services are intended for personal, educational use only. Commercial use, resale, or sublicensing of the technology is prohibited without express written permission by the Developer. The Services are intended for personal, educational use only. Commercial use, resale, or sublicensing of the technology is prohibited without express written permission by the Developer.rms of Service Display
  * Displays comprehensive legal content in a clean, accessible modal interface
  */
 
@@ -7,7 +13,7 @@ console.log('[Legal] Script loading...');
 
 // Terms of Service content - structured for better readability
 const TERMS_OF_SERVICE = {
-    title: "Terms of Service for INEXASLI Platform, AI Services, and Business Automation",
+    title: "Terms of Service for INEXASLI AI Education Platform",
     
     // Main disclaimer at the top
     disclaimer: `INEXASLI is a technology company that facilitates user AI interactions for educational purposes only, generating outputs from engineered prompts to support learning, not providing financial, medical, or professional advice. The Services utilize third-party AI providers for response generation. User input data is transmitted to these external services for processing. INEXASLI does not control, endorse, or assume responsibility for the outputs, accuracy, or privacy practices of these external AI systems. By using the Services, users acknowledge that their data is transmitted to third-party AI providers and is subject to those providers' terms, policies, and security measures, over which INEXASLI has no control.
@@ -17,32 +23,22 @@ const TERMS_OF_SERVICE = {
     sections: [
         {
             title: "Introduction",
-            content: `Note: This document outlines the terms of service for the use of the INEXASLI educational technology platform and managed business automation services (referred to collectively as the "Services") provided by INEXASLI, a technology company (hereinafter referred to as the "Developer"). By using any of these Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader or business client, when accessing any of the Services. If you do not agree with these terms, you must not use the Services.
+            content: `Note: This document outlines the terms of service for the use of the INEXASLI educational technology platform (the "Services") provided by INEXASLI, a technology company (hereinafter referred to as the "Developer"). By using the Services, you agree to be bound by these terms of service. The term "user" refers to you, the reader, when accessing the Services. If you do not agree with these terms, you must not use the Services.
 
-Company Definition: INEXASLI is a technology company that provides both educational AI interaction tools and managed business automation services (such as automated social media posting). We are not a financial services company, healthcare provider, legal services firm, or professional advisory business. Our core business is developing user interface technology, engineered prompts, and automation tools that facilitate educational and business interactions with third-party artificial intelligence systems.
+Company Definition: INEXASLI is a technology company that provides educational AI interaction tools for personal learning and professional consultation preparation. We are not a financial services company, healthcare provider, legal services firm, or professional advisory business. Our core business is developing user interface technology and engineered prompts that facilitate educational interactions with third-party artificial intelligence systems.
 
-Description: The Services include educational technology interfaces for learning and exploration, as well as managed automation services for business clients. Businesses purchase access to managed services, not ownership of the technology or code. All AI-generated content originates from third-party providers through our engineered prompts and is intended as educational material or for business automation, not as definitive guidance for decision-making.
+Description: The Services include educational technology interfaces for learning and exploration through AI interactions. All AI-generated content originates from third-party providers through our engineered prompts and is intended as educational material for learning purposes, not as definitive guidance for decision-making.
 
 Privacy Policy Compliance:
 - The Developer complies with the General Data Protection Regulation (GDPR) for users within the European Union and also adheres to the Personal Information Protection and Electronic Documents Act (PIPEDA) for users in Canada.`
         },
         {
-            title: "Business Automation Services",
-            content: `**Managed Automation for Businesses**
-- INEXASLI offers managed automation services (such as automated social media posting) for business clients using proprietary AI technology.
-- Businesses purchase access to these managed services, not ownership of the underlying technology or code.
-- Businesses must comply with all applicable platform rules (e.g., social media terms) and provide accurate, lawful data for posting.
-- INEXASLI is not responsible for third-party platform restrictions, outages, or account actions.
-- Businesses are responsible for reviewing and approving automated posts. INEXASLI does not guarantee the accuracy, appropriateness, or compliance of AI-generated content.
-- Clients should monitor outputs and report any issues immediately. INEXASLI is not liable for reputational, legal, or financial consequences resulting from AI-generated content.`
-        },
-        {
             title: "Intellectual Property",
             content: `- All rights, title, and interest in and to the Services, including the website, software, source code, databases, functionalities, graphics, designs, trademarks, service marks, and all related content (collectively, the "IP Assets"), are and will remain the exclusive property of INEXASLI.
-- Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for their personal, non-commercial, educational purposes, or for business automation only as a managed service provided by INEXASLI.
+- Users are granted a limited, non-exclusive, non-transferable, revocable license to access and use the Services for their personal, non-commercial, educational purposes only.
 
 **User-Generated Content**
-- Any content, data, text, or information you submit or upload to the Services ("User Content") may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services, or for business automation as managed by INEXASLI.
+- Any content, data, text, or information you submit or upload to the Services ("User Content") may be used by you solely for your personal, non-commercial use in connection with the educational objectives of the Services.
 - By submitting User Content, you grant the Developer a non-exclusive, royalty-free, worldwide license to use, store, display, reproduce, modify, create derivative works, and distribute such User Content as necessary to provide the Services.
 
 **Feedback**
@@ -165,11 +161,7 @@ Privacy Policy Compliance:
             title: "Limitation of Liability",
             content: `**Third-Party AI Content Disclaimers**
 - No AI system is entirely free from errors, biases, or inaccuracies, and third-party AI-generated content should not be relied upon for actual decision-making without professional consultation.
-- Users acknowledge that our technology platform facilitates access to third-party AI-generated educational content and business automation only, and any decisions made based on this content are at their own discretion and risk.
-
-**Business Automation Liability**
-- INEXASLI is not liable for business losses, missed posts, reputational harm, or third-party platform actions (including account suspension or removal) resulting from use of the business automation services.
-- INEXASLI is not responsible for the content generated by third-party AI (e.g., XAI) and recommends that clients review and approve all automated posts.
+- Users acknowledge that our technology platform facilitates access to third-party AI-generated educational content only, and any decisions made based on this content are at their own discretion and risk.
 
 **Technology Platform Liability Cap**
 - The Developer's liability shall be limited to the greater of the amount paid by the user for the technology services in the 6 months preceding the claim, or a nominal sum of $100.
@@ -217,107 +209,49 @@ Privacy Policy Compliance:
         {
             title: "Privacy Policy",
             content: `**Information We Collect**
-- Account information provided during OAuth authorization (username, profile data)
-- Content you authorize us to post (text, images, scheduling preferences)
+- Personal information you provide when using our educational AI interfaces (personal data for analysis)
 - Technical information (IP address, browser type, device identifiers for rate limiting)
-- Usage analytics (features used, error logs, performance metrics)
+- Usage analytics (AI tools used, error logs, performance metrics)
+- Payment information processed through third-party providers (Stripe)
 
 **How We Use Your Information**
-- To provide social media automation services as requested
-- To authenticate with third-party platforms (X, Instagram) on your behalf
-- To generate AI-powered content using third-party providers (XAI/Grok)
+- To provide educational AI interaction services through third-party AI providers
+- To generate AI-powered content and analysis using third-party providers (XAI/Grok)
 - To monitor service performance and prevent abuse through rate limiting
+- To process payments for premium subscriptions
 - To communicate with you about service updates or issues
 
 **Information Sharing**
-- **Third-Party AI Providers:** Content data is transmitted to XAI for AI generation
-- **Social Media Platforms:** Authorized content is posted to X, Instagram per your instructions
+- **Third-Party AI Providers:** Your input data is transmitted to AI providers (like XAI) for content generation
 - **Service Providers:** Cloudflare Workers for hosting, Stripe for payment processing
 - **Legal Requirements:** When required by law or to protect our rights
 
 **Data Retention and Security**
-- OAuth tokens stored securely and can be revoked by you at any time
-- Generated content temporarily processed, not permanently stored by us
+- Your personal data is stored locally in your browser's localStorage and automatically expires after 365 days
+- Generated content is temporarily processed, not permanently stored by us
 - Industry-standard security measures including encrypted data transmission
-- You can delete your account and associated data by contacting support
+- You can clear your data at any time through your browser settings
 
 **Your Rights and Choices**
-- Revoke social media platform access through their settings
-- Request data deletion by contacting support@inexasli.com
-- Opt out of AI content generation by discontinuing service use
-- Update your preferences through our service interface
+- Clear your locally stored data through browser settings at any time
+- Request support for data-related questions at support@inexasli.com
+- Discontinue service use to stop AI data processing
+- Cancel premium subscriptions through your account settings
 
 **Third-Party Privacy Practices**
-- X/Twitter: Subject to X Privacy Policy and Developer Agreement
-- Instagram/Meta: Subject to Meta Privacy Policy and Platform Terms
 - XAI: Subject to XAI Privacy Policy for AI content generation
+- Stripe: Subject to Stripe Privacy Policy for payment processing
 - We are not responsible for third-party privacy practices
 
 **Contact Information**
 - Email: support@inexasli.com
 - We will respond to privacy inquiries within 30 days
-- For data deletion requests, we will process within 30 days where technically feasible
+- For data-related requests, we will process within 30 days where technically feasible
 
 **International Data Transfers**
 - Data may be processed in United States, Canada, and other jurisdictions
 - We comply with GDPR for EU users and PIPEDA for Canadian users
 - Adequate safeguards in place for international transfers`
-        },
-        {
-            title: "Social Media Platform Integration",
-            content: `**General Integration Principles**
-- All social media integrations use OAuth 2.0 authorization for secure access
-- Users must explicitly authorize each platform connection and can revoke access at any time
-- We comply with all applicable platform developer agreements and policies
-- Automated posting is performed only with explicit user consent and within platform guidelines
-
-**User Authorization and Consent**
-- Clear disclosure of what content will be posted and where
-- Explicit consent required before any automated posting actions
-- Users shown preview of content before publication when possible
-- Respect for user's platform settings (private accounts, blocking, etc.)
-
-**Content and Data Handling**
-- AI-generated content is created using third-party providers (XAI/Grok)
-- Content is temporarily processed for posting, not stored long-term
-- Users retain ownership of their original content and account data
-- Platform-specific content requirements and restrictions are followed
-
-**Rate Limiting and Usage**
-- Automated actions performed within platform rate limits
-- Fair usage policies prevent spam and abuse
-- Graceful handling of platform outages or restrictions
-- Users notified of any posting failures or limitations
-
-**Platform-Specific Terms:**
-
-**X/Twitter Integration**
-- Full compliance with X Developer Agreement and Automation Rules
-- Respect for X's rate limits and usage guidelines
-- Proper attribution of X as content source when required
-- Users must authorize posting actions and can revoke access via X settings
-- Content must comply with X Rules and community guidelines
-- No circumvention of X's spam detection or security measures
-
-**Instagram/Meta Integration**
-- Full compliance with Meta Platform Terms and Instagram API Terms
-- Respect for Instagram's content policies and community guidelines
-- Proper handling of Instagram business account requirements
-- Users authorize through Instagram's OAuth flow with appropriate scopes
-- Content published only to accounts user has authorized access to
-- Compliance with Meta's data use policies and privacy requirements
-- Support for Instagram's content review and moderation systems
-
-**Service Limitations**
-- Platform outages or restrictions may affect service availability
-- Changes to platform APIs may require service modifications
-- We are not liable for platform-specific restrictions or account actions
-- Users responsible for compliance with platform terms of service
-
-**Data Portability**
-- Users can export their data by contacting support
-- Platform connections can be managed through respective platform settings
-- Content history available through platform's own data export tools`
         },
         {
             title: "Governing Law & Dispute Resolution",
@@ -337,13 +271,13 @@ Privacy Policy Compliance:
         }
     ],
 
-    acceptance: `By using our technology platform or managed business automation services, or by indicating your acceptance through an electronic means (e.g., clicking "I Agree", checking a box), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
+    acceptance: `By using our educational technology platform, or by indicating your acceptance through an electronic means (e.g., clicking "I Agree", checking a box), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.
 
-By using our technology platform, you confirm that you understand INEXASLI provides data organization tools, basic calculations, prompt engineering, user interface technology, and managed automation services to facilitate educational and business interactions with third-party AI systems.
+By using our technology platform, you confirm that you understand INEXASLI provides data organization tools, basic calculations, prompt engineering, and user interface technology to facilitate educational interactions with third-party AI systems.
 
-You consent to the collection, use, storage, and disposal of your information as outlined in these terms for the purpose of providing our technology services.
+You consent to the collection, use, storage, and disposal of your information as outlined in these terms for the purpose of providing our educational technology services.
 
-You agree that your use of our technology platform and business automation services is at your own risk, understanding that all analytical and automated content is generated by third-party AI systems and is for educational or business purposes only.`
+You agree that your use of our educational technology platform is at your own risk, understanding that all analytical content is generated by third-party AI systems and is for educational purposes only.`
 };
 
 /**
