@@ -377,24 +377,47 @@
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('user');
         const instagramStatus = urlParams.get('instagram');
+        const xStatus = urlParams.get('x');
+        
+        // Validate that at least one account is connected
+        if (!instagramStatus && !xStatus) {
+            // Redirect back to OAuth page if no accounts connected
+            window.location.href = 'oauth-connect.html?error=no_accounts';
+            return;
+        }
+        
+        // Update page content based on connected accounts
+        const subtitle = document.querySelector('.subtitle');
+        let connectedPlatforms = [];
+        
+        if (instagramStatus === 'connected') {
+            connectedPlatforms.push('Instagram');
+        }
+        if (xStatus === 'connected') {
+            connectedPlatforms.push('X (Twitter)');
+        }
+        
+        // Update subtitle with connected platforms
+        if (connectedPlatforms.length > 0) {
+            const platformList = connectedPlatforms.join(' and ');
+            subtitle.innerHTML = `Your automation is now active for ${platformList}! Our AI will begin creating and posting content according to your preferences.`;
+        }
         
         // Log successful completion
-        console.log('Setup completed for user:', userId);
+        console.log('Setup completed for platforms:', connectedPlatforms);
+        console.log('User ID:', userId);
         
         // Optional: Send completion analytics
-        if (userId) {
-            // You could send this data to your analytics or backend
+        if (connectedPlatforms.length > 0) {
             fetch('/api/setup-complete', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, timestamp: new Date().toISOString() })
+                body: JSON.stringify({ 
+                    userId, 
+                    connectedPlatforms, 
+                    timestamp: new Date().toISOString() 
+                })
             }).catch(e => console.log('Analytics logging failed:', e));
-        }
-        
-        // Show personalized message if we have user data
-        if (userId) {
-            const subtitle = document.querySelector('.subtitle');
-            subtitle.innerHTML = `Your automation is configured for Instagram User ID: ${userId}. Our AI will begin creating and posting content according to your preferences.`;
         }
     </script>
 </body>

@@ -267,6 +267,17 @@
                 </a>
             </div>
             
+            <!-- Complete Setup Button -->
+            <div id="completeSetupSection" style="margin-top: 30px; display: none;">
+                <button id="completeSetupButton" class="oauth-button" style="background: linear-gradient(135deg, #90ee90, #32cd32); color: #000; font-weight: bold; border: none; cursor: pointer;">
+                    <i class="fas fa-check-circle"></i>
+                    Complete Setup
+                </button>
+                <p style="color: #ccc; font-size: 0.9em; margin-top: 10px;">
+                    All required accounts connected. Ready to activate automation!
+                </p>
+            </div>
+            
             <div class="oauth-steps">
                 <h4>What happens next:</h4>
                 <ol>
@@ -349,14 +360,68 @@
         // Initialize OAuth buttons after page loads
         document.addEventListener('DOMContentLoaded', setupOAuthButtons);
         
-        // Handle payment success parameter
+        // Check for connection status and update UI
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('payment_success') === 'true') {
-            // Show payment success message
+        document.addEventListener('DOMContentLoaded', function() {
             const subtitle = document.querySelector('.oauth-subtitle');
-            subtitle.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>Payment confirmed!</strong> Now connect your Instagram account to complete the setup.';
-            subtitle.style.color = '#90ee90';
-        }
+            let connectedAccounts = [];
+            
+            // Check for successful connections
+            if (urlParams.get('x') === 'connected') {
+                // X connected - show success and hide X button
+                const xButton = document.getElementById('xOauthButton');
+                xButton.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> X Connected';
+                xButton.style.backgroundColor = '#90ee90';
+                xButton.style.color = '#000';
+                xButton.onclick = function(e) { e.preventDefault(); };
+                xButton.style.cursor = 'default';
+                connectedAccounts.push('x');
+                
+                subtitle.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>X Connected!</strong> Connect additional accounts below.';
+                subtitle.style.color = '#90ee90';
+            }
+            
+            if (urlParams.get('instagram') === 'connected') {
+                // Instagram connected - show success and hide Instagram button
+                const instagramButton = document.getElementById('instagramOauthButton');
+                instagramButton.innerHTML = '<i class="fab fa-instagram" style="color: #90ee90;"></i> Instagram Connected';
+                instagramButton.style.backgroundColor = '#90ee90';
+                instagramButton.style.color = '#000';
+                instagramButton.onclick = function(e) { e.preventDefault(); };
+                instagramButton.style.cursor = 'default';
+                connectedAccounts.push('instagram');
+                
+                subtitle.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>Instagram Connected!</strong> Connect additional accounts below.';
+                subtitle.style.color = '#90ee90';
+            }
+            
+            // Check for payment success (original functionality)
+            if (urlParams.get('payment_success') === 'true') {
+                subtitle.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>Payment confirmed!</strong> Now connect your social media accounts.';
+                subtitle.style.color = '#90ee90';
+            }
+            
+            // Show complete setup button if at least one account is connected
+            if (connectedAccounts.length > 0) {
+                const completeSetupSection = document.getElementById('completeSetupSection');
+                completeSetupSection.style.display = 'block';
+                
+                // Add click handler for complete setup button
+                document.getElementById('completeSetupButton').addEventListener('click', function() {
+                    // Build query params for connected accounts
+                    const params = new URLSearchParams();
+                    connectedAccounts.forEach(account => {
+                        params.set(account, 'connected');
+                    });
+                    if (urlParams.get('user')) {
+                        params.set('user', urlParams.get('user'));
+                    }
+                    
+                    // Redirect to setup complete page
+                    window.location.href = 'setupComplete.html?' + params.toString();
+                });
+            }
+        });
     </script>
     
     <script src="../utility/modal.js"></script>
