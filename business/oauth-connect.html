@@ -323,20 +323,20 @@
         // Fetch OAuth configuration and set up buttons
         async function setupOAuthButtons() {
             try {
-                const response = await fetch('https://x-worker.4hm7q4q75z.workers.dev/oauth-config');
+                const response = await fetch('https://mastersocial.4hm7q4q75z.workers.dev/oauth-config');
                 const config = await response.json();
                 
                 // Instagram OAuth configuration
                 const INSTAGRAM_SCOPE = 'instagram_basic,instagram_content_publish';
                 
-                // X (Twitter) OAuth configuration  
-                const X_SCOPE = 'tweet.read tweet.write users.read';
+                // X (Twitter) OAuth 1.0a configuration  
+                const X_OAUTH_REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token';
                 
                 // Build Instagram OAuth URL
                 const instagramOauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${config.instagram_app_id}&redirect_uri=${encodeURIComponent(config.instagram_redirect_uri)}&scope=${INSTAGRAM_SCOPE}&response_type=code&state=production_oauth_flow`;
                 
-                // Build X OAuth URL
-                const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${config.x_client_id}&redirect_uri=${encodeURIComponent(config.x_redirect_uri)}&scope=${encodeURIComponent(X_SCOPE)}&state=production_oauth_flow&code_challenge=challenge&code_challenge_method=plain`;
+                // For X OAuth 1.0a, we need to get request token first via worker
+                const xOauthUrl = `https://mastersocial.4hm7q4q75z.workers.dev/x/request-token?state=production_oauth_flow`;
                 
                 // Set up OAuth buttons
                 document.getElementById('instagramOauthButton').href = instagramOauthUrl;
@@ -350,7 +350,7 @@
                 console.error('Failed to fetch OAuth config:', error);
                 // Fallback to hardcoded values
                 const X_CLIENT_ID = '31242716';
-                const X_REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/x/callback';
+                const X_REDIRECT_URI = 'https://mastersocial.4hm7q4q75z.workers.dev/x/callback';
                 const X_SCOPE = 'tweet.read tweet.write users.read';
                 const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=production_oauth_flow&code_challenge=challenge&code_challenge_method=plain`;
                 document.getElementById('xOauthButton').href = xOauthUrl;
@@ -370,14 +370,31 @@
             if (urlParams.get('x') === 'connected') {
                 // X connected - show success and hide X button
                 const xButton = document.getElementById('xOauthButton');
-                xButton.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> X Connected';
+                const screenName = urlParams.get('screen_name');
+                const isManual = urlParams.get('manual') === 'true';
+                
+                let displayText = 'X Connected';
+                if (screenName) {
+                    displayText = `X Connected (@${screenName})`;
+                } else if (isManual) {
+                    displayText = 'X Connected (Existing Credentials)';
+                }
+                
+                xButton.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> ' + displayText;
                 xButton.style.backgroundColor = '#90ee90';
                 xButton.style.color = '#000';
                 xButton.onclick = function(e) { e.preventDefault(); };
                 xButton.style.cursor = 'default';
                 connectedAccounts.push('x');
                 
-                subtitle.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>X Connected!</strong> Connect additional accounts below.';
+                let successMessage = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>X Connected!</strong> Connect additional accounts below.';
+                if (screenName) {
+                    successMessage = `<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>X Connected (@${screenName})!</strong> Connect additional accounts below.`;
+                } else if (isManual) {
+                    successMessage = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>X Connected with existing credentials!</strong> Connect additional accounts below.';
+                }
+                
+                subtitle.innerHTML = successMessage;
                 subtitle.style.color = '#90ee90';
             }
             
@@ -415,6 +432,9 @@
                     });
                     if (urlParams.get('user')) {
                         params.set('user', urlParams.get('user'));
+                    }
+                    if (urlParams.get('screen_name')) {
+                        params.set('screen_name', urlParams.get('screen_name'));
                     }
                     
                     // Redirect to setup complete page

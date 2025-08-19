@@ -10,6 +10,26 @@ main = "./business/x.js"
 [env.x.triggers]
 crons = ["11 19 * * *"]
 
+# --- Master Social Worker (Central Token/Secret Manager) ---
+[env.mastersocial]
+name = "mastersocial"
+main = "./business/masterSocial.js"
+
+# KV namespace for storing client OAuth tokens
+[[env.mastersocial.kv_namespaces]]
+binding = "CLIENT_TOKENS"
+id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+preview_id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+
+# --- Business Worker Template ---
+[env.businesstemplate]
+name = "businesstemplate"
+main = "./business/businessTemplate.js"
+
+# Optional cron triggers for scheduled posting
+[env.businesstemplate.triggers]
+crons = ["0 9,13,17 * * *"]  # Post at 9am, 1pm, 5pm UTC
+
 # CENTRALIZED MASTER WORKER ARCHITECTURE
 # This project uses a master worker that imports all individual modules.
 # Individual modules (calorie.js, event.js, etc.) are NOT standalone workers - 

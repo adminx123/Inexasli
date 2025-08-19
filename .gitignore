@@ -1,5 +1,10 @@
 # Ignore Cloudflare Worker file with credentials
 business/x.js
+
+# Master/Business Worker Architecture (contains sensitive patterns)
+business/masterSocial.js
+business/businessTemplate.js
+
 # INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP
