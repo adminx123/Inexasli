@@ -229,9 +229,12 @@
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 </script>
-    <img src="../images/apple-touch-icon.png" alt="Logo" class="splash-logo">
-    <div class="splash-inexasli">INEXASLI</div>
-    <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+    
+    <div class="splash-container" id="splashContainer">
+        <img src="../images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+        <div class="splash-inexasli">INEXASLI</div>
+        <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+    </div>
     
     <div class="oauth-content" style="opacity: 0; display: none;" id="mainContent">
         <div class="device-container">
@@ -290,29 +293,21 @@
     
     <script>
         // Splash screen transition
-        document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Fade out splash
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1s ease-out';
+            
             setTimeout(() => {
-                const splash = document.querySelector('body');
-                const main = document.getElementById('mainContent');
-                
-                // Fade out splash elements
-                document.querySelector('.splash-logo').style.opacity = '0';
-                document.querySelector('.splash-inexasli').style.opacity = '0';
-                document.querySelector('.splash-empowering').style.opacity = '0';
-                
-                setTimeout(() => {
-                    // Hide splash elements
-                    document.querySelector('.splash-logo').style.display = 'none';
-                    document.querySelector('.splash-inexasli').style.display = 'none';
-                    document.querySelector('.splash-empowering').style.display = 'none';
-                    
-                    // Show main content
-                    main.style.display = 'block';
-                    main.style.opacity = '1';
-                    main.style.transition = 'opacity 1s ease-in';
-                }, 1000);
-            }, 2500); // Show splash for 2.5 seconds
-        });
+                splash.style.display = 'none';
+                main.style.display = 'block';
+                main.style.opacity = '1';
+                main.style.transition = 'opacity 1s ease-in';
+            }, 1000);
+        }, 2500); // Show splash for 2.5 seconds
         
         // Instagram OAuth configuration
         const INSTAGRAM_APP_ID = '765153222726242';
