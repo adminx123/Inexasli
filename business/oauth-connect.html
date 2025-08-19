@@ -309,29 +309,45 @@
             }, 1000);
         }, 2500); // Show splash for 2.5 seconds
         
-        // Instagram OAuth configuration
-        const INSTAGRAM_APP_ID = '765153222726242';
-        const INSTAGRAM_REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/instagram/callback';
-        const INSTAGRAM_SCOPE = 'instagram_basic,instagram_content_publish';
+        // Fetch OAuth configuration and set up buttons
+        async function setupOAuthButtons() {
+            try {
+                const response = await fetch('https://x-worker.4hm7q4q75z.workers.dev/oauth-config');
+                const config = await response.json();
+                
+                // Instagram OAuth configuration
+                const INSTAGRAM_SCOPE = 'instagram_basic,instagram_content_publish';
+                
+                // X (Twitter) OAuth configuration  
+                const X_SCOPE = 'tweet.read tweet.write users.read';
+                
+                // Build Instagram OAuth URL
+                const instagramOauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${config.instagram_app_id}&redirect_uri=${encodeURIComponent(config.instagram_redirect_uri)}&scope=${INSTAGRAM_SCOPE}&response_type=code&state=production_oauth_flow`;
+                
+                // Build X OAuth URL
+                const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${config.x_client_id}&redirect_uri=${encodeURIComponent(config.x_redirect_uri)}&scope=${encodeURIComponent(X_SCOPE)}&state=production_oauth_flow&code_challenge=challenge&code_challenge_method=plain`;
+                
+                // Set up OAuth buttons
+                document.getElementById('instagramOauthButton').href = instagramOauthUrl;
+                document.getElementById('xOauthButton').href = xOauthUrl;
+                
+                // Log OAuth URLs for debugging
+                console.log('Instagram OAuth URL:', instagramOauthUrl);
+                console.log('X OAuth URL:', xOauthUrl);
+                
+            } catch (error) {
+                console.error('Failed to fetch OAuth config:', error);
+                // Fallback to hardcoded values
+                const X_CLIENT_ID = '31242716';
+                const X_REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/x/callback';
+                const X_SCOPE = 'tweet.read tweet.write users.read';
+                const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=production_oauth_flow&code_challenge=challenge&code_challenge_method=plain`;
+                document.getElementById('xOauthButton').href = xOauthUrl;
+            }
+        }
         
-        // X (Twitter) OAuth configuration
-        const X_CLIENT_ID = '31242716'; // Your X app Client ID
-        const X_REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/x/callback';
-        const X_SCOPE = 'tweet.read tweet.write users.read';
-        
-        // Build Instagram OAuth URL
-        const instagramOauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_APP_ID}&redirect_uri=${encodeURIComponent(INSTAGRAM_REDIRECT_URI)}&scope=${INSTAGRAM_SCOPE}&response_type=code&state=production_oauth_flow`;
-        
-        // Build X OAuth URL
-        const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=production_oauth_flow&code_challenge=challenge&code_challenge_method=plain`;
-        
-        // Set up OAuth buttons
-        document.getElementById('instagramOauthButton').href = instagramOauthUrl;
-        document.getElementById('xOauthButton').href = xOauthUrl;
-        
-        // Log OAuth URLs for debugging
-        console.log('Instagram OAuth URL:', instagramOauthUrl);
-        console.log('X OAuth URL:', xOauthUrl);
+        // Initialize OAuth buttons after page loads
+        document.addEventListener('DOMContentLoaded', setupOAuthButtons);
         
         // Handle payment success parameter
         const urlParams = new URLSearchParams(window.location.search);
