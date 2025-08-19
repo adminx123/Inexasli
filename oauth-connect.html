@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect Your Instagram - INEXASLI</title>
-    <link rel="stylesheet" href="/styles/salesflow.css">
+    <link rel="stylesheet" href="/business/salesflow.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             margin: 0;
             padding: 0;
             width: 100vw;
-            height: 100vh;
+            min-height: 100vh;
             background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             font-family: Arial, sans-serif;
-            overflow: hidden;
         }
         
         .splash-logo {
@@ -86,7 +86,7 @@
             line-height: 1.5;
         }
         
-        .oauth-button {
+                .oauth-button {
             background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
             color: white;
             border: none;
@@ -98,8 +98,24 @@
             transition: transform 0.3s, box-shadow 0.3s;
             text-decoration: none;
             display: inline-block;
+            box-shadow: 0 10px 30px rgba(64, 93, 230, 0.3);
             margin-bottom: 20px;
             letter-spacing: 1px;
+        }
+
+        .oauth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .instagram-button {
+            background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+        }
+
+        .x-button {
+            background: linear-gradient(45deg, #000000, #1a1a1a, #333333);
         }
         
         .oauth-button:hover {
@@ -217,11 +233,11 @@
     <div class="splash-inexasli">INEXASLI</div>
     <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     
-    <div class="oauth-content">
+    <div class="oauth-content" style="opacity: 0; display: none;" id="mainContent">
         <div class="device-container">
             <div class="step-indicator">
                 <div class="step completed">
-                    <div class="step-number">✓</div>
+                    <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Payment</span>
                 </div>
                 <div class="step active">
@@ -234,54 +250,105 @@
                 </div>
             </div>
             
-            <div class="oauth-title">Connect Your Instagram Business Account</div>
+            <div class="oauth-title">Connect Your Social Media Accounts</div>
             <div class="oauth-subtitle">
-                Securely authorize INEXASLI to create and post content to your Instagram account using our AI automation system.
+                Securely authorize INEXASLI to create and post content to your social media accounts using our AI automation system.
             </div>
             
-            <a href="#" id="oauthButton" class="oauth-button">
-                📱 Connect Instagram Account
-            </a>
+            <div class="oauth-buttons">
+                <a href="#" id="instagramOauthButton" class="oauth-button instagram-button">
+                    <i class="fab fa-instagram"></i> Connect Instagram Account
+                </a>
+                <a href="#" id="xOauthButton" class="oauth-button x-button">
+                    <i class="platform-icon-x">𝕏</i> Connect X (Twitter) Account
+                </a>
+            </div>
             
             <div class="oauth-steps">
                 <h4>What happens next:</h4>
                 <ol>
-                    <li>You'll be redirected to Instagram's secure authorization page</li>
-                    <li>Log in with your Instagram Business account</li>
+                    <li>Connect your Instagram and/or X (Twitter) accounts</li>
+                    <li>You'll be redirected to each platform's secure authorization page</li>
+                    <li>Log in with your business accounts</li>
                     <li>Grant permissions for content posting</li>
                     <li>Return here for final setup completion</li>
                     <li>We'll configure your automation within 24-48 hours</li>
                 </ol>
-                <div style="text-align: center; margin-top: 15px; font-size: 12px; color: #888;">
-                    <a href="https://inexasli.com/?terms=true" style="color: #ccc; text-decoration: none;">Terms of Service</a>
-                </div>
+            </div>
+            
+            <!-- Legal Footer -->
+            <div style="text-align: center; margin: 40px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="color: #ccc; font-size: 12px; margin: 0;">
+                    <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
+                    • 
+                    <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
+                    • Contact: support@inexasli.com
+                </p>
             </div>
         </div>
     </div>
     
     <script>
+        // Splash screen transition
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const splash = document.querySelector('body');
+                const main = document.getElementById('mainContent');
+                
+                // Fade out splash elements
+                document.querySelector('.splash-logo').style.opacity = '0';
+                document.querySelector('.splash-inexasli').style.opacity = '0';
+                document.querySelector('.splash-empowering').style.opacity = '0';
+                
+                setTimeout(() => {
+                    // Hide splash elements
+                    document.querySelector('.splash-logo').style.display = 'none';
+                    document.querySelector('.splash-inexasli').style.display = 'none';
+                    document.querySelector('.splash-empowering').style.display = 'none';
+                    
+                    // Show main content
+                    main.style.display = 'block';
+                    main.style.opacity = '1';
+                    main.style.transition = 'opacity 1s ease-in';
+                }, 1000);
+            }, 2500); // Show splash for 2.5 seconds
+        });
+        
         // Instagram OAuth configuration
         const INSTAGRAM_APP_ID = '765153222726242';
-        const REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/instagram/callback';
-        const SCOPE = 'instagram_basic,instagram_content_publish';
+        const INSTAGRAM_REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/instagram/callback';
+        const INSTAGRAM_SCOPE = 'instagram_basic,instagram_content_publish';
         
-        // Build OAuth URL
-        const oauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPE}&response_type=code&state=production_oauth_flow`;
+        // X (Twitter) OAuth configuration
+        const X_CLIENT_ID = '31242716'; // Your X app Client ID
+        const X_REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/x/callback';
+        const X_SCOPE = 'tweet.read tweet.write users.read';
         
-        // Set up OAuth button
-        document.getElementById('oauthButton').href = oauthUrl;
+        // Build Instagram OAuth URL
+        const instagramOauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_APP_ID}&redirect_uri=${encodeURIComponent(INSTAGRAM_REDIRECT_URI)}&scope=${INSTAGRAM_SCOPE}&response_type=code&state=production_oauth_flow`;
         
-        // Log OAuth URL for debugging
-        console.log('Instagram OAuth URL:', oauthUrl);
+        // Build X OAuth URL
+        const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=production_oauth_flow&code_challenge=challenge&code_challenge_method=plain`;
+        
+        // Set up OAuth buttons
+        document.getElementById('instagramOauthButton').href = instagramOauthUrl;
+        document.getElementById('xOauthButton').href = xOauthUrl;
+        
+        // Log OAuth URLs for debugging
+        console.log('Instagram OAuth URL:', instagramOauthUrl);
+        console.log('X OAuth URL:', xOauthUrl);
         
         // Handle payment success parameter
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('payment_success') === 'true') {
             // Show payment success message
             const subtitle = document.querySelector('.oauth-subtitle');
-            subtitle.innerHTML = '✅ <strong>Payment confirmed!</strong> Now connect your Instagram account to complete the setup.';
+            subtitle.innerHTML = '<i class="fas fa-check-circle" style="color: #90ee90;"></i> <strong>Payment confirmed!</strong> Now connect your Instagram account to complete the setup.';
             subtitle.style.color = '#90ee90';
         }
     </script>
+    
+    <script src="/utility/modal.js"></script>
+    <script src="/business/legalSocial.js"></script>
 </body>
 </html>
