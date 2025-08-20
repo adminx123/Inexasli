@@ -331,11 +331,21 @@
             const codeVerifier = generateCodeVerifier();
             const codeChallenge = await generateCodeChallenge(codeVerifier);
             
-            // Store code verifier for callback
-            localStorage.setItem('twitter_code_verifier', codeVerifier);
+            // Generate unique client ID for this user session
+            const clientId = 'client_' + Math.random().toString(36).substring(2, 15);
             
-            // Generate state for security
-            const state = 'production_oauth_flow_' + Math.random().toString(36).substring(7);
+            // Store code verifier in worker KV via API call
+            await fetch('https://mastersocial.4hm7q4q75z.workers.dev/store-verifier', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    client_id: clientId,
+                    code_verifier: codeVerifier
+                })
+            });
+            
+            // Generate state with client ID for backend identification
+            const state = `${clientId}_production_oauth_flow`;
             
             // OAuth 2.0 URL with PKCE for Twitter/X
             const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
@@ -355,6 +365,7 @@
                 // Log OAuth URLs for debugging
                 console.log('Instagram OAuth URL:', instagramOauthUrl);
                 console.log('X OAuth 2.0 URL with PKCE:', xOauthUrl);
+                console.log('Client ID:', clientId);
                 
             } catch (error) {
                 console.error('Failed to fetch OAuth config:', error);
