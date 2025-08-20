@@ -32,7 +32,7 @@ body {
     opacity: 0;
     animation: rotateImage 2.1675s linear 1;
     animation-delay: 0.180625s;
-    animation-fill-mode: forwards;
+    animation-fill-mode: both;
     margin-bottom: 10px;
 }
 
@@ -55,8 +55,8 @@ body {
     font-size: 1.2em;
     margin: 0 0 40px 0;
     opacity: 0;
-    animation: fadeIn 1.445s ease-in forwards;
-    animation-delay: 0.7225s;
+    animation: fadeInWithRotation 2.1675s ease-in forwards;
+    animation-delay: 0.180625s;
     text-align: center;
 }
 
@@ -906,8 +906,17 @@ textarea {
     100% { opacity: 1; }
 }
 
+@keyframes fadeInWithRotation {
+    0% { opacity: 0; color: rgb(49, 49, 49); }
+    10% { opacity: 0.2; color: rgb(80, 80, 80); }
+    30% { opacity: 0.4; color: rgb(120, 120, 120); }
+    60% { opacity: 0.7; color: rgb(180, 180, 180); }
+    100% { opacity: 1; color: white; }
+}
+
 @keyframes rotateImage {
     0% { transform: rotate(0deg); opacity: 0; }
+    1% { transform: rotate(0deg); opacity: 0; }
     100% { transform: rotate(180deg); opacity: 1; }
 }
 
