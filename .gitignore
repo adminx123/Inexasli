@@ -5,6 +5,9 @@ business/x.js
 business/masterSocial.js
 business/businessTemplate.js
 
+# Business client workers (contains client-specific credentials)
+business/clients/
+
 # INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP

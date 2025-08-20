@@ -30,6 +30,15 @@ main = "./business/businessTemplate.js"
 [env.businesstemplate.triggers]
 crons = ["0 9,13,17 * * *"]  # Post at 9am, 1pm, 5pm UTC
 
+# --- INEXASLI Client Worker ---
+[env.inexasli]
+name = "inexasli"
+main = "./business/clients/inexasli.js"
+
+# INEXASLI posting schedule
+[env.inexasli.triggers]
+crons = ["0 9,13,17 * * *"]  # Post at 9am, 1pm, 5pm UTC
+
 # CENTRALIZED MASTER WORKER ARCHITECTURE
 # This project uses a master worker that imports all individual modules.
 # Individual modules (calorie.js, event.js, etc.) are NOT standalone workers - 
