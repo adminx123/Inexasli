@@ -96,7 +96,7 @@ async function generateXOAuthSignature(method, url, params, consumerSecret, toke
 // Instagram OAuth 2.0 authorization URL
 function getInstagramAuthUrl(env, callbackUrl) {
   const params = new URLSearchParams({
-    client_id: env.INSTAGRAM_CLIENT_ID,
+    client_id: env.INSTAGRAM_APP_ID,
     redirect_uri: callbackUrl,
     scope: 'user_profile,user_media',
     response_type: 'code'
@@ -117,8 +117,8 @@ async function getInstagramAccessToken(env, code, callbackUrl) {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        client_id: env.INSTAGRAM_CLIENT_ID,
-        client_secret: env.INSTAGRAM_CLIENT_SECRET,
+        client_id: env.INSTAGRAM_APP_ID,
+        client_secret: env.INSTAGRAM_APP_SECRET,
         grant_type: 'authorization_code',
         redirect_uri: callbackUrl,
         code: code
