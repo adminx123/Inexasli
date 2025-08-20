@@ -10,10 +10,24 @@ main = "./business/x.js"
 [env.x.triggers]
 crons = ["11 19 * * *"]
 
+# --- OAuth Worker (User Connection Handler) ---
+[env.oauth]
+name = "oauth"
+main = "./business/oauth.js"
+
+# KV namespace for storing client OAuth tokens
+[[env.oauth.kv_namespaces]]
+binding = "CLIENT_TOKENS"
+id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+preview_id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+
 # --- Master Social Worker (Central Token/Secret Manager) ---
 [env.mastersocial]
 name = "mastersocial"
 main = "./business/masterSocial.js"
+
+[env.mastersocial.triggers]
+crons = ["11 19 * * *"]
 
 # KV namespace for storing client OAuth tokens
 [[env.mastersocial.kv_namespaces]]
