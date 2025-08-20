@@ -322,16 +322,23 @@
         
         // Fetch OAuth configuration and set up buttons
         async function setupOAuthButtons() {
-            // Force OAuth 2.0 for Twitter/X
+            // Force OAuth 2.0 for Twitter/X with correct redirect URI
             const X_CLIENT_ID = '31242716';
             const X_REDIRECT_URI = 'https://mastersocial.4hm7q4q75z.workers.dev/x/oauth2-callback';
             const X_SCOPE = 'tweet.read tweet.write users.read offline.access';
             
+            // Generate PKCE for OAuth 2.0 security
+            const codeVerifier = generateCodeVerifier();
+            const codeChallenge = await generateCodeChallenge(codeVerifier);
+            
+            // Store code verifier for callback
+            localStorage.setItem('twitter_code_verifier', codeVerifier);
+            
             // Generate state for security
             const state = 'production_oauth_flow_' + Math.random().toString(36).substring(7);
             
-            // OAuth 2.0 URL for Twitter/X
-            const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=${state}`;
+            // OAuth 2.0 URL with PKCE for Twitter/X
+            const xOauthUrl = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${X_CLIENT_ID}&redirect_uri=${encodeURIComponent(X_REDIRECT_URI)}&scope=${encodeURIComponent(X_SCOPE)}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
             
             try {
                 const response = await fetch('https://mastersocial.4hm7q4q75z.workers.dev/oauth-config');
@@ -347,7 +354,7 @@
                 
                 // Log OAuth URLs for debugging
                 console.log('Instagram OAuth URL:', instagramOauthUrl);
-                console.log('X OAuth 2.0 URL:', xOauthUrl);
+                console.log('X OAuth 2.0 URL with PKCE:', xOauthUrl);
                 
             } catch (error) {
                 console.error('Failed to fetch OAuth config:', error);
@@ -355,6 +362,26 @@
                 document.getElementById('xOauthButton').href = xOauthUrl;
                 console.log('X OAuth 2.0 URL (fallback):', xOauthUrl);
             }
+        }
+        
+        // PKCE helper functions for OAuth 2.0
+        function generateCodeVerifier() {
+            const array = new Uint8Array(32);
+            crypto.getRandomValues(array);
+            return btoa(String.fromCharCode.apply(null, array))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '');
+        }
+        
+        async function generateCodeChallenge(verifier) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(verifier);
+            const digest = await crypto.subtle.digest('SHA-256', data);
+            return btoa(String.fromCharCode.apply(null, new Uint8Array(digest)))
+                .replace(/\+/g, '-')
+                .replace(/\//g, '_')
+                .replace(/=/g, '');
         }
         
         // Initialize OAuth buttons after page loads
