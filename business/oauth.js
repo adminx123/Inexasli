@@ -98,7 +98,7 @@ function getInstagramAuthUrl(env, callbackUrl) {
   const params = new URLSearchParams({
     client_id: env.INSTAGRAM_APP_ID,
     redirect_uri: callbackUrl,
-    scope: 'instagram_business_basic,instagram_business_manage_messages,instagram_business_content_publish,instagram_business_manage_comments,instagram_business_manage_insights',
+    scope: 'user_profile,user_media',
     response_type: 'code'
   });
   
@@ -473,6 +473,23 @@ export default {
 
       // Route: Handle Instagram OAuth callback
       if (pathname === '/oauth/instagram/callback') {
+        // Check if this is actually a webhook verification hitting the callback route
+        const hubMode = url.searchParams.get('hub.mode');
+        const hubChallenge = url.searchParams.get('hub.challenge');
+        const hubVerifyToken = url.searchParams.get('hub.verify_token');
+        
+        if (hubMode && hubChallenge && hubVerifyToken) {
+          logDebug('Instagram webhook verification detected on callback route - handling appropriately');
+          
+          if (handleInstagramWebhookVerification(hubVerifyToken, hubChallenge, env)) {
+            return new Response(hubChallenge, {
+              headers: { 'Content-Type': 'text/plain' }
+            });
+          } else {
+            return new Response('Forbidden', { status: 403 });
+          }
+        }
+        
         logDebug('Handling Instagram OAuth callback');
         
         const code = url.searchParams.get('code');
