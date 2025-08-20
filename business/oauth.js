@@ -352,15 +352,11 @@ export default {
           });
         }
         
-        // Store request token temporarily (you might want to use KV for this too)
-        const state = Math.random().toString(36).substring(2, 15);
-        await env.CLIENT_TOKENS.put(`request_token:${state}`, JSON.stringify({
-          token: requestTokenData.token,
-          tokenSecret: requestTokenData.tokenSecret
-        }), { expirationTtl: 300 }); // 5 minutes
+        // Store request token secret using the oauth_token as key (Twitter preserves this)
+        await env.CLIENT_TOKENS.put(`request_token_secret:${requestTokenData.token}`, requestTokenData.tokenSecret, { expirationTtl: 900 }); // 15 minutes
         
-        // Redirect to Twitter authorization
-        const authUrl = `${OAUTH_AUTHORIZE_URL}?oauth_token=${requestTokenData.token}&state=${state}`;
+        // Redirect to Twitter authorization (no custom state needed)
+        const authUrl = `${OAUTH_AUTHORIZE_URL}?oauth_token=${requestTokenData.token}`;
         logDebug('Redirecting to:', authUrl);
         
         return Response.redirect(authUrl, 302);
@@ -372,11 +368,9 @@ export default {
         
         const oauthToken = url.searchParams.get('oauth_token');
         const oauthVerifier = url.searchParams.get('oauth_verifier');
-        const state = url.searchParams.get('state');
         
         logDebug('OAuth token:', oauthToken);
         logDebug('OAuth verifier:', oauthVerifier);
-        logDebug('State:', state);
         
         if (!oauthToken || !oauthVerifier) {
           logError('Missing OAuth parameters');
@@ -386,26 +380,21 @@ export default {
           });
         }
         
-        // Retrieve request token from temporary storage
-        let requestTokenData;
-        if (state) {
-          const stored = await env.CLIENT_TOKENS.get(`request_token:${state}`);
-          if (stored) {
-            requestTokenData = JSON.parse(stored);
-            await env.CLIENT_TOKENS.delete(`request_token:${state}`); // Clean up
-          }
-        }
-        
-        if (!requestTokenData) {
-          logError('Request token not found or expired');
+        // Retrieve request token secret using oauth_token as key
+        const requestTokenSecret = await env.CLIENT_TOKENS.get(`request_token_secret:${oauthToken}`);
+        if (!requestTokenSecret) {
+          logError('Request token secret not found or expired for token:', oauthToken);
           return new Response(generateErrorPage('Request token not found or expired'), {
             status: 400,
             headers: { 'Content-Type': 'text/html' }
           });
         }
         
+        // Clean up the stored secret
+        await env.CLIENT_TOKENS.delete(`request_token_secret:${oauthToken}`);
+        
         // Exchange for access token
-        const accessTokenData = await getAccessToken(env, oauthToken, requestTokenData.tokenSecret, oauthVerifier);
+        const accessTokenData = await getAccessToken(env, oauthToken, requestTokenSecret, oauthVerifier);
         if (!accessTokenData) {
           logError('Failed to get access token');
           return new Response(generateErrorPage('Failed to get access token'), {
