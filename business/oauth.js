@@ -133,76 +133,96 @@ async function getRequestToken(env, callbackUrl) {
   }
 }
 
-// Step 2: Exchange authorization code for access token
+// Step 2: Exchange authorization code for access token with retry logic
 async function getAccessToken(env, requestToken, requestTokenSecret, oauthVerifier) {
   logDebug('=== GET ACCESS TOKEN START ===');
   logDebug('Request token:', requestToken);
   logDebug('OAuth verifier:', oauthVerifier);
   
-  try {
-    const oauthParams = {
-      oauth_consumer_key: env.X_CONSUMER_KEY,
-      oauth_nonce: Math.random().toString(36).substring(2, 15),
-      oauth_signature_method: 'HMAC-SHA1',
-      oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
-      oauth_token: requestToken,
-      oauth_verifier: oauthVerifier,
-      oauth_version: '1.0'
-    };
-    
-    logDebug('OAuth params before signature:', oauthParams);
-    
-    // Generate signature
-    const signature = await generateOAuthSignature('POST', OAUTH_ACCESS_TOKEN_URL, oauthParams, env.X_CONSUMER_SECRET, requestTokenSecret);
-    oauthParams.oauth_signature = signature;
-    
-    logDebug('OAuth signature generated:', signature);
-    
-    // Build Authorization header
-    const authHeader = 'OAuth ' + Object.keys(oauthParams)
-      .map(key => `${key}="${encodeURIComponent(oauthParams[key])}"`)
-      .join(', ');
-    
-    logDebug('Making access token API call...');
-    const response = await fetch(OAUTH_ACCESS_TOKEN_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': authHeader,
-        'Content-Type': 'application/x-www-form-urlencoded'
+  const maxRetries = 3;
+  const baseDelay = 1000; // 1 second
+  
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      logDebug(`Access token attempt ${attempt}/${maxRetries}`);
+      
+      const oauthParams = {
+        oauth_consumer_key: env.X_CONSUMER_KEY,
+        oauth_nonce: Math.random().toString(36).substring(2, 15),
+        oauth_signature_method: 'HMAC-SHA1',
+        oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
+        oauth_token: requestToken,
+        oauth_verifier: oauthVerifier,
+        oauth_version: '1.0'
+      };
+      
+      logDebug('OAuth params before signature:', oauthParams);
+      
+      // Generate signature
+      const signature = await generateOAuthSignature('POST', OAUTH_ACCESS_TOKEN_URL, oauthParams, env.X_CONSUMER_SECRET, requestTokenSecret);
+      oauthParams.oauth_signature = signature;
+      
+      logDebug('OAuth signature generated:', signature);
+      
+      // Build Authorization header
+      const authHeader = 'OAuth ' + Object.keys(oauthParams)
+        .map(key => `${key}="${encodeURIComponent(oauthParams[key])}"`)
+        .join(', ');
+      
+      logDebug('Making access token API call...');
+      const response = await fetch(OAUTH_ACCESS_TOKEN_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      
+      logDebug('Access token response status:', response.status);
+      const responseText = await response.text();
+      logDebug('Access token response body:', responseText);
+      
+      if (response.ok) {
+        // Success - parse response
+        const params = new URLSearchParams(responseText);
+        const accessToken = params.get('oauth_token');
+        const accessTokenSecret = params.get('oauth_token_secret');
+        const userId = params.get('user_id');
+        const screenName = params.get('screen_name');
+        
+        logDebug('Access token retrieved for user:', screenName);
+        logDebug('User ID:', userId);
+        logDebug('=== GET ACCESS TOKEN END ===');
+        
+        return {
+          accessToken,
+          accessTokenSecret,
+          userId,
+          screenName
+        };
+      } else if (response.status >= 500 && attempt < maxRetries) {
+        // Server error - retry with exponential backoff
+        const delay = baseDelay * Math.pow(2, attempt - 1);
+        logError(`Access token attempt ${attempt} failed with status ${response.status}. Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      } else {
+        // Client error or final retry attempt failed
+        logError('Failed to get access token:', responseText);
+        return null;
       }
-    });
-    
-    logDebug('Access token response status:', response.status);
-    const responseText = await response.text();
-    logDebug('Access token response body:', responseText);
-    
-    if (!response.ok) {
-      logError('Failed to get access token:', responseText);
-      return null;
+    } catch (error) {
+      if (attempt < maxRetries) {
+        const delay = baseDelay * Math.pow(2, attempt - 1);
+        logError(`Access token attempt ${attempt} exception: ${error.message}. Retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      } else {
+        logError('Access token final attempt exception:', error.message);
+        logError('Access token final attempt exception stack:', error.stack);
+        return null;
+      }
     }
-    
-    // Parse response
-    const params = new URLSearchParams(responseText);
-    const accessToken = params.get('oauth_token');
-    const accessTokenSecret = params.get('oauth_token_secret');
-    const userId = params.get('user_id');
-    const screenName = params.get('screen_name');
-    
-    logDebug('Access token retrieved for user:', screenName);
-    logDebug('User ID:', userId);
-    logDebug('=== GET ACCESS TOKEN END ===');
-    
-    return {
-      accessToken,
-      accessTokenSecret,
-      userId,
-      screenName
-    };
-    
-  } catch (error) {
-    logError('Access token exception:', error.message);
-    logError('Access token exception stack:', error.stack);
-    return null;
   }
 }
 
