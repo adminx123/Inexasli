@@ -98,7 +98,7 @@ function getInstagramAuthUrl(env, callbackUrl) {
   const params = new URLSearchParams({
     client_id: env.INSTAGRAM_APP_ID,
     redirect_uri: callbackUrl,
-    scope: 'user_profile,user_media',
+    scope: 'instagram_business_basic,instagram_business_manage_messages,instagram_business_content_publish,instagram_business_manage_comments,instagram_business_manage_insights',
     response_type: 'code'
   });
   
