@@ -23,7 +23,7 @@ function logError(...args) {
 // X.com OAuth 1.0a endpoints
 const OAUTH_REQUEST_TOKEN_URL = 'https://api.x.com/oauth/request_token';
 const OAUTH_AUTHORIZE_URL = 'https://api.x.com/oauth/authorize';
-const OAUTH_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token';
+const OAUTH_ACCESS_TOKEN_URL = 'https://api.x.com/oauth/access_token';
 
 // Generate OAuth signature for Twitter API
 async function generateOAuthSignature(method, url, params, consumerSecret, tokenSecret = '') {
