@@ -1,6 +1,19 @@
 // Multi-Platform OAuth Worker
 // Handles user authentication for X.com, Instagram, and other social platforms
 
+// Instagram webhook verification
+function handleInstagramWebhookVerification(verifyToken, challenge, env) {
+  logDebug('Instagram webhook verification:', { verifyToken, challenge });
+  
+  if (verifyToken === env.INSTAGRAM_VERIFY_TOKEN) {
+    logDebug('Instagram webhook verified successfully');
+    return true;
+  } else {
+    logDebug('Instagram webhook verification failed - token mismatch');
+    return false;
+  }
+}
+
 // Utility: log to console with timestamp
 function logDebug(...args) {
   try {
@@ -36,7 +49,6 @@ const X_OAUTH_ACCESS_TOKEN_URL = 'https://api.x.com/oauth/access_token';
 // Instagram OAuth 2.0 endpoints
 const INSTAGRAM_OAUTH_AUTHORIZE_URL = 'https://api.instagram.com/oauth/authorize';
 const INSTAGRAM_OAUTH_ACCESS_TOKEN_URL = 'https://api.instagram.com/oauth/access_token';
-const INSTAGRAM_WEBHOOK_VERIFY_TOKEN = 'test1'; // Should match your Instagram app settings
 
 // Generate OAuth signature for X.com API (OAuth 1.0a)
 async function generateXOAuthSignature(method, url, params, consumerSecret, tokenSecret = '') {
@@ -80,24 +92,6 @@ async function generateXOAuthSignature(method, url, params, consumerSecret, toke
 // ============================
 // INSTAGRAM FUNCTIONS
 // ============================
-
-// Instagram webhook verification
-function handleInstagramWebhookVerification(url) {
-  const urlParams = new URL(url).searchParams;
-  const mode = urlParams.get('hub.mode');
-  const challenge = urlParams.get('hub.challenge');
-  const verifyToken = urlParams.get('hub.verify_token');
-  
-  logDebug('Instagram webhook verification:', { mode, challenge, verifyToken });
-  
-  if (mode === 'subscribe' && verifyToken === INSTAGRAM_WEBHOOK_VERIFY_TOKEN) {
-    logDebug('Instagram webhook verified successfully');
-    return new Response(challenge, { status: 200 });
-  } else {
-    logError('Instagram webhook verification failed');
-    return new Response('Verification failed', { status: 403 });
-  }
-}
 
 // Instagram OAuth 2.0 authorization URL
 function getInstagramAuthUrl(env, callbackUrl) {
@@ -569,6 +563,23 @@ export default {
       
       // Route: Handle X.com OAuth callback
       if (pathname === '/oauth/callback') {
+        // Check if this is actually an Instagram webhook verification hitting the wrong endpoint
+        const hubMode = url.searchParams.get('hub.mode');
+        const hubChallenge = url.searchParams.get('hub.challenge');
+        const hubVerifyToken = url.searchParams.get('hub.verify_token');
+        
+        if (hubMode && hubChallenge && hubVerifyToken) {
+          logDebug('Instagram webhook verification detected on X.com callback route - handling appropriately');
+          
+          if (handleInstagramWebhookVerification(hubVerifyToken, hubChallenge, env)) {
+            return new Response(hubChallenge, {
+              headers: { 'Content-Type': 'text/plain' }
+            });
+          } else {
+            return new Response('Forbidden', { status: 403 });
+          }
+        }
+        
         logDebug('Handling X.com OAuth callback');
         
         const oauthToken = url.searchParams.get('oauth_token');
