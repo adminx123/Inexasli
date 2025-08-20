@@ -46,9 +46,9 @@ const X_OAUTH_ACCESS_TOKEN_URL = 'https://api.x.com/oauth/access_token';
 // INSTAGRAM OAUTH 2.0
 // ============================
 
-// Instagram OAuth 2.0 endpoints
+// Instagram Graph API OAuth 2.0 endpoints
 const INSTAGRAM_OAUTH_AUTHORIZE_URL = 'https://api.instagram.com/oauth/authorize';
-const INSTAGRAM_OAUTH_ACCESS_TOKEN_URL = 'https://api.instagram.com/oauth/access_token';
+const INSTAGRAM_OAUTH_ACCESS_TOKEN_URL = 'https://graph.instagram.com/oauth/access_token';
 
 // Generate OAuth signature for X.com API (OAuth 1.0a)
 async function generateXOAuthSignature(method, url, params, consumerSecret, tokenSecret = '') {
@@ -98,7 +98,7 @@ function getInstagramAuthUrl(env, callbackUrl) {
   const params = new URLSearchParams({
     client_id: env.INSTAGRAM_APP_ID,
     redirect_uri: callbackUrl,
-    scope: 'user_profile,user_media',
+    scope: 'instagram_business_basic,instagram_business_manage_messages,instagram_business_content_publish,instagram_business_manage_comments,instagram_business_manage_insights',
     response_type: 'code'
   });
   
