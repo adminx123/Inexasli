@@ -353,7 +353,18 @@ export default {
         }
         
         // Store request token secret using the oauth_token as key (Twitter preserves this)
-        await env.CLIENT_TOKENS.put(`request_token_secret:${requestTokenData.token}`, requestTokenData.tokenSecret, { expirationTtl: 900 }); // 15 minutes
+        const kvKey = `request_token_secret:${requestTokenData.token}`;
+        const kvValue = requestTokenData.tokenSecret;
+        logDebug('Storing request token secret with key:', kvKey);
+        logDebug('Storing request token secret value:', kvValue);
+        
+        await env.CLIENT_TOKENS.put(kvKey, kvValue, { expirationTtl: 900 }); // 15 minutes
+        logDebug('Request token secret stored successfully');
+        
+        // Verify storage by immediately reading it back
+        const verifyStored = await env.CLIENT_TOKENS.get(kvKey);
+        logDebug('Verification - stored value retrieval:', verifyStored ? 'SUCCESS' : 'FAILED');
+        logDebug('Verification - retrieved value:', verifyStored);
         
         // Redirect to Twitter authorization (no custom state needed)
         const authUrl = `${OAUTH_AUTHORIZE_URL}?oauth_token=${requestTokenData.token}`;
@@ -381,9 +392,23 @@ export default {
         }
         
         // Retrieve request token secret using oauth_token as key
+        logDebug('Looking for request token secret with key:', `request_token_secret:${oauthToken}`);
         const requestTokenSecret = await env.CLIENT_TOKENS.get(`request_token_secret:${oauthToken}`);
+        logDebug('Retrieved request token secret:', requestTokenSecret ? 'FOUND' : 'NOT FOUND');
+        logDebug('Request token secret value:', requestTokenSecret);
+        
         if (!requestTokenSecret) {
           logError('Request token secret not found or expired for token:', oauthToken);
+          
+          // Debug: List all keys in KV to see what's actually stored
+          logDebug('Checking KV storage...');
+          try {
+            const listResult = await env.CLIENT_TOKENS.list({ prefix: 'request_token_secret:' });
+            logDebug('KV keys with request_token_secret prefix:', listResult.keys.map(k => k.name));
+          } catch (e) {
+            logDebug('Failed to list KV keys:', e.message);
+          }
+          
           return new Response(generateErrorPage('Request token not found or expired'), {
             status: 400,
             headers: { 'Content-Type': 'text/html' }
