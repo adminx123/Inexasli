@@ -117,8 +117,9 @@
             <ul>
                 <li><strong>App ID:</strong> 765153222726242</li>
                 <li><strong>Platform:</strong> Cloudflare Workers (Serverless)</li>
-                <li><strong>Callback URL:</strong> https://x-worker.4hm7q4q75z.workers.dev/instagram/callback</li>
-                <li><strong>Scopes:</strong> instagram_basic, instagram_content_publish</li>
+                <li><strong>OAuth Worker:</strong> https://oauth.4hm7q4q75z.workers.dev</li>
+                <li><strong>Callback URL:</strong> https://oauth.4hm7q4q75z.workers.dev/oauth/instagram/callback</li>
+                <li><strong>Scopes:</strong> user_profile, user_media</li>
                 <li><strong>Purpose:</strong> B2B social media automation service</li>
             </ul>
         </div>
@@ -126,7 +127,7 @@
         <div class="info">
             <h3>📄 OAuth Callback Processing</h3>
             <div class="callback-url">
-                https://x-worker.4hm7q4q75z.workers.dev/instagram/callback
+                https://oauth.4hm7q4q75z.workers.dev/oauth/instagram/callback
             </div>
             <p><small>This endpoint securely processes Instagram authorization codes and exchanges them for access tokens.</small></p>
         </div>
@@ -139,6 +140,26 @@
             <p><strong>Service Type:</strong> Managed automation platform (businesses purchase access to our AI posting service)</p>
             <p><strong>Data Handling:</strong> Secure OAuth authorization, no password collection, users maintain full control</p>
             <p><strong>Compliance:</strong> Full adherence to Instagram Platform Terms and Meta Developer Policies</p>
+        </div>
+
+        <div class="info">
+            <h3>🔐 Security & Privacy</h3>
+            <ul>
+                <li><strong>OAuth 2.0:</strong> Industry-standard secure authorization</li>
+                <li><strong>No Data Storage:</strong> We only store access tokens with user consent</li>
+                <li><strong>User Control:</strong> Users can revoke access anytime via Instagram settings</li>
+                <li><strong>GDPR Compliant:</strong> Full data protection compliance</li>
+                <li><strong>Token Security:</strong> Encrypted storage in Cloudflare KV</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h3>📋 Permissions Requested</h3>
+            <ul>
+                <li><strong>user_profile:</strong> To display connected account information</li>
+                <li><strong>user_media:</strong> To access and manage Instagram content for automation</li>
+            </ul>
+            <p><small>These permissions enable our AI to create and schedule content on behalf of business accounts with their explicit authorization.</small></p>
         </div>
 
         <div class="info">
@@ -155,16 +176,12 @@
     </div>
 
     <script>
-        // Instagram OAuth configuration
-        const INSTAGRAM_APP_ID = '765153222726242';
-        const REDIRECT_URI = 'https://x-worker.4hm7q4q75z.workers.dev/instagram/callback';
-        const SCOPE = 'instagram_basic,instagram_content_publish';
+        // Use the new unified OAuth worker
+        const OAUTH_WORKER_URL = 'https://oauth.4hm7q4q75z.workers.dev';
+        const INSTAGRAM_OAUTH_URL = `${OAUTH_WORKER_URL}/oauth/instagram/start`;
 
-        // Build OAuth URL
-        const oauthUrl = `https://api.instagram.com/oauth/authorize?client_id=${INSTAGRAM_APP_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPE}&response_type=code&state=test_oauth_flow`;
-
-        // Set up OAuth button
-        document.getElementById('oauthButton').href = oauthUrl;
+        // Set up OAuth button to use the new worker
+        document.getElementById('oauthButton').href = INSTAGRAM_OAUTH_URL;
 
         // Check for OAuth callback parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -179,7 +196,7 @@
                 <h4>✅ OAuth Success!</h4>
                 <p>Authorization code received: <code>${code.substring(0, 20)}...</code></p>
                 <p>State: <code>${state}</code></p>
-                <p>The callback handler will exchange this code for an access token.</p>
+                <p>The OAuth worker will exchange this code for an access token and store it securely.</p>
             `;
         } else if (error) {
             document.getElementById('status').style.display = 'block';
@@ -192,7 +209,7 @@
         }
 
         // Log OAuth URL for debugging
-        console.log('Instagram OAuth URL:', oauthUrl);
+        console.log('Instagram OAuth URL (via unified worker):', INSTAGRAM_OAUTH_URL);
     </script>
 </body>
 </html>
