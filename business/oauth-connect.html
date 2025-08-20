@@ -5,7 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connect Your Instagram - INEXASLI</title>
     <link rel="stylesheet" href="salesflow.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.co    <script>
+        // Splash screen transition
+        setTimeout(() => {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Prepare main content
+            main.style.display = 'block';
+            main.style.opacity = '0';
+            main.style.transition = 'opacity 0.6s ease-in';
+            
+            // Fade out splash and fade in main simultaneously
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 0.6s ease-out';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                main.style.opacity = '1';
+            }, 600);
+        }, 1800); // Show splash for 1.8 secondsawesome/6.4.0/css/all.min.css">
     <style>
         body {
             margin: 0;
@@ -230,13 +249,13 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
     
-    <div class="splash-container" id="splashContainer">
+    <div class="splash-container" id="splashContainer" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
         <img src="../images/apple-touch-icon.png" alt="Logo" class="splash-logo">
         <div class="splash-inexasli">INEXASLI</div>
         <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     </div>
     
-    <div class="oauth-content" style="opacity: 0; display: none;" id="mainContent">
+    <div class="oauth-content" style="opacity: 0; display: block; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;" id="mainContent">
         <div class="device-container">
             <div class="step-indicator">
                 <div class="step completed">
@@ -304,21 +323,23 @@
     
     <script>
         // Splash screen transition
+        const splash = document.getElementById('splashContainer');
+        const main = document.getElementById('mainContent');
+        
+        // Start main content fade-in immediately
+        main.style.transition = 'opacity 1.2s ease-in';
+        
         setTimeout(() => {
-            const splash = document.getElementById('splashContainer');
-            const main = document.getElementById('mainContent');
-            
-            // Fade out splash
+            // Start crossfade
+            main.style.opacity = '1';
             splash.style.opacity = '0';
-            splash.style.transition = 'opacity 1s ease-out';
+            splash.style.transition = 'opacity 1.2s ease-out';
             
             setTimeout(() => {
                 splash.style.display = 'none';
-                main.style.display = 'block';
-                main.style.opacity = '1';
-                main.style.transition = 'opacity 1s ease-in';
-            }, 1000);
-        }, 2500); // Show splash for 2.5 seconds
+                main.style.position = 'static';
+            }, 1200);
+        }, 1500); // Show splash for 1.5 seconds
         
         // Fetch OAuth configuration and set up buttons
         async function setupOAuthButtons() {

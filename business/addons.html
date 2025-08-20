@@ -8,13 +8,13 @@
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="splash-container" id="splashContainer">
+    <div class="splash-container" id="splashContainer" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
         <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo">
         <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
         <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     </div>
 
-    <div class="main-content" id="mainContent" style="opacity: 0; display: none;">
+    <div class="main-content" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
         <div class="splash-container">
             <!-- Content Container -->
             <div class="content-container wide">
@@ -105,21 +105,23 @@
 
     <script>
         // Splash screen transition
+        const splash = document.getElementById('splashContainer');
+        const main = document.getElementById('mainContent');
+        
+        // Start main content fade-in immediately
+        main.style.transition = 'opacity 1.2s ease-in';
+        
         setTimeout(() => {
-            const splash = document.getElementById('splashContainer');
-            const main = document.getElementById('mainContent');
-            
-            // Fade out splash
+            // Start crossfade
+            main.style.opacity = '1';
             splash.style.opacity = '0';
-            splash.style.transition = 'opacity 1s ease-out';
+            splash.style.transition = 'opacity 1.2s ease-out';
             
             setTimeout(() => {
                 splash.style.display = 'none';
-                main.style.display = 'block';
-                main.style.opacity = '1';
-                main.style.transition = 'opacity 1s ease-in';
-            }, 1000);
-        }, 2500); // Show splash for 2.5 seconds
+                main.style.position = 'static';
+            }, 1200);
+        }, 1500); // Show splash for 1.5 seconds
 
         // Load selected package on page load
         document.addEventListener('DOMContentLoaded', function() {

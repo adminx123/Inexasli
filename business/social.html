@@ -19,13 +19,13 @@
         <div class="particle" style="top: 10%; left: 60%; width: 7px; height: 7px; animation-delay: 3s;"></div>
     </div>
     
-    <div class="splash-container" id="splashContainer" style="padding-top: 40px;">
+    <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
         <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
         <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
         <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     </div>
     
-    <div class="main-content" id="mainContent" style="opacity: 0; display: none;">
+    <div class="main-content" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
         <div class="device-container">
             <div class="form-page">
                 <!-- Hero Section with Social Proof -->
@@ -198,29 +198,31 @@
 
   // Splash screen transition
   document.addEventListener('DOMContentLoaded', function() {
+    const splash = document.getElementById('splashContainer');
+    const main = document.getElementById('mainContent');
+    
+    // Start main content fade-in immediately
+    main.style.transition = 'opacity 1.2s ease-in';
+    
     setTimeout(() => {
-      const splash = document.getElementById('splashContainer');
-      const main = document.getElementById('mainContent');
-      
-      // Fade out splash
+      // Start crossfade
+      main.style.opacity = '1';
       splash.style.opacity = '0';
-      splash.style.transition = 'opacity 1s ease-out';
+      splash.style.transition = 'opacity 1.2s ease-out';
       
       setTimeout(() => {
         splash.style.display = 'none';
-        main.style.display = 'block';
-        main.style.opacity = '1';
-        main.style.transition = 'opacity 1s ease-in';
+        main.style.position = 'static';
         
         // Check for URL parameters to auto-open modals
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('terms') === 'true') {
-          setTimeout(() => showSocialTerms(), 500);
+          setTimeout(() => showSocialTerms(), 300);
         } else if (urlParams.get('privacy') === 'true') {
-          setTimeout(() => showSocialPrivacy(), 500);
+          setTimeout(() => showSocialPrivacy(), 300);
         }
-      }, 1000);
-    }, 2500); // Show splash for 2.5 seconds
+      }, 1200);
+    }, 1500); // Show splash for 1.5 seconds
   });
 </script>
 </html>
