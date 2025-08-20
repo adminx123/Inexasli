@@ -1,5 +1,5 @@
-// OAuth Worker for X.com (Twitter) Authentication
-// Handles user connection flow and token storage
+// Multi-Platform OAuth Worker
+// Handles user authentication for X.com, Instagram, and other social platforms
 
 // Utility: log to console with timestamp
 function logDebug(...args) {
@@ -20,13 +20,26 @@ function logError(...args) {
   }
 }
 
-// X.com OAuth 1.0a endpoints
-const OAUTH_REQUEST_TOKEN_URL = 'https://api.x.com/oauth/request_token';
-const OAUTH_AUTHORIZE_URL = 'https://api.x.com/oauth/authorize';
-const OAUTH_ACCESS_TOKEN_URL = 'https://api.x.com/oauth/access_token';
+// ============================
+// X.COM (TWITTER) OAUTH 1.0A
+// ============================
 
-// Generate OAuth signature for Twitter API
-async function generateOAuthSignature(method, url, params, consumerSecret, tokenSecret = '') {
+// X.com OAuth 1.0a endpoints
+const X_OAUTH_REQUEST_TOKEN_URL = 'https://api.x.com/oauth/request_token';
+const X_OAUTH_AUTHORIZE_URL = 'https://api.x.com/oauth/authorize';
+const X_OAUTH_ACCESS_TOKEN_URL = 'https://api.x.com/oauth/access_token';
+
+// ============================
+// INSTAGRAM OAUTH 2.0
+// ============================
+
+// Instagram OAuth 2.0 endpoints
+const INSTAGRAM_OAUTH_AUTHORIZE_URL = 'https://api.instagram.com/oauth/authorize';
+const INSTAGRAM_OAUTH_ACCESS_TOKEN_URL = 'https://api.instagram.com/oauth/access_token';
+const INSTAGRAM_WEBHOOK_VERIFY_TOKEN = 'test1'; // Should match your Instagram app settings
+
+// Generate OAuth signature for X.com API (OAuth 1.0a)
+async function generateXOAuthSignature(method, url, params, consumerSecret, tokenSecret = '') {
   // Create parameter string
   const sortedParams = Object.keys(params)
     .sort()
@@ -64,8 +77,84 @@ async function generateOAuthSignature(method, url, params, consumerSecret, token
   return btoa(binary);
 }
 
-// Step 1: Get request token from Twitter
-async function getRequestToken(env, callbackUrl) {
+// ============================
+// INSTAGRAM FUNCTIONS
+// ============================
+
+// Instagram webhook verification
+function handleInstagramWebhookVerification(url) {
+  const urlParams = new URL(url).searchParams;
+  const mode = urlParams.get('hub.mode');
+  const challenge = urlParams.get('hub.challenge');
+  const verifyToken = urlParams.get('hub.verify_token');
+  
+  logDebug('Instagram webhook verification:', { mode, challenge, verifyToken });
+  
+  if (mode === 'subscribe' && verifyToken === INSTAGRAM_WEBHOOK_VERIFY_TOKEN) {
+    logDebug('Instagram webhook verified successfully');
+    return new Response(challenge, { status: 200 });
+  } else {
+    logError('Instagram webhook verification failed');
+    return new Response('Verification failed', { status: 403 });
+  }
+}
+
+// Instagram OAuth 2.0 authorization URL
+function getInstagramAuthUrl(env, callbackUrl) {
+  const params = new URLSearchParams({
+    client_id: env.INSTAGRAM_CLIENT_ID,
+    redirect_uri: callbackUrl,
+    scope: 'user_profile,user_media',
+    response_type: 'code'
+  });
+  
+  return `${INSTAGRAM_OAUTH_AUTHORIZE_URL}?${params.toString()}`;
+}
+
+// Instagram OAuth 2.0 access token exchange
+async function getInstagramAccessToken(env, code, callbackUrl) {
+  logDebug('=== GET INSTAGRAM ACCESS TOKEN START ===');
+  logDebug('Authorization code:', code);
+  
+  try {
+    const response = await fetch(INSTAGRAM_OAUTH_ACCESS_TOKEN_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: env.INSTAGRAM_CLIENT_ID,
+        client_secret: env.INSTAGRAM_CLIENT_SECRET,
+        grant_type: 'authorization_code',
+        redirect_uri: callbackUrl,
+        code: code
+      })
+    });
+    
+    const data = await response.json();
+    logDebug('Instagram access token response:', data);
+    
+    if (data.access_token) {
+      return {
+        accessToken: data.access_token,
+        userId: data.user_id
+      };
+    } else {
+      logError('Instagram access token failed:', data);
+      return null;
+    }
+  } catch (error) {
+    logError('Instagram access token exception:', error.message);
+    return null;
+  }
+}
+
+// ============================
+// X.COM FUNCTIONS  
+// ============================
+
+// Step 1: Get request token from X.com
+async function getXRequestToken(env, callbackUrl) {
   logDebug('=== GET REQUEST TOKEN START ===');
   logDebug('Callback URL:', callbackUrl);
   
@@ -82,7 +171,7 @@ async function getRequestToken(env, callbackUrl) {
     logDebug('OAuth params before signature:', oauthParams);
     
     // Generate signature
-    const signature = await generateOAuthSignature('POST', OAUTH_REQUEST_TOKEN_URL, oauthParams, env.X_CONSUMER_SECRET);
+    const signature = await generateXOAuthSignature('POST', X_OAUTH_REQUEST_TOKEN_URL, oauthParams, env.X_CONSUMER_SECRET);
     oauthParams.oauth_signature = signature;
     
     logDebug('OAuth signature generated:', signature);
@@ -93,7 +182,7 @@ async function getRequestToken(env, callbackUrl) {
       .join(', ');
     
     logDebug('Making request token API call...');
-    const response = await fetch(OAUTH_REQUEST_TOKEN_URL, {
+    const response = await fetch(X_OAUTH_REQUEST_TOKEN_URL, {
       method: 'POST',
       headers: {
         'Authorization': authHeader,
@@ -134,7 +223,7 @@ async function getRequestToken(env, callbackUrl) {
 }
 
 // Step 2: Exchange authorization code for access token with retry logic
-async function getAccessToken(env, requestToken, requestTokenSecret, oauthVerifier) {
+async function getXAccessToken(env, requestToken, requestTokenSecret, oauthVerifier) {
   logDebug('=== GET ACCESS TOKEN START ===');
   logDebug('Request token:', requestToken);
   logDebug('OAuth verifier:', oauthVerifier);
@@ -159,7 +248,7 @@ async function getAccessToken(env, requestToken, requestTokenSecret, oauthVerifi
       logDebug('OAuth params before signature:', oauthParams);
       
       // Generate signature
-      const signature = await generateOAuthSignature('POST', OAUTH_ACCESS_TOKEN_URL, oauthParams, env.X_CONSUMER_SECRET, requestTokenSecret);
+      const signature = await generateXOAuthSignature('POST', X_OAUTH_ACCESS_TOKEN_URL, oauthParams, env.X_CONSUMER_SECRET, requestTokenSecret);
       oauthParams.oauth_signature = signature;
       
       logDebug('OAuth signature generated:', signature);
@@ -170,7 +259,7 @@ async function getAccessToken(env, requestToken, requestTokenSecret, oauthVerifi
         .join(', ');
       
       logDebug('Making access token API call...');
-      const response = await fetch(OAUTH_ACCESS_TOKEN_URL, {
+      const response = await fetch(X_OAUTH_ACCESS_TOKEN_URL, {
         method: 'POST',
         headers: {
           'Authorization': authHeader,
@@ -267,19 +356,33 @@ function generateConnectPage() {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Connect Your X Account</title>
+    <title>Connect Your Social Accounts</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        .button { background: #1d9bf0; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; }
-        .button:hover { background: #1a8cd8; }
+        .button { color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 10px 0; }
+        .button.x { background: #1d9bf0; }
+        .button.x:hover { background: #1a8cd8; }
+        .button.instagram { background: #E4405F; }
+        .button.instagram:hover { background: #C13584; }
+        .platform-section { margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
     </style>
 </head>
 <body>
-    <h1>Connect Your X Account</h1>
-    <p>Click the button below to authorize our app to post to your X account.</p>
-    <a href="/oauth/start" class="button">Connect X Account</a>
+    <h1>Connect Your Social Accounts</h1>
+    
+    <div class="platform-section">
+        <h2>X (Twitter)</h2>
+        <p>Connect your X account to enable posting tweets.</p>
+        <a href="/oauth/start" class="button x">Connect X Account</a>
+    </div>
+    
+    <div class="platform-section">
+        <h2>Instagram</h2>
+        <p>Connect your Instagram account to enable posting content.</p>
+        <a href="/oauth/instagram/start" class="button instagram">Connect Instagram Account</a>
+    </div>
 </body>
 </html>`;
 }
@@ -348,7 +451,78 @@ export default {
     logDebug('Pathname:', pathname);
     
     try {
-      // Route: Show connect page
+      // Route: Instagram webhook verification
+      if (pathname === '/oauth/instagram/webhook' && request.method === 'GET') {
+        logDebug('Handling Instagram webhook verification');
+        const hubChallenge = url.searchParams.get('hub.challenge');
+        const hubVerifyToken = url.searchParams.get('hub.verify_token');
+        
+        if (handleInstagramWebhookVerification(hubVerifyToken, hubChallenge, env)) {
+          return new Response(hubChallenge, {
+            headers: { 'Content-Type': 'text/plain' }
+          });
+        } else {
+          return new Response('Forbidden', { status: 403 });
+        }
+      }
+
+      // Route: Start Instagram OAuth flow
+      if (pathname === '/oauth/instagram/start') {
+        logDebug('Starting Instagram OAuth flow');
+        
+        const callbackUrl = `${url.origin}/oauth/instagram/callback`;
+        const authUrl = getInstagramAuthUrl(env, callbackUrl);
+        
+        logDebug('Redirecting to Instagram auth:', authUrl);
+        return Response.redirect(authUrl, 302);
+      }
+
+      // Route: Handle Instagram OAuth callback
+      if (pathname === '/oauth/instagram/callback') {
+        logDebug('Handling Instagram OAuth callback');
+        
+        const code = url.searchParams.get('code');
+        const state = url.searchParams.get('state');
+        
+        logDebug('Instagram auth code:', code);
+        logDebug('Instagram state:', state);
+        
+        if (!code) {
+          logError('Missing Instagram authorization code');
+          return new Response(generateErrorPage('Missing authorization code'), {
+            status: 400,
+            headers: { 'Content-Type': 'text/html' }
+          });
+        }
+        
+        const callbackUrl = `${url.origin}/oauth/instagram/callback`;
+        const accessTokenData = await getInstagramAccessToken(env, code, callbackUrl);
+        
+        if (!accessTokenData) {
+          logError('Failed to get Instagram access token');
+          return new Response(generateErrorPage('Failed to get Instagram access token'), {
+            status: 500,
+            headers: { 'Content-Type': 'text/html' }
+          });
+        }
+        
+        // Store Instagram tokens (using Instagram user ID)
+        const stored = await storeUserTokens(env, `instagram:${accessTokenData.user_id}`, accessTokenData);
+        if (!stored) {
+          logError('Failed to store Instagram user tokens');
+          return new Response(generateErrorPage('Failed to store user tokens'), {
+            status: 500,
+            headers: { 'Content-Type': 'text/html' }
+          });
+        }
+        
+        logDebug('Instagram OAuth flow completed successfully');
+        return new Response(generateSuccessPage(`Instagram User ${accessTokenData.user_id}`), {
+          headers: { 'Content-Type': 'text/html' }
+        });
+      }
+
+      // Route: Show connect page (X.com by default)
       if (pathname === '/oauth/connect' || pathname === '/') {
         logDebug('Serving connect page');
         return new Response(generateConnectPage(), {
@@ -356,14 +530,14 @@ export default {
         });
       }
       
-      // Route: Start OAuth flow
+      // Route: Start X.com OAuth flow
       if (pathname === '/oauth/start') {
-        logDebug('Starting OAuth flow');
+        logDebug('Starting X.com OAuth flow');
         
         const callbackUrl = `${url.origin}/oauth/callback`;
         logDebug('Callback URL:', callbackUrl);
         
-        const requestTokenData = await getRequestToken(env, callbackUrl);
+        const requestTokenData = await getXRequestToken(env, callbackUrl);
         if (!requestTokenData) {
           logError('Failed to get request token');
           return new Response(generateErrorPage('Failed to get request token'), {
@@ -387,15 +561,15 @@ export default {
         logDebug('Verification - retrieved value:', verifyStored);
         
         // Redirect to Twitter authorization (no custom state needed)
-        const authUrl = `${OAUTH_AUTHORIZE_URL}?oauth_token=${requestTokenData.token}`;
+        const authUrl = `${X_OAUTH_AUTHORIZE_URL}?oauth_token=${requestTokenData.token}`;
         logDebug('Redirecting to:', authUrl);
         
         return Response.redirect(authUrl, 302);
       }
       
-      // Route: Handle OAuth callback
+      // Route: Handle X.com OAuth callback
       if (pathname === '/oauth/callback') {
-        logDebug('Handling OAuth callback');
+        logDebug('Handling X.com OAuth callback');
         
         const oauthToken = url.searchParams.get('oauth_token');
         const oauthVerifier = url.searchParams.get('oauth_verifier');
@@ -439,7 +613,7 @@ export default {
         await env.CLIENT_TOKENS.delete(`request_token_secret:${oauthToken}`);
         
         // Exchange for access token
-        const accessTokenData = await getAccessToken(env, oauthToken, requestTokenSecret, oauthVerifier);
+        const accessTokenData = await getXAccessToken(env, oauthToken, requestTokenSecret, oauthVerifier);
         if (!accessTokenData) {
           logError('Failed to get access token');
           return new Response(generateErrorPage('Failed to get access token'), {
@@ -467,6 +641,8 @@ export default {
       // Route: API endpoint to check if user is connected
       if (pathname === '/oauth/status' && request.method === 'GET') {
         const userId = url.searchParams.get('user_id');
+        const platform = url.searchParams.get('platform'); // 'x', 'instagram', or 'all'
+        
         if (!userId) {
           return new Response(JSON.stringify({ error: 'user_id required' }), {
             status: 400,
@@ -474,21 +650,44 @@ export default {
           });
         }
         
-        const tokenData = await env.CLIENT_TOKENS.get(`user:${userId}`);
-        const isConnected = !!tokenData;
-        
-        return new Response(JSON.stringify({ 
-          connected: isConnected,
-          userId: userId
-        }), {
-          headers: { 'Content-Type': 'application/json' }
-        });
+        if (platform === 'x') {
+          const tokenData = await env.CLIENT_TOKENS.get(`user:${userId}`);
+          return new Response(JSON.stringify({ 
+            connected: !!tokenData,
+            platform: 'x',
+            userId: userId
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        } else if (platform === 'instagram') {
+          const tokenData = await env.CLIENT_TOKENS.get(`user:instagram:${userId}`);
+          return new Response(JSON.stringify({ 
+            connected: !!tokenData,
+            platform: 'instagram',
+            userId: userId
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        } else {
+          // Check both platforms
+          const xTokenData = await env.CLIENT_TOKENS.get(`user:${userId}`);
+          const instagramTokenData = await env.CLIENT_TOKENS.get(`user:instagram:${userId}`);
+          
+          return new Response(JSON.stringify({ 
+            x: { connected: !!xTokenData },
+            instagram: { connected: !!instagramTokenData },
+            userId: userId
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
       }
       
       // Route: API endpoint to disconnect user
       if (pathname === '/oauth/disconnect' && request.method === 'POST') {
         const reqData = await request.json();
         const userId = reqData.user_id;
+        const platform = reqData.platform; // 'x', 'instagram', or 'all'
         
         if (!userId) {
           return new Response(JSON.stringify({ error: 'user_id required' }), {
@@ -497,14 +696,35 @@ export default {
           });
         }
         
-        await env.CLIENT_TOKENS.delete(`user:${userId}`);
-        
-        return new Response(JSON.stringify({ 
-          success: true,
-          message: 'User disconnected successfully'
-        }), {
-          headers: { 'Content-Type': 'application/json' }
-        });
+        if (platform === 'x') {
+          await env.CLIENT_TOKENS.delete(`user:${userId}`);
+          return new Response(JSON.stringify({ 
+            success: true,
+            message: 'X account disconnected successfully',
+            platform: 'x'
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        } else if (platform === 'instagram') {
+          await env.CLIENT_TOKENS.delete(`user:instagram:${userId}`);
+          return new Response(JSON.stringify({ 
+            success: true,
+            message: 'Instagram account disconnected successfully',
+            platform: 'instagram'
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        } else {
+          // Disconnect both platforms
+          await env.CLIENT_TOKENS.delete(`user:${userId}`);
+          await env.CLIENT_TOKENS.delete(`user:instagram:${userId}`);
+          return new Response(JSON.stringify({ 
+            success: true,
+            message: 'All accounts disconnected successfully'
+          }), {
+            headers: { 'Content-Type': 'application/json' }
+          });
+        }
       }
       
       // 404 for unknown routes
