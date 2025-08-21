@@ -25,11 +25,9 @@
         <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     </div>
     
-    <div class="main-content" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
-        <div class="device-container">
-            <div class="form-page">
-                <!-- Hero Section with Social Proof -->
-    <div class="hero-section">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+        <!-- Hero Section with Social Proof -->
+        <div class="hero-section">
       <div class="promo-badge-outer" style="margin-top: 15px;">
         <div class="promo-badge-inner">
           LIMITED TIME: 50% OFF SETUP FEE
@@ -167,7 +165,6 @@
       </div>
     </div>
 
-  </div>
 </body>
 <script src="/utility/modal.js"></script>
 <script src="/business/legalSocial.js"></script>
@@ -213,6 +210,8 @@
       setTimeout(() => {
         splash.style.display = 'none';
         main.style.position = 'static';
+        main.style.left = 'auto';
+        main.style.transform = 'none';
         
         // Check for URL parameters to auto-open modals
         const urlParams = new URLSearchParams(window.location.search);

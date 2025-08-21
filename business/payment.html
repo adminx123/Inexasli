@@ -8,14 +8,13 @@
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <div class="splash-container" id="splashContainer" style="position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
-        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo">
+    <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
+        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
+        <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
+        <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     </div>
 
-    <div class="main-content" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 0; width: 100%; z-index: 1;">
-        <div class="splash-container">
-            <!-- Content Container -->
-            <div class="content-container wide">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
             <!-- Step Indicator -->
             <div class="step-indicator">
                 <div class="step completed">
@@ -232,6 +231,33 @@
             window.location.href = 'quote.html';
         }
     </script>
+    
+    <!-- Splash Screen Transition Script -->
+    <script>
+        // Splash screen transition
+        document.addEventListener('DOMContentLoaded', function() {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Start main content fade-in immediately
+            main.style.transition = 'opacity 1.2s ease-in';
+            
+            setTimeout(() => {
+                // Start crossfade
+                main.style.opacity = '1';
+                splash.style.opacity = '0';
+                splash.style.transition = 'opacity 1.2s ease-out';
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    main.style.position = 'static';
+                    main.style.left = 'auto';
+                    main.style.transform = 'none';
+                }, 1200);
+            }, 1500); // Show splash for 1.5 seconds
+        });
+    </script>
+    
     <script src="/utility/modal.js"></script>
     <script src="/business/legalSocial.js"></script>
     <script src="step-navigation.js"></script>
