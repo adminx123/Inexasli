@@ -344,6 +344,32 @@
                 }, 1200);
             }, 1500); // Show splash for 1.5 seconds
         });
+        
+        // Fetch OAuth configuration and set up buttons
+        async function setupOAuthButtons() {
+            // Use new OAuth worker for X.com authentication
+            const OAUTH_WORKER_URL = 'https://oauth.4hm7q4q75z.workers.dev';
+            
+            // Generate unique client ID for this user session
+            const clientId = 'client_' + Math.random().toString(36).substring(2, 15);
+            
+            // X OAuth URL using new OAuth worker
+            const xOauthUrl = `${OAUTH_WORKER_URL}/oauth/start`;
+            
+            // Instagram OAuth URL using new OAuth worker
+            const instagramOauthUrl = `${OAUTH_WORKER_URL}/oauth/instagram/start`;
+            
+            // Set up OAuth buttons with new unified worker
+            document.getElementById('instagramOauthButton').href = instagramOauthUrl;
+            document.getElementById('xOauthButton').href = xOauthUrl;
+            
+            // Log OAuth URLs for debugging
+            console.log('Instagram OAuth URL (new worker):', instagramOauthUrl);
+            console.log('X OAuth URL (new worker):', xOauthUrl);
+        }
+        
+        // Initialize OAuth buttons after page loads
+        document.addEventListener('DOMContentLoaded', setupOAuthButtons);
     </script>
 </body>
 </html>
