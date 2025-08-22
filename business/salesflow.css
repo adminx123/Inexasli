@@ -944,7 +944,6 @@ textarea {
     .stat-item {
         min-width: 100px;
         max-width: 120px;
-        padding: 8px 10px;
         height: 60px;
     }
     
@@ -1125,6 +1124,7 @@ textarea {
     font-weight: 500;
     line-height: 1.2;
     margin-top: 5px;
+    white-space: nowrap;
 }
 
 /* Problem Section */
