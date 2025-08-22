@@ -1,6 +1,9 @@
 # Ignore Cloudflare Worker file with credentials
 business/x.js
 
+# OAuth worker (contains sensitive OAuth credentials and secrets)
+business/oauth.js
+
 # Master/Business Worker Architecture (contains sensitive patterns)
 business/masterSocial.js
 business/businessTemplate.js
