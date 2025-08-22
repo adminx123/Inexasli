@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Setup - INEXASLI</title>
+    <link rel="stylesheet" href="salesflow.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <style>
+        .device-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .setup-container {
+            width: 100%;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 4px;
+            animation: progressLoad 1s ease-out;
+        }
+        
+        @keyframes progressLoad {
+            from { width: 75%; }
+            to { width: 100%; }
+        }
+        
+        .setup-form {
+            background: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+        
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .grid-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .grid-item {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 15px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        
+        .grid-item:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+        
+        .grid-item.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #fff;
+        }
+        
+        .grid-item-text {
+            color: #ccc;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .grid-item.selected .grid-item-text {
+            color: #fff;
+        }
+        
+        .consultation-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .consultation-text {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .btn-consultation {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-consultation:hover {
+            transform: translateY(-2px);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .setup-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .setup-title {
+            color: #fff;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+        
+        .setup-subtitle {
+            color: #ccc;
+            font-size: 16px;
+        }
+        
+        .step-indicator {
+            color: #10b981;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="device-container">
+        <div class="setup-container">
+        <div class="setup-header">
+            <div class="step-indicator">SETUP STEP 1 OF 2</div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <h1 class="setup-title">Customize Your Automation</h1>
+            <p class="setup-subtitle">Tell us about your brand so we can create perfect content for your business</p>
+        </div>
+
+        <form class="setup-form" id="setupForm">
+            <div class="form-group">
+                <label class="form-label" for="industry">Business Industry *</label>
+                <select class="form-select" id="industry" name="industry" required>
+                    <option value="">Select your industry</option>
+                    <option value="restaurant">Restaurant/Food Service</option>
+                    <option value="fitness">Fitness/Health</option>
+                    <option value="retail">Retail/E-commerce</option>
+                    <option value="beauty">Beauty/Wellness</option>
+                    <option value="tech">Technology/Software</option>
+                    <option value="consulting">Consulting/Professional Services</option>
+                    <option value="real-estate">Real Estate</option>
+                    <option value="automotive">Automotive</option>
+                    <option value="education">Education/Training</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Brand Tone *</label>
+                <div class="grid-selection" data-type="single" data-name="tone">
+                    <div class="grid-item" data-value="professional">
+                        <div class="grid-item-text">Professional</div>
+                    </div>
+                    <div class="grid-item" data-value="casual">
+                        <div class="grid-item-text">Casual</div>
+                    </div>
+                    <div class="grid-item" data-value="friendly">
+                        <div class="grid-item-text">Friendly</div>
+                    </div>
+                    <div class="grid-item" data-value="edgy">
+                        <div class="grid-item-text">Edgy</div>
+                    </div>
+                </div>
+                <input type="hidden" name="tone" id="tone" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="frequency">Posting Frequency *</label>
+                <select class="form-select" id="frequency" name="frequency" required>
+                    <option value="">Select posting frequency</option>
+                    <option value="daily">Daily (7 posts/week)</option>
+                    <option value="5x-week">5x per week (weekdays)</option>
+                    <option value="3x-week">3x per week</option>
+                    <option value="weekly">Weekly (1 post/week)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="audience">Target Audience *</label>
+                <textarea class="form-textarea" id="audience" name="audience" 
+                    placeholder="Describe your ideal customer (age, interests, demographics, etc.)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Content Focus (select all that apply) *</label>
+                <div class="grid-selection" data-type="multiple" data-name="content">
+                    <div class="grid-item" data-value="products">
+                        <div class="grid-item-text">Products/Services</div>
+                    </div>
+                    <div class="grid-item" data-value="tips">
+                        <div class="grid-item-text">Tips/Advice</div>
+                    </div>
+                    <div class="grid-item" data-value="behind-scenes">
+                        <div class="grid-item-text">Behind-the-scenes</div>
+                    </div>
+                    <div class="grid-item" data-value="quotes">
+                        <div class="grid-item-text">Motivational Quotes</div>
+                    </div>
+                    <div class="grid-item" data-value="team">
+                        <div class="grid-item-text">Team/Culture</div>
+                    </div>
+                    <div class="grid-item" data-value="news">
+                        <div class="grid-item-text">Industry News</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="avoid">Topics to Avoid</label>
+                <textarea class="form-textarea" id="avoid" name="avoid" 
+                    placeholder="Any topics, themes, or content types we should never post about?"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="additional">Additional Information</label>
+                <textarea class="form-textarea" id="additional" name="additional" 
+                    placeholder="Any other details about your brand voice, special requirements, or preferences?"></textarea>
+            </div>
+
+            <div class="consultation-box">
+                <div class="consultation-text">
+                    <strong>Want personalized consultation?</strong><br>
+                    Schedule a 15-minute brand strategy call for enhanced customization
+                </div>
+                <a href="#" class="btn-consultation" onclick="scheduleConsultation()">
+                    📞 Schedule Call (Optional)
+                </a>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                    🚀 Complete Setup
+                </button>
+                <button type="button" class="btn-secondary" onclick="saveAndSchedule()">
+                    📅 Save & Schedule Call
+                </button>
+            </div>
+        </form>
+        </div>
+    </div>
+    
+    <script>
+        // Grid selection functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const gridSelections = document.querySelectorAll('.grid-selection');
+            
+            gridSelections.forEach(grid => {
+                const type = grid.dataset.type; // 'single' or 'multiple'
+                const name = grid.dataset.name;
+                const items = grid.querySelectorAll('.grid-item');
+                
+                items.forEach(item => {
+                    item.addEventListener('click', function() {
+                        const value = this.dataset.value;
+                        
+                        if (type === 'single') {
+                            // Single selection - clear others and select this one
+                            items.forEach(i => i.classList.remove('selected'));
+                            this.classList.add('selected');
+                            
+                            // Update hidden input
+                            const hiddenInput = document.getElementById(name);
+                            if (hiddenInput) {
+                                hiddenInput.value = value;
+                            }
+                        } else {
+                            // Multiple selection - toggle this item
+                            this.classList.toggle('selected');
+                            
+                            // Update form data (will be handled in form submission)
+                        }
+                    });
+                });
+            });
+        });
+
+        document.getElementById('setupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const setupData = {};
+            
+            // Handle regular fields
+            for (let [key, value] of formData.entries()) {
+                setupData[key] = value;
+            }
+            
+            // Handle grid selections
+            const contentGrid = document.querySelector('[data-name="content"]');
+            const selectedContent = contentGrid.querySelectorAll('.grid-item.selected');
+            setupData.content = Array.from(selectedContent).map(item => item.dataset.value);
+            
+            // Validate content selection
+            if (setupData.content.length === 0) {
+                alert('Please select at least one content focus area.');
+                return;
+            }
+            
+            // Validate tone selection
+            if (!setupData.tone) {
+                alert('Please select a brand tone.');
+                return;
+            }
+            
+            // TODO: Send to your backend/worker
+            console.log('Setup Data:', setupData);
+            
+            // Redirect to success page
+            window.location.href = 'setupComplete.html';
+        });
+        
+        function scheduleConsultation() {
+            // TODO: Integrate with Calendly or your scheduling system
+            alert('Consultation scheduling coming soon! We\'ll contact you within 24 hours.');
+        }
+        
+        function saveAndSchedule() {
+            // Collect current form data
+            const formData = new FormData(document.getElementById('setupForm'));
+            const setupData = {};
+            
+            for (let [key, value] of formData.entries()) {
+                setupData[key] = value;
+            }
+            
+            // Handle grid selections
+            const contentGrid = document.querySelector('[data-name="content"]');
+            const selectedContent = contentGrid.querySelectorAll('.grid-item.selected');
+            setupData.content = Array.from(selectedContent).map(item => item.dataset.value);
+            
+            const toneGrid = document.querySelector('[data-name="tone"]');
+            const selectedTone = toneGrid.querySelector('.grid-item.selected');
+            if (selectedTone) setupData.tone = selectedTone.dataset.value;
+            
+            // TODO: Save data and schedule consultation
+            console.log('Saved for consultation:', setupData);
+            scheduleConsultation();
+        }
+    </script>
+</body>
+</html>
