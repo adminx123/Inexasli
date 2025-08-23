@@ -1,0 +1,24 @@
+name = "oauth"
+main = "oauth.js"
+compatibility_date = "2025-07-22"
+account_id = "b70c309587ed8ba2bfa06320792ea457"
+workers_dev = true
+
+# KV namespace for storing OAuth tokens
+[[kv_namespaces]]
+binding = "CLIENT_TOKENS"
+id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+preview_id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+
+# Environment variables (you'll need to set these with wrangler secret put)
+# X.com OAuth credentials
+# X_CONSUMER_KEY = "your_x_consumer_key"
+# X_CONSUMER_SECRET = "your_x_consumer_secret"
+# X_API_KEY = "your_x_api_key"  # Same as Consumer Key
+# X_API_SECRET = "your_x_api_secret"  # Same as Consumer Secret
+# X_BEARER_TOKEN = "your_x_bearer_token"  # For API v2 access
+
+# Instagram OAuth credentials  
+# INSTAGRAM_APP_ID = "your_instagram_app_id"
+# INSTAGRAM_APP_SECRET = "your_instagram_app_secret"
+# INSTAGRAM_VERIFY_TOKEN = "your_instagram_verify_token"
