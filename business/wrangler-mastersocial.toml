@@ -1,0 +1,17 @@
+name = "mastersocial"
+main = "masterSocial.js"
+compatibility_date = "2023-10-30"
+
+# KV namespace for storing client tokens
+[[kv_namespaces]]
+binding = "CLIENT_TOKENS"
+id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+preview_id = "f1fb28cb03b04ed2abcea8c88c0b9587"
+
+# Environment variables set via wrangler secret put:
+# XAI_API_KEY
+# X_CONSUMER_KEY  
+# X_CONSUMER_SECRET
+# X_ACCESS_TOKEN (default/fallback)
+# X_ACCESS_TOKEN_SECRET (default/fallback)
+# POSTER_SECRET
