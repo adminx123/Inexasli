@@ -11,6 +11,9 @@ business/businessTemplate.js
 # Business client workers (contains client-specific credentials)
 business/clients/
 
+# Business scene folder
+business/scene/
+
 # INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP
