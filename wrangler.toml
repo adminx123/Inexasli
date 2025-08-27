@@ -24,10 +24,15 @@ preview_id = "f1fb28cb03b04ed2abcea8c88c0b9587"
 # --- Master Social Worker (Central Token/Secret Manager) ---
 [env.mastersocial]
 name = "mastersocial"
-main = "./business/masterSocial.js"
+main = "./business/clients/masterSocial.js"
 
 [env.mastersocial.triggers]
 crons = ["11 19 * * *"]
+
+# Service binding to INEXASLI worker
+[[env.mastersocial.services]]
+binding = "INEXASLI"
+service = "prompt-inexasli"
 
 # KV namespace for storing client OAuth tokens
 [[env.mastersocial.kv_namespaces]]
@@ -46,8 +51,8 @@ crons = ["0 9,13,17 * * *"]  # Post at 9am, 1pm, 5pm UTC
 
 # --- INEXASLI Client Worker ---
 [env.inexasli]
-name = "inexasli"
-main = "./business/clients/inexasli.js"
+name = "prompt-inexasli"
+main = "./business/clients/prompt-inexasli.js"
 
 # INEXASLI posting schedule
 [env.inexasli.triggers]
