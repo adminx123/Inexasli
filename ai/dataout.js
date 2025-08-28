@@ -85,11 +85,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             content = content.replace(/<script[^>]*src=['"]*[^'"]*copy\.js[^'"]*['"][^>]*><\/script>/gi, '');
             content = content.replace(/<script[^>]*src=['"]*[^'"]*enhancedUI\.js[^'"]*['"][^>]*><\/script>/gi, '');
             
-            // Update content - container is always visible at 100% viewport
+            // Update content - switch to content state
+            dataContainer.className = 'data-container-out has-content';
             dataContainer.innerHTML = `
                 <div class="data-content">${content}</div>
             `;
-            console.log('[DataOut] Content inserted into container (duplicate scripts removed)');
+            console.log('[DataOut] Content inserted into container and switched to content state (duplicate scripts removed)');
 
             const scripts = dataContainer.querySelectorAll('script');
             console.log('[DataOut] Found scripts to execute:', scripts.length);
@@ -118,8 +119,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.log('[DataOut] All scripts processed');
         } catch (error) {
             console.error(`Error loading stored content (dataout.js):`, error);
+            // Keep empty state styling but show error in content area
+            dataContainer.className = 'data-container-out empty-state';
             dataContainer.innerHTML = `
-                <div class="data-content">Error loading content: ${error.message}</div>
+                <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+                <div class="splash-inexasli">INEXASLI</div>
+                <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+                <div class="data-content" style="display: block; color: white; text-align: center; margin-top: 20px;">Error loading content: ${error.message}</div>
             `;
         }
     }
@@ -133,7 +139,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (lastUrl) {
                 loadStoredContent(lastUrl);
             } else {
+                 // Keep empty state with splash screen styling
+                 dataContainer.className = 'data-container-out empty-state';
                  dataContainer.innerHTML = `
+                    <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+                    <div class="splash-inexasli">INEXASLI</div>
+                    <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
                     <div class="data-content"></div>
                 `;
             }
@@ -142,11 +153,71 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const style = document.createElement('style');
         style.textContent = `
-            /* Data out container - always 100% viewport, no state management */
+            /* Data out container - matches splash screen final state when empty */
             .data-container-out {
                 position: fixed;
                 top: 0;
                 left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100vw;
+                height: 100vh;
+                background: #000; /* Black background like splash screen */
+                z-index: 500;
+                overflow: hidden;
+                font-family: "Inter", sans-serif;
+                opacity: 1;
+                color: #333333;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+            }
+
+            /* Empty state styling - matches splash screen */
+            .data-container-out.empty-state {
+                background: #000;
+            }
+
+            .data-container-out.empty-state .splash-logo {
+                width: 60px;
+                height: 60px;
+                opacity: 1;
+                transform: rotate(180deg);
+                margin-bottom: 10px;
+            }
+
+            .data-container-out.empty-state .splash-inexasli {
+                font-family: Arial, sans-serif;
+                font-size: 2.5em;
+                font-weight: bold;
+                color: white;
+                opacity: 1;
+                margin-bottom: 10px;
+                letter-spacing: 2px;
+                text-align: center;
+            }
+
+            .data-container-out.empty-state .splash-empowering {
+                color: rgb(49, 49, 49);
+                font-family: 'Montserrat', sans-serif;
+                font-weight: bold;
+                letter-spacing: 2px;
+                font-size: 1.2em;
+                margin: 0;
+                opacity: 1;
+                text-align: center;
+            }
+
+            .data-container-out.empty-state .tm {
+                font-size: 0.5em;
+                position: relative;
+                top: -0.2em;
+                vertical-align: top;
+            }
+
+            /* Content loaded state - revert to original gradient background */
+            .data-container-out.has-content {
                 background:
                   linear-gradient(120deg, #888 0%, #b0b0b0 25%, #e0e0e0 45%, #b0b0b0 65%, #888 85%, #e0e0e0 100%),
                   linear-gradient(210deg, #b0b0b0 0%, #e0e0e0 30%, #b0b0b0 70%, transparent 100%),
@@ -155,16 +226,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                   repeating-linear-gradient(60deg, rgba(176,176,176,0.16) 0px, rgba(224,224,224,0.08) 6px, transparent 12px, transparent 24px),
                   repeating-linear-gradient(170deg, rgba(136,136,136,0.14) 0px, rgba(176,176,176,0.08) 4px, transparent 10px, transparent 20px);
                 background-blend-mode: lighten, screen, overlay, soft-light, lighten, normal;
+                flex-direction: column;
+                align-items: stretch;
+                justify-content: flex-start;
                 padding: 4px;
                 border-radius: 0 0 27px 27px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-                z-index: 500;
-                width: 100%;
-                height: 100vh;
-                overflow: hidden;
-                font-family: "Inter", sans-serif;
-                opacity: 1;
-                color: #333333;
             }
 
             .data-container-out .data-content {
@@ -176,20 +243,40 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 margin-top: 30px;
+                display: none; /* Hidden when empty */
+            }
+
+            .data-container-out.has-content .data-content {
+                display: block; /* Show when content is loaded */
             }
 
             /* Mobile responsiveness */
             @media (max-width: 480px) {
                 .data-container-out {
-                    width: 100%;
+                    width: 100vw;
                     height: 100vh;
                     top: 0;
                     left: 0;
                     right: 0;
+                    bottom: 0;
                     border-radius: 0;
                     border: none;
                     box-shadow: none;
                     padding: 0;
+                }
+
+                .data-container-out.has-content {
+                    padding: 0;
+                    border-radius: 0;
+                    box-shadow: none;
+                }
+
+                .data-container-out.empty-state .splash-inexasli {
+                    font-size: 2em; /* Slightly smaller on mobile */
+                }
+
+                .data-container-out.empty-state .splash-empowering {
+                    font-size: 1em; /* Slightly smaller on mobile */
                 }
 
                 .data-container-out .data-content {
@@ -205,12 +292,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.head.appendChild(style);
 
         dataContainer = document.createElement('div');
-        dataContainer.className = 'data-container-out';
+        dataContainer.className = 'data-container-out empty-state';
         dataContainer.innerHTML = `
-            <div class="data-content"></div> 
+            <img src="/images/apple-touch-icon.png" alt="Logo" class="splash-logo">
+            <div class="splash-inexasli">INEXASLI</div>
+            <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
+            <div class="data-content"></div>
         `;
         document.body.appendChild(dataContainer);
-        console.log('Data out container injected - always visible at 100% viewport (dataout.js)');
+        console.log('Data out container injected with splash screen styling for empty state (dataout.js)');
 
         // REMOVED click listeners for container, close button, and data label for toggling
         // REMOVED initializeGridItems function as it seems unrelated to dataout toggling
