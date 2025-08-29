@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhance Your Package - INEXASLI</title>
+    <title>Add Enhancements - INEXASLI</title>
     <link rel="stylesheet" href="salesflow.css">
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
 </head>
@@ -17,20 +17,24 @@
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
             <!-- Step Indicator -->
             <div class="step-indicator">
-                <div class="step completed">
+                <a href="packages.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number">1</div>
                     <span>Base</span>
-                </div>
+                </a>
                 <div class="step active">
                     <div class="step-number">2</div>
                     <span>Enhance</span>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <span>Review</span>
+                    <span>Customize</span>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
+                    <span>Review</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
                     <span>Payment</span>
                 </div>
             </div>
@@ -46,31 +50,69 @@
             <!-- Add-ons Section -->
             <div class="addons-container">
                 <h1 class="addons-title">Add Enhancements</h1>
-                <p class="addons-subtitle">Boost your base package with extra content and premium features (all optional)</p>
+                <p class="addons-subtitle">Boost your base package with extra content and premium features (availability depends on your selected package)</p>
 
                 <div class="addons-grid">
                     <!-- Extra Photos -->
                     <div class="addon-card" data-addon="photos-10" data-price="50">
                         <div class="addon-selected-indicator">✓</div>
-                        <div class="addon-name">+10 Photos</div>
-                        <div class="addon-description">Additional high-quality, professionally edited photos for your content library</div>
+                        <div class="addon-name">+10 Photo Storage</div>
+                        <div class="addon-description">Additional capacity for up to 10 more photos in your content library</div>
                         <div class="addon-price">+$50</div>
                     </div>
 
                     <!-- Extra Videos -->
                     <div class="addon-card" data-addon="videos-5" data-price="75">
                         <div class="addon-selected-indicator">✓</div>
-                        <div class="addon-name">+5 Videos</div>
-                        <div class="addon-description">Extra engaging video content to boost your social media performance</div>
+                        <div class="addon-name">+5 Video Storage</div>
+                        <div class="addon-description">Additional capacity for up to 5 more videos in your content library</div>
                         <div class="addon-price">+$75</div>
                     </div>
 
-                    <!-- Extra Platform -->
-                    <div class="addon-card" data-addon="platform-extra" data-price="100">
+                    <!-- Extra Iterations -->
+                    <div class="addon-card" data-addon="iterations-extra" data-price="150">
                         <div class="addon-selected-indicator">✓</div>
-                        <div class="addon-name">Extra Platform</div>
-                        <div class="addon-description">Add LinkedIn or TikTok to expand your reach across additional networks</div>
+                        <div class="addon-name">+10 Content Refinements</div>
+                        <div class="addon-description">Additional content refinement rounds for perfecting your posts and messaging</div>
+                        <div class="addon-price">+$150</div>
+                    </div>
+
+                    <!-- Hybrid Content Mode -->
+                    <div class="addon-card" data-addon="hybrid-mode" data-price="100">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">Hybrid Content Mode</div>
+                        <div class="addon-description">Combine AI-generated content with your own photos/videos for optimal engagement</div>
                         <div class="addon-price">+$100</div>
+                    </div>
+
+                    <!-- User Content Automation -->
+                    <div class="addon-card" data-addon="user-automation" data-price="75">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">User Content Automation</div>
+                        <div class="addon-description">Automated scheduling and posting of your existing content library</div>
+                        <div class="addon-price">+$75</div>
+                    </div>
+
+                    <!-- Discount Options -->
+                    <div class="addon-card discount-addon" data-addon="user-content-only" data-price="-50">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">User Content Only</div>
+                        <div class="addon-description">Provide your own content - discount for no AI generation costs</div>
+                        <div class="addon-price">-$50</div>
+                    </div>
+
+                    <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-25">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">Basic Scheduling Only</div>
+                        <div class="addon-description">Simple automated posting without advanced analytics or engagement optimization</div>
+                        <div class="addon-price">-$25</div>
+                    </div>
+
+                    <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-30">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">Reduced Posting Frequency</div>
+                        <div class="addon-description">Post 3x per week instead of daily - perfect for businesses with less frequent content</div>
+                        <div class="addon-price">-$30</div>
                     </div>
                     </div>
                 </div>
@@ -123,9 +165,13 @@
         // Load selected package on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadSelectedPackage();
-            setupAddonListeners();
             updateTotal();
         });
+
+        // Setup addon listeners after content is visible
+        setTimeout(() => {
+            setupAddonListeners();
+        }, 1600); // After splash screen animation completes
 
         let selectedPackage = null;
         let selectedAddons = [];
@@ -146,19 +192,34 @@
                 ];
                 
                 document.getElementById('selectedPackageDetails').textContent = features.join(' • ');
+                
+                // Conditionally show/hide platform addon based on package
+                togglePlatformAddon(selectedPackage.type);
             } else {
                 // Redirect back if no package selected
                 window.location.href = 'packages.html';
             }
         }
 
+        function togglePlatformAddon(packageType) {
+            const platformAddon = document.querySelector('[data-addon="platform-extra"]');
+            
+            if (packageType === 'starter') {
+                // Show platform addon for starter (they have 2 platforms, can upgrade to 3)
+                platformAddon.style.display = 'block';
+            } else {
+                // Hide platform addon for professional/premium (they already have all 3 platforms)
+                platformAddon.style.display = 'none';
+            }
+        }
+
         function getPackagePhotos(type) {
-            const photos = { starter: 15, professional: 25, enterprise: 40 };
+            const photos = { starter: 15, professional: 25, premium: 40 };
             return photos[type] || 25;
         }
 
         function getPackageVideos(type) {
-            const videos = { starter: 5, professional: 10, enterprise: 15 };
+            const videos = { starter: 5, professional: 10, premium: 15 };
             return videos[type] || 10;
         }
 
@@ -215,8 +276,8 @@
             
             localStorage.setItem('quoteData', JSON.stringify(quoteData));
             
-            // Redirect to quote page
-            window.location.href = 'quote.html';
+            // Redirect to customization page
+            window.location.href = 'customization.html';
         }
     </script>
     

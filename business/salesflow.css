@@ -371,8 +371,8 @@ p {
     background: rgba(255,255,255,0.05);
     border: 2px solid rgba(255,255,255,0.2);
     border-radius: 15px;
-    padding: 20px;
-    text-align: center;
+    padding: 15px 15px 15px 20px;
+    text-align: left;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -385,8 +385,11 @@ p {
 }
 
 .addon-card.selected {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.3) !important;
+    border-color: #10b981 !important;
+    border-width: 3px !important;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5) !important;
+    transform: scale(1.02) !important;
 }
 
 .addon-name {
@@ -394,25 +397,34 @@ p {
     font-size: 1.3em;
     font-weight: bold;
     margin-bottom: 10px;
+    padding-right: 80px;
 }
 
 .addon-description {
     color: #ccc;
     font-size: 14px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     line-height: 1.4;
+    padding-right: 80px;
 }
 
 .addon-price {
+    position: absolute;
+    top: 15px;
+    right: 20px;
     color: #10b981;
-    font-size: 1.8em;
+    font-size: 1.4em;
     font-weight: bold;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 5px 10px;
+    border-radius: 8px;
+    z-index: 2;
 }
 
 .addon-selected-indicator {
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 55px;
     background: #10b981;
     color: white;
     border-radius: 50%;
@@ -425,10 +437,33 @@ p {
     font-weight: bold;
     opacity: 0;
     transition: opacity 0.3s ease;
+    border: 2px solid white;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+    z-index: 3;
 }
 
-.addon-card.selected .addon-selected-indicator {
-    opacity: 1;
+.addon-card.discount-addon:hover {
+    background: rgba(34, 197, 94, 0.05);
+    border-color: rgba(34, 197, 94, 0.2);
+}
+
+.addon-card.discount-addon.selected {
+    background: rgba(34, 197, 94, 0.4) !important;
+    border-color: #22c55e !important;
+    border-width: 3px !important;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.5) !important;
+    transform: scale(1.02) !important;
+}
+
+.addon-card.discount-addon .addon-price {
+    color: #22c55e;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.addon-card.discount-addon .addon-selected-indicator {
+    background: #22c55e;
+    border: 2px solid white;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
 }
 
 .addons-total {
