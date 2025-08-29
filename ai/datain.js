@@ -922,8 +922,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-in {
                 position: fixed;
                 bottom: 0;
-                left: 0;
+                left: 50%;
                 width: 100%;
+                max-width: 480px;
+                transform: translate(-50%, calc(100% - 38.5px));
                 height: 90vh;
                 background-color: rgba(255, 255, 255, 0.97);
                 backdrop-filter: blur(12px);
@@ -940,8 +942,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 font-family: "Inter", sans-serif;
                 display: flex;
                 flex-direction: column;
-                /* Pure transform approach - only move up/down */
-                transform: translateY(calc(100% - 38.5px));
                 transition: transform 0.3s ease-in-out;
                 overflow: hidden;
             }

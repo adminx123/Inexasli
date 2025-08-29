@@ -157,10 +157,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             .data-container-out {
                 position: fixed;
                 top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                width: 100vw;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 480px; /* Match datain.js */
                 height: 100vh;
                 background: #000; /* Black background like splash screen */
                 z-index: 500;
@@ -238,8 +238,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 padding: 0 0 35px 0; /* Add 35px bottom padding for overscroll */
                 font-size: 14px;
                 height: calc(100vh - 40px);
-                overflow-y: auto;
-                overflow-x: auto;
+                overflow-y: hidden;
+                overflow-x: hidden;
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 margin-top: 30px;
