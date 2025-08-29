@@ -8,6 +8,7 @@ function injectCurrencyStyles() {
     .currency-selector-container {
       margin-bottom: 20px;
       padding: 0 20px;
+      margin-top: 30px;
     }
     
     .currency-selector {
