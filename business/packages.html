@@ -7,6 +7,50 @@
     <link rel="stylesheet" href="salesflow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    
+    <style>
+        .currency-selector-container {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .currency-selector {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .currency-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .currency-select {
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .currency-select option {
+            background: white;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
@@ -14,6 +58,21 @@
     </div>
 
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+            
+            <!-- Currency Selector -->
+            <div class="currency-selector-container">
+                <div class="currency-selector">
+                    <span class="currency-label">Your Currency:</span>
+                    <select id="currencySelect" class="currency-select">
+                        <option value="CAD" data-symbol="$">🇨🇦 CAD ($)</option>
+                        <option value="USD" data-symbol="$">🇺🇸 USD ($)</option>
+                        <option value="EUR" data-symbol="€">🇪🇺 EUR (€)</option>
+                        <option value="GBP" data-symbol="£">🇬🇧 GBP (£)</option>
+                        <option value="AUD" data-symbol="$">🇦🇺 AUD ($)</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- Step Indicator -->
             <div class="step-indicator">
                 <div class="step active">
@@ -43,8 +102,8 @@
                 <!-- Starter Package -->
                 <div class="package-card" data-package="starter" data-price="397">
                     <div class="package-name">Starter Base</div>
-                    <div class="package-price">$397</div>
-                    <div class="package-period">Setup + First Month</div>
+                    <div class="package-price" data-package-price="starter" data-price-type="setup">$397</div>
+                    <div class="package-period">Setup + <span data-package-price="starter" data-price-type="monthly">$127</span>/month</div>
                     
                     <div class="package-features">
                         <div class="package-feature">
@@ -70,9 +129,9 @@
                     </div>
 
                     <div class="package-platforms">
-                        <div class="package-platforms-title">Choose Any 2 Platforms:</div>
+                        <div class="package-platforms-title">Instagram + Your Choice:</div>
                         <div class="platform-selection-grid">
-                            <div class="platform-option" data-platform="instagram">
+                            <div class="platform-option selected" data-platform="instagram">
                                 <i class="fab fa-instagram"></i>
                             </div>
                             <div class="platform-option" data-platform="x">
@@ -81,12 +140,9 @@
                             <div class="platform-option" data-platform="facebook">
                                 <i class="fab fa-facebook"></i>
                             </div>
-                            <div class="platform-option" data-platform="linkedin">
-                                <i class="fab fa-linkedin"></i>
-                            </div>
                         </div>
                         <div class="platform-selection-counter">
-                            <span class="selected-count">0</span> of 2 platforms selected
+                            <span class="selected-count">1</span> of 2 platforms selected
                         </div>
                     </div>
 
@@ -97,8 +153,8 @@
                 <div class="package-card most-popular" data-package="professional" data-price="597">
                     <div class="package-badge">Most Popular</div>
                     <div class="package-name">Professional Base</div>
-                    <div class="package-price">$597</div>
-                    <div class="package-period">Setup + First Month</div>
+                    <div class="package-price" data-package-price="professional" data-price-type="setup">$597</div>
+                    <div class="package-period">Setup + <span data-package-price="professional" data-price-type="monthly">$197</span>/month</div>
                     
                     <div class="package-features">
                         <div class="package-feature">
@@ -128,34 +184,31 @@
                     </div>
 
                     <div class="package-platforms">
-                        <div class="package-platforms-title">Choose Any 3 Platforms:</div>
+                        <div class="package-platforms-title">All 3 Platforms Included:</div>
                         <div class="platform-selection-grid">
-                            <div class="platform-option" data-platform="instagram">
+                            <div class="platform-option selected" data-platform="instagram">
                                 <i class="fab fa-instagram"></i>
                             </div>
-                            <div class="platform-option" data-platform="x">
+                            <div class="platform-option selected" data-platform="x">
                                 <i class="platform-icon-x">𝕏</i>
                             </div>
-                            <div class="platform-option" data-platform="facebook">
+                            <div class="platform-option selected" data-platform="facebook">
                                 <i class="fab fa-facebook"></i>
-                            </div>
-                            <div class="platform-option" data-platform="linkedin">
-                                <i class="fab fa-linkedin"></i>
                             </div>
                         </div>
                         <div class="platform-selection-counter">
-                            <span class="selected-count">0</span> of 3 platforms selected
+                            Instagram + X + Facebook
                         </div>
                     </div>
 
                     <button class="btn-select-package">Select Base + Add Enhancements</button>
                 </div>
 
-                <!-- Enterprise Package -->
-                <div class="package-card" data-package="enterprise" data-price="997">
-                    <div class="package-name">Enterprise Base</div>
-                    <div class="package-price">$997</div>
-                    <div class="package-period">Setup + First Month</div>
+                <!-- Premium Package -->
+                <div class="package-card" data-package="premium" data-price="897">
+                    <div class="package-name">Premium Base</div>
+                    <div class="package-price" data-package-price="premium" data-price-type="setup">$897</div>
+                    <div class="package-period">Setup + <span data-package-price="premium" data-price-type="monthly">$297</span>/month</div>
                     
                     <div class="package-features">
                         <div class="package-feature">
@@ -186,20 +239,32 @@
                             <span class="package-feature-icon">✓</span>
                             Monthly Strategy Call
                         </div>
+                        <div class="package-feature">
+                            <span class="package-feature-icon">✓</span>
+                            Priority Support
+                        </div>
                     </div>
 
                     <div class="package-platforms">
-                        <div class="package-platforms-title">Choose Any 4 Platforms:</div>
+                        <div class="package-platforms-title">All 3 Platforms + Premium Features:</div>
                         <div class="platform-selection-grid">
-                            <div class="platform-option" data-platform="instagram">
+                            <div class="platform-option selected" data-platform="instagram">
                                 <i class="fab fa-instagram"></i>
                             </div>
-                            <div class="platform-option" data-platform="x">
+                            <div class="platform-option selected" data-platform="x">
                                 <i class="platform-icon-x">𝕏</i>
                             </div>
-                            <div class="platform-option" data-platform="facebook">
+                            <div class="platform-option selected" data-platform="facebook">
                                 <i class="fab fa-facebook"></i>
                             </div>
+                        </div>
+                        <div class="platform-selection-counter">
+                            Instagram + X + Facebook + Premium Support
+                        </div>
+                    </div>
+
+                    <button class="btn-select-package">Select Base + Add Enhancements</button>
+                </div>
                             <div class="platform-option" data-platform="linkedin">
                                 <i class="fab fa-linkedin"></i>
                             </div>
@@ -417,6 +482,9 @@
             const splash = document.getElementById('splashContainer');
             const main = document.getElementById('mainContent');
             
+            // Initialize currency selector
+            initializeCurrencySelector();
+            
             // Start main content fade-in immediately
             main.style.transition = 'opacity 1.2s ease-in';
             
@@ -437,6 +505,7 @@
     </script>
     
     <script src="/utility/modal.js"></script>
+    <script src="/utility/currency.js"></script>
     <script src="/business/legalSocial.js"></script>
     <script src="step-navigation.js"></script>
 </body>
