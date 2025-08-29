@@ -238,12 +238,20 @@ document.addEventListener('DOMContentLoaded', async function () {
                 padding: 0 0 35px 0; /* Add 35px bottom padding for overscroll */
                 font-size: 14px;
                 height: calc(100vh - 40px);
-                overflow-y: hidden;
+                overflow-y: auto;
                 overflow-x: hidden;
                 font-family: "Inter", sans-serif;
                 width: 100%;
                 margin-top: 30px;
                 display: none; /* Hidden when empty */
+                /* Hide scrollbar but keep functionality */
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* Internet Explorer 10+ */
+            }
+
+            /* Hide scrollbar for WebKit browsers */
+            .data-container-out .data-content::-webkit-scrollbar {
+                display: none;
             }
 
             .data-container-out.has-content .data-content {

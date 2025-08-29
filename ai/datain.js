@@ -948,7 +948,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             /* Visible state - move container up */
             .data-container-in.visible {
-                transform: translateY(0);
+                transform: translate(-50%, 0);
             }
 
             /* Utility buttons - always visible at top */
