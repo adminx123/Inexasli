@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const stepPages = {
         1: 'packages.html',
         2: 'addons.html', 
-        3: 'quote.html',
-        4: 'payment.html'
+        3: 'customization.html',
+        4: 'quote.html',
+        5: 'payment.html'
     };
 
     // Get current page to determine which step we're on
@@ -81,8 +82,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const titles = {
             1: 'Choose Base Package',
             2: 'Add Enhancements', 
-            3: 'Review Order',
-            4: 'Payment'
+            3: 'Customize Content',
+            4: 'Review Order',
+            5: 'Payment'
         };
         return titles[stepNumber] || `Step ${stepNumber}`;
     }
@@ -186,8 +188,9 @@ window.stepNavigation = {
         const stepPages = {
             1: 'packages.html',
             2: 'addons.html',
-            3: 'quote.html', 
-            4: 'payment.html'
+            3: 'customization.html',
+            4: 'quote.html',
+            5: 'payment.html'
         };
         
         const targetPage = stepPages[stepNumber];
