@@ -20,7 +20,7 @@
         "deploy:quiz": "npx wrangler deploy -e quiz",
         "deploy:adventure": "npx wrangler deploy -e adventure",
         "deploy:calorie": "npx wrangler deploy -e calorie",
-        "deploy:income": "npx wrangler deploy -e income"
+        "deploy:oauth": "npx wrangler deploy --env oauth"
     },
     "keywords": [],
     "author": "",
