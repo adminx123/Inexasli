@@ -505,6 +505,49 @@
                     });
                 });
             });
+            
+            // Load selected package and adapt form
+            const packageData = localStorage.getItem('selectedPackage');
+            if (packageData) {
+                const selectedPackage = JSON.parse(packageData);
+                const frequencySelect = document.getElementById('frequency');
+                
+                // Filter frequency options based on package
+                const options = frequencySelect.querySelectorAll('option');
+                let allowedFrequencies = [];
+                
+                if (selectedPackage.package === 'starter') {
+                    allowedFrequencies = ['3x-week', 'weekly'];
+                } else if (selectedPackage.package === 'professional') {
+                    allowedFrequencies = ['5x-week', '3x-week', 'weekly'];
+                } else if (selectedPackage.package === 'premium') {
+                    allowedFrequencies = ['daily', '5x-week', '3x-week', 'weekly'];
+                }
+                
+                // Hide incompatible options
+                options.forEach(option => {
+                    if (option.value && !allowedFrequencies.includes(option.value)) {
+                        option.style.display = 'none';
+                    } else {
+                        option.style.display = 'block';
+                    }
+                });
+                
+                // Pre-select appropriate frequency
+                if (selectedPackage.package === 'starter') {
+                    frequencySelect.value = '3x-week';
+                } else if (selectedPackage.package === 'professional') {
+                    frequencySelect.value = '5x-week';
+                } else if (selectedPackage.package === 'premium') {
+                    frequencySelect.value = 'daily';
+                }
+                
+                // Optional: Add package info to page
+                const subtitle = document.querySelector('.setup-subtitle');
+                if (subtitle) {
+                    subtitle.textContent += ` (Customizing ${selectedPackage.name})`;
+                }
+            }
         });
 
         document.getElementById('setupForm').addEventListener('submit', function(e) {
