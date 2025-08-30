@@ -209,14 +209,91 @@
         }
         
         .step-indicator {
-            color: #10b981;
-            font-weight: 600;
-            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            margin: 10px 0 20px 0;
+            gap: 8px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 0 5px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1.5px 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 13px;
+            color: #ccc;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            white-space: nowrap;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+        
+        .step:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .step.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .step.active:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+        }
+        
+        .step.completed {
+            background: rgba(40, 167, 69, 0.3);
+            color: #90ee90;
+            border-color: #28a745;
+        }
+        
+        .step.completed:hover {
+            background: rgba(40, 167, 69, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .step-number {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+        
+        .step.completed .step-number {
+            background: #28a745;
+            color: white;
+        }
+        
+        .step.active .step-number {
+            background: rgba(255,255,255,0.3);
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="device-container">
+    <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
+        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
+    </div>
+
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
         <div class="setup-container">
         <div class="setup-header">
             <!-- Step Indicator -->
@@ -363,6 +440,37 @@
         <a href="addons.html" class="btn-back">← Back to Enhancements</a>
         </div>
     </div>
+    
+    <script>
+        // Splash screen transition
+        document.addEventListener('DOMContentLoaded', function() {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            if (!splash || !main) {
+                console.error('Splash or main content elements not found');
+                return;
+            }
+            
+            // Start main content fade-in immediately
+            main.style.transition = 'opacity 1.2s ease-in';
+            
+            setTimeout(() => {
+                // Start crossfade
+                main.style.opacity = '1';
+                splash.style.opacity = '0';
+                splash.style.transition = 'opacity 1.2s ease-out';
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    main.style.position = 'static';
+                    main.style.left = 'auto';
+                    main.style.transform = 'none';
+                    main.style.top = 'auto';
+                }, 1200);
+            }, 1500); // Show splash for 1.5 seconds
+        });
+    </script>
     
     <script>
         // Grid selection functionality

@@ -6,12 +6,33 @@
     <title>Payment - INEXASLI Social Media Automation</title>
     <link rel="stylesheet" href="salesflow.css">
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <style>
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 4px;
+            animation: progressLoad 1s ease-out;
+        }
+        
+        @keyframes progressLoad {
+            from { width: 80%; }
+            to { width: 100%; }
+        }
+    </style>
 </head>
 <body>
     <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
         <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
-        <div class="splash-inexasli">INEXASLI<span class="tm">™</span></div>
-        <div class="splash-empowering">Empowering Thee<span class="tm">™</span></div>
     </div>
 
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
@@ -37,6 +58,10 @@
                     <div class="step-number">5</div>
                     <span>Pay</span>
                 </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
 
             <!-- Payment Section -->
