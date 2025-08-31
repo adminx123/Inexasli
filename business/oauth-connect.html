@@ -370,6 +370,21 @@
         
         // Initialize OAuth buttons after page loads
         document.addEventListener('DOMContentLoaded', setupOAuthButtons);
+            // Show green check mark if Instagram is connected
+            document.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('instagram') === 'connected') {
+                    // Insert green check mark indicator for Instagram
+                    const instagramBtn = document.getElementById('instagramOauthButton');
+                    if (instagramBtn) {
+                        instagramBtn.innerHTML = '<span style="color:#059669;font-size:1.5em;margin-right:8px;">✅</span> Instagram Connected';
+                        instagramBtn.style.background = 'linear-gradient(135deg, #90ee90, #32cd32)';
+                        instagramBtn.style.color = '#000';
+                        instagramBtn.style.fontWeight = 'bold';
+                        instagramBtn.style.pointerEvents = 'none';
+                    }
+                }
+            });
     </script>
 </body>
 </html>
