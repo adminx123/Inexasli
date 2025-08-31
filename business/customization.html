@@ -455,9 +455,6 @@
                 <button type="submit" class="btn-primary">
                     🚀 Complete Setup
                 </button>
-                <button type="button" class="btn-secondary" onclick="saveAndSchedule()">
-                    📅 Save & Schedule Call
-                </button>
             </div>
         </form>
         
@@ -635,30 +632,7 @@
         
         function scheduleConsultation() {
             // TODO: Integrate with Calendly or your scheduling system
-            alert('Consultation scheduling coming soon! We\'ll contact you within 24 hours.');
-        }
-        
-        function saveAndSchedule() {
-            // Collect current form data
-            const formData = new FormData(document.getElementById('setupForm'));
-            const setupData = {};
-            
-            for (let [key, value] of formData.entries()) {
-                setupData[key] = value;
-            }
-            
-            // Handle grid selections
-            const contentGrid = document.querySelector('[data-name="content"]');
-            const selectedContent = contentGrid.querySelectorAll('.grid-item.selected');
-            setupData.content = Array.from(selectedContent).map(item => item.dataset.value);
-            
-            const toneGrid = document.querySelector('[data-name="tone"]');
-            const selectedTone = toneGrid.querySelector('.grid-item.selected');
-            if (selectedTone) setupData.tone = selectedTone.dataset.value;
-            
-            // TODO: Save data and schedule consultation
-            console.log('Saved for consultation:', setupData);
-            scheduleConsultation();
+            alert('Consultation scheduling coming soon! We\'ll contact you within 2-5 days.');
         }
     </script>
     
