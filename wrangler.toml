@@ -139,6 +139,9 @@ PRICE_ID_EXTRA_PHOTOS_10 = "price_1S2IU4ILSdrwu9bgDlolRQKg"
 PRICE_ID_HYBRID_CONTENT_MODE = "price_1S1bi2ILSdrwu9bgOI7nS2Iq"
 PRICE_ID_EXTRA_ITERATIONS = "price_1S1bgVILSdrwu9bgiQ1jd33Z"
 PRICE_ID_EXTRA_VIDEOS_5 = "price_1RxFDkILSdrwu9bgOjwrtNaN"
+COUPON_USER_CONTENT_ONLY = "jst21IVY"
+COUPON_BASIC_SCHEDULING = "FR8M8OyC"
+COUPON_REDUCED_FREQUENCY = "zk3QtCEk"
 
 # KV namespace for payment data storage  
 [[env.stripeintegration.kv_namespaces]]
