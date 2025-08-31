@@ -130,7 +130,7 @@ main = "./payment/stripeintegration.js"
 # Variables for Stripe integration
 [env.stripeintegration.vars]
 DOMAIN_URL = "https://inexasli.com"  # Updated for production deployment
-PRICE_ID_PREMIUM = "price_1R9egnILSdrwu9bgKFghOlih"
+PRICE_ID_ENTERPRISE = "price_1R9egnILSdrwu9bgKFghOlih"
 
 # KV namespace for payment data storage  
 [[env.stripeintegration.kv_namespaces]]

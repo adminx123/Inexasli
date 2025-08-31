@@ -237,18 +237,18 @@
                 // Show platform addon for starter (they have 2 platforms, can upgrade to 3)
                 platformAddon.style.display = 'block';
             } else {
-                // Hide platform addon for professional/premium (they already have all 3 platforms)
+                // Hide platform addon for professional/enterprise (they already have all 3 platforms)
                 platformAddon.style.display = 'none';
             }
         }
 
         function getPackagePhotos(type) {
-            const photos = { starter: 15, professional: 25, premium: 40 };
+            const photos = { starter: 15, professional: 25, enterprise: 40 };
             return photos[type] || 25;
         }
 
         function getPackageVideos(type) {
-            const videos = { starter: 5, professional: 10, premium: 15 };
+            const videos = { starter: 5, professional: 10, enterprise: 15 };
             return videos[type] || 10;
         }
 

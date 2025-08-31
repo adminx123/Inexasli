@@ -125,7 +125,7 @@ const CURRENCY_CONFIG = {
       setup: 597,
       monthly: 197
     },
-    premium: {
+    enterprise: {
       setup: 897,
       monthly: 297
     }
