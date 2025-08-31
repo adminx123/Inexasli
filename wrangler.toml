@@ -130,7 +130,15 @@ main = "./payment/stripeintegration.js"
 # Variables for Stripe integration
 [env.stripeintegration.vars]
 DOMAIN_URL = "https://inexasli.com"  # Updated for production deployment
-PRICE_ID_ENTERPRISE = "price_1R9egnILSdrwu9bgKFghOlih"
+PRICE_ID_ENTERPRISE = "price_1RxFAMILSdrwu9bgxmQHeqhp"
+PRICE_ID_ENTERPRISE_MONTHLY = "price_1S2HdCILSdrwu9bg0iC1tjGJ"
+PRICE_ID_PROFESSIONAL_MONTHLY = "price_1S2HdTILSdrwu9bgr9DIDU48"
+PRICE_ID_STARTER_MONTHLY = "price_1S2HdoILSdrwu9bg2c0KcPcA"
+PRICE_ID_USER_CONTENT_AUTOMATION = "price_1S2IMxILSdrwu9bgNMXhQXbu"
+PRICE_ID_EXTRA_PHOTOS_10 = "price_1S2IU4ILSdrwu9bgDlolRQKg"
+PRICE_ID_HYBRID_CONTENT_MODE = "price_1S1bi2ILSdrwu9bgOI7nS2Iq"
+PRICE_ID_EXTRA_ITERATIONS = "price_1S1bgVILSdrwu9bgiQ1jd33Z"
+PRICE_ID_EXTRA_VIDEOS_5 = "price_1RxFDkILSdrwu9bgOjwrtNaN"
 
 # KV namespace for payment data storage  
 [[env.stripeintegration.kv_namespaces]]
