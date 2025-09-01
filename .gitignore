@@ -14,6 +14,9 @@ business/clients/
 # Business scene folder
 business/scene/
 
+# Cloudflare Workers configuration
+wrangler*
+
 # INEXASLI .gitignore files
 
 # Ignore engineered prompts and worker files containing sensitive IP
