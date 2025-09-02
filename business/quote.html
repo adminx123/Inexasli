@@ -216,10 +216,12 @@
 
             const { package: pkg, addons, total } = quoteData;
 
-            // Update package line
+            // Update package line - show setup + first month
+            const monthlyFee = getMonthlyFee(pkg.type);
+            const firstMonthTotal = pkg.price + monthlyFee;
             document.getElementById('packageLine').textContent = 
                 `${pkg.name} Package (Setup + Month 1)`;
-            document.getElementById('packageAmount').textContent = `$${pkg.price}`;
+            document.getElementById('packageAmount').textContent = `$${firstMonthTotal}`;
 
             // Add addon lines
             const addonsContainer = document.getElementById('addonsLines');
@@ -235,11 +237,10 @@
                 addonsContainer.appendChild(addonLine);
             });
 
-            // Update total
+            // Update total - this should now be correct
             document.getElementById('totalAmount').textContent = `$${total}`;
 
             // Update monthly amount (base monthly fee)
-            const monthlyFee = getMonthlyFee(pkg.type);
             document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
 
             // Update package features
@@ -256,7 +257,7 @@
         }
 
         function getMonthlyFee(packageType) {
-            const fees = { starter: 97, professional: 197, enterprise: 297 };
+            const fees = { starter: 127, professional: 197, enterprise: 297 };
             return fees[packageType] || 197;
         }
 

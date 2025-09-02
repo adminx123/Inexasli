@@ -371,7 +371,7 @@
 
             <div class="form-group">
                 <label class="form-label">Brand Tone *</label>
-                <div class="grid-selection" data-type="single" data-name="tone">
+                <div class="grid-selection" id="toneGrid" data-type="single" data-name="tone">
                     <div class="grid-item" data-value="professional">
                         <div class="grid-item-text">Professional</div>
                     </div>
@@ -407,7 +407,7 @@
 
             <div class="form-group">
                 <label class="form-label">Content Focus (select all that apply) *</label>
-                <div class="grid-selection" data-type="multiple" data-name="content">
+                <div class="grid-selection" id="contentGrid" data-type="multiple" data-name="content">
                     <div class="grid-item" data-value="products">
                         <div class="grid-item-text">Products/Services</div>
                     </div>
@@ -627,5 +627,12 @@
     <script src="/utility/modal.js"></script>
     <script src="/business/legalSocial.js"></script>
     <script src="step-navigation.js"></script>
+    <script type="module">
+        import { BusinessFormPersistence } from './businessFormPersistence.js';
+        
+        // Initialize form persistence for customization form
+        const customizationPersistence = new BusinessFormPersistence('setupForm', 'customization-form-data');
+        customizationPersistence.init();
+    </script>
 </body>
 </html>

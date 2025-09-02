@@ -300,8 +300,8 @@
                 return;
             }
             
-            // Calculate total properly using monthly price as base
-            let subtotal = selectedPackage.monthlyPrice || selectedPackage.price;
+            // Calculate total properly using setup + first month + addons
+            let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
             const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
             const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
             
