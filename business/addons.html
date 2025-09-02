@@ -114,18 +114,18 @@
                     </div>
 
                     <!-- Discount Options -->
-                    <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-5">
+                    <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-25">
                         <div class="addon-selected-indicator">✓</div>
                         <div class="addon-name">Basic Scheduling Only</div>
                         <div class="addon-description">Simple automated posting without advanced analytics or engagement optimization</div>
-                        <div class="addon-price">-5%</div>
+                        <div class="addon-price">-$25</div>
                     </div>
 
-                    <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-5">
+                    <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-15">
                         <div class="addon-selected-indicator">✓</div>
                         <div class="addon-name">Reduced Posting Frequency</div>
                         <div class="addon-description">Post 3x per week instead of daily - perfect for businesses with less frequent content</div>
-                        <div class="addon-price">-5%</div>
+                        <div class="addon-price">-$15</div>
                     </div>
                     </div>
                 </div>
@@ -286,7 +286,8 @@
             
             subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
             
-            const discountAmount = negativeAddons.reduce((sum, addon) => sum + (subtotal * (addon.price / 100)), 0);
+            // Apply dollar discounts directly (no percentage calculation)
+            const discountAmount = negativeAddons.reduce((sum, addon) => sum + addon.price, 0);
             
             const grandTotal = subtotal + discountAmount;
             
@@ -306,7 +307,8 @@
             
             subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
             
-            const discountAmount = negativeAddons.reduce((sum, addon) => sum + (subtotal * (addon.price / 100)), 0);
+            // Apply dollar discounts directly (no percentage calculation)
+            const discountAmount = negativeAddons.reduce((sum, addon) => sum + addon.price, 0);
             
             const total = subtotal + discountAmount;
             
