@@ -151,6 +151,13 @@
             const summaryContainer = document.getElementById('orderSummary');
             const { package: selectedPackage, addons: selectedAddons = [], total } = orderData;
             
+            // Filter out base package from addons (defensive programming for old data)
+            const filteredAddons = selectedAddons.filter(addon => 
+                addon.id !== 'base-package' && 
+                addon.name !== 'Starter Social Media Automation' &&
+                addon.name !== `${selectedPackage.name} Monthly`
+            );
+            
             // Retrieve customization data
             const customizationData = JSON.parse(localStorage.getItem('customizationData') || '{}');
             
@@ -182,7 +189,7 @@
             `;
             
             // Add selected addons to monthly section
-            selectedAddons.forEach(addon => {
+            filteredAddons.forEach(addon => {
                 // Display add-on price with correct sign
                 const priceDisplay = addon.price >= 0 
                     ? `+$${addon.price}/month` 
@@ -197,7 +204,7 @@
             });
             
             // Calculate monthly total
-            const addonTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+            const addonTotal = filteredAddons.reduce((sum, addon) => sum + addon.price, 0);
             const monthlyTotal = (selectedPackage.monthlyPrice || 127) + addonTotal;
             
             summaryHTML += `
@@ -244,6 +251,13 @@
         async function createCheckoutSession(orderData) {
             const { package: selectedPackage, addons: selectedAddons = [] } = orderData;
             
+            // Filter out base package from addons (defensive programming)
+            const filteredAddons = selectedAddons.filter(addon => 
+                addon.id !== 'base-package' && 
+                addon.name !== 'Starter Social Media Automation' &&
+                addon.name !== `${selectedPackage.name} Monthly`
+            );
+            
             // Retrieve customization data
             const customizationData = JSON.parse(localStorage.getItem('customizationData') || '{}');
             
@@ -257,7 +271,7 @@
                     body: JSON.stringify({
                         packageType: selectedPackage.type,
                         platforms: selectedPackage.platforms,
-                        addons: selectedAddons.map(a => a.id),
+                        addons: filteredAddons.map(a => a.id),
                         customerEmail: document.getElementById('email').value,
                         customization: customizationData
                     })

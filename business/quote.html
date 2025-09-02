@@ -101,8 +101,8 @@
                             <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
                         </div>
                         
-                        <!-- Monthly Subtotal -->
-                        <div class="quote-subtotal">
+                        <!-- Monthly Subtotal (only show when addons exist) -->
+                        <div id="monthlyRecurringContainer" class="quote-subtotal" style="display: none;">
                             <span class="quote-subtotal-label">Monthly Recurring Total</span>
                             <span class="quote-subtotal-amount" id="monthlyRecurringTotal">$197/month</span>
                         </div>
@@ -110,7 +110,7 @@
 
                     <!-- Overall Total -->
                     <div class="quote-total">
-                        <span class="quote-total-label">Total Due Today (One-Time + First Month)</span>
+                        <span class="quote-total-label">Total Due Today</span>
                         <span class="quote-total-amount" id="totalAmount">$794</span>
                     </div>
                 </div>
@@ -263,8 +263,18 @@
             const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
             const monthlyRecurringTotal = monthlyFee + addonsTotal;
             
-            // Update monthly recurring total
-            document.getElementById('monthlyRecurringTotal').textContent = `$${monthlyRecurringTotal}/month`;
+            // Only show monthly recurring total if there are addons
+            const monthlyRecurringElement = document.getElementById('monthlyRecurringTotal');
+            const monthlyRecurringContainer = document.getElementById('monthlyRecurringContainer');
+            
+            if (addons.length > 0) {
+                // Show monthly recurring total when there are addons
+                monthlyRecurringElement.textContent = `$${monthlyRecurringTotal}/month`;
+                monthlyRecurringContainer.style.display = 'block';
+            } else {
+                // Hide monthly recurring total when no addons
+                monthlyRecurringContainer.style.display = 'none';
+            }
             
             // Update monthly amount display
             document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
