@@ -448,12 +448,15 @@
             
             function selectPackage(card, selectedPlatforms) {
                 const packageType = card.dataset.package;
-                const packagePrice = card.dataset.price;
+                const setupPrice = card.dataset.price;
+                const monthlyPriceElement = card.querySelector('[data-price-type="monthly"]');
+                const monthlyPrice = monthlyPriceElement ? parseInt(monthlyPriceElement.textContent.replace('$', '')) : 0;
                 
                 // Store selected package with platforms
                 const selectedPackage = {
                     type: packageType,
-                    price: parseInt(packagePrice),
+                    price: parseInt(setupPrice),
+                    monthlyPrice: monthlyPrice,
                     name: card.querySelector('.package-name').textContent,
                     features: Array.from(card.querySelectorAll('.package-feature')).map(f => f.textContent.trim()),
                     platforms: selectedPlatforms

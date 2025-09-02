@@ -71,7 +71,7 @@
             <div class="selected-package-summary">
                 <div class="selected-package-title" id="selectedPackageName">Professional Base Package Selected</div>
                 <div class="selected-package-details" id="selectedPackageDetails">
-                    25 Photos • 10 Videos • Instagram, X, Facebook • $597
+                    25 Photos • 10 Videos • Instagram, X, Facebook • $197/month
                 </div>
             </div>
 
@@ -132,8 +132,11 @@
 
                 <!-- Total Display -->
                 <div class="addons-total">
-                    <div class="addons-total-label">Package Total</div>
-                    <div class="addons-total-amount" id="totalAmount">$597</div>
+                    <div class="addons-total-label">Monthly Subscription</div>
+                    <div class="addons-total-amount" id="totalAmount">$127</div>
+                    <div class="setup-notice" style="font-size: 12px; color: #666; margin-top: 5px;">
+                        + $397 one-time setup fee
+                    </div>
                 </div>
 
                 <!-- Continue Button -->
@@ -202,10 +205,16 @@
                     `${getPackagePhotos(selectedPackage.type)} Photos`,
                     `${getPackageVideos(selectedPackage.type)} Videos`,
                     selectedPackage.platforms.join(', '),
-                    `$${selectedPackage.price}`
+                    `$${selectedPackage.monthlyPrice}/month`
                 ];
                 
                 document.getElementById('selectedPackageDetails').textContent = features.join(' • ');
+                
+                // Add setup fee notice
+                const setupNotice = document.createElement('div');
+                setupNotice.className = 'setup-fee-notice';
+                setupNotice.innerHTML = `<small style="color: #888; font-size: 12px;">+ $${selectedPackage.price} one-time setup fee</small>`;
+                document.getElementById('selectedPackageDetails').appendChild(setupNotice);
                 
                 // Conditionally show/hide platform addon based on package
                 togglePlatformAddon(selectedPackage.type);
@@ -218,12 +227,14 @@
         function togglePlatformAddon(packageType) {
             const platformAddon = document.querySelector('[data-addon="platform-extra"]');
             
-            if (packageType === 'starter') {
-                // Show platform addon for starter (they have 2 platforms, can upgrade to 3)
-                platformAddon.style.display = 'block';
-            } else {
-                // Hide platform addon for professional/enterprise (they already have all 3 platforms)
-                platformAddon.style.display = 'none';
+            if (platformAddon) {
+                if (packageType === 'starter') {
+                    // Show platform addon for starter (they have 2 platforms, can upgrade to 3)
+                    platformAddon.style.display = 'block';
+                } else {
+                    // Hide platform addon for professional/enterprise (they already have all 3 platforms)
+                    platformAddon.style.display = 'none';
+                }
             }
         }
 
@@ -268,7 +279,8 @@
         function updateTotal() {
             if (!selectedPackage) return;
             
-            let subtotal = selectedPackage.price;
+            // Use monthly price as base for ongoing costs
+            let subtotal = selectedPackage.monthlyPrice || selectedPackage.price;
             const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
             const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
             
@@ -287,8 +299,8 @@
                 return;
             }
             
-            // Calculate total properly
-            let subtotal = selectedPackage.price;
+            // Calculate total properly using monthly price as base
+            let subtotal = selectedPackage.monthlyPrice || selectedPackage.price;
             const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
             const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
             
