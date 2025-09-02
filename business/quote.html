@@ -75,27 +75,43 @@
                 <div class="quote-box">
                     <h3 class="quote-box-title">Monthly Plan Summary</h3>
                     
-                    <!-- Package Line -->
-                    <div class="quote-line">
-                        <span class="quote-line-label" id="packageLine">Professional Package (Setup + Month 1)</span>
-                        <span class="quote-line-amount" id="packageAmount">$597</span>
+                    <!-- One-Time Fees Section -->
+                    <div class="quote-section">
+                        <h4 class="quote-section-title">One-Time Fees</h4>
+                        
+                        <!-- Package Base Fee -->
+                        <div class="quote-line">
+                            <span class="quote-line-label" id="packageLine">Professional Package</span>
+                            <span class="quote-line-amount" id="packageAmount">$597</span>
+                        </div>
                     </div>
 
-                    <!-- Add-ons Lines -->
-                    <div id="addonsLines">
-                        <!-- Add-on lines will be inserted here -->
+                    <!-- Monthly Fees Section -->
+                    <div class="quote-section">
+                        <h4 class="quote-section-title">Monthly Fees</h4>
+                        
+                        <!-- Add-ons Lines -->
+                        <div id="addonsLines">
+                            <!-- Add-on lines will be inserted here -->
+                        </div>
+
+                        <!-- Monthly Ongoing -->
+                        <div class="quote-line-monthly">
+                            <span class="quote-line-label">Monthly Subscription (Starting Month 1)</span>
+                            <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
+                        </div>
+                        
+                        <!-- Monthly Subtotal -->
+                        <div class="quote-subtotal">
+                            <span class="quote-subtotal-label">Monthly Recurring Total</span>
+                            <span class="quote-subtotal-amount" id="monthlyRecurringTotal">$197/month</span>
+                        </div>
                     </div>
 
-                    <!-- Monthly Ongoing -->
-                    <div class="quote-line-monthly">
-                        <span class="quote-line-label">Monthly Subscription (Starting Month 2) - Base Plan + Add-ons</span>
-                        <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
-                    </div>
-
-                    <!-- Total -->
+                    <!-- Overall Total -->
                     <div class="quote-total">
-                        <span class="quote-total-label">Total Setup + First Month</span>
-                        <span class="quote-total-amount" id="totalAmount">$597</span>
+                        <span class="quote-total-label">Total Due Today (One-Time + First Month)</span>
+                        <span class="quote-total-amount" id="totalAmount">$794</span>
                     </div>
                 </div>
 
@@ -216,32 +232,46 @@
 
             const { package: pkg, addons, total } = quoteData;
 
-            // Update package line - show setup + first month
-            const monthlyFee = getMonthlyFee(pkg.type);
-            const firstMonthTotal = pkg.price + monthlyFee;
-            document.getElementById('packageLine').textContent = 
-                `${pkg.name} Package (Setup + Month 1)`;
-            document.getElementById('packageAmount').textContent = `$${firstMonthTotal}`;
+            // Get monthly fee from package data or fallback to calculation
+            const monthlyFee = pkg.monthlyPrice || getMonthlyFee(pkg.type);
+            
+            // Package price is one-time
+            document.getElementById('packageLine').textContent = `${pkg.name} Package`;
+            document.getElementById('packageAmount').textContent = `$${pkg.price}`;
 
-            // Add addon lines
+            // Add addon lines to monthly section (add-ons are recurring)
             const addonsContainer = document.getElementById('addonsLines');
             addonsContainer.innerHTML = '';
             
             addons.forEach(addon => {
                 const addonLine = document.createElement('div');
                 addonLine.className = 'quote-line';
+                
+                // Display add-on price with correct sign
+                const priceDisplay = addon.price >= 0 
+                    ? `+$${addon.price}/month` 
+                    : `-$${Math.abs(addon.price)}/month`;
+                
                 addonLine.innerHTML = `
                     <span class="quote-line-label">${addon.name}</span>
-                    <span class="quote-line-amount">+$${addon.price}</span>
+                    <span class="quote-line-amount">${priceDisplay}</span>
                 `;
                 addonsContainer.appendChild(addonLine);
             });
 
-            // Update total - this should now be correct
-            document.getElementById('totalAmount').textContent = `$${total}`;
-
-            // Update monthly amount (base monthly fee)
+            // Calculate monthly recurring total (base monthly + add-ons)
+            const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
+            const monthlyRecurringTotal = monthlyFee + addonsTotal;
+            
+            // Update monthly recurring total
+            document.getElementById('monthlyRecurringTotal').textContent = `$${monthlyRecurringTotal}/month`;
+            
+            // Update monthly amount display
             document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
+
+            // Update overall total (one-time package + first month recurring)
+            const totalDueToday = pkg.price + monthlyRecurringTotal;
+            document.getElementById('totalAmount').textContent = `$${totalDueToday}`;
 
             // Update package features
             const featuresContainer = document.getElementById('packageFeatures');
