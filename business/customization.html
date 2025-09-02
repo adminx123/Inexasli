@@ -611,23 +611,11 @@
                 return;
             }
             
-            // Generate email with customization data
-            const emailBody = Object.entries(setupData)
-                .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
-                .join('\n');
-            
-            const mailtoLink = `mailto:your-email@example.com?subject=New Customization Setup&body=${encodeURIComponent(emailBody)}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
-            
-            // Store data for later use
+            // Store customization data for Stripe integration
             localStorage.setItem('customizationData', JSON.stringify(setupData));
             
-            // Redirect to quote page after a short delay
-            setTimeout(() => {
-                window.location.href = 'quote.html';
-            }, 1000);
+            // Redirect to payment page
+            window.location.href = 'payment.html';
         });
         
         function scheduleConsultation() {
