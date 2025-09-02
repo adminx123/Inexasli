@@ -163,18 +163,30 @@
                     • ${selectedPackage.platforms.join('<br>• ')}
                 </div>
                 
-                <div class="quote-line">
-                    <span class="quote-line-label">${selectedPackage.name}</span>
-                    <span class="quote-line-amount">$${selectedPackage.price}</span>
+                <!-- One-Time Fees Section -->
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 10px;">
+                    <h4 style="color: #10b981; margin-bottom: 10px;">One-Time Setup</h4>
+                    <div class="quote-line">
+                        <span class="quote-line-label">${selectedPackage.name} Setup</span>
+                        <span class="quote-line-amount">$${selectedPackage.price}</span>
+                    </div>
                 </div>
+                
+                <!-- Monthly Fees Section -->
+                <div style="margin-bottom: 20px; padding: 15px; background: rgba(16, 185, 129, 0.1); border-radius: 10px;">
+                    <h4 style="color: #10b981; margin-bottom: 10px;">Monthly Subscription</h4>
+                    <div class="quote-line">
+                        <span class="quote-line-label">${selectedPackage.name} Monthly</span>
+                        <span class="quote-line-amount">$${selectedPackage.monthlyPrice || 127}/month</span>
+                    </div>
             `;
             
-            // Add selected addons
+            // Add selected addons to monthly section
             selectedAddons.forEach(addon => {
                 // Display add-on price with correct sign
                 const priceDisplay = addon.price >= 0 
-                    ? `+$${addon.price}` 
-                    : `-$${Math.abs(addon.price)}`;
+                    ? `+$${addon.price}/month` 
+                    : `-$${Math.abs(addon.price)}/month`;
                 
                 summaryHTML += `
                     <div class="quote-line">
@@ -183,6 +195,24 @@
                     </div>
                 `;
             });
+            
+            // Calculate monthly total
+            const addonTotal = selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
+            const monthlyTotal = (selectedPackage.monthlyPrice || 127) + addonTotal;
+            
+            summaryHTML += `
+                    <div class="quote-line" style="border-top: 1px solid rgba(16, 185, 129, 0.3); padding-top: 10px; margin-top: 10px;">
+                        <span class="quote-line-label" style="font-weight: bold;">Monthly Total</span>
+                        <span class="quote-line-amount" style="font-weight: bold;">$${monthlyTotal}/month</span>
+                    </div>
+                </div>
+                
+                <!-- Overall Total -->
+                <div class="quote-total">
+                    <span class="quote-total-label">Total Due Today</span>
+                    <span class="quote-total-amount">$${selectedPackage.price + monthlyTotal}</span>
+                </div>
+            `;
             
             // Add customization summary
             if (customizationData.industry) {
@@ -202,8 +232,8 @@
             
             summaryHTML += `
                 <div class="quote-total">
-                    <span class="quote-total-label">Total</span>
-                    <span class="quote-total-amount">$${total}</span>
+                    <span class="quote-total-label">Total Due Today</span>
+                    <span class="quote-total-amount">$${selectedPackage.price + monthlyTotal}</span>
                 </div>
             `;
             
