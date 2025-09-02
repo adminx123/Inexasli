@@ -203,21 +203,13 @@
                 `;
             });
             
-            // Calculate monthly total
-            const addonTotal = filteredAddons.reduce((sum, addon) => sum + addon.price, 0);
-            const monthlyTotal = (selectedPackage.monthlyPrice || 127) + addonTotal;
-            
             summaryHTML += `
-                    <div class="quote-line" style="border-top: 1px solid rgba(16, 185, 129, 0.3); padding-top: 10px; margin-top: 10px;">
-                        <span class="quote-line-label" style="font-weight: bold;">Monthly Total</span>
-                        <span class="quote-line-amount" style="font-weight: bold;">$${monthlyTotal}/month</span>
-                    </div>
                 </div>
                 
                 <!-- Overall Total -->
                 <div class="quote-total">
                     <span class="quote-total-label">Total Due Today</span>
-                    <span class="quote-total-amount">$${selectedPackage.price + monthlyTotal}</span>
+                    <span class="quote-total-amount">$${selectedPackage.price + (selectedPackage.monthlyPrice || 127) + filteredAddons.reduce((sum, addon) => sum + addon.price, 0)}</span>
                 </div>
             `;
             
@@ -236,13 +228,6 @@
                     </div>
                 `;
             }
-            
-            summaryHTML += `
-                <div class="quote-total">
-                    <span class="quote-total-label">Total Due Today</span>
-                    <span class="quote-total-amount">$${selectedPackage.price + monthlyTotal}</span>
-                </div>
-            `;
             
             summaryContainer.innerHTML = summaryHTML;
         }
