@@ -171,10 +171,15 @@
             
             // Add selected addons
             selectedAddons.forEach(addon => {
+                // Display add-on price with correct sign
+                const priceDisplay = addon.price >= 0 
+                    ? `+$${addon.price}` 
+                    : `-$${Math.abs(addon.price)}`;
+                
                 summaryHTML += `
                     <div class="quote-line">
                         <span class="quote-line-label">${addon.name}</span>
-                        <span class="quote-line-amount">+$${addon.price}</span>
+                        <span class="quote-line-amount">${priceDisplay}</span>
                     </div>
                 `;
             });
