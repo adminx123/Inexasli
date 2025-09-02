@@ -248,15 +248,11 @@
         let selectedAddons = [];
 
         function initializeBasePackage() {
-            // Add base package as always selected
+            // Add base package as always selected (visual only - not for calculations)
             const basePackageCard = document.querySelector('[data-addon="base-package"]');
             if (basePackageCard) {
                 basePackageCard.classList.add('selected');
-                selectedAddons.push({
-                    id: 'base-package',
-                    name: 'Starter Social Media Automation',
-                    price: 127
-                });
+                // Don't add to selectedAddons array - base package is handled separately in calculations
             }
         }
 
@@ -337,13 +333,12 @@
         function updateTotal() {
             if (!selectedPackage) return;
             
-            // Start with base package price from selectedAddons
-            const basePackage = selectedAddons.find(addon => addon.id === 'base-package');
-            let subtotal = basePackage ? basePackage.price : selectedPackage.monthlyPrice;
+            // Start with base package price from selectedPackage (not from addons)
+            let subtotal = selectedPackage.monthlyPrice || 127;
             
-            // Add positive addons (excluding base package which is already included)
+            // Add positive addons (excluding base package completely)
             const positiveAddons = selectedAddons.filter(addon => addon.price > 0 && addon.id !== 'base-package');
-            const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
+            const negativeAddons = selectedAddons.filter(addon => addon.price < 0 && addon.id !== 'base-package');
             
             subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
             
@@ -362,12 +357,11 @@
             }
             
             // Calculate total properly using setup + first month + addons
-            const basePackage = selectedAddons.find(addon => addon.id === 'base-package');
-            let subtotal = selectedPackage.price + (basePackage ? basePackage.price : selectedPackage.monthlyPrice);
+            let subtotal = selectedPackage.price + (selectedPackage.monthlyPrice || 127);
             
-            // Add positive addons (excluding base package which is already included)
+            // Add positive addons (excluding base package completely)
             const positiveAddons = selectedAddons.filter(addon => addon.price > 0 && addon.id !== 'base-package');
-            const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
+            const negativeAddons = selectedAddons.filter(addon => addon.price < 0 && addon.id !== 'base-package');
             
             subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
             
