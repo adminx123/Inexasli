@@ -8,6 +8,44 @@
   <link rel="icon" type="image/x-icon" href="../images/newLogo.jpg">
   <link rel="stylesheet" href="/business/salesflow.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Mobile responsiveness for step navigation */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 1.8em !important;
+      }
+      
+      .cta-title {
+        font-size: 1.8em !important;
+      }
+      
+      .solution-title {
+        font-size: 1.6em !important;
+      }
+      
+      .urgency-title {
+        font-size: 1.5em !important;
+      }
+      
+      .btn-primary {
+        font-size: 1.1em !important;
+        padding: 18px 40px !important;
+      }
+      
+      /* Stack step indicators vertically on very small screens */
+      @media (max-width: 480px) {
+        .stats-container {
+          flex-direction: column;
+          gap: 15px;
+        }
+        
+        .benefits {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+      }
+    }
+  </style>
 </head>
 <body>
     <div class="floating-particles">
@@ -121,9 +159,9 @@
 
     <!-- CTA Header -->
     <div class="cta-header">
-      <h2 class="cta-title" style="font-size: 2.2em; line-height: 1.2;">Get Started in 4 Easy Steps</h2>
+      <h2 class="cta-title" style="font-size: 2.2em; line-height: 1.2;">Get Started in 5 Easy Steps</h2>
       <p class="cta-subtitle">
-        Pick your base package, add enhancements, review your order, and complete payment
+        Pick your base package, add enhancements, customize your brand, review your order, and complete payment
       </p>
       <div class="guarantee-box">
         <div class="guarantee-text">No contracts • Cancel anytime • 30-day money-back guarantee</div>
@@ -131,7 +169,7 @@
 
       <!-- Single Clear Path -->
       <div style="margin: 30px 0; text-align: center;">
-        <a href="packages.html" class="btn-primary" style="font-size: 1.3em; padding: 22px 60px; text-decoration: none; display: inline-block; background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);">
+        <a href="packages.html?step=1" class="btn-primary" style="font-size: 1.3em; padding: 22px 60px; text-decoration: none; display: inline-block; background: linear-gradient(135deg, #10b981, #059669); margin-bottom: 20px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);">
           🚀 Start Your Setup
         </a>
         <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
@@ -171,7 +209,6 @@
 
 </body>
 <script src="/utility/modal.js"></script>
-<script src="/utility/currency.js"></script>
 <script src="/business/legalSocial.js"></script>
 <script>
   // Counter animation for stats
@@ -203,8 +240,12 @@
     const splash = document.getElementById('splashContainer');
     const main = document.getElementById('mainContent');
     
-    // Initialize currency selector using shared utility
-    initializeCurrencySelector();
+    // Clear any previous session data when starting fresh from landing page
+    if (window.location.search === '') {
+      localStorage.removeItem('orderData');
+      localStorage.removeItem('customizationData');
+      localStorage.removeItem('business-social-form-data');
+    }
     
     // Start main content fade-in immediately
     main.style.transition = 'opacity 1.2s ease-in';
