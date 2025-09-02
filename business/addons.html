@@ -31,6 +31,50 @@
             from { width: 20%; }
             to { width: 40%; }
         }
+
+        /* Base Package Styling - Keep it simple like other selected addons */
+        .addon-card.base-package {
+            position: relative;
+        }
+
+        .addon-card.base-package .addon-name {
+            font-weight: 600;
+        }
+
+        .addon-card.base-package .addon-description {
+            color: #666;
+        }
+
+        .addon-card.base-package .addon-price {
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .locked-indicator {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .addon-card.locked {
+            pointer-events: none;
+            opacity: 1;
+        }
+
+        .addon-card.locked .addon-selected-indicator {
+            background: #10b981;
+        }
     </style>
 </head>
 <body>
@@ -69,18 +113,27 @@
 
             <!-- Selected Package Summary -->
             <div class="selected-package-summary">
-                <div class="selected-package-title" id="selectedPackageName">Professional Base Package Selected</div>
+                <div class="selected-package-title" id="selectedPackageName">Review Your Package Selection</div>
                 <div class="selected-package-details" id="selectedPackageDetails">
-                    25 Photos • 10 Videos • Instagram, X, Facebook • $197/month
+                    Setup fee will be added at checkout • All prices shown are monthly recurring
                 </div>
             </div>
 
             <!-- Add-ons Section -->
             <div class="addons-container">
-                <h1 class="addons-title">Add Enhancements</h1>
-                <p class="addons-subtitle">Enhance your monthly plan with additional storage, content refinements, and premium features</p>
+                <h1 class="addons-title">Your Package & Enhancements</h1>
+                <p class="addons-subtitle">Review your base package and add premium enhancements to customize your monthly plan</p>
 
                 <div class="addons-grid">
+                    <!-- Base Package (Always Selected) -->
+                    <div class="addon-card base-package selected locked" data-addon="base-package" data-price="127">
+                        <div class="addon-selected-indicator">✓</div>
+                        <div class="addon-name">Starter Social Media Automation</div>
+                        <div class="addon-description">25 Photos • 10 Videos • Instagram, X, Facebook • Full automation platform (monthly)</div>
+                        <div class="addon-price">$127</div>
+                        <div class="locked-indicator">Base Package</div>
+                    </div>
+
                     <!-- Extra Photos -->
                     <div class="addon-card" data-addon="photos-10" data-price="50">
                         <div class="addon-selected-indicator">✓</div>
@@ -182,6 +235,7 @@
         // Load selected package on page load
         document.addEventListener('DOMContentLoaded', function() {
             loadSelectedPackage();
+            initializeBasePackage();
             updateTotal();
         });
 
@@ -193,28 +247,26 @@
         let selectedPackage = null;
         let selectedAddons = [];
 
+        function initializeBasePackage() {
+            // Add base package as always selected
+            const basePackageCard = document.querySelector('[data-addon="base-package"]');
+            if (basePackageCard) {
+                basePackageCard.classList.add('selected');
+                selectedAddons.push({
+                    id: 'base-package',
+                    name: 'Starter Social Media Automation',
+                    price: 127
+                });
+            }
+        }
+
         function loadSelectedPackage() {
             const packageData = localStorage.getItem('selectedPackage');
             if (packageData) {
                 selectedPackage = JSON.parse(packageData);
                 
-                // Update display
-                document.getElementById('selectedPackageName').textContent = `${selectedPackage.name} Base Package Selected`;
-                
-                const features = [
-                    `${getPackagePhotos(selectedPackage.type)} Photos`,
-                    `${getPackageVideos(selectedPackage.type)} Videos`,
-                    selectedPackage.platforms.join(', '),
-                    `$${selectedPackage.monthlyPrice}/month`
-                ];
-                
-                document.getElementById('selectedPackageDetails').textContent = features.join(' • ');
-                
-                // Add setup fee notice
-                const setupNotice = document.createElement('div');
-                setupNotice.className = 'setup-fee-notice';
-                setupNotice.innerHTML = `<small style="color: #888; font-size: 12px;">+ $${selectedPackage.price} one-time setup fee</small>`;
-                document.getElementById('selectedPackageDetails').appendChild(setupNotice);
+                // Update display - simplified since base package is now shown as addon
+                document.getElementById('selectedPackageName').textContent = `Review Your ${selectedPackage.name} Package`;
                 
                 // Conditionally show/hide platform addon based on package
                 togglePlatformAddon(selectedPackage.type);
@@ -254,6 +306,12 @@
             addonCards.forEach(card => {
                 card.addEventListener('click', function() {
                     const addonId = this.dataset.addon;
+                    
+                    // Prevent base package from being deselected
+                    if (addonId === 'base-package') {
+                        return; // Do nothing for base package
+                    }
+                    
                     const addonPrice = parseFloat(this.dataset.price);
                     const addonName = this.querySelector('.addon-name').textContent;
                     
@@ -279,9 +337,12 @@
         function updateTotal() {
             if (!selectedPackage) return;
             
-            // Use monthly price as base for ongoing costs
-            let subtotal = selectedPackage.monthlyPrice || selectedPackage.price;
-            const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
+            // Start with base package price from selectedAddons
+            const basePackage = selectedAddons.find(addon => addon.id === 'base-package');
+            let subtotal = basePackage ? basePackage.price : selectedPackage.monthlyPrice;
+            
+            // Add positive addons (excluding base package which is already included)
+            const positiveAddons = selectedAddons.filter(addon => addon.price > 0 && addon.id !== 'base-package');
             const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
             
             subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
@@ -301,8 +362,11 @@
             }
             
             // Calculate total properly using setup + first month + addons
-            let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
-            const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
+            const basePackage = selectedAddons.find(addon => addon.id === 'base-package');
+            let subtotal = selectedPackage.price + (basePackage ? basePackage.price : selectedPackage.monthlyPrice);
+            
+            // Add positive addons (excluding base package which is already included)
+            const positiveAddons = selectedAddons.filter(addon => addon.price > 0 && addon.id !== 'base-package');
             const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
             
             subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
