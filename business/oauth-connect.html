@@ -428,18 +428,15 @@
                 completeSetupSection.style.display = 'block';
                 
                 // Update button text based on what's connected
-                let buttonText = 'Complete Setup';
-                let subText = 'Ready to activate automation!';
+                let buttonText = 'Finalize';
+                let subText = 'Ready to complete your setup!';
                 
                 if (connectedPlatforms.instagram && connectedPlatforms.x) {
-                    buttonText = 'Complete Setup - Both Connected';
-                    subText = 'Instagram & X accounts connected. Ready to activate automation!';
+                    subText = 'Instagram & X accounts connected and ready!';
                 } else if (connectedPlatforms.instagram) {
-                    buttonText = 'Complete Setup - Instagram Ready';
-                    subText = 'Instagram account connected. Ready to activate automation!';
+                    subText = 'Instagram account connected and ready!';
                 } else if (connectedPlatforms.x) {
-                    buttonText = 'Complete Setup - X Ready';
-                    subText = 'X account connected. Ready to activate automation!';
+                    subText = 'X account connected and ready!';
                 }
                 
                 completeSetupButton.innerHTML = `<i class="fas fa-check-circle"></i> ${buttonText}`;
