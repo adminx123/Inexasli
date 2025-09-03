@@ -55,8 +55,8 @@ body {
     font-size: 1.2em;
     margin: 0 0 40px 0;
     opacity: 0;
-    animation: fadeInWithRotation 2.1675s ease-in forwards;
-    animation-delay: 0.180625s;
+    animation: fadeIn 1.445s ease-in forwards;
+    animation-delay: 0.7225s;
     text-align: center;
 }
 
