@@ -14,10 +14,31 @@
             padding: 60px 20px;
         }
         
-        .step-indicator {
-            color: #10b981;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .step a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1.5px 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            white-space: nowrap;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+        
+        .step a:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: inherit;
         }
         
         .progress-bar {
@@ -193,30 +214,30 @@
         <div class="success-container">
             <!-- Step Indicator -->
             <div class="step-indicator">
-                <div class="step completed">
+                <a href="packages.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Base</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="addons.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Add</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="customization.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Info</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="quote.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Review</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="payment.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Pay</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="oauth-connect.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Link</span>
-                </div>
+                </a>
             </div>
             
             <div class="success-icon">
@@ -224,62 +245,24 @@
         </div>
         
         <h1 class="success-title">Setup Complete!</h1>
-        <p class="success-subtitle">
-            Your Instagram automation is now being configured.<br>
-            <strong>Estimated setup time: 2-5 days.</strong>
+        <p class="success-subtitle" id="setupMessage">
+            Your account setup is now being configured.<br>
+            <strong id="setupTime">Estimated setup time: 1-2 days.</strong>
         </p>
         
-        <div class="success-details">
-            <div class="timeline-item">
-                <div class="timeline-icon">
-                    <i class="fas fa-cog"></i>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-title">AI Configuration</div>
-                    <div class="timeline-desc">Our team is engineering your custom AI prompts based on your brand requirements</div>
-                </div>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="timeline-icon">
-                    <i class="fas fa-robot"></i>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-title">Content Generation</div>
-                    <div class="timeline-desc">AI will begin creating tailored content for your business and audience</div>
-                </div>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="timeline-icon">
-                    <i class="fas fa-calendar"></i>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-title">Automated Posting</div>
-                    <div class="timeline-desc">Your first AI-generated posts will appear on Instagram after setup is complete (typically 2-5 days)</div>
-                </div>
-            </div>
-            
-            <div class="timeline-item">
-                <div class="timeline-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="timeline-content">
-                    <div class="timeline-title">Ongoing Optimization</div>
-                    <div class="timeline-desc">We continuously improve content based on engagement and performance</div>
-                </div>
-            </div>
+        <div class="success-details" id="timelineContainer">
+            <!-- Dynamic timeline items will be inserted here -->
         </div>
         
-        <div class="contact-info">
+        <div class="contact-info" id="contactSection">
             <div class="contact-title">Need Help or Have Questions?</div>
             <div class="contact-detail">
                 📧 Email: <a href="mailto:support@inexasli.com">support@inexasli.com</a>
             </div>
-            <div class="contact-detail">
+            <div class="contact-detail" id="responseTime">
                 📱 Response Time: Within 2-5 days
             </div>
-            <div class="contact-detail">
+            <div class="contact-detail" id="supportLevel">
                 🔧 Technical Support: Available 7 days a week
             </div>
         </div>
@@ -310,8 +293,136 @@
             alert('Strategy call scheduling coming soon! We\'ll contact you within 2-5 days to arrange a consultation.');
         }
         
+        function scheduleConsultation() {
+            // TODO: Integrate with Calendly or your scheduling system
+            alert('Strategy call scheduling coming soon! We\'ll contact you within 2-5 days to arrange a consultation.');
+        }
+        
+        // Dynamic content based on user selections
+        function loadUserSelections() {
+            const orderData = JSON.parse(localStorage.getItem('orderData') || '{}');
+            const customizationData = JSON.parse(localStorage.getItem('customizationData') || '{}');
+            
+            if (!orderData.package) {
+                // Fallback for users who somehow reach here without order data
+                return;
+            }
+            
+            const { package: selectedPackage, addons = [] } = orderData;
+            const timelineContainer = document.getElementById('timelineContainer');
+            const setupMessage = document.getElementById('setupMessage');
+            const setupTime = document.getElementById('setupTime');
+            
+            // Check if user has automation features
+            const hasAutomation = selectedPackage.features.some(feature => 
+                feature.toLowerCase().includes('ai') || 
+                feature.toLowerCase().includes('automation') ||
+                feature.toLowerCase().includes('content')
+            ) || addons.some(addon => 
+                addon.name.toLowerCase().includes('ai') ||
+                addon.name.toLowerCase().includes('automation') ||
+                addon.name.toLowerCase().includes('content')
+            );
+            
+            // Update main message based on selections
+            if (hasAutomation) {
+                setupMessage.innerHTML = 'Your Instagram automation is now being configured.<br><strong id="setupTime">Estimated setup time: 2-5 days.</strong>';
+            } else {
+                setupMessage.innerHTML = 'Your social media accounts have been successfully connected.<br><strong id="setupTime">Setup complete! You can start using your accounts immediately.</strong>';
+            }
+            
+            let timelineHTML = '';
+            
+            // Always show account connection confirmation
+            timelineHTML += `
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">Account Connected</div>
+                        <div class="timeline-desc">Your ${selectedPackage.platforms.join(' and ')} accounts are now linked and ready to use</div>
+                    </div>
+                </div>
+            `;
+            
+            // Show AI configuration only if they have automation features
+            if (hasAutomation) {
+                timelineHTML += `
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">AI Configuration</div>
+                            <div class="timeline-desc">Our team is engineering your custom AI prompts based on your brand requirements</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Content Generation</div>
+                            <div class="timeline-desc">AI will begin creating tailored content for your business and audience</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Automated Posting</div>
+                            <div class="timeline-desc">Your first AI-generated posts will appear on Instagram after setup is complete (typically 2-5 days)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Ongoing Optimization</div>
+                            <div class="timeline-desc">We continuously improve content based on engagement and performance</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Show basic account setup completion
+                timelineHTML += `
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Setup Complete</div>
+                            <div class="timeline-desc">Your ${selectedPackage.name} package is ready to use. You can now manually post to your connected accounts.</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Update the timeline container with the generated HTML
+            timelineContainer.innerHTML = timelineHTML;
+            
+            // Update contact information based on package type
+            const responseTimeElement = document.getElementById('responseTime');
+            const supportLevelElement = document.getElementById('supportLevel');
+            
+            if (hasAutomation) {
+                responseTimeElement.innerHTML = '📱 Response Time: Within 2-5 days';
+                supportLevelElement.innerHTML = '🔧 Technical Support: Available 7 days a week';
+            } else {
+                responseTimeElement.innerHTML = '📱 Response Time: Within 24-48 hours';
+                supportLevelElement.innerHTML = '🔧 Basic Support: Available Monday-Friday';
+            }
+        }
+        
         // Optional: Add some celebration effects
         document.addEventListener('DOMContentLoaded', function() {
+            loadUserSelections();
             // You could add confetti or other celebration animations here
             console.log('Setup completed successfully!');
         });

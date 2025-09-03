@@ -168,9 +168,31 @@
             color: #059669;
         }
         
-        /* Step indicator enhancements */
-        .step-indicator {
-            margin-bottom: 40px;
+        .step a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1.5px 3px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 25px;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            white-space: nowrap;
+            min-width: 0;
+            flex-shrink: 0;
+        }
+        
+        .step a:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: inherit;
         }
         
         .step.active {
@@ -236,26 +258,26 @@
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
             <!-- Step Indicator -->
             <div class="step-indicator">
-                <div class="step completed">
+                <a href="packages.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Base</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="addons.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Add</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="customization.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Info</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="quote.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Review</span>
-                </div>
-                <div class="step completed">
+                </a>
+                <a href="payment.html" class="step completed" style="cursor: pointer; text-decoration: none;">
                     <div class="step-number"><i class="fas fa-check"></i></div>
                     <span>Pay</span>
-                </div>
+                </a>
                 <div class="step active">
                     <div class="step-number">6</div>
                     <span>Link</span>
@@ -266,6 +288,7 @@
             <h1 class="page-title">Connect Your Social Media Accounts</h1>
             <p class="page-subtitle">
                 Securely authorize INEXASLI to create and post content to your social media accounts using our AI automation system.
+                <strong style="color: #10b981;">Connect at least one platform to continue.</strong>
             </p>
             
             <!-- Payment Success Note -->
@@ -299,13 +322,16 @@
             <div class="info-box">
                 <h4>What happens next:</h4>
                 <ol>
-                    <li>Connect your Instagram and/or X (Twitter) accounts</li>
+                    <li><strong>Connect at least one</strong> Instagram and/or X (Twitter) account</li>
                     <li>You'll be redirected to each platform's secure authorization page</li>
                     <li>Log in with your business accounts</li>
                     <li>Grant permissions for content posting</li>
                     <li>Return here for final setup completion</li>
                     <li>We'll configure your automation within 2-5 days</li>
                 </ol>
+                <p style="color: #10b981; font-weight: bold; margin-top: 15px; text-align: center;">
+                    💡 <em>You only need to connect the platforms you want to use for automation</em>
+                </p>
             </div>
             
             <!-- Legal Footer -->
@@ -363,6 +389,12 @@
             }, 1500); // Show splash for 1.5 seconds
         });
         
+        // Track connected platforms
+        let connectedPlatforms = {
+            instagram: false,
+            x: false
+        };
+        
         // Fetch OAuth configuration and set up buttons
         async function setupOAuthButtons() {
             // Use new OAuth worker for X.com authentication
@@ -384,6 +416,43 @@
             // Log OAuth URLs for debugging
             console.log('Instagram OAuth URL (new worker):', instagramOauthUrl);
             console.log('X OAuth URL (new worker):', xOauthUrl);
+        }
+        
+        // Check if at least one platform is connected and show complete setup button
+        function checkConnectionStatus() {
+            const hasConnection = connectedPlatforms.instagram || connectedPlatforms.x;
+            const completeSetupSection = document.getElementById('completeSetupSection');
+            const completeSetupButton = document.getElementById('completeSetupButton');
+            
+            if (hasConnection) {
+                completeSetupSection.style.display = 'block';
+                
+                // Update button text based on what's connected
+                let buttonText = 'Complete Setup';
+                let subText = 'Ready to activate automation!';
+                
+                if (connectedPlatforms.instagram && connectedPlatforms.x) {
+                    buttonText = 'Complete Setup - Both Connected';
+                    subText = 'Instagram & X accounts connected. Ready to activate automation!';
+                } else if (connectedPlatforms.instagram) {
+                    buttonText = 'Complete Setup - Instagram Ready';
+                    subText = 'Instagram account connected. Ready to activate automation!';
+                } else if (connectedPlatforms.x) {
+                    buttonText = 'Complete Setup - X Ready';
+                    subText = 'X account connected. Ready to activate automation!';
+                }
+                
+                completeSetupButton.innerHTML = `<i class="fas fa-check-circle"></i> ${buttonText}`;
+                completeSetupButton.nextElementSibling.textContent = subText;
+            } else {
+                completeSetupSection.style.display = 'none';
+            }
+        }
+        
+        // Mark platform as connected
+        function markPlatformConnected(platform) {
+            connectedPlatforms[platform] = true;
+            checkConnectionStatus();
         }
         
         // Initialize OAuth buttons after page loads
@@ -409,21 +478,43 @@
             }
         });
         
-            // Show green check mark if Instagram is connected
-            document.addEventListener('DOMContentLoaded', function() {
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('instagram') === 'connected') {
-                    // Insert green check mark indicator for Instagram
-                    const instagramBtn = document.getElementById('instagramOauthButton');
-                    if (instagramBtn) {
-                        instagramBtn.innerHTML = '<span style="color:#059669;font-size:1.5em;margin-right:8px;">✅</span> Instagram Connected';
-                        instagramBtn.style.background = 'linear-gradient(135deg, #90ee90, #32cd32)';
-                        instagramBtn.style.color = '#000';
-                        instagramBtn.style.fontWeight = 'bold';
-                        instagramBtn.style.pointerEvents = 'none';
-                    }
+        // Check URL parameters and connection status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Check Instagram connection
+            if (urlParams.get('instagram') === 'connected') {
+                markPlatformConnected('instagram');
+                
+                // Update Instagram button appearance
+                const instagramBtn = document.getElementById('instagramOauthButton');
+                if (instagramBtn) {
+                    instagramBtn.innerHTML = '<span style="color:#059669;font-size:1.5em;margin-right:8px;">✅</span> Instagram Connected';
+                    instagramBtn.style.background = 'linear-gradient(135deg, #90ee90, #32cd32)';
+                    instagramBtn.style.color = '#000';
+                    instagramBtn.style.fontWeight = 'bold';
+                    instagramBtn.style.pointerEvents = 'none';
                 }
-            });
+            }
+            
+            // Check X connection (you can add URL parameter logic for X as well)
+            if (urlParams.get('x') === 'connected') {
+                markPlatformConnected('x');
+                
+                // Update X button appearance
+                const xBtn = document.getElementById('xOauthButton');
+                if (xBtn) {
+                    xBtn.innerHTML = '<span style="color:#059669;font-size:1.5em;margin-right:8px;">✅</span> X Connected';
+                    xBtn.style.background = 'linear-gradient(135deg, #90ee90, #32cd32)';
+                    xBtn.style.color = '#000';
+                    xBtn.style.fontWeight = 'bold';
+                    xBtn.style.pointerEvents = 'none';
+                }
+            }
+            
+            // Initial check
+            checkConnectionStatus();
+        });
     </script>
 </body>
 </html>
