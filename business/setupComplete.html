@@ -313,12 +313,13 @@
             const setupMessage = document.getElementById('setupMessage');
             const setupTime = document.getElementById('setupTime');
             
-            // Check if user has automation features
-            const hasAutomation = selectedPackage.features.some(feature => 
-                feature.toLowerCase().includes('ai') || 
+            // Check if user has automation features (very specific detection)
+            const hasAutomation = selectedPackage.features.some(feature =>
+                feature.toLowerCase().includes('ai') ||
                 feature.toLowerCase().includes('automation') ||
-                feature.toLowerCase().includes('content')
-            ) || addons.some(addon => 
+                (feature.toLowerCase().includes('content') &&
+                 feature.toLowerCase().includes('generation'))
+            ) || addons.some(addon =>
                 addon.name.toLowerCase().includes('ai') ||
                 addon.name.toLowerCase().includes('automation') ||
                 addon.name.toLowerCase().includes('content')
