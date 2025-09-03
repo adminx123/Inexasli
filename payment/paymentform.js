@@ -1040,7 +1040,8 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
         task: "pay", 
         client_email: email, 
         username: username,
-        price_id: selectedPriceId === 'default' ? null : selectedPriceId
+        price_id: selectedPriceId === 'default' ? null : selectedPriceId,
+        flow_type: "app"
     };
     console.log("Sending payload to Cloudflare Worker:", payload);
 

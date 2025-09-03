@@ -376,6 +376,27 @@
         
         // Initialize OAuth buttons after page loads
         document.addEventListener('DOMContentLoaded', setupOAuthButtons);
+        
+        // Handle Complete Setup button
+        document.addEventListener('DOMContentLoaded', function() {
+            const completeSetupButton = document.getElementById('completeSetupButton');
+            if (completeSetupButton) {
+                completeSetupButton.addEventListener('click', function() {
+                    // Get flow type from URL
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const flowType = urlParams.get('flow') || 'service';
+                    
+                    if (flowType === 'service') {
+                        // Service flow: redirect to setup completion
+                        window.location.href = '/business/setupComplete.html';
+                    } else {
+                        // App flow: redirect to app (fallback)
+                        window.location.href = '/ai/landing/landing.html';
+                    }
+                });
+            }
+        });
+        
             // Show green check mark if Instagram is connected
             document.addEventListener('DOMContentLoaded', function() {
                 const urlParams = new URLSearchParams(window.location.search);

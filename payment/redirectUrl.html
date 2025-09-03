@@ -1,8 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">        // IMMEDIATE TEST - If you see this, JavaScript is working
+        // alert('🚨 JAVASCRIPT IS EXECUTING! Click OK to continue...');
+        console.error('🚨 JAVASCRIPT EXECUTING - redirectUrl.html');
+        
+        // Debug logging with localStorage persistence
+        let debugLogs = [];
+        function log(message) {
+            console.error('[RedirectUrl] ' + message); // Use console.error for visibility
+            debugLogs.push({
+                timestamp: new Date().toISOString(),
+                message: message
+            });
+            // Store in localStorage for persistence across redirects
+            localStorage.setItem('redirectUrlDebugLogs', JSON.stringify(debugLogs));
+        }
+
+        log('Script started - redirectUrl.html initialization');viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Processing</title>
     <style>
         body {
@@ -60,17 +75,27 @@
         <h2 id="status">Processing your payment...</h2>
         <p id="message">Please wait while we verify your payment and update your account.</p>
         <div id="debug" class="debug" style="display: none;"></div>
+        <div id="countdown" style="display: none;"></div>
     </div>
 
     <script>
-        // Debug logging
+        // IMMEDIATE TEST - If you see this, JavaScript is working
+        alert('🚨 JAVASCRIPT IS EXECUTING! Click OK to continue...');
+        console.error('� JAVASCRIPT EXECUTING - redirectUrl.html');
+        
+        // Debug logging with localStorage persistence
+        let debugLogs = [];
         function log(message) {
-            console.log('[RedirectUrl]', message);
-            // Remove debug display for seamless user experience
-            // const debugDiv = document.getElementById('debug');
-            // debugDiv.style.display = 'block';
-            // debugDiv.innerHTML += '<div>' + new Date().toISOString() + ': ' + message + '</div>';
+            console.error('[RedirectUrl] ' + message); // Use console.error for visibility
+            debugLogs.push({
+                timestamp: new Date().toISOString(),
+                message: message
+            });
+            // Store in localStorage for persistence across redirects
+            localStorage.setItem('redirectUrlDebugLogs', JSON.stringify(debugLogs));
         }
+
+        log('Script started - redirectUrl.html initialization');
 
         // Update UI
         function updateUI(status, message, isError = false) {
@@ -78,6 +103,11 @@
             document.getElementById('status').textContent = status;
             document.getElementById('status').className = isError ? 'error' : 'success';
             document.getElementById('message').textContent = message;
+            
+            // Show debug info
+            const debugDiv = document.getElementById('debug');
+            debugDiv.textContent = debugLogs.map(log => `[${log.timestamp}] ${log.message}`).join('\n');
+            debugDiv.scrollTop = debugDiv.scrollHeight; // Auto-scroll to bottom
         }
 
         // Generate device fingerprint (matching rateLimiter.js)
@@ -191,27 +221,47 @@
                 
                 // Step 1: Verify payment with backend
                 log('Calling checkPayment API...');
-                const checkResponse = await fetch('https://stripeintegration.4hm7q4q75z.workers.dev/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        task: 'checkPayment',
-                        sessionId: sessionId,
-                        fingerprint: fingerprint
-                    })
-                });
-
-                if (!checkResponse.ok) {
-                    throw new Error('Payment verification failed: ' + checkResponse.status);
+                let checkResponse;
+                try {
+                    checkResponse = await fetch('https://stripeintegration.4hm7q4q75z.workers.dev/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            task: 'checkPayment',
+                            sessionId: sessionId,
+                            fingerprint: fingerprint
+                        })
+                    });
+                } catch (networkError) {
+                    log('Network error during fetch: ' + networkError.message);
+                    throw new Error('Network error: Unable to connect to payment server. Please check your internet connection.');
                 }
 
-                const checkData = await checkResponse.json();
+                if (!checkResponse) {
+                    log('Fetch returned null response');
+                    throw new Error('Server returned null response');
+                }
+
+                if (!checkResponse.ok) {
+                    const errorText = await checkResponse.text();
+                    log('Payment verification failed with status: ' + checkResponse.status + ', response: ' + errorText);
+                    throw new Error('Payment verification failed: ' + checkResponse.status + ' - ' + errorText);
+                }
+
+                let checkData;
+                try {
+                    checkData = await checkResponse.json();
+                } catch (parseError) {
+                    log('Failed to parse JSON response: ' + parseError.message);
+                    throw new Error('Invalid response from server: ' + parseError.message);
+                }
+
                 log('checkPayment response: ' + JSON.stringify(checkData));
 
-                if (checkData.paymentStatus !== 'paid') {
-                    throw new Error('Payment not completed: ' + (checkData.message || checkData.paymentStatus || 'Unknown error'));
+                if (!checkData || checkData.paymentStatus !== 'paid') {
+                    throw new Error('Payment not completed: ' + (checkData?.message || checkData?.paymentStatus || 'Unknown error'));
                 }
 
                 // Update localStorage
@@ -225,33 +275,55 @@
                 } else if (checkData.limits && checkData.remaining) {
                     // Fallback: create rateLimitStatus manually
                     const rateLimitStatus = {
-                        allowed: checkData.allowed,
-                        isPaid: checkData.isPaid,
+                        allowed: true,
+                        isPaid: true,
                         limits: checkData.limits,
                         remaining: checkData.remaining,
-                        username: linkData.username,
+                        username: checkData.username,
                         lastUpdated: Date.now()
                     };
                     
                     localStorage.setItem('rateLimitStatus', JSON.stringify(rateLimitStatus));
                     log('Rate limit status created manually (fallback): ' + JSON.stringify(rateLimitStatus));
                 } else {
-                    log('No rate limit data in linkData response - will be set on first AI generation');
+                    log('No rate limit data in checkData response - will be set on first AI generation');
                 }
 
                 // Success!
                 document.getElementById('spinner').style.display = 'none';
-                updateUI('Payment Successful!', 'Redirecting you to the application...', false);
                 
-                // Immediate redirect for seamless experience
-                setTimeout(() => {
-                    log('Redirecting to main application...');
+                // SIMPLE DEBUG: Check URL and force correct redirect
+                const currentUrl = window.location.href;
+                const currentDomain = window.location.origin;
+                const hasFlowService = currentUrl.includes('flow=service');
+                
+                log('CURRENT URL: ' + currentUrl);
+                log('CURRENT DOMAIN: ' + currentDomain);
+                log('Has flow=service: ' + hasFlowService);
+                
+                // FORCE ALERT REGARDLESS
+                // alert('🔍 DEBUG INFO:\n\nURL: ' + currentUrl + '\nDomain: ' + currentDomain + '\nHas flow=service: ' + hasFlowService);
+                
+                // Check if this is a business service payment
+                if (hasFlowService) {
+                    // Redirect to business service setup
+                    const serviceUrl = currentDomain + '/business/oauth-connect.html?session_id=' + sessionId + '&flow=service';
+                    log('Redirecting to business service setup: ' + serviceUrl);
+                    window.location.href = serviceUrl;
+                } else {
+                    // Redirect to main app landing page
+                    log('Redirecting to app landing page');
                     window.location.href = '/ai/landing/landing.html';
-                }, 500); // Very short delay to ensure UI updates
+                }
 
             } catch (error) {
                 log('ERROR: ' + error.message);
                 updateUI('Payment Processing Failed', error.message, true);
+                
+                // On error, redirect to landing page after a delay
+                setTimeout(() => {
+                    window.location.href = '/ai/landing/landing.html';
+                }, 3000);
             }
         }
 
