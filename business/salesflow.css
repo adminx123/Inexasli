@@ -536,12 +536,12 @@ p {
 /* Step Indicators */
 .step-indicator {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     margin: 10px 0 20px 0;
-    gap: 8px;
+    gap: 4px;
     flex-wrap: nowrap;
     overflow-x: auto;
-    padding: 0 5px;
+    padding: 0 8px;
 }
 
 .step {
@@ -622,6 +622,10 @@ p {
 .step.active .step-number {
     background: rgba(255,255,255,0.3);
     color: white;
+}
+
+.step span {
+    padding-right: 1.5px;
 }
 
 /* Buttons */
