@@ -137,38 +137,20 @@
 
                 <!-- Timeline -->
                 <div class="timeline">
-                    <h4>What Happens Next</h4>
+                    <h4>Ready to Proceed?</h4>
                     <div class="timeline-item">
-                        <div class="timeline-time">Day 1</div>
-                        <div class="timeline-content">Payment processed & welcome email sent</div>
+                        <div class="timeline-content">Secure payment processing via Stripe</div>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-time">Day 2-3</div>
-                        <div class="timeline-content">Brand analysis & content strategy development</div>
+                        <div class="timeline-content">Instant order confirmation</div>
                     </div>
                     <div class="timeline-item">
-                        <div class="timeline-time">Day 4-7</div>
-                        <div class="timeline-content">Content creation & account setup</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-time">Day 8+</div>
-                        <div class="timeline-content">Daily posting begins across all platforms</div>
+                        <div class="timeline-content">Setup begins immediately after payment</div>
                     </div>
                 </div>
 
                 <!-- Proceed Button -->
                 <button class="proceed-button" onclick="proceedToPayment()">Proceed to Payment</button>
-
-                <!-- Next Steps -->
-                <div class="next-steps-box">
-                    <div class="next-steps-title">Secure Payment Processing</div>
-                    <ul class="next-steps-list">
-                        <li>Secure checkout powered by Stripe</li>
-                        <li>Immediate order confirmation via email</li>
-                        <li>Setup begins within 2-5 days</li>
-                        <li>30-day satisfaction guarantee</li>
-                    </ul>
-                </div>
 
                 <!-- Payment Disclaimer -->
                 <div class="payment-disclaimer">
@@ -290,13 +272,13 @@
             // Update package features
             const featuresContainer = document.getElementById('packageFeatures');
             featuresContainer.innerHTML = pkg.features.map(feature => 
-                `<p style="color: white; margin: 5px 0;">• ${feature}</p>`
+                `<p style="color: white; margin: 5px 0;">${feature}</p>`
             ).join('');
 
             // Update platforms
             const platformsContainer = document.getElementById('packagePlatforms');
             platformsContainer.innerHTML = pkg.platforms.map(platform => 
-                `<p style="color: white; margin: 5px 0;">• ${platform}</p>`
+                `<p style="color: white; margin: 5px 0;">${platform}</p>`
             ).join('');
         }
 
