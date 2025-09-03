@@ -28,10 +28,16 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
         
-        .oauth-button.x-button:hover {
+        .oauth-button.facebook-button {
+            background: linear-gradient(45deg, #1877f2, #42a5f5);
+            color: white;
+            border: none;
+            box-shadow: 0 10px 30px rgba(24, 119, 242, 0.3);
+        }
+        
+        .oauth-button.facebook-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-            background: linear-gradient(45deg, #1a1a1a, #333333);
+            box-shadow: 0 15px 40px rgba(24, 119, 242, 0.4);
         }
         
         .platform-icon-x {
@@ -297,41 +303,30 @@
                 <p>Your customization details have been securely recorded in your Stripe payment record for our reference. You'll receive a receipt email from Stripe with your order summary.</p>
             </div>
             
-            <!-- OAuth Buttons -->
-            <div class="oauth-buttons">
-                <a href="#" id="instagramOauthButton" class="btn-primary oauth-button instagram-button">
-                     Connect <i class="fab fa-instagram"></i> Account
-                </a>
-                <a href="#" id="xOauthButton" class="btn-primary oauth-button x-button">
-                     Connect <i class="platform-icon-x">𝕏</i> Account
-                </a>
-            </div>
-            
-            <!-- Complete Setup Button -->
-            <div id="completeSetupSection" style="margin-top: 30px; display: none;">
-                <button id="completeSetupButton" class="btn-primary" style="background: linear-gradient(135deg, #90ee90, #32cd32); color: #000; font-weight: bold;">
-                    <i class="fas fa-check-circle"></i>
-                    Complete Setup
-                </button>
-                <p style="color: #ccc; font-size: 0.9em; margin-top: 10px;">
-                    All required accounts connected. Ready to activate automation!
-                </p>
-            </div>
-            
             <!-- Instructions -->
             <div class="info-box">
                 <h4>What happens next:</h4>
                 <ol>
-                    <li><strong>Connect at least one</strong> Instagram and/or X (Twitter) account</li>
+                    <li><strong>Connect at least one</strong> Instagram, Facebook, and/or X (Twitter) account</li>
                     <li>You'll be redirected to each platform's secure authorization page</li>
                     <li>Log in with your business accounts</li>
                     <li>Grant permissions for content posting</li>
                     <li>Return here for final setup completion</li>
                     <li>We'll configure your automation within 2-5 days</li>
                 </ol>
-                <p style="color: #10b981; font-weight: bold; margin-top: 15px; text-align: center;">
-                    💡 <em>You only need to connect the platforms you want to use for automation</em>
-                </p>
+            </div>
+            
+            <!-- OAuth Buttons -->
+            <div class="oauth-buttons">
+                <a href="#" id="instagramOauthButton" class="btn-primary oauth-button instagram-button">
+                     Connect <i class="fab fa-instagram"></i> Account
+                </a>
+                <a href="#" id="facebookOauthButton" class="btn-primary oauth-button facebook-button">
+                     Connect <i class="fab fa-facebook"></i> Account
+                </a>
+                <a href="#" id="xOauthButton" class="btn-primary oauth-button x-button">
+                     Connect <i class="platform-icon-x">𝕏</i> Account
+                </a>
             </div>
             
             <!-- Legal Footer -->
@@ -385,13 +380,70 @@
                     main.style.position = 'static';
                     main.style.left = 'auto';
                     main.style.transform = 'none';
+                    
+                    // Show/hide OAuth buttons based on selected platforms
+                    showSelectedPlatformButtons();
                 }, 1200);
             }, 1500); // Show splash for 1.5 seconds
         });
         
+        // Show/hide OAuth buttons based on selected platforms from localStorage
+        function showSelectedPlatformButtons() {
+            const selectedPackage = JSON.parse(localStorage.getItem('selectedPackage') || '{}');
+            const selectedPlatforms = selectedPackage.platforms || [];
+            
+            console.log('Selected package:', selectedPackage);
+            console.log('Selected platforms:', selectedPlatforms);
+            
+            // Check if buttons exist
+            const instagramBtn = document.getElementById('instagramOauthButton');
+            const facebookBtn = document.getElementById('facebookOauthButton');
+            const xBtn = document.getElementById('xOauthButton');
+            
+            console.log('Buttons found:', {
+                instagram: !!instagramBtn,
+                facebook: !!facebookBtn,
+                x: !!xBtn
+            });
+            
+            // If no package data at all, show all buttons (for testing)
+            if (!selectedPackage || Object.keys(selectedPackage).length === 0) {
+                console.log('No package data found, showing all buttons');
+                if (instagramBtn) instagramBtn.style.display = 'inline-flex';
+                if (facebookBtn) facebookBtn.style.display = 'inline-flex';
+                if (xBtn) xBtn.style.display = 'inline-flex';
+                return;
+            }
+            
+            // Hide all buttons by default
+            if (instagramBtn) instagramBtn.style.display = 'none';
+            if (facebookBtn) facebookBtn.style.display = 'none';
+            if (xBtn) xBtn.style.display = 'none';
+            
+            // Show only selected platforms
+            selectedPlatforms.forEach(platform => {
+                const buttonId = platform + 'OauthButton';
+                const button = document.getElementById(buttonId);
+                console.log('Looking for button:', buttonId, 'Found:', !!button);
+                if (button) {
+                    button.style.display = 'inline-flex';
+                    console.log('Showing button:', buttonId);
+                }
+            });
+            
+            // If no platforms selected, show all (fallback)
+            if (selectedPlatforms.length === 0) {
+                console.log('No platforms selected, showing all buttons');
+                if (instagramBtn) instagramBtn.style.display = 'inline-flex';
+                if (facebookBtn) facebookBtn.style.display = 'inline-flex';
+                if (xBtn) xBtn.style.display = 'inline-flex';
+            }
+        }
+        
         // Track connected platforms
         let connectedPlatforms = {
             instagram: false,
+            facebook: false,
             x: false
         };
         
@@ -409,18 +461,23 @@
             // Instagram OAuth URL using new OAuth worker
             const instagramOauthUrl = `${OAUTH_WORKER_URL}/oauth/instagram/start`;
             
+            // Facebook OAuth URL using new OAuth worker
+            const facebookOauthUrl = `${OAUTH_WORKER_URL}/oauth/facebook/start`;
+            
             // Set up OAuth buttons with new unified worker
             document.getElementById('instagramOauthButton').href = instagramOauthUrl;
+            document.getElementById('facebookOauthButton').href = facebookOauthUrl;
             document.getElementById('xOauthButton').href = xOauthUrl;
             
             // Log OAuth URLs for debugging
             console.log('Instagram OAuth URL (new worker):', instagramOauthUrl);
+            console.log('Facebook OAuth URL (new worker):', facebookOauthUrl);
             console.log('X OAuth URL (new worker):', xOauthUrl);
         }
         
         // Check if at least one platform is connected and show complete setup button
         function checkConnectionStatus() {
-            const hasConnection = connectedPlatforms.instagram || connectedPlatforms.x;
+            const hasConnection = connectedPlatforms.instagram || connectedPlatforms.facebook || connectedPlatforms.x;
             const completeSetupSection = document.getElementById('completeSetupSection');
             const completeSetupButton = document.getElementById('completeSetupButton');
             
@@ -431,10 +488,16 @@
                 let buttonText = 'Finalize';
                 let subText = 'Ready to complete your setup!';
                 
-                if (connectedPlatforms.instagram && connectedPlatforms.x) {
-                    subText = 'Instagram & X accounts connected and ready!';
+                const connectedCount = Object.values(connectedPlatforms).filter(Boolean).length;
+                if (connectedCount === 3) {
+                    subText = 'All accounts connected and ready!';
+                } else if (connectedCount === 2) {
+                    const connected = Object.entries(connectedPlatforms).filter(([_, connected]) => connected).map(([platform, _]) => platform);
+                    subText = `${connected.join(' & ')} accounts connected and ready!`;
                 } else if (connectedPlatforms.instagram) {
                     subText = 'Instagram account connected and ready!';
+                } else if (connectedPlatforms.facebook) {
+                    subText = 'Facebook account connected and ready!';
                 } else if (connectedPlatforms.x) {
                     subText = 'X account connected and ready!';
                 }
