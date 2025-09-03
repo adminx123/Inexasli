@@ -331,9 +331,9 @@
             
             <!-- Complete Setup Button -->
             <div id="completeSetupSection" style="display: none;">
-                <button id="completeSetupButton" class="btn-primary" style="background: linear-gradient(135deg, #90ee90, #32cd32); color: #000; font-weight: bold;">
-                    <i class="fas fa-check-circle"></i>
-                    Complete Setup
+                <button id="completeSetupButton" class="btn-primary" style="background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; font-weight: bold;">
+                    <i class="fab fa-instagram"></i>
+                    Finalize
                 </button>
                 <p style="color: #ccc; font-size: 0.9em; margin-top: 10px;">
                     All required accounts connected. Ready to activate automation!
@@ -513,7 +513,7 @@
                     subText = 'X account connected and ready!';
                 }
                 
-                completeSetupButton.innerHTML = `<i class="fas fa-check-circle"></i> ${buttonText}`;
+                completeSetupButton.innerHTML = `<i class="fab fa-instagram"></i> ${buttonText}`;
                 completeSetupButton.nextElementSibling.textContent = subText;
             } else {
                 completeSetupSection.style.display = 'none';
@@ -560,9 +560,9 @@
                 // Update Instagram button appearance
                 const instagramBtn = document.getElementById('instagramOauthButton');
                 if (instagramBtn) {
-                    instagramBtn.innerHTML = '<span style="color:#059669;font-size:1.5em;margin-right:8px;">✅</span> Instagram Connected';
-                    instagramBtn.style.background = 'linear-gradient(135deg, #90ee90, #32cd32)';
-                    instagramBtn.style.color = '#000';
+                    instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Instagram Connected';
+                    instagramBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    instagramBtn.style.color = '#fff';
                     instagramBtn.style.fontWeight = 'bold';
                     instagramBtn.style.pointerEvents = 'none';
                 }
@@ -575,11 +575,26 @@
                 // Update X button appearance
                 const xBtn = document.getElementById('xOauthButton');
                 if (xBtn) {
-                    xBtn.innerHTML = '<span style="color:#059669;font-size:1.5em;margin-right:8px;">✅</span> X Connected';
-                    xBtn.style.background = 'linear-gradient(135deg, #90ee90, #32cd32)';
-                    xBtn.style.color = '#000';
+                    xBtn.innerHTML = '<i class="platform-icon-x">𝕏</i> X Connected';
+                    xBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    xBtn.style.color = '#fff';
                     xBtn.style.fontWeight = 'bold';
                     xBtn.style.pointerEvents = 'none';
+                }
+            }
+            
+            // Check Facebook connection
+            if (urlParams.get('facebook') === 'connected') {
+                markPlatformConnected('facebook');
+                
+                // Update Facebook button appearance
+                const facebookBtn = document.getElementById('facebookOauthButton');
+                if (facebookBtn) {
+                    facebookBtn.innerHTML = '<i class="fab fa-facebook"></i> Facebook Connected';
+                    facebookBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    facebookBtn.style.color = '#fff';
+                    facebookBtn.style.fontWeight = 'bold';
+                    facebookBtn.style.pointerEvents = 'none';
                 }
             }
             
