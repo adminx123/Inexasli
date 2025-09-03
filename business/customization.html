@@ -454,13 +454,10 @@
                     📞 Schedule Call (Optional)
                 </a>
             </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn-primary">
-                    Continue to Review
-                </button>
-            </div>
         </form>
+        
+        <!-- Continue Button -->
+        <button class="btn-continue-to-quote" onclick="submitCustomizationForm()" style="margin-top: 20px;">Continue to Order Review</button>
         
         <!-- Back Button -->
         <a href="addons.html" class="btn-back">← Back to Enhancements</a>
@@ -586,11 +583,11 @@
             }
         });
 
-        document.getElementById('setupForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function submitCustomizationForm() {
+            const form = document.getElementById('setupForm');
             
             // Collect form data
-            const formData = new FormData(this);
+            const formData = new FormData(form);
             const setupData = {};
             
             // Handle regular fields
@@ -620,8 +617,8 @@
             
             // Redirect to quote page
             window.location.href = 'quote.html';
-        });
-        
+        }
+
         function scheduleConsultation() {
             // TODO: Integrate with Calendly or your scheduling system
             alert('Consultation scheduling coming soon! We\'ll contact you within 2-5 days.');
