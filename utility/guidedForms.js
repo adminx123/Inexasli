@@ -135,17 +135,11 @@ class GuidedFormSystem {
         if (gridContainer) {
             const gridItems = gridContainer.querySelectorAll('.grid-item');
             
-            // Check for single-selection containers
-            const containerId = gridContainer.id;
-            const singleSelectionContainers = [
-                'calorie-activity', 'calorie-diet-type', 'fitness-level', 
-                'fitness-home-exercises', 'area-goal', 'test-goal'
-            ];
-            
-            // Also check for data attributes that indicate single selection
-            const isSingleSelection = singleSelectionContainers.includes(containerId) || 
-                                    gridContainer.hasAttribute('data-single-select') ||
-                                    gridContainer.classList.contains('single-select');
+            // Check for single-selection containers based on data attributes or classes
+            const isSingleSelection = gridContainer.hasAttribute('data-single-select') ||
+                                    gridContainer.classList.contains('single-select') ||
+                                    gridContainer.querySelectorAll('.grid-item').length > 0 && 
+                                    gridContainer.querySelectorAll('.grid-item[data-single-select]').length > 0;
             
             if (isSingleSelection) {
                 stepType = 'single-selection';
@@ -378,19 +372,14 @@ class GuidedFormSystem {
         if (!this.config.respectExistingPersistence) return;
         
         try {
-            // Check for CalorieIQ form persistence
-            if (typeof setJSON === 'function' && typeof collectFormData === 'function') {
-                setJSON('calorieIqInput', collectFormData());
-            }
-            
-            // Check for other form persistence functions
-            // Look for common persistence patterns
+            // Trigger any existing persistence functions if they exist
+            // Look for common persistence patterns without module-specific references
             const currentStepElement = this.steps[this.currentStep]?.element;
             if (currentStepElement) {
                 const inputs = currentStepElement.querySelectorAll('input, textarea, select');
                 const gridItems = currentStepElement.querySelectorAll('.grid-item.selected');
                 
-                // Trigger any existing save functions if they exist
+                // Trigger generic save functions if they exist
                 if (inputs.length > 0 && typeof saveInput === 'function') {
                     inputs.forEach(input => saveInput(input));
                 }
@@ -398,8 +387,14 @@ class GuidedFormSystem {
                 if (gridItems.length > 0 && typeof saveGridItem === 'function') {
                     gridItems.forEach(item => saveGridItem(item));
                 }
+                
+                // Trigger generic form data collection if available
+                if (typeof collectFormData === 'function') {
+                    collectFormData();
+                }
             }
         } catch (error) {
+            // Silently handle any persistence errors
         }
     }
     
