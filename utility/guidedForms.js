@@ -815,35 +815,3 @@ window.toggleGuidedMode = toggleGuidedMode;
 window.guidedFormsPrevious = guidedFormsPrevious;
 window.guidedFormsNext = guidedFormsNext;
 window.getGuidedFormsState = getGuidedFormsState;
-
-// Auto-initialize when script loads (can be disabled by setting window.autoInitGuidedForms = false)
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.autoInitGuidedForms !== false) {
-        // Check if we're in a form context
-        const hasFormElements = document.querySelector('.row1, [class*="grid-items"], .grid-container, .device-container');
-        if (hasFormElements) {
-            initGuidedForms({
-                autoAdvance: true,
-                showProgressIndicator: true,
-                smoothTransitions: true,
-                enableSkipping: true,
-                autoStart: true
-            });
-        }
-    }
-});
-document.addEventListener('data-in-loaded', (e) => {
-    setTimeout(() => {
-        const container = e.detail?.container || document;
-        const hasFormElements = container.querySelector('.row1, [class*="grid-items"], .grid-container, .device-container');
-        if (hasFormElements && window.autoInitGuidedForms !== false) {
-            initGuidedForms({
-                autoAdvance: true,
-                showProgressIndicator: true,
-                smoothTransitions: true,
-                enableSkipping: true,
-                autoStart: true
-            });
-        }
-    }, 200);
-});

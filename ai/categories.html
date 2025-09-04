@@ -243,8 +243,18 @@ const productsGrid = document.querySelector('.row1[data-step-label="Products"] .
 const deviceContainer = document.querySelector('.device-container');
 
 function getFavorites() {
-    // Use the imported function directly
-    return window.getJSON('favoriteProducts', []);
+    // Use the imported function directly with error handling
+    try {
+        if (typeof window.getJSON === 'function') {
+            return window.getJSON('favoriteProducts', []);
+        } else {
+            console.warn('[Categories] window.getJSON not available, returning empty array');
+            return [];
+        }
+    } catch (error) {
+        console.error('[Categories] Error getting favorites:', error);
+        return [];
+    }
 }
 
 function saveFavorites(favorites) {
@@ -253,8 +263,21 @@ function saveFavorites(favorites) {
 }
 
 function renderFavorites() {
+    // Check if favoritesGrid exists
+    if (!favoritesGrid) {
+        console.warn('[Categories] favoritesGrid element not found, skipping render');
+        return;
+    }
+
     const favorites = getFavorites();
     favoritesGrid.innerHTML = '';
+
+    // Add null check to prevent errors
+    if (!favorites || !Array.isArray(favorites)) {
+        console.warn('[Categories] Favorites data is null or not an array, skipping render');
+        return;
+    }
+
     if (favorites.length === 0) {
         return;
     }
@@ -294,11 +317,13 @@ function toggleFavorite(url) {
 
 function updateFavoriteIcons() {
     const favorites = getFavorites();
+    // Ensure favorites is always an array to prevent null reference errors
+    const safeFavorites = Array.isArray(favorites) ? favorites : [];
     // This will update icons in both the main grid and the favorites grid
     document.querySelectorAll('.product-item[data-value]').forEach(item => {
         const icon = item.querySelector('.favorite-icon');
         if (icon) {
-            if (favorites.includes(item.dataset.value)) {
+            if (safeFavorites.includes(item.dataset.value)) {
                 icon.classList.add('favorited');
             } else {
                 icon.classList.remove('favorited');
