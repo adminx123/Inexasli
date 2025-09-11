@@ -21,8 +21,7 @@
         "deploy:adventure": "npx wrangler deploy -e adventure",
         "deploy:calorie": "npx wrangler deploy -e calorie",
         "deploy:oauth": "npx wrangler deploy --env oauth",
-        "deploy:stripe-integration": "npx wrangler deploy --config payment/wrangler-stripeintegration.toml",
-        "deploy:prompt-inexasli": "npx wrangler deploy --config business/clients/wrangler-inexasli.toml --env inexasli"
+        "deploy:stripe-integration": "npx wrangler deploy --config payment/wrangler-stripeintegration.toml"
     },
     "keywords": [],
     "author": "",
