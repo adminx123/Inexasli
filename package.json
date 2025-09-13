@@ -8,7 +8,7 @@
         "build": "webpack --mode production",
         "test": "jest",
         "login": "npx wrangler login",
-        "deploy:all": "npm run deploy:rate-limiter && npm run deploy:symptom && npm run deploy:fitness && npm run deploy:research && npm run deploy:social && npm run deploy:speculation && npm run deploy:enneagram && npm run deploy:event && npm run deploy:quiz && npm run deploy:adventure && npm run deploy:calorie && npm run deploy:oauth && npm run deploy:stripe-integration",
+        "deploy:all": "npm run deploy:rate-limiter && npm run deploy:symptom && npm run deploy:fitness && npm run deploy:research && npm run deploy:social && npm run deploy:speculation && npm run deploy:enneagram && npm run deploy:event && npm run deploy:quiz && npm run deploy:adventure && npm run deploy:calorie && npm run deploy:oauth && npm run deploy:stripe-integration && npm run deploy:inexasli && npm run deploy:meofia",
         "deploy:rate-limiter": "npx wrangler deploy -e rate-limiter",
         "deploy:symptom": "npx wrangler deploy -e symptom",
         "deploy:fitness": "npx wrangler deploy -e fitness",
@@ -21,7 +21,9 @@
         "deploy:adventure": "npx wrangler deploy -e adventure",
         "deploy:calorie": "npx wrangler deploy -e calorie",
         "deploy:oauth": "npx wrangler deploy --env oauth",
-        "deploy:stripe-integration": "npx wrangler deploy --config payment/wrangler-stripeintegration.toml"
+        "deploy:stripe-integration": "npx wrangler deploy --config payment/wrangler-stripeintegration.toml",
+        "deploy:inexasli": "npx wrangler deploy --config business/clients/wrangler-inexasli.toml --env inexasli",
+        "deploy:meofia": "npx wrangler deploy --config business/clients/wrangler-meofia.toml --env meofia"
     },
     "keywords": [],
     "author": "",
