@@ -267,6 +267,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     left: 0;
                     right: 0;
                     bottom: 0;
+                    transform: none;
                     border-radius: 0;
                     border: none;
                     box-shadow: none;
