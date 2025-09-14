@@ -32,28 +32,38 @@
   </div>
 
   <div class="row1">
-    <h3 class="tooltip1" data-tooltip="Basic physical information needed to calculate your personalized calorie requirements.">
-      Personal Information<span class="tooltip1-content"></span>
-    </h3>
     <input id="age" type="text" placeholder="Age">
-    <input id="height" type="text" placeholder="5'10">
-    <input id="weight" type="text" placeholder="70 kg">
+  </div>
+
+  <div class="row1">
+    <input id="height" type="text" placeholder="Height (e.g., 5'10)">
+  </div>
+
+  <div class="row1">
+    <input id="weight" type="text" placeholder="Weight (e.g., 70 kg)">
+  </div>
+
+  <div class="row1">
     <select id="sex">
       <option value="" disabled selected>Select Gender</option>
       <option value="man">Man</option>
       <option value="woman">Woman</option>
     </select>
+  </div>
 
+  <div class="row1">
     <h3 class="tooltip1" data-tooltip="Choose your primary fitness objective to receive customized calorie recommendations.">
       Fitness Goal<span class="tooltip1-content"></span>
     </h3>
-    <div class="grid-container" id="goal">
+    <div class="grid-container" id="goal" data-single-select>
       <div class="grid-item" data-value="Lose Weight">Lose weight</div>
       <div class="grid-item" data-value="Gain Muscle">Gain muscle</div>
       <div class="grid-item" data-value="Maintain Weight">Maintain weight</div>
       <div class="grid-item" data-value="Improve Endurance">Improve endurance</div>
     </div>
+  </div>
 
+  <div class="row1">
     <h3 class="tooltip1" data-tooltip="Describe your weekly physical activity to help calculate your daily calorie needs based on your lifestyle.">
       Activity Details<span class="tooltip1-content"></span>
     </h3>
@@ -61,11 +71,13 @@
     <textarea id="activity-level" rows="2" style="width:100%;max-width:460px;display:block;margin:0 auto;" placeholder="I do cardio 3 times per week
 Weights 2 times per week
 Each session about 45 minutes"></textarea>
+  </div>
 
+  <div class="row1">
     <h3 class="tooltip1" data-tooltip="Select your dietary preferences or restrictions to receive personalized meal recommendations that fit your lifestyle.">
       Dietary Preferences<span class="tooltip1-content"></span>
     </h3>
-    <div class="grid-container" id="diet-type">
+    <div class="grid-container" id="diet-type" data-single-select>
       <div class="grid-item" data-value="None">No Restrictions</div>
       <div class="grid-item" data-value="Vegetarian">Vegetarian</div>
       <div class="grid-item" data-value="Vegan">Vegan</div>
@@ -75,22 +87,30 @@ Each session about 45 minutes"></textarea>
       <div class="grid-item" data-value="Low-Carb">Low-Carb</div>
       <div class="grid-item" data-value="Mediterranean">Mediterranean</div>
     </div>
+  </div>
 
-    <h3 class="tooltip1" data-tooltip="Record what you typically eat throughout the day to get personalized nutritional analysis and recommendations.">
-      Food Log<span class="tooltip1-content"></span>
-    </h3>
+  <div class="row1">
     <textarea id="breakfast" data-meal="breakfast" placeholder="Breakfast:
 1 cup oatmeal
 0.5 cup berries
 1 tbsp honey" rows="3"></textarea>
+  </div>
+
+  <div class="row1">
     <textarea id="lunch" data-meal="lunch" placeholder="Lunch:
 200g chicken breast
 150g mixed salad
 2 tbsp olive oil" rows="3"></textarea>
+  </div>
+
+  <div class="row1">
     <textarea id="dinner" data-meal="dinner" placeholder="Dinner:
 6 oz salmon
 1/2 cup quinoa
 100g broccoli" rows="3"></textarea>
+  </div>
+
+  <div class="row1">
     <textarea id="snacks" data-meal="snacks" placeholder="Snacks:
 1 apple
 30g almonds
