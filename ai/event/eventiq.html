@@ -30,67 +30,63 @@
     </div>
 </div>
 
-        <div class="row1">
-            <h3 class="tooltip1" data-tooltip="Select the type of event you're planning to receive tailored suggestions and planning advice.">
-                Event Type<span class="tooltip1-content"></span>
-            </h3>
-            <div class="grid-container" id="types">
-                <div class="grid-item" data-value="Birthday">Birthday</div>
-                <div class="grid-item" data-value="Wedding">Wedding</div>
-                <div class="grid-item" data-value="House Party">House Party</div>
-                <div class="grid-item" data-value="Corporate Event">Corporate Event</div>
-                <div class="grid-item" data-value="Family Reunion">Family Reunion</div>
-                <div class="grid-item" data-value="Concert">Concert</div>
-                <div class="grid-item" data-value="Graduation">Graduation</div>
-                <div class="grid-item" data-value="Festival">Festival</div>
-                <div class="grid-item" data-value="Charity Event">Charity Event</div>
-                <div class="grid-item" data-value="Community Gathering">Community Gathering</div>
-            </div>
+  <div class="row1">
+    <h3 class="tooltip1" data-tooltip="Select the type of event you're planning to receive tailored suggestions and planning advice.">
+      Event Type<span class="tooltip1-content"></span>
+    </h3>
+    <div class="grid-container" id="types">
+      <div class="grid-item" data-value="Birthday">Birthday</div>
+      <div class="grid-item" data-value="Wedding">Wedding</div>
+      <div class="grid-item" data-value="House Party">House Party</div>
+      <div class="grid-item" data-value="Corporate Event">Corporate Event</div>
+      <div class="grid-item" data-value="Family Reunion">Family Reunion</div>
+      <div class="grid-item" data-value="Concert">Concert</div>
+      <div class="grid-item" data-value="Graduation">Graduation</div>
+      <div class="grid-item" data-value="Festival">Festival</div>
+      <div class="grid-item" data-value="Charity Event">Charity Event</div>
+      <div class="grid-item" data-value="Community Gathering">Community Gathering</div>
+    </div>
+  </div>
 
-            <h3 class="tooltip1" data-tooltip="Select the elements that will be part of your event (e.g., food, drinks, entertainment, etc.) for tailored planning.">
-                Event Elements<span class="tooltip1-content"></span>
-            </h3>
-            <div class="grid-container" id="elements">
-                <div class="grid-item" data-value="Food">Food</div>
-                <div class="grid-item" data-value="Drinks">Drinks</div>
-                <div class="grid-item" data-value="Alcoholic Drinks">Alcoholic Drinks</div>
-                <div class="grid-item" data-value="Photography">Photography</div>
-                <div class="grid-item" data-value="Games">Games</div>
-                <div class="grid-item" data-value="Live Entertainment">Live Entertainment</div>
-                <div class="grid-item" data-value="Decorations">Decorations</div>
-                <div class="grid-item" data-value="Music">Music</div>
-                <div class="grid-item" data-value="Invitations">Invitations</div>
-                <div class="grid-item" data-value="Gift Bags">Gift Bags</div>
-            </div>
-        </div>
+  <div class="row1">
+    <h3 class="tooltip1" data-tooltip="Select the elements that will be part of your event (e.g., food, drinks, entertainment, etc.) for tailored planning.">
+      Event Elements<span class="tooltip1-content"></span>
+    </h3>
+    <div class="grid-container" id="elements">
+      <div class="grid-item" data-value="Food">Food</div>
+      <div class="grid-item" data-value="Drinks">Drinks</div>
+      <div class="grid-item" data-value="Alcoholic Drinks">Alcoholic Drinks</div>
+      <div class="grid-item" data-value="Photography">Photography</div>
+      <div class="grid-item" data-value="Games">Games</div>
+      <div class="grid-item" data-value="Live Entertainment">Live Entertainment</div>
+      <div class="grid-item" data-value="Decorations">Decorations</div>
+      <div class="grid-item" data-value="Music">Music</div>
+      <div class="grid-item" data-value="Invitations">Invitations</div>
+      <div class="grid-item" data-value="Gift Bags">Gift Bags</div>
+    </div>
+  </div>
       
 
-        <div class="row1">
+  <div class="row1">
+    <select id="venue">
+      <option value="" disabled selected>Select Venue Status</option>
+      <option value="Venue Secured">Venue Secured</option>
+      <option value="Venue Needed">Venue Needed</option>
+    </select>
+  </div>
 
-   <h3 class="tooltip1" data-tooltip="Indicate whether you already have a venue secured or need help finding one.">
-                Venue Status<span class="tooltip1-content"></span>
-            </h3>
-            <select id="venue">
-                <option value="" disabled selected>Select Venue Status</option>
-                <option value="Venue Secured">Venue Secured</option>
-                <option value="Venue Needed">Venue Needed</option>
-            </select>
+  <div class="row1">
+    <select id="location">
+      <option value="" disabled selected>Select Location Type</option>
+      <option value="indoors">Indoors</option>
+      <option value="outdoors">Outdoors</option>
+    </select>
+  </div>
 
-            
-            <h3 class="tooltip1" data-tooltip="Choose whether your event will be held indoors or outdoors to get appropriate planning recommendations.">
-                Location Type<span class="tooltip1-content"></span>
-            </h3>
-            <select id="location">
-                <option value="" disabled selected>Select Location Type</option>
-                <option value="indoors">Indoors</option>
-                <option value="outdoors">Outdoors</option>
-            </select>
-
-            <h3 class="tooltip1" data-tooltip="Specify the location or address for your event.">
-                Event Location<span class="tooltip1-content"></span>
-            </h3>
-            <textarea id="specific-location" rows="1" placeholder="123 Main St, New York"></textarea>
-        </div>
+  <div class="row1">
+    <textarea id="specific-location" rows="1" placeholder="Event Location:
+123 Main St, New York"></textarea>
+  </div>
 
 
         <div class="row1" id="event-requirements">
@@ -116,32 +112,25 @@
       
     
     
-        <div class="row1">
+  <div class="row1">
+    <label for="start">Start:</label>
+    <input type="datetime-local" id="start" name="start">
+    <label for="end">End:</label>
+    <input type="datetime-local" id="end" name="end">
+  </div>
 
-  <h3 class="tooltip1" data-tooltip="Set the start and end time for your event.">
-      Event Time<span class="tooltip1-content"></span>
-  </h3>
-            <label for="start">Start:</label>
-            <input type="datetime-local" id="start" name="start">
-            <label for="end">End:</label>
-            <input type="datetime-local" id="end" name="end">
+  <div class="row1">
+    <input type="number" id="guests" placeholder="50 guests" min="1">
+    <input type="number" id="budget" placeholder="Budget $5000">
+  </div>
 
-
-<h3 class="tooltip1" data-tooltip="Enter the expected number of guests and your budget.">
-    Attendance & Budget<span class="tooltip1-content"></span>
-</h3>
-            <input type="number" id="guests" placeholder="50" min="1">
-            <input type="number" id="budget" placeholder="5000">
-
-            <h3 class="tooltip1" data-tooltip="Add any extra details or context that will help us plan your event.">
-                Additional Context<span class="tooltip1-content"></span>
-            </h3>
-            <textarea id="specific-context" rows="3" placeholder="Majority of attendees have an Italian background. 
-Most individuals between 5-10 yrs old. 
-Need accommodations for 3 wheelchair users."></textarea>
-       
-            <button class="generate-btn" id="generate-event-btn">Generate Analysis</button>
-        </div>
+  <div class="row1">
+    <textarea id="specific-context" rows="3" placeholder="Additional Context:
+Majority of attendees have an Italian background
+Most individuals between 5-10 yrs old
+Need accommodations for 3 wheelchair users"></textarea>
+    <button class="generate-btn" id="generate-event-btn">Generate Analysis</button>
+  </div>
   
 
 <script type="module">
