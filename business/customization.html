@@ -635,9 +635,12 @@
         // Make setJSON available globally for the form submission function
         window.setJSON = setJSON;
         
-        // Initialize form persistence for customization form
-        const customizationPersistence = new BusinessFormPersistence('setupForm', 'customization-form-data');
-        customizationPersistence.init();
+        // Initialize form persistence for customization form after a short delay
+        // to ensure grid selection event listeners are set up
+        setTimeout(() => {
+            const customizationPersistence = new BusinessFormPersistence('setupForm', 'customization-form-data');
+            customizationPersistence.init();
+        }, 100);
     </script>
 </body>
 </html>

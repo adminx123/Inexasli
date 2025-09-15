@@ -137,12 +137,16 @@ class BusinessFormPersistence {
             });
 
             // Collect grid selections by container ID
-            const gridContainers = this.form.querySelectorAll('[id] .grid-container, .grid-container[id]');
+            const gridContainers = this.form.querySelectorAll('[id].grid-selection, .grid-selection[id]');
             gridContainers.forEach(container => {
-                const containerId = container.id || container.closest('[id]')?.id;
+                const containerId = container.id;
                 if (containerId) {
                     const selectedItems = container.querySelectorAll('.grid-item.selected');
-                    formData.gridSelections[containerId] = Array.from(selectedItems).map(item => item.dataset.value || item.textContent.trim());
+                    const selectedValues = Array.from(selectedItems).map(item => item.dataset.value || item.textContent.trim());
+                    if (selectedValues.length > 0) {
+                        formData.gridSelections[containerId] = selectedValues;
+                        console.log(`[BusinessFormPersistence] Saving grid selections for ${containerId}:`, selectedValues);
+                    }
                 }
             });
 
@@ -190,9 +194,11 @@ class BusinessFormPersistence {
 
             // Restore grid selections
             if (savedData.gridSelections) {
+                console.log('[BusinessFormPersistence] Restoring grid selections:', savedData.gridSelections);
                 Object.entries(savedData.gridSelections).forEach(([containerId, selectedValues]) => {
                     const container = document.getElementById(containerId);
                     if (container && Array.isArray(selectedValues)) {
+                        console.log(`[BusinessFormPersistence] Restoring ${selectedValues.length} selections for ${containerId}`);
                         // First, clear all selections in this container
                         container.querySelectorAll('.grid-item.selected').forEach(item => {
                             item.classList.remove('selected');
@@ -203,8 +209,22 @@ class BusinessFormPersistence {
                             const item = container.querySelector(`[data-value="${value}"]`);
                             if (item) {
                                 item.classList.add('selected');
+                                
+                                // For single selections, also update the hidden input
+                                const gridContainer = item.closest('.grid-selection');
+                                if (gridContainer && gridContainer.dataset.type === 'single') {
+                                    const hiddenInput = document.getElementById(gridContainer.dataset.name);
+                                    if (hiddenInput) {
+                                        hiddenInput.value = value;
+                                        console.log(`[BusinessFormPersistence] Updated hidden input ${gridContainer.dataset.name} to ${value}`);
+                                    }
+                                }
+                            } else {
+                                console.warn(`[BusinessFormPersistence] Could not find grid item with data-value="${value}" in ${containerId}`);
                             }
                         });
+                    } else {
+                        console.warn(`[BusinessFormPersistence] Could not find container ${containerId} or invalid selectedValues`);
                     }
                 });
             }
