@@ -613,7 +613,7 @@
             }
             
             // Store customization data for Stripe integration
-            localStorage.setItem('customizationData', JSON.stringify(setupData));
+            setJSON('customizationData', setupData);
             
             // Redirect to quote page
             window.location.href = 'quote.html';
@@ -630,6 +630,10 @@
     <script src="step-navigation.js"></script>
     <script type="module">
         import { BusinessFormPersistence } from './businessFormPersistence.js';
+        import { setJSON } from '../utility/setJSON.js';
+        
+        // Make setJSON available globally for the form submission function
+        window.setJSON = setJSON;
         
         // Initialize form persistence for customization form
         const customizationPersistence = new BusinessFormPersistence('setupForm', 'customization-form-data');

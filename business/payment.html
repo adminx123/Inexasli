@@ -84,11 +84,13 @@
                 <!-- Customer Information -->
                 <div class="form-section" style="max-width: 500px; margin: 30px auto;">
                     <h3>Billing Information</h3>
-                    <div class="form-fields">
-                        <input type="email" id="email" placeholder="Email Address" required>
-                        <input type="text" id="fullName" placeholder="Full Name" required>
-                        <input type="text" id="company" placeholder="Company Name (Optional)">
-                    </div>
+                    <form id="paymentForm">
+                        <div class="form-fields">
+                            <input type="email" id="email" placeholder="Email Address" required>
+                            <input type="text" id="fullName" placeholder="Full Name" required>
+                            <input type="text" id="company" placeholder="Company Name (Optional)">
+                        </div>
+                    </form>
                 </div>
                 
                 <!-- Payment Disclaimer -->
@@ -166,7 +168,7 @@
             );
             
             // Retrieve customization data
-            const customizationData = JSON.parse(localStorage.getItem('customizationData') || '{}');
+            const customizationData = getJSON('customizationData', {});
             
             let summaryHTML = `
                 <h3 class="quote-box-title">${selectedPackage.name}</h3>
@@ -251,7 +253,7 @@
             );
             
             // Retrieve customization data
-            const customizationData = JSON.parse(localStorage.getItem('customizationData') || '{}');
+            const customizationData = getJSON('customizationData', {});
             
             try {
                 // Call backend to create checkout session
@@ -355,5 +357,17 @@
     <script src="/utility/modal.js"></script>
     <script src="/business/legalSocial.js"></script>
     <script src="step-navigation.js"></script>
+    
+    <script type="module">
+        import { getJSON } from '../utility/getJSON.js';
+        import { BusinessFormPersistence } from './businessFormPersistence.js';
+        
+        // Make getJSON available globally for the payment functions
+        window.getJSON = getJSON;
+        
+        // Initialize form persistence for payment form
+        const paymentFormPersistence = new BusinessFormPersistence('paymentForm', 'payment-form-data');
+        paymentFormPersistence.init();
+    </script>
 </body>
 </html>
