@@ -28,13 +28,7 @@
   </div>
 
   <div class="row1" data-step-label="Basic Information">
-    <h3 class="tooltip1" data-tooltip="Basic information to help personalize your period tracking experience.">
-      Basic Information<span class="tooltip1-content"></span>
-    </h3>
-
-
-
-    <input id="age" type="text" placeholder="Age">
+    <input id="age" type="text" placeholder="Age: 25">
     <select id="birthControlType">
       <option value="" disabled selected>Birth control type</option>
       <option value="pill">Birth Control Pill</option>
@@ -48,11 +42,11 @@
       <option value="spermicide">Spermicide</option>
       <option value="none">None</option>
     </select>
-    <input id="birthControlDetail" type="text" placeholder="Specify brand/type" style="display: none;">
+    <input id="birthControlDetail" type="text" placeholder="Specify brand/type: Yaz" style="display: none;">
 
     <!-- Natural Cycle Specific Fields -->
     <div id="natural-cycle-container" style="display: none;">
-      <input id="cycleLengthInput" type="text" placeholder="Typical cycle length (e.g. 28 days, varies 25-30)">
+      <input id="cycleLengthInput" type="text" placeholder="Typical cycle length: 28 days, varies 25-30">
     </div>
 
     <!-- Birth Control Pill Specific Fields -->
@@ -80,41 +74,43 @@
     <input id="endDate" type="date" name="last-period-end-date">
   </div>
 
-  <div class="row1" data-step-label="Medical Information">
-    <h3 class="tooltip1" data-tooltip="Medical conditions and medications that may affect your cycle.">
-      Medical Information<span class="tooltip1-content"></span>
-    </h3>
-    
-    <textarea id="medicalConditions" placeholder="Diabetes Type 2
+  <div class="row1">
+    <textarea id="medicalConditions" placeholder="Medical Conditions:
+Diabetes Type 2
 High blood pressure
-Thyroid condition"></textarea>        <textarea id="currentMedications" placeholder="Zoloft 50mg daily
+Thyroid condition"></textarea>
+  </div>
+
+  <div class="row1">
+    <textarea id="currentMedications" placeholder="Current Medications:
+Zoloft 50mg daily
 Vitamin D 1000 IU
 Birth control pill"></textarea>
   </div>
 
-  <div class="row1" data-step-label="Cycle Information">
-
-    <h3 class="tooltip1" data-tooltip="Basic cycle pattern information for predictions.">
-      Cycle Information<span class="tooltip1-content"></span>
-    </h3>
-
-    <label>Average cycle length</label>
-    <textarea id="cycleLength" placeholder="Average cycle length
+  <div class="row1">
+    <textarea id="cycleLength" placeholder="Average Cycle Length:
 • 28 days (most common)
 • Varies 26-32 days
-• 25 days on birth control
+• 25 days on birth control"></textarea>
+  </div>
 
-"></textarea>
-
-    <label>How regular are your cycles?</label>
+  <div class="row1">
+    <h3 class="tooltip1" data-tooltip="How regular are your cycles?">
+      Cycle Regularity<span class="tooltip1-content"></span>
+    </h3>
     <div class="grid-items2" id="cycleRegularityContainer">
       <div class="grid-item" data-value="very-regular">Very Regular (±1 day)</div>
       <div class="grid-item" data-value="mostly-regular">Mostly Regular (±2-3 days)</div>
       <div class="grid-item" data-value="irregular">Irregular (±4+ days)</div>
       <div class="grid-item" data-value="unpredictable">Unpredictable</div>
     </div>
+  </div>
 
-    <label>Flow intensity</label>
+  <div class="row1">
+    <h3 class="tooltip1" data-tooltip="Flow intensity">
+      Flow Intensity<span class="tooltip1-content"></span>
+    </h3>
     <div class="grid-items2" id="flowIntensityContainer">
       <div class="grid-item" data-value="light">Light</div>
       <div class="grid-item" data-value="medium">Medium</div>
