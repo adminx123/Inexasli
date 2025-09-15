@@ -1,0 +1,14 @@
+execution path logging
+Whitelist: a list of allowed or approved items
+
+Reasoning tokens: tokens the AI is used to think
+
+dispaly:content makes the contents ignored by css?
+
+Stepwise : Yes, I am familiar with "stepwise" approaches for conditional field visibility in forms. This typically involves using a state machine or step-based logic to control which fields are shown or hidden based on user input and progression through the form.
+
+
+Rework: wasted tim eif you would have done it right the first time. 
+
+
+Client Onboarding:

@@ -107,3 +107,6 @@ ai/master.js
 
 # Payment processing worker
 payment/stripeintegration.js
+
+# any folder named hide
+hide
