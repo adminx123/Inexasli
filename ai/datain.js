@@ -1792,7 +1792,7 @@ window.enhancedLoading = async function(buttonId, moduleName, apiCall) {
  * Container sizing configuration
  */
 const containerSizingConfig = {
-    minContainerHeight: 300,
+    minContainerHeight: 150,
     maxContainerHeight: '80vh',
     sizingPadding: 100,
     transitionDuration: 300,
