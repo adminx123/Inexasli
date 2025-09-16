@@ -386,7 +386,7 @@
                 // Store session data from OAuth flow
                 const sessionId = urlParams.get('session_id');
                 const sessionExpiry = urlParams.get('session_expiry') || (Date.now() + 24 * 60 * 60 * 1000);
-                const username = urlParams.get('username') || 'User';
+                const username = decodeURIComponent(urlParams.get('username') || 'User');
                 
                 if (sessionId) {
                     localStorage.setItem('instagram_session_id', sessionId);
@@ -403,7 +403,7 @@
             if (urlParams.get('session_id')) {
                 localStorage.setItem('instagram_session_id', urlParams.get('session_id'));
                 localStorage.setItem('instagram_session_expiry', urlParams.get('session_expiry') || (Date.now() + 24 * 60 * 60 * 1000));
-                localStorage.setItem('instagram_username', urlParams.get('username') || 'User');
+                localStorage.setItem('instagram_username', decodeURIComponent(urlParams.get('username') || 'User'));
                 
                 // Clean up URL
                 const newUrl = window.location.pathname;
