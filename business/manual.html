@@ -136,11 +136,70 @@
             margin-bottom: 25px;
         }
 
+        .image-previews {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
         .image-preview {
             margin-top: 15px;
             max-width: 100%;
             border-radius: 8px;
-            display: none;
+            display: block;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 10px;
+        }
+
+        .preview-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .preview-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .preview-controls {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        .remove-btn {
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-btn:hover {
+            background: rgba(255, 0, 0, 1);
         }
 
         .btn-post {
@@ -245,16 +304,6 @@
         <h1 class="page-title">Manual Social Media Post</h1>
         <p class="page-subtitle">Create and post content manually to your connected Instagram, Facebook, and X accounts. Perfect for time-sensitive updates and special announcements.</p>
 
-        <!-- Authentication Status -->
-        <div id="auth-status" class="auth-status" style="display: none;">
-            <div id="auth-message"></div>
-            <div style="text-align: center; margin-top: 15px;">
-                <button id="instagramOauthButton" class="oauth-button instagram-button">
-                    <i class="fab fa-instagram"></i> Connect Instagram Account
-                </button>
-            </div>
-        </div>
-
         <!-- Manual Post Form -->
         <div class="manual-post-form">
             <!-- Platform Selection -->
@@ -303,6 +352,13 @@
                 </div>
             </div>
 
+            <!-- OAuth Button -->
+            <div style="text-align: center; margin: 20px 0;">
+                <button id="instagramOauthButton" class="oauth-button instagram-button" style="display: none;">
+                    <i class="fab fa-instagram"></i> Connect Instagram Account
+                </button>
+            </div>
+
             <!-- Post Button -->
             <button id="btn-post" class="btn-post" disabled>
                 <span id="btn-text">Post to Selected Platforms</span>
@@ -319,8 +375,6 @@
     <script>
         // Check authentication status
         function checkAuthenticationStatus() {
-            const authStatus = document.getElementById('auth-status');
-            const authMessage = document.getElementById('auth-message');
             const instagramBtn = document.getElementById('instagramOauthButton');
             const sessionId = localStorage.getItem('instagram_session_id');
             const sessionExpiry = localStorage.getItem('instagram_session_expiry');
@@ -330,17 +384,12 @@
                 const expiryTime = parseInt(sessionExpiry);
                 
                 if (now < expiryTime) {
-                    // Valid session - show connected state
-                    const username = localStorage.getItem('instagram_username') || 'User';
-                    authMessage.innerHTML = `✅ Authenticated as <strong>@${username}</strong> via Instagram identity verification`;
-                    authStatus.className = 'auth-status authenticated';
-                    authStatus.style.display = 'block';
-                    
-                    // Update button to connected state (matching oauth-connect.html)
+                    // Valid session - hide OAuth button and show connected state
                     instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Instagram Connected';
                     instagramBtn.classList.add('connected');
                     instagramBtn.disabled = true;
                     instagramBtn.style.pointerEvents = 'none';
+                    instagramBtn.style.display = 'block';
                 } else {
                     // Expired session
                     localStorage.removeItem('instagram_session_id');
@@ -354,13 +403,10 @@
         }
 
         function showNotAuthenticated() {
-            const authStatus = document.getElementById('auth-status');
-            const authMessage = document.getElementById('auth-message');
             const instagramBtn = document.getElementById('instagramOauthButton');
             
-            authMessage.innerHTML = `Connect your Instagram account to verify your identity and enable manual posting.`;
-            authStatus.className = 'auth-status not-authenticated';
-            authStatus.style.display = 'block';
+            // Show OAuth button
+            instagramBtn.style.display = 'block';
             
             // Set up OAuth button
             const OAUTH_WORKER_URL = 'https://oauth.4hm7q4q75z.workers.dev';
@@ -424,8 +470,8 @@
             }, 2500);
 
             // Initialize image upload with cross-platform compatibility
+            console.log('Initializing image upload...');
             const imageUpload = new ImageUploadUtility({
-                containerId: 'image-upload-container',
                 maxFiles: 1,
                 maxFileSize: 5 * 1024 * 1024, // 5MB (Twitter limit - most restrictive)
                 acceptedTypes: ['image/jpeg', 'image/png', 'image/webp'], // Compatible with all platforms
@@ -436,6 +482,73 @@
                 maxWidth: 1920, // Instagram/Facebook optimal
                 maxHeight: 1080
             });
+            console.log('Created ImageUploadUtility instance:', imageUpload);
+            
+            const container = document.getElementById('image-upload-container');
+            console.log('Container element:', container);
+            
+            if (container) {
+                imageUpload.render(container);
+                console.log('Image upload rendered');
+                
+                // Check if the HTML was actually rendered
+                setTimeout(() => {
+                    const uploadUtility = container.querySelector('.image-upload-utility');
+                    const previewContainer = container.querySelector('.image-previews');
+                    console.log('Upload utility element:', uploadUtility);
+                    console.log('Preview container element:', previewContainer);
+                    console.log('Container HTML after render:', container.innerHTML.substring(0, 200) + '...');
+                }, 100);
+            } else {
+                console.error('Could not find image-upload-container element!');
+            }
+            
+            // Store reference globally for form submission
+            window.manualPostImageUpload = imageUpload;
+            
+            // Override updatePreview method to add debugging
+            const originalUpdatePreview = imageUpload.updatePreview.bind(imageUpload);
+            imageUpload.updatePreview = function() {
+                console.log('[DEBUG] updatePreview called, images array:', this.images);
+                console.log('[DEBUG] showPreview option:', this.options.showPreview);
+                
+                const previewContainer = this.container?.querySelector('.image-previews');
+                console.log('[DEBUG] Preview container found:', previewContainer);
+                
+                if (previewContainer) {
+                    console.log('[DEBUG] Preview container innerHTML before update:', previewContainer.innerHTML);
+                }
+                
+                // Call original method
+                originalUpdatePreview();
+                
+                if (previewContainer) {
+                    console.log('[DEBUG] Preview container innerHTML after update:', previewContainer.innerHTML);
+                    console.log('[DEBUG] Preview container children count:', previewContainer.children.length);
+                }
+            };
+            
+            // Add event listener to track file uploads
+            setTimeout(() => {
+                if (imageUpload.container) {
+                    const fileInput = imageUpload.container.querySelector('.file-input');
+                    if (fileInput) {
+                        fileInput.addEventListener('change', (e) => {
+                            console.log('[DEBUG] File input changed, files:', e.target.files);
+                            setTimeout(() => {
+                                console.log('[DEBUG] Images in utility after file selection:', imageUpload.getImages());
+                                console.log('[DEBUG] Manually calling updatePreview...');
+                                imageUpload.updatePreview();
+                            }, 1000);
+                        });
+                        console.log('[DEBUG] File input event listener added');
+                    } else {
+                        console.error('[DEBUG] Could not find file input element');
+                    }
+                } else {
+                    console.error('[DEBUG] Image upload container not found for event listener');
+                }
+            }, 500);
 
             // Character counter
             const textInput = document.getElementById('post-text');
@@ -483,8 +596,8 @@
                     statusMessage.textContent = '❌ You must connect your Instagram account first to verify your identity before posting.';
                     statusMessage.style.display = 'block';
                     
-                    // Scroll to auth section
-                    document.getElementById('auth-status').scrollIntoView({ behavior: 'smooth' });
+                    // Scroll to OAuth button
+                    document.getElementById('instagramOauthButton').scrollIntoView({ behavior: 'smooth' });
                     return;
                 }
 
@@ -500,7 +613,7 @@
                         .map(cb => cb.value);
 
                     // Get uploaded image if any
-                    const uploadedImages = imageUpload.getImages();
+                    const uploadedImages = window.manualPostImageUpload ? window.manualPostImageUpload.getImages() : [];
                     const imageBase64 = uploadedImages.length > 0 ? uploadedImages[0].dataUrl : null;
 
                     // Prepare post data for masterSocial API
@@ -581,9 +694,9 @@
                         // Update auth status to show not authenticated
                         checkAuthenticationStatus();
                         
-                        // Scroll to auth section
+                        // Scroll to OAuth button
                         setTimeout(() => {
-                            document.getElementById('auth-status').scrollIntoView({ behavior: 'smooth' });
+                            document.getElementById('instagramOauthButton').scrollIntoView({ behavior: 'smooth' });
                         }, 1000);
                     } else {
                         statusMessage.className = 'status-message error';
