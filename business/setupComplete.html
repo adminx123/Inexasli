@@ -207,6 +207,11 @@
         .btn-secondary:hover {
             background: rgba(255,255,255,0.2);
         }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -271,6 +276,9 @@
             <a href="/business/social.html" class="btn-primary">
                 🏠 Back to Home
             </a>
+            <button id="testPostBtn" class="btn-primary" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                🚀 Test Post Now
+            </button>
             <a href="#" class="btn-secondary" onclick="scheduleConsultation()">
                 📞 Schedule Strategy Call
             </a>
@@ -426,7 +434,134 @@
             loadUserSelections();
             // You could add confetti or other celebration animations here
             console.log('Setup completed successfully!');
+            
+            // Initialize test post functionality
+            initializeTestPost();
         });
+        
+        function initializeTestPost() {
+            const testPostBtn = document.getElementById('testPostBtn');
+            if (!testPostBtn) return;
+            
+            testPostBtn.addEventListener('click', async function() {
+                // Disable button and show loading state
+                testPostBtn.disabled = true;
+                testPostBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                
+                try {
+                    // Get session data from localStorage (set during OAuth)
+                    const sessionId = localStorage.getItem('instagram_session_id');
+                    
+                    if (!sessionId) {
+                        throw new Error('No active session found. Please reconnect your social media accounts.');
+                    }
+                    
+                    // Determine worker URL based on client (default to inexasli)
+                    const workerUrl = 'https://prompt-inexasli.4hm7q4q75z.workers.dev';
+                    
+                    // Make request to generate and post
+                    const response = await fetch(workerUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Poster-Secret': 'test1'
+                        },
+                        body: JSON.stringify({
+                            action: 'generate_and_post',
+                            sessionId: sessionId,
+                            platforms: ['instagram'] // Default to Instagram, could be made configurable
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Success - show celebration
+                        testPostBtn.innerHTML = '✅ Test Post Successful!';
+                        testPostBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                        
+                        // Show success message
+                        showTestPostMessage('success', result.message || 'Your test post has been generated and posted successfully!');
+                        
+                        // Reset button after 3 seconds
+                        setTimeout(() => {
+                            testPostBtn.disabled = false;
+                            testPostBtn.innerHTML = '🚀 Test Post Now';
+                            testPostBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                        }, 3000);
+                        
+                    } else {
+                        throw new Error(result.message || 'Test post failed');
+                    }
+                    
+                } catch (error) {
+                    console.error('Test post error:', error);
+                    
+                    // Show error state
+                    testPostBtn.innerHTML = '❌ Test Post Failed';
+                    testPostBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                    
+                    // Show error message
+                    showTestPostMessage('error', error.message);
+                    
+                    // Reset button after 5 seconds
+                    setTimeout(() => {
+                        testPostBtn.disabled = false;
+                        testPostBtn.innerHTML = '🚀 Test Post Now';
+                        testPostBtn.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+                    }, 5000);
+                }
+            });
+        }
+        
+        function showTestPostMessage(type, message) {
+            // Remove any existing message
+            const existingMessage = document.querySelector('.test-post-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new message element
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `test-post-message ${type}`;
+            messageDiv.style.cssText = `
+                margin: 20px 0;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: 600;
+                animation: fadeIn 0.5s ease-in-out;
+            `;
+            
+            if (type === 'success') {
+                messageDiv.style.cssText += `
+                    background: rgba(16, 185, 129, 0.2);
+                    border: 1px solid #10b981;
+                    color: #10b981;
+                `;
+            } else {
+                messageDiv.style.cssText += `
+                    background: rgba(239, 68, 68, 0.2);
+                    border: 1px solid #ef4444;
+                    color: #ef4444;
+                `;
+            }
+            
+            messageDiv.innerHTML = message;
+            
+            // Insert after the button container
+            const buttonContainer = document.querySelector('div[style*="margin-top: 40px"]');
+            if (buttonContainer) {
+                buttonContainer.parentNode.insertBefore(messageDiv, buttonContainer.nextSibling);
+                
+                // Auto-remove after 10 seconds
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.remove();
+                    }
+                }, 10000);
+            }
+        }
     </script>
 </body>
 </html>
