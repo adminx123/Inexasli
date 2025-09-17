@@ -57,6 +57,13 @@
             box-shadow: 0 15px 40px rgba(64, 93, 230, 0.4);
         }
 
+        .oauth-button.connected {
+            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+            color: #fff !important;
+            font-weight: bold !important;
+            pointer-events: none !important;
+        }
+
         .platform-icon-x {
             font-family: 'Times New Roman', serif;
             font-weight: bold;
@@ -82,6 +89,10 @@
             color: white;
         }
 
+        .text-input-container {
+            position: relative;
+        }
+
         .text-input {
             width: 100%;
             min-height: 120px;
@@ -100,6 +111,25 @@
             outline: none;
             border-color: #10b981;
             background: rgba(255,255,255,0.15);
+        }
+
+        .character-counter {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.9em;
+            color: #ccc;
+            background: rgba(0,0,0,0.7);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .character-counter.warning {
+            color: #ffcc00;
+        }
+
+        .character-counter.error {
+            color: #ff4444;
         }
 
         .image-upload-section {
@@ -170,6 +200,31 @@
 
         .remove-btn:hover {
             background: rgba(255, 0, 0, 1);
+        }
+
+        .btn-post {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-post:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-post:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .platform-selection {
@@ -286,18 +341,21 @@
             <!-- Text Input -->
             <div class="form-group">
                 <label class="form-label">Post Text *</label>
-                <textarea
-                    id="post-text"
-                    class="text-input"
-                    placeholder="What's on your mind? Share your thoughts, updates, or announcements..."
-                    maxlength="280"
-                ></textarea>
+                <div class="text-input-container">
+                    <textarea
+                        id="post-text"
+                        class="text-input"
+                        placeholder="What's on your mind? Share your thoughts, updates, or announcements..."
+                        maxlength="280"
+                    ></textarea>
+                    <div id="character-counter" class="character-counter">0/280</div>
+                </div>
             </div>
 
             <!-- OAuth Button -->
             <div style="text-align: center; margin: 20px 0;">
-                <button id="instagramOauthButton" class="oauth-button instagram-button">
-                    <i class="fab fa-instagram"></i> Verify & Post
+                <button id="instagramOauthButton" class="oauth-button instagram-button" style="display: none;">
+                    <i class="fab fa-instagram"></i> Connect Instagram Account
                 </button>
             </div>
 
@@ -310,192 +368,86 @@
     <script src="../utility/piexif.js"></script>
     <script src="../utility/imageUpload.js"></script>
     <script>
-        // Check authentication status - simplified since we verify every time
+        // Check authentication status
         function checkAuthenticationStatus() {
             const instagramBtn = document.getElementById('instagramOauthButton');
-
-            // Button is already visible in HTML, just ensure proper state
-            instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Verify & Post';
-            instagramBtn.disabled = false;
-
-            // Set up OAuth button with token checking
-            setupOAuthButton();
+            const sessionId = localStorage.getItem('instagram_session_id');
+            const sessionExpiry = localStorage.getItem('instagram_session_expiry');
+            
+            if (sessionId && sessionExpiry) {
+                const now = Date.now();
+                const expiryTime = parseInt(sessionExpiry);
+                
+                if (now < expiryTime) {
+                    // Valid session - hide OAuth button and show connected state
+                    instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Verified and Ready to Post';
+                    instagramBtn.classList.add('connected');
+                    instagramBtn.disabled = true;
+                    instagramBtn.style.pointerEvents = 'none';
+                    instagramBtn.style.display = 'block';
+                } else {
+                    // Expired session
+                    localStorage.removeItem('instagram_session_id');
+                    localStorage.removeItem('instagram_session_expiry');
+                    localStorage.removeItem('instagram_username');
+                    showNotAuthenticated();
+                }
+            } else {
+                showNotAuthenticated();
+            }
         }
 
-        function setupOAuthButton() {
+        function showNotAuthenticated() {
             const instagramBtn = document.getElementById('instagramOauthButton');
+            
+            // Show OAuth button
+            instagramBtn.style.display = 'block';
+            
+            // Set up OAuth button
             const OAUTH_WORKER_URL = 'https://oauth.4hm7q4q75z.workers.dev';
             const instagramOauthUrl = `${OAUTH_WORKER_URL}/oauth/instagram/start?redirect=${encodeURIComponent(window.location.href)}`;
             
-            instagramBtn.onclick = async function() {
-                // Store form data before OAuth redirect
-                const text = document.getElementById('post-text').value.trim();
-                const selectedPlatforms = Array.from(document.querySelectorAll('input[name="platforms"]:checked')).map(cb => cb.value);
+            instagramBtn.onclick = function() {
+                // Validate form before proceeding
+                const textInput = document.getElementById('post-text');
+                const text = textInput.value.trim();
                 const uploadedImages = window.manualPostImageUpload ? window.manualPostImageUpload.getImages() : [];
-                const imageBase64 = uploadedImages.length > 0 ? uploadedImages[0].dataUrl : null;
+                const statusMessage = document.getElementById('status-message');
                 
-                // Validate form before storing
-                if (!text || selectedPlatforms.length === 0) {
-                    const statusMessage = document.getElementById('status-message');
+                // Check if text is present and within limits
+                if (!text || text.length === 0) {
                     statusMessage.className = 'status-message error';
-                    statusMessage.textContent = '❌ Please fill in the post text and select at least one platform.';
+                    statusMessage.textContent = '❌ Please enter some text for your post.';
                     statusMessage.style.display = 'block';
                     return;
                 }
                 
-                // Check for existing valid tokens server-side (secure, no localStorage)
-                const tokenCheck = await checkExistingTokensSecurely();
-                if (tokenCheck.hasToken) {
-                    console.log('Found existing valid token, skipping OAuth');
-                    // Use existing token for posting
-                    const formData = {
-                        content: text,
-                        platforms: selectedPlatforms,
-                        imageBase64: imageBase64,
-                        timestamp: Date.now()
-                    };
-                    localStorage.setItem('pending_post_data', JSON.stringify(formData));
-                    // Use the session ID from server validation
-                    autoPostAfterVerification(formData, tokenCheck.sessionId, tokenCheck.username);
+                if (text.length > 280) {
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = '❌ Text is too long. Please keep it under 280 characters.';
+                    statusMessage.style.display = 'block';
                     return;
                 }
                 
-                // No valid tokens found, go through OAuth to get new ones
-                const formData = {
-                    content: text,
-                    platforms: selectedPlatforms,
-                    imageBase64: imageBase64,
-                    timestamp: Date.now()
-                };
-                localStorage.setItem('pending_post_data', JSON.stringify(formData));
+                // Check if image is uploaded
+                if (uploadedImages.length === 0) {
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = '❌ Please upload a photo for your post.';
+                    statusMessage.style.display = 'block';
+                    return;
+                }
                 
-                // Redirect to OAuth
+                // Clear any previous messages
+                statusMessage.style.display = 'none';
+                
+                // Proceed to OAuth
                 window.location.href = instagramOauthUrl;
             };
             
             // Reset button to non-connected state
-            instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Verify & Post';
+            instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Verify and Post';
+            instagramBtn.classList.remove('connected');
             instagramBtn.disabled = false;
-        }
-
-        // Secure server-side token validation (no localStorage)
-        async function checkExistingTokensSecurely() {
-            try {
-                const OAUTH_WORKER_URL = 'https://oauth.4hm7q4q75z.workers.dev';
-                
-                // Ask server to check for any valid tokens (secure, no client-side storage)
-                const response = await fetch(`${OAUTH_WORKER_URL}/oauth/check-any-tokens`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        // Could include session info, IP, or other identifying data if needed
-                        timestamp: Date.now()
-                    })
-                });
-                
-                if (!response.ok) {
-                    return { hasToken: false };
-                }
-                
-                const result = await response.json();
-                
-                if (result.hasValidTokens && result.sessionId) {
-                    console.log('Server validated existing tokens for user:', result.username);
-                    return {
-                        hasToken: true,
-                        sessionId: result.sessionId,
-                        username: result.username || 'inexasli'
-                    };
-                }
-                
-                return { hasToken: false };
-            } catch (error) {
-                console.error('Error checking tokens securely:', error);
-                return { hasToken: false };
-            }
-        }
-
-        // Auto-post function after verification
-        async function autoPostAfterVerification(postData, sessionId, username = 'inexasli') {
-            const statusMessage = document.getElementById('status-message');
-            
-            // Show posting in progress
-            statusMessage.className = 'status-message';
-            statusMessage.textContent = '🔄 Auto-posting to selected platforms...';
-            statusMessage.style.display = 'block';
-            
-            try {
-                // Determine worker URL based on verified account
-                const clientWorkerUrl = window.location.hostname.includes('localhost') 
-                    ? 'http://localhost:8787' // Local development
-                    : `https://prompt-${username.toLowerCase()}.4hm7q4q75z.workers.dev`; // Production worker based on username
-                
-                // Prepare post data for masterSocial API
-                const apiPostData = {
-                    action: 'manual_post',
-                    content: postData.content,
-                    platforms: postData.platforms,
-                    sessionId: sessionId
-                };
-
-                // Add image data if available
-                if (postData.imageBase64) {
-                    apiPostData.imageBase64 = postData.imageBase64;
-                }
-
-                console.log('Auto-posting to worker:', clientWorkerUrl, apiPostData);
-
-                // Send to masterSocial API
-                const response = await fetch(clientWorkerUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Poster-Secret': 'YOUR_POSTER_SECRET' // Note: This should be retrieved securely
-                    },
-                    body: JSON.stringify(apiPostData)
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({ error: 'Network error' }));
-                    throw new Error(errorData.error || `HTTP ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log('Auto-post result:', result);
-
-                if (result.success) {
-                    // Show success message
-                    const successPlatforms = result.results.filter(r => r.success).map(r => r.platform);
-                    const failedPlatforms = result.results.filter(r => !r.success).map(r => r.platform);
-                    
-                    let message = `✅ Auto-posted to ${successPlatforms.join(' and ')} successfully!`;
-                    if (failedPlatforms.length > 0) {
-                        message += ` ⚠️ Failed on: ${failedPlatforms.join(', ')}`;
-                    }
-                    
-                    statusMessage.className = 'status-message success';
-                    statusMessage.textContent = message;
-                    
-                    // Clear the form
-                    document.getElementById('post-text').value = '';
-                    document.querySelectorAll('input[name="platforms"]').forEach(cb => cb.checked = false);
-                    if (window.manualPostImageUpload) {
-                        window.manualPostImageUpload.clearImages();
-                    }
-                    
-                } else {
-                    throw new Error(result.error || 'Unknown error occurred');
-                }
-
-            } catch (error) {
-                console.error('Auto-post error:', error);
-                statusMessage.className = 'status-message error';
-                statusMessage.textContent = `❌ Auto-post failed: ${error.message}`;
-            } finally {
-                // No button to reset since we removed the post button
-            }
         }
 
         // Initialize page
@@ -503,31 +455,31 @@
             // Handle OAuth redirect with session data
             const urlParams = new URLSearchParams(window.location.search);
             
-            // Check Instagram verification callback
-            if (urlParams.get('instagram') === 'verified' && urlParams.get('ready_to_post') === 'true') {
-                // Get session data from OAuth flow
+            // Check Instagram connection callback
+            if (urlParams.get('instagram') === 'connected') {
+                // Store session data from OAuth flow
                 const sessionId = urlParams.get('session_id');
-                const username = decodeURIComponent(urlParams.get('username') || 'inexasli');
+                const sessionExpiry = urlParams.get('session_expiry') || (Date.now() + 24 * 60 * 60 * 1000);
+                const username = decodeURIComponent(urlParams.get('username') || 'User');
                 
-                // Check for pending post data and auto-post
-                const pendingPostData = localStorage.getItem('pending_post_data');
-                if (pendingPostData) {
-                    const postData = JSON.parse(pendingPostData);
-                    
-                    // Clear pending data
-                    localStorage.removeItem('pending_post_data');
-                    
-                    // Auto-post the stored data
-                    autoPostAfterVerification(postData, sessionId, username);
-                } else {
-                    // Show success message for verification only
-                    const statusMessage = document.getElementById('status-message');
-                    statusMessage.className = 'status-message success';
-                    statusMessage.textContent = '✅ Instagram verified! You can now post content.';
-                    statusMessage.style.display = 'block';
+                if (sessionId) {
+                    localStorage.setItem('instagram_session_id', sessionId);
+                    localStorage.setItem('instagram_session_expiry', sessionExpiry);
+                    localStorage.setItem('instagram_username', username);
                 }
                 
                 // Clean up URL parameters
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+            
+            // Handle generic session parameters from OAuth worker
+            if (urlParams.get('session_id')) {
+                localStorage.setItem('instagram_session_id', urlParams.get('session_id'));
+                localStorage.setItem('instagram_session_expiry', urlParams.get('session_expiry') || (Date.now() + 24 * 60 * 60 * 1000));
+                localStorage.setItem('instagram_username', decodeURIComponent(urlParams.get('username') || 'User'));
+                
+                // Clean up URL
                 const newUrl = window.location.pathname;
                 window.history.replaceState({}, document.title, newUrl);
             }
@@ -625,6 +577,27 @@
                     console.error('[DEBUG] Image upload container not found for event listener');
                 }
             }, 500);
+
+            // Character counter
+            const textInput = document.getElementById('post-text');
+            const charCounter = document.getElementById('character-counter');
+
+            function updateCharacterCount() {
+                const text = textInput.value;
+                const count = text.length;
+                charCounter.textContent = `${count}/280`;
+
+                // Update counter color
+                charCounter.classList.remove('warning', 'error');
+                if (count > 250) {
+                    charCounter.classList.add('warning');
+                }
+                if (count > 280) {
+                    charCounter.classList.add('error');
+                }
+            }
+
+            textInput.addEventListener('input', updateCharacterCount);
         });
     </script>
 </body>
