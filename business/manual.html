@@ -357,6 +357,9 @@
                 <button id="instagramOauthButton" class="oauth-button instagram-button" style="display: none;">
                     <i class="fab fa-instagram"></i> Connect Instagram Account
                 </button>
+                <button id="proceedToPostButton" class="btn-post" style="display: none; margin-top: 15px;">
+                    <i class="fab fa-instagram"></i> Proceed to Post
+                </button>
             </div>
 
             <!-- Status Message -->
@@ -371,6 +374,7 @@
         // Check authentication status
         function checkAuthenticationStatus() {
             const instagramBtn = document.getElementById('instagramOauthButton');
+            const proceedBtn = document.getElementById('proceedToPostButton');
             const sessionId = localStorage.getItem('instagram_session_id');
             const sessionExpiry = localStorage.getItem('instagram_session_expiry');
             
@@ -385,6 +389,9 @@
                     instagramBtn.disabled = true;
                     instagramBtn.style.pointerEvents = 'none';
                     instagramBtn.style.display = 'block';
+                    
+                    // Show proceed button
+                    proceedBtn.style.display = 'block';
                 } else {
                     // Expired session
                     localStorage.removeItem('instagram_session_id');
@@ -399,9 +406,13 @@
 
         function showNotAuthenticated() {
             const instagramBtn = document.getElementById('instagramOauthButton');
+            const proceedBtn = document.getElementById('proceedToPostButton');
             
             // Show OAuth button
             instagramBtn.style.display = 'block';
+            
+            // Hide proceed button
+            proceedBtn.style.display = 'none';
             
             // Set up OAuth button
             const OAUTH_WORKER_URL = 'https://oauth.4hm7q4q75z.workers.dev';
@@ -598,6 +609,105 @@
             }
 
             textInput.addEventListener('input', updateCharacterCount);
+
+            // Proceed to Post button handler
+            const proceedBtn = document.getElementById('proceedToPostButton');
+            proceedBtn.addEventListener('click', async function() {
+                const statusMessage = document.getElementById('status-message');
+                const textInput = document.getElementById('post-text');
+                const text = textInput.value.trim();
+                const uploadedImages = window.manualPostImageUpload ? window.manualPostImageUpload.getImages() : [];
+                
+                // Show loading state
+                proceedBtn.disabled = true;
+                proceedBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+                
+                try {
+                    // Get session data
+                    const sessionId = localStorage.getItem('instagram_session_id');
+                    const username = localStorage.getItem('instagram_username') || 'default';
+                    
+                    if (!sessionId) {
+                        throw new Error('No valid session found. Please authenticate first.');
+                    }
+                    
+                    // Get selected platforms
+                    const selectedPlatforms = [];
+                    const platformCheckboxes = document.querySelectorAll('input[name="platforms"]:checked');
+                    platformCheckboxes.forEach(checkbox => {
+                        selectedPlatforms.push(checkbox.value);
+                    });
+                    
+                    if (selectedPlatforms.length === 0) {
+                        throw new Error('Please select at least one platform to post to.');
+                    }
+                    
+                    // Prepare data for posting
+                    const postData = {
+                        action: "manual_post",
+                        content: text,
+                        platforms: selectedPlatforms,
+                        sessionId: sessionId
+                    };
+                    
+                    // Add image if uploaded
+                    if (uploadedImages.length > 0) {
+                        postData.imageBase64 = uploadedImages[0]; // Use first image
+                    }
+                    
+                    // Call the prompt-inexasli worker
+                    const workerUrl = 'https://prompt-inexasli.inexasli.workers.dev';
+                    
+                    console.log('Posting to worker:', workerUrl);
+                    console.log('Post data:', postData);
+                    
+                    // Call the worker
+                    const response = await fetch(workerUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(postData)
+                    });
+                    
+                    const result = await response.json();
+                    console.log('Worker response:', result);
+                    
+                    if (result.success) {
+                        statusMessage.className = 'status-message success';
+                        statusMessage.textContent = `✅ ${result.message}`;
+                        statusMessage.style.display = 'block';
+                        
+                        // Reset form
+                        textInput.value = '';
+                        if (window.manualPostImageUpload) {
+                            window.manualPostImageUpload.clearImages();
+                        }
+                        updateCharacterCount();
+                        
+                        // Hide proceed button and show verify button again
+                        proceedBtn.style.display = 'none';
+                        const instagramBtn = document.getElementById('instagramOauthButton');
+                        instagramBtn.innerHTML = '<i class="fab fa-instagram"></i> Verify and Post';
+                        instagramBtn.classList.remove('connected');
+                        instagramBtn.disabled = false;
+                        instagramBtn.style.pointerEvents = 'auto';
+                        
+                    } else {
+                        throw new Error(`Posting failed: ${response.statusText}`);
+                    }
+                    
+                } catch (error) {
+                    console.error('Posting error:', error);
+                    statusMessage.className = 'status-message error';
+                    statusMessage.textContent = `❌ Posting failed: ${error.message}`;
+                    statusMessage.style.display = 'block';
+                } finally {
+                    // Reset button state
+                    proceedBtn.disabled = false;
+                    proceedBtn.innerHTML = '<i class="fab fa-instagram"></i> Proceed to Post';
+                }
+            });
         });
     </script>
 </body>
