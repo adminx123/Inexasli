@@ -638,37 +638,82 @@
                         selectedPlatforms.push(checkbox.value);
                     });
                     
+                    console.log('Selected platforms:', selectedPlatforms);
+                    console.log('Platform checkboxes found:', document.querySelectorAll('input[name="platforms"]').length);
+                    console.log('Checked checkboxes:', platformCheckboxes.length);
+                    
                     if (selectedPlatforms.length === 0) {
                         throw new Error('Please select at least one platform to post to.');
                     }
                     
                     // Prepare data for posting
-                    const postData = {
-                        action: "manual_post",
-                        content: text,
-                        platforms: selectedPlatforms,
-                        sessionId: sessionId
-                    };
+                    let postData;
+                    let fetchOptions;
                     
-                    // Add image if uploaded
-                    if (uploadedImages.length > 0) {
-                        postData.imageBase64 = uploadedImages[0]; // Use first image
+                    // Check if we have images to upload
+                    if (window.manualPostImageUpload) {
+                        const imageFormData = window.manualPostImageUpload.getFirstImageAsFormData();
+                        if (imageFormData) {
+                            // Use FormData for efficient image upload
+                            postData = imageFormData;
+                            postData.append('action', 'manual_post');
+                            postData.append('content', text);
+                            postData.append('platforms', JSON.stringify(selectedPlatforms));
+                            postData.append('sessionId', sessionId);
+                            
+                            console.log('FormData contents:');
+                            for (let [key, value] of postData.entries()) {
+                                console.log(key, ':', value);
+                            }
+                            
+                            fetchOptions = {
+                                method: 'POST',
+                                body: postData
+                            };
+                            
+                            console.log('Sending FormData with image file (much more efficient than base64!)');
+                        } else {
+                            // No images, use regular JSON
+                            postData = {
+                                action: "manual_post",
+                                content: text,
+                                platforms: selectedPlatforms,
+                                sessionId: sessionId
+                            };
+                            
+                            fetchOptions = {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(postData)
+                            };
+                        }
+                    } else {
+                        // No image upload utility, use regular JSON
+                        postData = {
+                            action: "manual_post",
+                            content: text,
+                            platforms: selectedPlatforms,
+                            sessionId: sessionId
+                        };
+                        
+                        fetchOptions = {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(postData)
+                        };
                     }
                     
                     // Call the prompt-inexasli worker
                     const workerUrl = 'https://prompt-inexasli.4hm7q4q75z.workers.dev';
                     
                     console.log('Posting to worker:', workerUrl);
-                    console.log('Post data:', postData);
                     
                     // Call the worker
-                    const response = await fetch(workerUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(postData)
-                    });
+                    const response = await fetch(workerUrl, fetchOptions);
                     
                     const result = await response.json();
                     console.log('Worker response:', result);

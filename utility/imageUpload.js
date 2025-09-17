@@ -1120,6 +1120,61 @@ class ImageUploadUtility {
         }));
     }
 
+    // NEW: Get images as FormData for efficient backend upload
+    getImagesAsFormData() {
+        const formData = new FormData();
+        
+        this.images.forEach((img, index) => {
+            // Convert base64/dataUrl back to File object
+            if (img.dataUrl && img.dataUrl.startsWith('data:')) {
+                // Extract base64 data and convert to blob
+                const base64Data = img.dataUrl.split(',')[1];
+                const mimeType = img.type || 'image/jpeg';
+                
+                // Convert base64 to blob
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: mimeType });
+                
+                // Create File object
+                const file = new File([blob], img.name || `image-${index}.jpg`, { type: mimeType });
+                formData.append(`image_${index}`, file);
+            }
+        });
+        
+        return formData;
+    }
+
+    // NEW: Get first image as FormData (for single image uploads)
+    getFirstImageAsFormData() {
+        if (this.images.length === 0) return null;
+        
+        const formData = new FormData();
+        const img = this.images[0];
+        
+        if (img.dataUrl && img.dataUrl.startsWith('data:')) {
+            const base64Data = img.dataUrl.split(',')[1];
+            const mimeType = img.type || 'image/jpeg';
+            
+            const byteCharacters = atob(base64Data);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: mimeType });
+            
+            const file = new File([blob], img.name || 'image.jpg', { type: mimeType });
+            formData.append('image', file);
+        }
+        
+        return formData;
+    }
+
     getBase64Images() {
         return this.images.map(img => img.base64);
     }
