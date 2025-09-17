@@ -632,11 +632,10 @@
                     console.log('Manual post request:', { ...postData, imageBase64: imageBase64 ? 'BASE64_DATA_PRESENT' : null });
 
                     // Send to masterSocial API
-                    // Note: We'll need to determine the correct client worker endpoint
-                    // For now, we'll use a generic approach that can be configured
+                    // Route manual posts to the correct social media worker
                     const clientWorkerUrl = window.location.hostname.includes('localhost') 
                         ? 'http://localhost:8787' // Local development
-                        : 'https://prompt-inexasli.4hm7q4q75z.workers.dev'; // Production
+                        : 'https://prompt-inexasli.4hm7q4q75z.workers.dev'; // Production - INEXASLI worker with bundled masterSocial
 
                     const response = await fetch(clientWorkerUrl, {
                         method: 'POST',
