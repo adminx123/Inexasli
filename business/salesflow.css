@@ -996,6 +996,7 @@ textarea {
         justify-content: flex-start;
         padding: 0 5px;
         margin: 8px 0 15px 0;
+        flex-wrap: wrap;
     }
     
     .step {
