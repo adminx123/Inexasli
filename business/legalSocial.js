@@ -193,6 +193,37 @@ Service Description: Our Services include automated social media content creatio
 - Content posting schedules provided upon request for service transition.
 - Basic guidance available for maintaining social media presence independently.
 - No obligation to provide proprietary technology or algorithms.`
+        },
+        {
+            title: "Refund Policy",
+            content: `**Refund Window**
+- Refunds available within 30 days from the start of automation service.
+- Requests must be submitted in writing to support@inexasli.com.
+
+**Eligibility for Refunds**
+- Refunds granted if service fails to deliver promised automation features.
+- Refunds for major technical issues preventing content posting.
+- Refunds if service is canceled before any posts are made.
+- No refunds for completed posts, client-requested content changes, or dissatisfaction with AI-generated content.
+
+**Partial Refunds**
+- No partial refunds for mid-cycle cancellations; service continues until end of current billing month.
+- Setup fees are non-refundable once service setup begins.
+
+**Non-Refundable Items**
+- Completed content posting and associated costs.
+- Third-party platform fees or API costs incurred.
+- Service fees for months where content was successfully posted.
+
+**Refund Process**
+- Submit refund request via email to support@inexasli.com with reason and account details.
+- Refunds processed within 7-10 business days of approval.
+- Refunds issued to original payment method.
+
+**Conditions**
+- Clients must provide necessary account access and comply with terms.
+- Refunds exclude any costs from client violations of platform policies or terms.
+- AI-generated content is reviewed by clients; refunds not available for content-related dissatisfaction.`
         }
     ]
 };
