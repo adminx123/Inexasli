@@ -110,3 +110,6 @@ payment/stripeintegration.js
 
 # any folder named hide
 hide
+
+# Chat folder (client collections and templates)
+chat/
