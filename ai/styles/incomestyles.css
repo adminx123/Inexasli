@@ -236,18 +236,17 @@
 }
 
 /* Highlight and expand active checkboxrow */
-.checkboxrow.active,
-.checkboxrow.dual-input.active {
-  background: #f0f8ff;
-  border-radius: 8px;
-  z-index: 2;
-  position: relative;
-  transition: background 0.2s;
+.checkboxrow.active label,
+.checkboxrow.dual-input.active label {
+  transform: scale(1.05);
+  font-weight: 600;
+  transition: transform 0.2s ease, font-weight 0.2s ease;
 }
 
-/* Optionally, make the row a bit taller when active */
-.checkboxrow.active {
-  min-height: 60px;
+.checkboxrow.active .checkbox-button-group,
+.checkboxrow.dual-input.active .checkbox-button-group {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
 }
 
 .checkboxrow.dual-input.active {

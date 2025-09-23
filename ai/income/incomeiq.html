@@ -1758,6 +1758,34 @@
     // Global intro section controller instance
     let introSectionController = null;
 
+    // Setup focus/blur handlers for checkboxrow enlargement effect
+    function setupCheckboxRowFocusHandlers() {
+        console.log("[IncomeIQ] Setting up checkboxrow focus handlers");
+
+        // Find all input elements within checkboxrow containers
+        const checkboxRowInputs = document.querySelectorAll('.checkboxrow input[type="number"], .checkboxrow input[type="text"]');
+
+        checkboxRowInputs.forEach(input => {
+            // Find the parent checkboxrow
+            const checkboxRow = input.closest('.checkboxrow');
+            if (!checkboxRow) return;
+
+            // Add focus handler
+            input.addEventListener('focus', function() {
+                console.log("[IncomeIQ] Input focused, adding active class to checkboxrow");
+                checkboxRow.classList.add('active');
+            });
+
+            // Add blur handler
+            input.addEventListener('blur', function() {
+                console.log("[IncomeIQ] Input blurred, removing active class from checkboxrow");
+                checkboxRow.classList.remove('active');
+            });
+        });
+
+        console.log(`[IncomeIQ] Setup focus handlers for ${checkboxRowInputs.length} inputs`);
+    }
+
     // Initialize form functionality with new state management
     function initIncomeForm() {
         console.log("[IncomeIQ] Initializing form functionality with new state management");
@@ -1799,7 +1827,10 @@
             // Set flag to prevent duplicate handler attachment
             generateBtn.dataset.handlerAttached = 'true';
         }
-        
+
+        // Setup focus/blur handlers for checkboxrow enlargement effect
+        setupCheckboxRowFocusHandlers();
+
         // Listen for regenerateIncomeCalculations event from modal
         window.addEventListener('regenerateIncomeCalculations', function() {
             console.log('[IncomeIQ] Received regenerateIncomeCalculations event, triggering regeneration...');
