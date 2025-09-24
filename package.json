@@ -22,6 +22,7 @@
         "deploy:calorie": "npx wrangler deploy -e calorie",
         "deploy:oauth": "npx wrangler deploy --env oauth",
         "deploy:stripe-integration": "npx wrangler deploy --config payment/wrangler-stripeintegration.toml",
+        "deploy:masterreply": "npx wrangler deploy --config products/reply/wrangler-masterreply.toml",
         "deploy:inexasli": "npx wrangler deploy --config business/clients/wrangler-inexasli.toml --env inexasli",
         "deploy:meofia": "npx wrangler deploy --config business/clients/wrangler-meofia.toml --env meofia"
     },
