@@ -113,3 +113,7 @@ hide
 
 # Chat folder (client collections and templates)
 chat/
+
+# Products folder (organized by offerings)
+products/reply/
+products/social-automation/clients/
