@@ -115,5 +115,6 @@ hide
 chat/
 
 # Products folder (organized by offerings)
-products/reply/
-products/social-automation/clients/
+product/**
+!product/social-automation/*.html
+!product/legal/legalSocial.js
