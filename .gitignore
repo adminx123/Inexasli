@@ -111,19 +111,19 @@ payment/stripeintegration.js
 # any folder named hide
 hide
 
-# Products folder (organized by offerings)
+# Products folder (organized by offerings) - allow specific salesfunnel files
+!product/_social-automation/salesfunnel/addons.html
+!product/_social-automation/salesfunnel/businessFormPersistence.js
+!product/_social-automation/salesfunnel/customization.html
+!product/_social-automation/salesfunnel/manual.html
+!product/_social-automation/salesfunnel/oauth-connect.html
+!product/_social-automation/salesfunnel/packages.html
+!product/_social-automation/salesfunnel/payment.html
+!product/_social-automation/salesfunnel/quote.html
+!product/_social-automation/salesfunnel/salesflow.css
+!product/_social-automation/salesfunnel/setupComplete.html
+!product/_social-automation/salesfunnel/social.html
+!product/_social-automation/salesfunnel/step-navigation.js
+!product/_social-automation/salesfunnel/website.html
 product/**
-!product/salesfunnel/addons.html
-!product/salesfunnel/businessFormPersistence.js
-!product/salesfunnel/customization.html
-!product/salesfunnel/manual.html
-!product/salesfunnel/oauth-connect.html
-!product/salesfunnel/packages.html
-!product/salesfunnel/payment.html
-!product/salesfunnel/quote.html
-!product/salesfunnel/salesflow.css
-!product/salesfunnel/setupComplete.html
-!product/salesfunnel/social.html
-!product/salesfunnel/step-navigation.js
-!product/salesfunnel/website.html
 !product/legal/legalSocial.js
