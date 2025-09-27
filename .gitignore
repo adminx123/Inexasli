@@ -111,10 +111,19 @@ payment/stripeintegration.js
 # any folder named hide
 hide
 
-# Chat folder (client collections and templates)
-chat/
-
 # Products folder (organized by offerings)
 product/**
-!product/social-automation/*.html
+!product/salesfunnel/addons.html
+!product/salesfunnel/businessFormPersistence.js
+!product/salesfunnel/customization.html
+!product/salesfunnel/manual.html
+!product/salesfunnel/oauth-connect.html
+!product/salesfunnel/packages.html
+!product/salesfunnel/payment.html
+!product/salesfunnel/quote.html
+!product/salesfunnel/salesflow.css
+!product/salesfunnel/setupComplete.html
+!product/salesfunnel/social.html
+!product/salesfunnel/step-navigation.js
+!product/salesfunnel/website.html
 !product/legal/legalSocial.js
