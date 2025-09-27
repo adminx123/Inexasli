@@ -6,7 +6,7 @@
     <title>Final Setup - INEXASLI</title>
     <link rel="stylesheet" href="salesflow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
     <style>
         .device-container {
             max-width: 480px;
@@ -315,7 +315,7 @@
 </head>
 <body>
     <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
-        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
+        <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
@@ -626,11 +626,11 @@
     </script>
     
     <script src="/utility/modal.js"></script>
-    <script src="/business/legalSocial.js"></script>
+    <script src="../legal/legalSocial.js"></script>
     <script src="step-navigation.js"></script>
     <script type="module">
         import { BusinessFormPersistence } from './businessFormPersistence.js';
-        import { setJSON } from '../utility/setJSON.js';
+        import { setJSON } from '../../utility/setJSON.js';
         
         // Make setJSON available globally for the form submission function
         window.setJSON = setJSON;

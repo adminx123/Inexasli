@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment - INEXASLI Social Media Automation</title>
     <link rel="stylesheet" href="salesflow.css">
-    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
     <style>
         .progress-bar {
             width: 100%;
@@ -32,7 +32,7 @@
 </head>
 <body>
     <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
-        <img src="../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
+        <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
@@ -355,11 +355,11 @@
     </script>
     
     <script src="/utility/modal.js"></script>
-    <script src="/business/legalSocial.js"></script>
+    <script src="../legal/legalSocial.js"></script>
     <script src="step-navigation.js"></script>
     
     <script type="module">
-        import { getJSON } from '../utility/getJSON.js';
+        import { getJSON } from '../../utility/getJSON.js';
         import { BusinessFormPersistence } from './businessFormPersistence.js';
         
         // Make getJSON available globally for the payment functions

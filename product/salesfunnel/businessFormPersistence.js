@@ -3,8 +3,8 @@
  * Saves and restores form data for business forms using setJSON/getJSON
  */
 
-import { setJSON } from '../utility/setJSON.js';
-import { getJSON } from '../utility/getJSON.js';
+import { setJSON } from '../../utility/setJSON.js';
+import { getJSON } from '../../utility/getJSON.js';
 
 class BusinessFormPersistence {
     constructor(formId = 'socialAutomationForm', storageKey = 'business-social-form-data') {
