@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Quote - INEXASLI</title>
+    <link rel="stylesheet" href="salesflow.css">
+    <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+    <style>
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 4px;
+            animation: progressLoad 1s ease-out;
+        }
+        
+        @keyframes progressLoad {
+            from { width: 60%; }
+            to { width: 80%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
+        <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
+    </div>
+
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <a href="packages.html" class="step completed" style="cursor: pointer; text-decoration: none;">
+                    <div class="step-number">1</div>
+                    <span>Base</span>
+                </a>
+                <a href="addons.html" class="step completed" style="cursor: pointer; text-decoration: none;">
+                    <div class="step-number">2</div>
+                    <span>Add</span>
+                </a>
+                <a href="customization.html" class="step completed" style="cursor: pointer; text-decoration: none;">
+                    <div class="step-number">3</div>
+                    <span>Info</span>
+                </a>
+                <div class="step active">
+                    <div class="step-number">4</div>
+                    <span>Review</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <span>Pay</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <span>Link</span>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+
+            <!-- Quote Results Container -->
+            <div class="quote-results-container">
+                <div class="quote-header">
+                    <h1 class="quote-title">Review Your Monthly Plan</h1>
+                    <p class="quote-subtitle">Confirm your monthly subscription and one-time setup before proceeding to payment</p>
+                </div>
+
+                <!-- Quote Box -->
+                <div class="quote-box">
+                    <h3 class="quote-box-title">Monthly Plan Summary</h3>
+                    
+                    <!-- One-Time Fees Section -->
+                    <div class="quote-section">
+                        <h4 class="quote-section-title">One-Time Fees</h4>
+                        
+                        <!-- Package Base Fee -->
+                        <div class="quote-line">
+                            <span class="quote-line-label" id="packageLine">Professional Package</span>
+                            <span class="quote-line-amount" id="packageAmount">$597</span>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Fees Section -->
+                    <div class="quote-section">
+                        <h4 class="quote-section-title">Monthly Fees</h4>
+                        
+                        <!-- Add-ons Lines -->
+                        <div id="addonsLines">
+                            <!-- Add-on lines will be inserted here -->
+                        </div>
+
+                        <!-- Monthly Ongoing -->
+                        <div class="quote-line-monthly">
+                            <span class="quote-line-label">Monthly Subscription (Starting Month 1)</span>
+                            <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
+                        </div>
+                        
+                        <!-- Monthly Subtotal (only show when addons exist) -->
+                        <div id="monthlyRecurringContainer" class="quote-subtotal" style="display: none;">
+                            <span class="quote-subtotal-label">Monthly Recurring Total</span>
+                            <span class="quote-subtotal-amount" id="monthlyRecurringTotal">$197/month</span>
+                        </div>
+                    </div>
+
+                    <!-- Overall Total -->
+                    <div class="quote-total">
+                        <span class="quote-total-label">Total Due Today</span>
+                        <span class="quote-total-amount" id="totalAmount">$794</span>
+                    </div>
+                </div>
+
+                <!-- Package Details -->
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>What's Included</h4>
+                        <div id="packageFeatures">
+                            <!-- Features will be loaded here -->
+                        </div>
+                        <div id="packagePlatforms">
+                            <!-- Platforms will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Disclaimer -->
+                <div class="payment-disclaimer">
+                    By proceeding, you agree to our <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>.
+                    Your payment information is secured with bank-level encryption.
+                </div>
+
+                <!-- Proceed Button -->
+                <button class="proceed-button" onclick="proceedToPayment()" style="margin-top: 20px;">Proceed to Payment</button>
+
+                <!-- Back Button -->
+                <a href="customization.html" class="btn-back">← Back to Customization</a>
+            </div>
+            
+            <!-- Legal Footer -->
+            <div style="text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p style="color: #ccc; font-size: 12px; margin: 0;">
+                    <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
+                    • 
+                    <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
+                    • Contact: support@inexasli.com
+                </p>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Splash screen transition
+        const splash = document.getElementById('splashContainer');
+        const main = document.getElementById('mainContent');
+        
+        // Start main content fade-in immediately
+        main.style.transition = 'opacity 1.2s ease-in';
+        
+        setTimeout(() => {
+            // Start crossfade
+            main.style.opacity = '1';
+            splash.style.opacity = '0';
+            splash.style.transition = 'opacity 1.2s ease-out';
+            
+            setTimeout(() => {
+                splash.style.display = 'none';
+                main.style.position = 'static';
+            }, 1200);
+        }, 1500); // Show splash for 1.5 seconds
+
+        // Load quote data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuoteData();
+        });
+
+        let quoteData = null;
+
+        function loadQuoteData() {
+            const data = localStorage.getItem('quoteData');
+            if (data) {
+                quoteData = JSON.parse(data);
+                displayQuote();
+            } else {
+                // Redirect back if no quote data
+                window.location.href = 'packages.html';
+            }
+        }
+
+        function displayQuote() {
+            if (!quoteData) return;
+
+            const { package: pkg, addons, total } = quoteData;
+
+            // Get monthly fee from package data or fallback to calculation
+            const monthlyFee = pkg.monthlyPrice || getMonthlyFee(pkg.type);
+            
+            // Package price is one-time
+            document.getElementById('packageLine').textContent = `${pkg.name} Package`;
+            document.getElementById('packageAmount').textContent = `$${pkg.price}`;
+
+            // Add addon lines to monthly section (add-ons are recurring)
+            const addonsContainer = document.getElementById('addonsLines');
+            addonsContainer.innerHTML = '';
+            
+            addons.forEach(addon => {
+                const addonLine = document.createElement('div');
+                addonLine.className = 'quote-line';
+                
+                // Display add-on price with correct sign
+                const priceDisplay = addon.price >= 0 
+                    ? `+$${addon.price}/month` 
+                    : `-$${Math.abs(addon.price)}/month`;
+                
+                addonLine.innerHTML = `
+                    <span class="quote-line-label">${addon.name}</span>
+                    <span class="quote-line-amount">${priceDisplay}</span>
+                `;
+                addonsContainer.appendChild(addonLine);
+            });
+
+            // Calculate monthly recurring total (base monthly + add-ons)
+            const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
+            const monthlyRecurringTotal = monthlyFee + addonsTotal;
+            
+            // Only show monthly recurring total if there are addons
+            const monthlyRecurringElement = document.getElementById('monthlyRecurringTotal');
+            const monthlyRecurringContainer = document.getElementById('monthlyRecurringContainer');
+            
+            if (addons.length > 0) {
+                // Show monthly recurring total when there are addons
+                monthlyRecurringElement.textContent = `$${monthlyRecurringTotal}/month`;
+                monthlyRecurringContainer.style.display = 'block';
+            } else {
+                // Hide monthly recurring total when no addons
+                monthlyRecurringContainer.style.display = 'none';
+            }
+            
+            // Update monthly amount display
+            document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
+
+            // Update overall total (one-time package + first month recurring)
+            const totalDueToday = pkg.price + monthlyRecurringTotal;
+            document.getElementById('totalAmount').textContent = `$${totalDueToday}`;
+
+            // Update package features
+            const featuresContainer = document.getElementById('packageFeatures');
+            featuresContainer.innerHTML = pkg.features.map(feature => 
+                `<p style="color: white; margin: 5px 0;">${feature}</p>`
+            ).join('');
+
+            // Update platforms
+            const platformsContainer = document.getElementById('packagePlatforms');
+            platformsContainer.innerHTML = pkg.platforms.map(platform => 
+                `<p style="color: white; margin: 5px 0;">${platform}</p>`
+            ).join('');
+        }
+
+        function getMonthlyFee(packageType) {
+            const fees = { starter: 127, professional: 197, enterprise: 297 };
+            return fees[packageType] || 197;
+        }
+
+        function proceedToPayment() {
+            if (!quoteData) {
+                alert('Quote data not found');
+                return;
+            }
+
+            // Store final order data
+            const orderData = {
+                ...quoteData,
+                monthlyFee: getMonthlyFee(quoteData.package.type),
+                orderDate: new Date().toISOString(),
+                orderId: 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+            };
+
+            localStorage.setItem('orderData', JSON.stringify(orderData));
+
+            // Redirect to payment page
+            window.location.href = 'payment.html';
+        }
+
+        function showTerms() {
+            showSocialTerms();
+        }
+
+        function showPrivacy() {
+            showSocialPrivacy();
+        }
+    </script>
+    
+    <!-- Splash Screen Transition Script -->
+    <script>
+        // Splash screen transition
+        document.addEventListener('DOMContentLoaded', function() {
+            const splash = document.getElementById('splashContainer');
+            const main = document.getElementById('mainContent');
+            
+            // Start main content fade-in immediately
+            main.style.transition = 'opacity 1.2s ease-in';
+            
+            setTimeout(() => {
+                // Start crossfade
+                main.style.opacity = '1';
+                splash.style.opacity = '0';
+                splash.style.transition = 'opacity 1.2s ease-out';
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    main.style.position = 'static';
+                    main.style.left = 'auto';
+                    main.style.transform = 'none';
+                }, 1200);
+            }, 1500); // Show splash for 1.5 seconds
+        });
+    </script>
+    
+    <script src="/utility/modal.js"></script>
+    <script src="../legal/legalSocial.js"></script>
+    <script src="step-navigation.js"></script>
+</body>
+</html>
