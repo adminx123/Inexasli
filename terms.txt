@@ -12,3 +12,5 @@ Rework: wasted tim eif you would have done it right the first time.
 
 
 Client Onboarding:
+
+depednecy injection: scaffolding receives config
