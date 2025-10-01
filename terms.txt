@@ -14,3 +14,5 @@ Rework: wasted tim eif you would have done it right the first time.
 Client Onboarding:
 
 depednecy injection: scaffolding receives config
+
+Context window: how much of the converstion is able to be refrenced
