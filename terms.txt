@@ -16,3 +16,9 @@ Client Onboarding:
 depednecy injection: scaffolding receives config
 
 Context window: how much of the converstion is able to be refrenced
+
+
+
+runtime vs deployment
+
+config injection vs fucniton injection
