@@ -547,12 +547,50 @@ class GuidedFormSystem {
         );
         
         if (focusableElements.length > 0) {
+            console.log('[GuidedForms] Focusing element:', focusableElements[0].id || 'unnamed', focusableElements[0]);
             focusableElements[0].focus();
             
             // Scroll into view for mobile keyboard handling (especially iOS)
             setTimeout(() => {
-                focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-            }, 300); // Delay to allow keyboard to appear
+                console.log('[GuidedForms] Scrolling into view:', focusableElements[0].id || 'unnamed');
+                
+                // Use Visual Viewport API for better iOS keyboard handling
+                if (window.visualViewport) {
+                    const keyboardHeight = window.innerHeight - window.visualViewport.height;
+                    if (keyboardHeight > 0) {
+                        // Keyboard is visible, scroll to keep the entire data-content container visible
+                        const dataContent = focusableElements[0].closest('.data-content');
+                        if (dataContent) {
+                            const contentRect = dataContent.getBoundingClientRect();
+                            const visualBottom = contentRect.bottom - window.visualViewport.offsetTop;
+                            const visibleHeight = window.visualViewport.height;
+                            
+                            // If content extends below visible area, scroll up to fit it
+                            if (visualBottom > visibleHeight) {
+                                const scrollUp = visualBottom - visibleHeight + 20; // 20px padding
+                                const scrollTop = window.pageYOffset + scrollUp;
+                                window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+                                console.log('[GuidedForms] Scrolled data-content into view, keyboard height:', keyboardHeight, 'scrollTop:', scrollTop);
+                            } else {
+                                console.log('[GuidedForms] Data-content already fully visible, keyboard height:', keyboardHeight);
+                            }
+                        } else {
+                            // Fallback to input scrolling
+                            const inputRect = focusableElements[0].getBoundingClientRect();
+                            const visualTop = inputRect.top - window.visualViewport.offsetTop;
+                            const scrollTop = window.pageYOffset + visualTop - 20;
+                            window.scrollTo({ top: scrollTop, behavior: 'smooth' });
+                            console.log('[GuidedForms] Fallback: Scrolled input to top, keyboard height:', keyboardHeight);
+                        }
+                    } else {
+                        // No keyboard, use regular scrollIntoView
+                        focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                } else {
+                    // Fallback for browsers without visualViewport
+                    focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 500); // Increased delay to 500ms
         }
     }
     

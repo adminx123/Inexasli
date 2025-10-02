@@ -702,7 +702,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             const content = await response.text();
             
             // Check if this request was cancelled
-            if (currentLoadController.signal.aborted) {
+            if (currentLoadController?.signal?.aborted) {
                 console.log('[DataIn] Request was cancelled, not updating content');
                 return;
             }
