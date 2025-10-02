@@ -241,6 +241,13 @@ class GuidedFormSystem {
             // Small delay to ensure DOM is updated
             setTimeout(() => {
                 this.checkStepCompletion(step);
+                
+                // Auto-advance if config enabled and not the last step
+                if (this.config.autoAdvance && this.currentStep < this.steps.length - 1) {
+                    setTimeout(() => {
+                        this.showStep(this.currentStep + 1);
+                    }, this.config.autoAdvanceDelay - 100); // Already delayed 100ms above
+                }
             }, 100);
         }
     }
@@ -256,12 +263,35 @@ class GuidedFormSystem {
             const step = this.findStepByElement(input);
 
             if (step && step.index === this.currentStep) {
-                // Debounce the validation check with a longer delay (e.g., 1200ms)
-                clearTimeout(this.inputValidationTimeout);
-                this.inputValidationTimeout = setTimeout(() => {
-                    // Only check completion if the input value hasn't changed in the last 1200ms
+                // Check if it's a radio button or checkbox - these should auto-advance
+                const isRadioOrCheckbox = input.type === 'radio' || input.type === 'checkbox';
+                const isTextarea = input.matches('textarea');
+                
+                if (isRadioOrCheckbox) {
+                    // Immediate check for radio/checkbox
                     this.checkStepCompletion(step);
-                }, 1200); // Increased delay to allow for user thinking/pausing
+                    
+                    // Auto-advance if config enabled and not the last step
+                    if (this.config.autoAdvance && this.currentStep < this.steps.length - 1) {
+                        setTimeout(() => {
+                            this.showStep(this.currentStep + 1);
+                        }, this.config.autoAdvanceDelay);
+                    }
+                } else if (isTextarea) {
+                    // Debounce validation for textareas - NO auto-advance
+                    clearTimeout(this.inputValidationTimeout);
+                    this.inputValidationTimeout = setTimeout(() => {
+                        this.checkStepCompletion(step);
+                        // Explicitly no auto-advance for textareas
+                    }, 1200);
+                } else {
+                    // Other input types (text, email, etc.) - debounce and NO auto-advance
+                    clearTimeout(this.inputValidationTimeout);
+                    this.inputValidationTimeout = setTimeout(() => {
+                        this.checkStepCompletion(step);
+                        // No auto-advance for text inputs
+                    }, 1200);
+                }
             }
         }
     }
@@ -278,6 +308,13 @@ class GuidedFormSystem {
             
             if (step && step.index === this.currentStep) {
                 this.checkStepCompletion(step);
+                
+                // Auto-advance if config enabled and not the last step
+                if (this.config.autoAdvance && this.currentStep < this.steps.length - 1) {
+                    setTimeout(() => {
+                        this.showStep(this.currentStep + 1);
+                    }, this.config.autoAdvanceDelay);
+                }
             }
         }
     }
