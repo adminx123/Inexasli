@@ -446,6 +446,9 @@ class GuidedFormSystem {
         const previousStep = this.steps[this.currentStep];
         const nextStep = this.steps[stepIndex];
         
+        // CRITICAL: Adjust container size BEFORE any animations to prevent jumps
+        this.adjustContainerSize(nextStep);
+        
         // Hide previous step
         if (previousStep) {
             this.hideStep(previousStep);
@@ -466,47 +469,34 @@ class GuidedFormSystem {
             }
         }));
 
-        // --- SCROLL TO TOP LOGIC (robust debug) ---
-        setTimeout(() => {
-            // Log all .data-content containers and their scrollTop
-            const allContents = document.querySelectorAll('.data-content');
-            allContents.forEach((el, idx) => {
-                console.log(`[GuidedForms][Debug] .data-content[${idx}] scrollTop BEFORE:`, el.scrollTop, el);
-            });
-
-            // Try to scroll all .data-content inside visible containers
-            let didScroll = false;
-            const visibleContainers = document.querySelectorAll('.data-container-income.visible, .data-container-in.visible');
-            visibleContainers.forEach((container, cidx) => {
-                const content = container.querySelector('.data-content');
-                if (content) {
-                    content.scrollTop = 0;
-                    if (typeof content.scrollTo === 'function') content.scrollTo(0, 0);
-                    console.log(`[GuidedForms] Scrolled .data-content in visible container[${cidx}] to top`, content);
-                    didScroll = true;
-                }
-            });
-
-            // Fallback: scroll all .data-content
-            if (!didScroll) {
-                allContents.forEach((el, idx) => {
-                    el.scrollTop = 0;
-                    if (typeof el.scrollTo === 'function') el.scrollTo(0, 0);
-                    console.log(`[GuidedForms] Fallback: Scrolled .data-content[${idx}] to top`, el);
-                });
+        // --- SCROLL TO TOP LOGIC (immediate, before animations) ---
+        // Scroll immediately to prevent visual jumps
+        const allContents = document.querySelectorAll('.data-content');
+        const visibleContainers = document.querySelectorAll('.data-container-income.visible, .data-container-in.visible');
+        
+        // Scroll visible containers first
+        let didScroll = false;
+        visibleContainers.forEach((container) => {
+            const content = container.querySelector('.data-content');
+            if (content) {
+                content.scrollTop = 0;
+                if (typeof content.scrollTo === 'function') content.scrollTo(0, 0);
+                didScroll = true;
             }
+        });
 
-            // Fallback: scroll window
-            if (!didScroll && allContents.length === 0) {
-                window.scrollTo(0, 0);
-                console.log('[GuidedForms] Fallback: Scrolled window to top');
-            }
-
-            // Log after scroll
-            document.querySelectorAll('.data-content').forEach((el, idx) => {
-                console.log(`[GuidedForms][Debug] .data-content[${idx}] scrollTop AFTER:`, el.scrollTop, el);
+        // Fallback: scroll all .data-content
+        if (!didScroll) {
+            allContents.forEach((el) => {
+                el.scrollTop = 0;
+                if (typeof el.scrollTo === 'function') el.scrollTo(0, 0);
             });
-        }, this.config.transitionDuration + 80); // Wait for transition to finish
+        }
+
+        // Fallback: scroll window if no data-content found
+        if (!didScroll && allContents.length === 0) {
+            window.scrollTo(0, 0);
+        }
         // --- END SCROLL TO TOP LOGIC ---
     }
 
@@ -534,21 +524,15 @@ class GuidedFormSystem {
             step.element.style.transform = 'translateY(20px)';
             step.element.style.transition = `opacity ${this.config.transitionDuration}ms ease, transform ${this.config.transitionDuration}ms ease`;
             
-            // Trigger animation and then adjust container size
+            // Trigger animation (container size already adjusted in showStep)
             requestAnimationFrame(() => {
                 step.element.style.opacity = '1';
                 step.element.style.transform = 'translateY(0)';
-                
-                // Adjust container size after transition completes
-                setTimeout(() => {
-                    this.adjustContainerSize(step);
-                }, this.config.transitionDuration);
             });
         } else {
             // No transitions - show immediately
             step.element.style.opacity = '1';
             step.element.style.transform = 'translateY(0)';
-            this.adjustContainerSize(step);
         }
         
         // Focus first interactive element
@@ -582,67 +566,90 @@ class GuidedFormSystem {
         const focusableElements = step.element.querySelectorAll(
             'input:not([type="button"]):not([type="submit"]), textarea, select, .grid-item'
         );
-        
+
         if (focusableElements.length > 0) {
             console.log('[GuidedForms] Focusing element:', focusableElements[0].id || 'unnamed', focusableElements[0]);
-            focusableElements[0].focus();
-            
-            // Scroll into view for mobile keyboard handling (especially iOS)
-            setTimeout(() => {
-                console.log('[GuidedForms] Scrolling into view:', focusableElements[0].id || 'unnamed');
-                
-                // Use Visual Viewport API for better iOS keyboard handling
-                if (window.visualViewport) {
+
+            // Set up viewport change listener BEFORE focusing to catch keyboard immediately
+            let keyboardHandler = null;
+            if (window.visualViewport) {
+                keyboardHandler = (event) => {
                     const keyboardHeight = window.innerHeight - window.visualViewport.height;
                     if (keyboardHeight > 0) {
-                        console.log('[GuidedForms] Keyboard detected, height:', keyboardHeight);
-                        
-                        // Keyboard is visible, scroll to keep the focused input visible
-                        const dataContent = focusableElements[0].closest('.data-content');
-                        if (dataContent) {
-                            const inputRect = focusableElements[0].getBoundingClientRect();
-                            const contentRect = dataContent.getBoundingClientRect();
-                            
-                            // Calculate the input's position relative to the viewport
-                            const inputTop = inputRect.top - window.visualViewport.offsetTop;
-                            const inputBottom = inputRect.bottom - window.visualViewport.offsetTop;
-                            const visibleHeight = window.visualViewport.height;
-                            
-                            console.log('[GuidedForms] Input top:', inputTop, 'Input bottom:', inputBottom, 'Visible height:', visibleHeight);
-                            
-                            // Check if input is partially or fully below visible area
-                            if (inputBottom > visibleHeight) {
-                                // Calculate how much to scroll up to bring input into view with padding
-                                const scrollUp = inputBottom - visibleHeight + 60; // 60px padding above input
-                                const newScrollTop = window.pageYOffset + scrollUp;
-                                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
-                                console.log('[GuidedForms] Scrolled input into view, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
-                            } else if (inputTop < 20) {
-                                // Input is too high, scroll down a bit
-                                const scrollDown = 20 - inputTop;
-                                const newScrollTop = Math.max(0, window.pageYOffset - scrollDown);
-                                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
-                                console.log('[GuidedForms] Scrolled input down slightly, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
-                            } else {
-                                console.log('[GuidedForms] Input already fully visible, keyboard height:', keyboardHeight);
-                            }
-                        } else {
-                            // Fallback to input scrolling
-                            const inputRect = focusableElements[0].getBoundingClientRect();
-                            const visualTop = inputRect.top - window.visualViewport.offsetTop;
-                            const scrollTop = window.pageYOffset + visualTop - 60; // 60px padding
-                            window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-                            console.log('[GuidedForms] Fallback: Scrolled input to top with padding, keyboard height:', keyboardHeight);
-                        }
-                    } else {
-                        // No keyboard, use regular scrollIntoView
-                        focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        console.log('[GuidedForms] Keyboard appeared immediately, height:', keyboardHeight);
+                        this.handleKeyboardForElement(focusableElements[0], keyboardHeight);
+                        // Remove listener after handling
+                        window.visualViewport.removeEventListener('resize', keyboardHandler);
                     }
-                } else {
-                    // Fallback for browsers without visualViewport
-                    focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+                window.visualViewport.addEventListener('resize', keyboardHandler);
+            }
+
+            focusableElements[0].focus();
+
+            // Fallback: if no viewport API or keyboard doesn't trigger immediately
+            setTimeout(() => {
+                if (keyboardHandler) {
+                    window.visualViewport.removeEventListener('resize', keyboardHandler);
                 }
-            }, 800); // Increased delay to 800ms for iOS keyboard animation
+                console.log('[GuidedForms] Checking for keyboard after delay');
+                this.checkAndHandleKeyboard(focusableElements[0]);
+            }, 300); // Reduced from 800ms to 300ms
+        }
+    }
+
+    /**
+     * Handle keyboard appearance for a specific element
+     */
+    handleKeyboardForElement(element, keyboardHeight) {
+        const dataContent = element.closest('.data-content');
+        if (dataContent) {
+            const inputRect = element.getBoundingClientRect();
+            const contentRect = dataContent.getBoundingClientRect();
+
+            // Calculate the input's position relative to the viewport
+            const inputTop = inputRect.top - (window.visualViewport?.offsetTop || 0);
+            const inputBottom = inputRect.bottom - (window.visualViewport?.offsetTop || 0);
+            const visibleHeight = window.visualViewport?.height || window.innerHeight;
+
+            console.log('[GuidedForms] Input top:', inputTop, 'Input bottom:', inputBottom, 'Visible height:', visibleHeight);
+
+            // Check if input is partially or fully below visible area
+            if (inputBottom > visibleHeight) {
+                // Calculate how much to scroll up to bring input into view with padding
+                const scrollUp = inputBottom - visibleHeight + 60; // 60px padding above input
+                const newScrollTop = window.pageYOffset + scrollUp;
+                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+                console.log('[GuidedForms] Scrolled input into view immediately, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
+            } else if (inputTop < 20) {
+                // Input is too high, scroll down a bit
+                const scrollDown = 20 - inputTop;
+                const newScrollTop = Math.max(0, window.pageYOffset - scrollDown);
+                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+                console.log('[GuidedForms] Scrolled input down slightly, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
+            } else {
+                console.log('[GuidedForms] Input already fully visible, keyboard height:', keyboardHeight);
+            }
+        }
+    }
+
+    /**
+     * Check and handle keyboard for an element (fallback method)
+     */
+    checkAndHandleKeyboard(element) {
+        // Use Visual Viewport API for better iOS keyboard handling
+        if (window.visualViewport) {
+            const keyboardHeight = window.innerHeight - window.visualViewport.height;
+            if (keyboardHeight > 0) {
+                console.log('[GuidedForms] Keyboard detected in fallback check, height:', keyboardHeight);
+                this.handleKeyboardForElement(element, keyboardHeight);
+            } else {
+                // No keyboard, use regular scrollIntoView
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        } else {
+            // Fallback for browsers without visualViewport
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }
     
