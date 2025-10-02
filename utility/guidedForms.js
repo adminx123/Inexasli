@@ -558,29 +558,44 @@ class GuidedFormSystem {
                 if (window.visualViewport) {
                     const keyboardHeight = window.innerHeight - window.visualViewport.height;
                     if (keyboardHeight > 0) {
-                        // Keyboard is visible, scroll to keep the entire data-content container visible
+                        console.log('[GuidedForms] Keyboard detected, height:', keyboardHeight);
+                        
+                        // Keyboard is visible, scroll to keep the focused input visible
                         const dataContent = focusableElements[0].closest('.data-content');
                         if (dataContent) {
+                            const inputRect = focusableElements[0].getBoundingClientRect();
                             const contentRect = dataContent.getBoundingClientRect();
-                            const visualBottom = contentRect.bottom - window.visualViewport.offsetTop;
+                            
+                            // Calculate the input's position relative to the viewport
+                            const inputTop = inputRect.top - window.visualViewport.offsetTop;
+                            const inputBottom = inputRect.bottom - window.visualViewport.offsetTop;
                             const visibleHeight = window.visualViewport.height;
                             
-                            // If content extends below visible area, scroll up to fit it
-                            if (visualBottom > visibleHeight) {
-                                const scrollUp = visualBottom - visibleHeight + 20; // 20px padding
-                                const scrollTop = window.pageYOffset + scrollUp;
-                                window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-                                console.log('[GuidedForms] Scrolled data-content into view, keyboard height:', keyboardHeight, 'scrollTop:', scrollTop);
+                            console.log('[GuidedForms] Input top:', inputTop, 'Input bottom:', inputBottom, 'Visible height:', visibleHeight);
+                            
+                            // Check if input is partially or fully below visible area
+                            if (inputBottom > visibleHeight) {
+                                // Calculate how much to scroll up to bring input into view with padding
+                                const scrollUp = inputBottom - visibleHeight + 60; // 60px padding above input
+                                const newScrollTop = window.pageYOffset + scrollUp;
+                                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+                                console.log('[GuidedForms] Scrolled input into view, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
+                            } else if (inputTop < 20) {
+                                // Input is too high, scroll down a bit
+                                const scrollDown = 20 - inputTop;
+                                const newScrollTop = Math.max(0, window.pageYOffset - scrollDown);
+                                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+                                console.log('[GuidedForms] Scrolled input down slightly, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
                             } else {
-                                console.log('[GuidedForms] Data-content already fully visible, keyboard height:', keyboardHeight);
+                                console.log('[GuidedForms] Input already fully visible, keyboard height:', keyboardHeight);
                             }
                         } else {
                             // Fallback to input scrolling
                             const inputRect = focusableElements[0].getBoundingClientRect();
                             const visualTop = inputRect.top - window.visualViewport.offsetTop;
-                            const scrollTop = window.pageYOffset + visualTop - 20;
+                            const scrollTop = window.pageYOffset + visualTop - 60; // 60px padding
                             window.scrollTo({ top: scrollTop, behavior: 'smooth' });
-                            console.log('[GuidedForms] Fallback: Scrolled input to top, keyboard height:', keyboardHeight);
+                            console.log('[GuidedForms] Fallback: Scrolled input to top with padding, keyboard height:', keyboardHeight);
                         }
                     } else {
                         // No keyboard, use regular scrollIntoView
@@ -590,7 +605,7 @@ class GuidedFormSystem {
                     // Fallback for browsers without visualViewport
                     focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-            }, 500); // Increased delay to 500ms
+            }, 800); // Increased delay to 800ms for iOS keyboard animation
         }
     }
     
