@@ -311,6 +311,13 @@
             </a>
         </div>
         
+        <div style="margin-top: 40px; text-align: center;">
+            <h3 style="color: #fff; margin-bottom: 20px;">Send Message to Leads</h3>
+            <textarea id="messageInput" placeholder="Enter your message to previous inquirers..." style="width: 80%; max-width: 500px; height: 100px; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: #fff; resize: vertical;"></textarea>
+            <br><br>
+            <button id="sendToLeadsButton" class="btn-primary">Send to Leads</button>
+        </div>
+        
         <!-- Test Post Result Display -->
         <div id="testResult" style="margin-top: 20px; display: none;"></div>
     </div>
@@ -485,6 +492,7 @@
                     // Initialize page functionality after splash
                     loadUserSelections();
                     initializeTestPost();
+                    initializeSendToLeads();
                 }, 1200);
             }, 1500); // Show splash for 1.5 seconds
         });
@@ -549,6 +557,50 @@
                     // Re-enable button
                     testPostButton.disabled = false;
                     testPostButton.innerHTML = '<i class="fas fa-magic"></i> Generate a Post';
+                });
+            }
+        }
+        
+        // Initialize send to leads functionality
+        function initializeSendToLeads() {
+            const sendButton = document.getElementById('sendToLeadsButton');
+            if (sendButton) {
+                sendButton.addEventListener('click', async function() {
+                    const message = document.getElementById('messageInput').value.trim();
+                    if (!message) {
+                        alert('Please enter a message to send.');
+                        return;
+                    }
+                    
+                    // Disable button and show loading
+                    sendButton.disabled = true;
+                    sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                    
+                    try {
+                        const response = await fetch('https://hub-inexasli.4hm7q4q75z.workers.dev/send-to-leads', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: message
+                            })
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (response.ok && data.success) {
+                            alert('Message sent to ' + (data.sentCount || 0) + ' leads successfully!');
+                        } else {
+                            alert('Failed to send message: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        alert('Network error: ' + error.message);
+                    }
+                    
+                    // Re-enable button
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = 'Send to Leads';
                 });
             }
         }
