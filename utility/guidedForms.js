@@ -548,6 +548,11 @@ class GuidedFormSystem {
         
         if (focusableElements.length > 0) {
             focusableElements[0].focus();
+            
+            // Scroll into view for mobile keyboard handling (especially iOS)
+            setTimeout(() => {
+                focusableElements[0].scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+            }, 300); // Delay to allow keyboard to appear
         }
     }
     
