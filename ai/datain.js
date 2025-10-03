@@ -1670,6 +1670,98 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
     }
+
+    /**
+     * Initialize simplified keyboard handling for mobile devices
+     * Uses focus/blur events and scrollIntoView to keep inputs visible above keyboard
+     */
+    function initializeKeyboardHandling() {
+        // Only initialize on mobile devices
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (!isMobile) {
+            console.log('[DataIn] Skipping keyboard handling initialization - not a mobile device');
+            return;
+        }
+
+        console.log('[DataIn] Initializing simplified keyboard handling for mobile devices');
+
+        // Use event delegation on the data container for better performance
+        const dataContainer = document.getElementById('data-container-in');
+        if (!dataContainer) {
+            console.warn('[DataIn] Data container not found, cannot initialize keyboard handling');
+            return;
+        }
+
+        // Handle focus events on form inputs within the data container
+        dataContainer.addEventListener('focusin', (event) => {
+            const target = event.target;
+
+            // Only handle focusable form elements (exclude buttons, etc.)
+            if (target.matches('input:not([type="button"]):not([type="submit"]):not([type="hidden"]), textarea, select')) {
+                console.log('[DataIn] Input focused:', target.id || target.name || 'unnamed input');
+
+                // Use setTimeout to allow the keyboard to appear before scrolling
+                setTimeout(() => {
+                    handleKeyboardForInput(target);
+                }, 100);
+            }
+        });
+
+        // Handle blur events to potentially adjust scroll position when keyboard disappears
+        dataContainer.addEventListener('focusout', (event) => {
+            const target = event.target;
+
+            if (target.matches('input:not([type="button"]):not([type="submit"]):not([type="hidden"]), textarea, select')) {
+                console.log('[DataIn] Input blurred:', target.id || target.name || 'unnamed input');
+
+                // Small delay to allow keyboard to start disappearing
+                setTimeout(() => {
+                    // Could add logic here to scroll back if needed, but for now just log
+                    console.log('[DataIn] Input blur handled');
+                }, 100);
+            }
+        });
+    }
+
+    /**
+     * Handle keyboard appearance for a focused input element
+     * Uses scrollIntoView with proper positioning to keep input visible above keyboard
+     */
+    function handleKeyboardForInput(input) {
+        try {
+            // Get the input's position relative to the viewport
+            const inputRect = input.getBoundingClientRect();
+            const viewportHeight = window.visualViewport?.height || window.innerHeight;
+
+            // Calculate if input is in the lower portion of the screen where keyboard might cover it
+            const inputBottom = inputRect.bottom;
+            const keyboardThreshold = viewportHeight * 0.7; // Consider keyboard might cover bottom 30%
+
+            console.log('[DataIn] Input position check - bottom:', inputBottom, 'threshold:', keyboardThreshold, 'viewport height:', viewportHeight);
+
+            if (inputBottom > keyboardThreshold) {
+                // Input is likely to be covered by keyboard, scroll it into a better position
+                const scrollOptions = {
+                    behavior: 'smooth',
+                    block: 'center', // Try to center the input
+                    inline: 'nearest'
+                };
+
+                input.scrollIntoView(scrollOptions);
+                console.log('[DataIn] Scrolled input into view to avoid keyboard overlap');
+            } else {
+                console.log('[DataIn] Input already in safe position above keyboard threshold');
+            }
+        } catch (error) {
+            console.error('[DataIn] Error handling keyboard for input:', error);
+            // Fallback to basic scrollIntoView
+            try {
+                input.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (fallbackError) {
+                console.error('[DataIn] Fallback scrollIntoView also failed:', fallbackError);
+            }
+        }
+    }
     
     async function initializeApp() {
         // Ensure lastGridItemUrl is set to categories.html if not present
@@ -1684,6 +1776,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         initializeDataContainer();
+
+        // Initialize simplified keyboard handling for mobile devices
+        initializeKeyboardHandling();
 
         // REMOVED: Check if data-out is already expanded to adjust z-index appropriately
         // const dataOutContainer = document.querySelector('.data-container-out');

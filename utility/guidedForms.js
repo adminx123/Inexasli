@@ -569,90 +569,11 @@ class GuidedFormSystem {
 
         if (focusableElements.length > 0) {
             console.log('[GuidedForms] Focusing element:', focusableElements[0].id || 'unnamed', focusableElements[0]);
-
-            // Set up viewport change listener BEFORE focusing to catch keyboard immediately
-            let keyboardHandler = null;
-            if (window.visualViewport) {
-                keyboardHandler = (event) => {
-                    const keyboardHeight = window.innerHeight - window.visualViewport.height;
-                    if (keyboardHeight > 0) {
-                        console.log('[GuidedForms] Keyboard appeared immediately, height:', keyboardHeight);
-                        this.handleKeyboardForElement(focusableElements[0], keyboardHeight);
-                        // Remove listener after handling
-                        window.visualViewport.removeEventListener('resize', keyboardHandler);
-                    }
-                };
-                window.visualViewport.addEventListener('resize', keyboardHandler);
-            }
-
             focusableElements[0].focus();
-
-            // Fallback: if no viewport API or keyboard doesn't trigger immediately
-            setTimeout(() => {
-                if (keyboardHandler) {
-                    window.visualViewport.removeEventListener('resize', keyboardHandler);
-                }
-                console.log('[GuidedForms] Checking for keyboard after delay');
-                this.checkAndHandleKeyboard(focusableElements[0]);
-            }, 300); // Reduced from 800ms to 300ms
+            // Keyboard handling is now managed by datain.js for better mobile UX
         }
     }
 
-    /**
-     * Handle keyboard appearance for a specific element
-     */
-    handleKeyboardForElement(element, keyboardHeight) {
-        const dataContent = element.closest('.data-content');
-        if (dataContent) {
-            const inputRect = element.getBoundingClientRect();
-            const contentRect = dataContent.getBoundingClientRect();
-
-            // Calculate the input's position relative to the viewport
-            const inputTop = inputRect.top - (window.visualViewport?.offsetTop || 0);
-            const inputBottom = inputRect.bottom - (window.visualViewport?.offsetTop || 0);
-            const visibleHeight = window.visualViewport?.height || window.innerHeight;
-
-            console.log('[GuidedForms] Input top:', inputTop, 'Input bottom:', inputBottom, 'Visible height:', visibleHeight);
-
-            // Check if input is partially or fully below visible area
-            if (inputBottom > visibleHeight) {
-                // Calculate how much to scroll up to bring input into view with padding
-                const scrollUp = inputBottom - visibleHeight + 60; // 60px padding above input
-                const newScrollTop = window.pageYOffset + scrollUp;
-                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
-                console.log('[GuidedForms] Scrolled input into view immediately, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
-            } else if (inputTop < 20) {
-                // Input is too high, scroll down a bit
-                const scrollDown = 20 - inputTop;
-                const newScrollTop = Math.max(0, window.pageYOffset - scrollDown);
-                window.scrollTo({ top: newScrollTop, behavior: 'smooth' });
-                console.log('[GuidedForms] Scrolled input down slightly, keyboard height:', keyboardHeight, 'scrollTop:', newScrollTop);
-            } else {
-                console.log('[GuidedForms] Input already fully visible, keyboard height:', keyboardHeight);
-            }
-        }
-    }
-
-    /**
-     * Check and handle keyboard for an element (fallback method)
-     */
-    checkAndHandleKeyboard(element) {
-        // Use Visual Viewport API for better iOS keyboard handling
-        if (window.visualViewport) {
-            const keyboardHeight = window.innerHeight - window.visualViewport.height;
-            if (keyboardHeight > 0) {
-                console.log('[GuidedForms] Keyboard detected in fallback check, height:', keyboardHeight);
-                this.handleKeyboardForElement(element, keyboardHeight);
-            } else {
-                // No keyboard, use regular scrollIntoView
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        } else {
-            // Fallback for browsers without visualViewport
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }
-    
     /**
      * Initialize the first step
      */
