@@ -1,122 +1,452 @@
 // paymentform.js - UPDATED VERSION WITH RATE LIMITER FIX - BUILD 2025-01-30-001
 console.log('[PaymentForm][CACHE-CHECK] 🚀 UPDATED paymentform.js is loading - BUILD 2025-01-30-001');
-document.addEventListener('DOMContentLoaded', async function() {
-    // Debug: Check if rateLimiter is available immediately
-    console.log('[PaymentForm][DEBUG] 🔍 DOMContentLoaded - checking window.rateLimiter availability');
-    console.log('[PaymentForm][DEBUG] 🔍 window.rateLimiter exists:', !!window.rateLimiter);
-    console.log('[PaymentForm][DEBUG] 🔍 window.rateLimiter value:', window.rateLimiter);
-    
-    // Import sanitizeErrorMessage function
-    const { sanitizeErrorMessage } = await import('../utility/inputValidation.js');
-    // Skip external button creation - now integrated into datain.js
-    console.log('[PaymentForm] Button creation skipped - integrated into datain.js');
-    // createPaymentCornerButton();
 
-    // Create modal HTML for payment form using self-contained modal system
-    if (!document.getElementById('payment-modal')) {
-        // Load Stripe script if not already loaded
-        if (!document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
-            const stripeScript = document.createElement('script');
-            stripeScript.src = 'https://js.stripe.com/v3/';
-            stripeScript.async = true;
-            document.head.appendChild(stripeScript);
-            console.log('Stripe script added to page');
-        }
+/**
+ * Generate the payment form HTML content for the modal
+ */
+function generatePaymentFormHTML(customMessage = null) {
+    const statusMessage = customMessage ? `<div style="color: #e74c3c; font-weight: 500; margin-bottom: 15px; text-align: center; padding: 10px; background-color: #fdf2f2; border-radius: 5px; border: 1px solid #fecaca;">${customMessage}</div>` : '';
 
-        // Add modal styles matching copy.js pattern
-        addPaymentModalStyles();
-        
-        // Create modal element
-        const modal = document.createElement('div');
-        modal.className = 'payment-modal';
-        modal.id = 'payment-modal';
-        
-        // Create modal content
-        const modalContent = document.createElement('div');
-        modalContent.className = 'payment-modal-content';
-        modalContent.innerHTML = `
-            <div class="payment-modal-header">
-                <div class="payment-modal-title">Premium Features</div>
-            </div>
-            <div id="status" class="payment-status"></div>
-            <form class="payment-form" id="payment-form">
-                <input type="text" class="payment-input" id="username" placeholder="Choose a username" required>
-                <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
-                
-                <div class="subscription-tiers">
-                    <div class="tier-option" data-price-id="price_1R9egSILSdrwu9bgkFhjxXMs">
-                        <input type="radio" name="subscription-tier" value="price_1R9egSILSdrwu9bgkFhjxXMs" id="tier-basic" checked>
-                        <label for="tier-basic" class="tier-label">
-                            <div class="tier-name">Basic Plan</div>
-                            <div class="tier-price">$2.99</div>
-                            <div class="tier-features">• All AI tools • Basic support</div>
-                        </label>
-                    </div>
-                    <div class="tier-option" data-price-id="price_1RhZYOILSdrwu9bgJ25yhEov">
-                        <input type="radio" name="subscription-tier" value="price_1RhZYOILSdrwu9bgJ25yhEov" id="tier-monthly">
-                        <label for="tier-monthly" class="tier-label">
-                            <div class="tier-name">Monthly Plan</div>
-                            <div class="tier-price">$4.99/month</div>
-                            <div class="tier-features">• All AI tools • Monthly billing</div>
-                        </label>
-                    </div>
-                    <div class="tier-option" data-price-id="price_1R9egnILSdrwu9bgKFghOlih">
-                        <input type="radio" name="subscription-tier" value="price_1R9egnILSdrwu9bgKFghOlih" id="tier-premium">
-                        <label for="tier-premium" class="tier-label">
-                            <div class="tier-name">Premium Plan</div>
-                            <div class="tier-price">$29.99/year</div>
-                            <div class="tier-features">• All AI tools • Priority support • Advanced features</div>
-                        </label>
-                    </div>
-                </div>
-                
-                <button class="payment-pay-button" id="pay-button" type="button">Subscribe Now</button>
-                <div class="payment-button-row">
-                    <button class="payment-support-link recovery-button" id="recovery-button" type="button">I have paid</button>
-                    <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="payment-support-link">Customer Portal</a>
-                </div>
-                <div id="recovery-form" class="recovery-form" style="display: none;">
-                    <input type="text" class="payment-input recovery-input" id="recovery-username" placeholder="Recovery Username" required>
-                    <button class="payment-recover-button" id="recover-button" type="button">Recover Access</button>
-                    <button class="payment-cancel-button" id="cancel-recovery" type="button">Cancel</button>
-                </div>
-                <button id="terms-button" class="payment-terms-button" type="button">Terms of Service</button>
-            </form>
-        `;
-
-        modal.appendChild(modalContent);
-        document.body.appendChild(modal);
-
-        console.log('Payment modal created');
-
-        // Add debugging to the button immediately after creation
-        const debugButton = document.getElementById('pay-button');
-        if (debugButton) {
-            console.log('Subscribe button found:', debugButton);
-            console.log('Button type:', debugButton.type);
+    return `
+        <style>
+            .payment-modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+                text-align: left;
+            }
             
-            // Add a simple test click handler
-            debugButton.addEventListener('click', function(e) {
-                console.log('🔥 BUTTON CLICKED! Event details:', e);
-                console.log('🔥 Button element:', this);
-                console.log('🔥 Form element:', document.getElementById('payment-form'));
-            });
-            console.log('Debug click handler added to button');
-        } else {
-            console.error('Subscribe button not found after modal creation!');
+            .payment-modal-title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                font-family: "Geist", sans-serif;
+                color: #2d5a3d;
+                flex: 1;
+                text-align: center;
+            }
+            
+            .payment-status {
+                margin-bottom: 15px;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+            
+            .payment-form {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .payment-input {
+                flex: 1;
+                padding: 10px 12px;
+                border: 1px solid #4a7c59;
+                border-radius: 6px;
+                font-family: "Inter", sans-serif;
+                font-size: 0.9rem;
+                transition: border-color 0.2s ease;
+            }
+            
+            .payment-input:focus {
+                outline: none;
+                border-color: #2d5a3d;
+            }
+            
+            .subscription-tiers {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .tier-option {
+                position: relative;
+                border: 2px solid transparent;
+                border-radius: 12px;
+                background: rgba(255, 255, 255, 0.8);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            
+            .tier-option:hover {
+                border-color: rgba(45, 90, 61, 0.3);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 16px rgba(45, 90, 61, 0.1);
+            }
+            
+            .tier-option input[type="radio"] {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+            }
+            
+            .tier-option input[type="radio"]:checked + .tier-label {
+                border-color: #2d5a3d;
+                background: rgba(45, 90, 61, 0.05);
+            }
+            
+            .tier-option input[type="radio"]:checked + .tier-label:before {
+                content: '✓';
+                position: absolute;
+                top: 12px;
+                right: 12px;
+                width: 20px;
+                height: 20px;
+                background: #2d5a3d;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                font-weight: bold;
+            }
+            
+            .tier-label {
+                display: block;
+                padding: 16px;
+                border: 2px solid rgba(45, 90, 61, 0.2);
+                border-radius: 12px;
+                background: transparent;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                position: relative;
+                text-align: left;
+            }
+            
+            .tier-name {
+                font-size: 1rem;
+                font-weight: 600;
+                color: #2d5a3d;
+                margin-bottom: 4px;
+                font-family: "Geist", sans-serif;
+            }
+            
+            .tier-price {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #2d5a3d;
+                margin-bottom: 4px;
+            }
+            
+            .tier-features {
+                font-size: 0.85rem;
+                color: #4a7c59;
+                line-height: 1.4;
+            }
+            
+            .payment-pay-button {
+                background: rgba(45, 90, 61, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 14px 20px;
+                font-size: 14px;
+                cursor: pointer;
+                font-family: 'Geist', sans-serif;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
+            }
+            
+            .payment-pay-button:hover {
+                background: rgba(74, 124, 89, 0.95);
+                transform: translateY(-1px);
+                box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
+            }
+            
+            .payment-button-row {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .payment-support-link {
+                background: rgba(75, 85, 99, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 12px 20px;
+                font-size: 1em;
+                cursor: pointer;
+                font-weight: bold;
+                font-family: "Geist", sans-serif;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 16px rgba(75, 85, 99, 0.15);
+                text-decoration: none;
+                text-align: center;
+            }
+            
+            .payment-support-link:hover {
+                background: rgba(107, 114, 128, 0.95);
+                transform: translateY(-1px);
+                box-shadow: 0 6px 20px rgba(75, 85, 99, 0.2);
+            }
+            
+            .recovery-form {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 15px;
+                padding: 15px;
+                background-color: rgba(242, 249, 243, 0.8);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                box-shadow: 0 4px 16px rgba(74, 124, 89, 0.08);
+            }
+            
+            .payment-recover-button, .payment-cancel-button {
+                background: rgba(45, 90, 61, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 12px 16px;
+                font-size: 13px;
+                cursor: pointer;
+                font-family: 'Geist', sans-serif;
+                font-weight: bold;
+                transition: all 0.3s ease;
+                width: 100%;
+                box-sizing: border-box;
+                box-shadow: 0 4px 16px rgba(45, 90, 61, 0.15);
+            }
+            
+            .payment-recover-button:hover, .payment-cancel-button:hover {
+                background: rgba(74, 124, 89, 0.95);
+                transform: translateY(-1px);
+                box-shadow: 0 6px 20px rgba(45, 90, 61, 0.2);
+            }
+            
+            .payment-terms-button {
+                background: rgba(74, 124, 89, 0.9);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                padding: 12px 20px;
+                font-size: 1em;
+                cursor: pointer;
+                font-weight: bold;
+                font-family: "Geist", sans-serif;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 16px rgba(74, 124, 89, 0.15);
+            }
+            
+            .payment-terms-button:hover {
+                background: rgba(107, 114, 128, 0.95);
+                transform: translateY(-1px);
+                box-shadow: 0 6px 20px rgba(74, 124, 89, 0.2);
+            }
+        </style>
+        <div class="payment-modal-header">
+            <div class="payment-modal-title">Premium Features</div>
+        </div>
+        <div id="status" class="payment-status">${statusMessage}</div>
+        <form class="payment-form" id="payment-form">
+            <input type="text" class="payment-input" id="username" placeholder="Choose a username" required>
+            <input type="email" class="payment-input" id="useremail" placeholder="Input your email" required>
+            
+            <div class="subscription-tiers">
+                <div class="tier-option" data-price-id="price_1R9egSILSdrwu9bgkFhjxXMs">
+                    <input type="radio" name="subscription-tier" value="price_1R9egSILSdrwu9bgkFhjxXMs" id="tier-basic" checked>
+                    <label for="tier-basic" class="tier-label">
+                        <div class="tier-name">Basic Plan</div>
+                        <div class="tier-price">$2.99</div>
+                        <div class="tier-features">• All AI tools • Basic support</div>
+                    </label>
+                </div>
+                <div class="tier-option" data-price-id="price_1RhZYOILSdrwu9bgJ25yhEov">
+                    <input type="radio" name="subscription-tier" value="price_1RhZYOILSdrwu9bgJ25yhEov" id="tier-monthly">
+                    <label for="tier-monthly" class="tier-label">
+                        <div class="tier-name">Monthly Plan</div>
+                        <div class="tier-price">$4.99/month</div>
+                        <div class="tier-features">• All AI tools • Monthly billing</div>
+                    </label>
+                </div>
+                <div class="tier-option" data-price-id="price_1R9egnILSdrwu9bgKFghOlih">
+                    <input type="radio" name="subscription-tier" value="price_1R9egnILSdrwu9bgKFghOlih" id="tier-premium">
+                    <label for="tier-premium" class="tier-label">
+                        <div class="tier-name">Premium Plan</div>
+                        <div class="tier-price">$29.99/year</div>
+                        <div class="tier-features">• All AI tools • Priority support • Advanced features</div>
+                    </label>
+                </div>
+            </div>
+            
+            <button class="payment-pay-button" id="pay-button" type="button">Subscribe Now</button>
+            <div class="payment-button-row">
+                <button class="payment-support-link recovery-button" id="recovery-button" type="button">I have paid</button>
+                <a href="https://billing.stripe.com/p/login/3cs2a0d905QE71mbII" class="payment-support-link">Customer Portal</a>
+            </div>
+            <div id="recovery-form" class="recovery-form" style="display: none;">
+                <input type="text" class="payment-input recovery-input" id="recovery-username" placeholder="Recovery Username" required>
+                <button class="payment-recover-button" id="recover-button" type="button">Recover Access</button>
+                <button class="payment-cancel-button" id="cancel-recovery" type="button">Cancel</button>
+            </div>
+            <button id="terms-button" class="payment-terms-button" type="button">Terms of Service</button>
+        </form>
+    `;
+}
+
+/**
+ * Initialize payment form handlers for a specific modal content
+ */
+async function initializePaymentFormHandlers(modalContent) {
+    console.log("initializePaymentFormHandlers called for modal content");
+
+    try {
+        // Check if Stripe is available
+        if (typeof Stripe === "undefined") {
+            console.error("Stripe not loaded yet");
+            return;
         }
 
-        // Set up modal functionality
-        setupPaymentModalFunctionality(modal);
+        // Payment endpoint and configuration
+        const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
+        const publicKey = "pk_test_51POOigILSdrwu9bgkDsm3tpdvSgP8PaV0VA4u9fSFMILqQDG0Bv8GxxFfNuTAv7knKX3x6685X3lYvxCs2iGEd9x00cSBedhxi";
+        const payForm = modalContent.querySelector("#payment-form");
 
-        // Initialize payment processing directly (combined from payment.js)
-        initializePaymentProcessing();
+        if (!payForm) {
+            console.error("Payment form not found in modal content");
+            return;
+        }
+        console.log("Payment form found in modal:", payForm);
 
-        // Rate limit status will be set by backend after payment completion
-        // No need to create hardcoded frontend values
+        const stripe = Stripe(publicKey);
+        console.log("Stripe initialized with public key:", publicKey);
 
-        console.log('Payment form and processing initialized');
+        // Add both form submit AND button click listeners for better debugging
+        
+        // Form submit listener (traditional way)
+        payForm.addEventListener("submit", async (e) => {
+            console.log("Form submit event triggered");
+            await handlePaymentSubmission(e, stripe, paymentEndpoint);
+        });
+
+        // Button click listener (backup way)
+        const payButton = modalContent.querySelector("#pay-button");
+        if (payButton) {
+            payButton.addEventListener("click", async (e) => {
+                console.log("Pay button clicked directly");
+                e.preventDefault(); // Prevent any default behavior
+                
+                // Manually trigger form submission by creating a fake submit event
+                const fakeSubmitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                payForm.dispatchEvent(fakeSubmitEvent);
+            });
+        }
+
+        // Recovery button functionality
+        const recoveryButton = modalContent.querySelector("#recovery-button");
+        if (recoveryButton) {
+            recoveryButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                const recoveryForm = modalContent.querySelector("#recovery-form");
+                if (recoveryForm) {
+                    recoveryForm.style.display = recoveryForm.style.display === "none" ? "block" : "none";
+                }
+            });
+        }
+
+        // Cancel recovery button
+        const cancelRecoveryButton = modalContent.querySelector("#cancel-recovery");
+        if (cancelRecoveryButton) {
+            cancelRecoveryButton.addEventListener("click", (e) => {
+                e.preventDefault();
+                const recoveryForm = modalContent.querySelector("#recovery-form");
+                if (recoveryForm) {
+                    recoveryForm.style.display = "none";
+                }
+            });
+        }
+
+        // Recover button functionality
+        const recoverButton = modalContent.querySelector("#recover-button");
+        if (recoverButton) {
+            recoverButton.addEventListener("click", async (e) => {
+                e.preventDefault();
+                const recoveryUsername = modalContent.querySelector("#recovery-username");
+                if (recoveryUsername && recoveryUsername.value.trim()) {
+                    await handleRecoverySubmission(recoveryUsername.value.trim());
+                } else {
+                    alert("Please enter a recovery username.");
+                }
+            });
+        }
+
+        // Terms button functionality
+        const termsButton = modalContent.querySelector("#terms-button");
+        if (termsButton) {
+            termsButton.addEventListener("click", async (e) => {
+                e.preventDefault();
+                const legalModule = await import('/utility/legal.js');
+                if (legalModule && legalModule.openLegalModal) {
+                    legalModule.openLegalModal();
+                }
+            });
+        }
+
+        console.log("Payment form handlers initialized for modal content");
+
+    } catch (error) {
+        console.error("Error initializing payment form handlers:", error);
     }
+}
+
+/**
+ * Setup payment modal functionality using modal.js
+ */
+function setupPaymentModalFunctionality() {
+    // Function to open payment modal
+    window.openPaymentModal = function(customMessage = null) {
+        const htmlContent = generatePaymentFormHTML(customMessage);
+        
+        window.openCustomModal(htmlContent, {
+            maxWidth: '300px',
+            backgroundColor: 'rgba(242, 249, 243, 0.95)',
+            dismissible: true,
+            onOpen: function(modal, modalContent) {
+                // Initialize form event handlers after modal is opened
+                initializePaymentFormHandlers(modalContent);
+                console.log('Payment modal opened with modal.js');
+            }
+        });
+    };
+
+    // Function to close payment modal
+    window.closePaymentModal = function() {
+        window.closeModal();
+        console.log('Payment modal closed with modal.js');
+    };
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
+
+    // Load Stripe script if not already loaded
+    if (!document.querySelector('script[src="https://js.stripe.com/v3/"]')) {
+        const stripeScript = document.createElement('script');
+        stripeScript.src = 'https://js.stripe.com/v3/';
+        stripeScript.async = true;
+        document.head.appendChild(stripeScript);
+        console.log('Stripe script added to page');
+    }
+
+    // Set up modal functionality using modal.js
+    setupPaymentModalFunctionality();
+
+    console.log('Payment modal system initialized with modal.js');
 
     // Load and initialize legal modal
     if (!window.openLegalModal) {
@@ -652,41 +982,6 @@ function addPaymentModalStyles() {
 }
 
 /**
- * Setup payment modal functionality with proper event handling
- */
-function setupPaymentModalFunctionality(modal) {
-    // Function to open payment modal
-    window.openPaymentModal = function(customMessage = null) {
-        // If custom message is provided, add it to the status div
-        if (customMessage) {
-            const statusDiv = modal.querySelector('#status');
-            if (statusDiv) {
-                statusDiv.innerHTML = `<div style="color: #e74c3c; font-weight: 500; margin-bottom: 15px; text-align: center; padding: 10px; background-color: #fdf2f2; border-radius: 5px; border: 1px solid #fecaca;">${customMessage}</div>`;
-            }
-        }
-        
-        modal.style.display = 'flex';
-        document.body.classList.add('modal-open');
-        addPaymentModalEventListeners(modal);
-        console.log('Payment modal opened');
-    };
-
-    // Function to close payment modal
-    window.closePaymentModal = function() {
-        // Clear any custom message when closing
-        const statusDiv = modal.querySelector('#status');
-        if (statusDiv) {
-            statusDiv.innerHTML = '';
-        }
-        
-        modal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-        removePaymentModalEventListeners(modal);
-        console.log('Payment modal closed');
-    };
-}
-
-/**
  * Add event listeners for the payment modal
  */
 function addPaymentModalEventListeners(modal) {
@@ -725,9 +1020,6 @@ function removePaymentModalEventListeners(modal) {
         modal._clickOutsideHandler = null;
     }
 }
-
-
-// --- PREMIUM ACCESS LOGIC ---
 function enablePremiumFeatures() {
     const auth = localStorage.getItem('authenticated');
     console.log('[Premium][Debug] localStorage.authenticated =', auth);
@@ -771,25 +1063,6 @@ window.enablePremiumFeatures = enablePremiumFeatures;
 
 // ===== PAYMENT PROCESSING (Combined from payment.js) =====
 
-// Wait for the Stripe script to load
-function waitForStripe() {
-    return new Promise((resolve, reject) => {
-        const startTime = Date.now();
-        const checkStripe = () => {
-            if (typeof Stripe !== "undefined") {
-                console.log("Stripe script loaded");
-                resolve();
-            } else if (Date.now() - startTime > 10000) { // 10-second timeout
-                console.error("Stripe script failed to load within 10 seconds");
-                reject(new Error("Stripe script failed to load"));
-            } else {
-                setTimeout(checkStripe, 100);
-            }
-        };
-        checkStripe();
-    });
-}
-
 // Wait for rateLimiter to be available (ES module timing issue fix)
 function waitForRateLimiter() {
     return new Promise((resolve, reject) => {
@@ -814,8 +1087,11 @@ async function initializePaymentProcessing() {
     console.log("initializePaymentProcessing called");
 
     try {
-        // Wait for Stripe to load
-        await waitForStripe();
+        // Check if Stripe is available
+        if (typeof Stripe === "undefined") {
+            console.error("Stripe not loaded yet");
+            return;
+        }
 
         // Payment endpoint and configuration
         const paymentEndpoint = "https://stripeintegration.4hm7q4q75z.workers.dev/";
