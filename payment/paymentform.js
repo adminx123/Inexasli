@@ -891,11 +891,6 @@ function addPaymentModalStyles() {
                 gap: 3px;
             }
         }
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
         
         .tier-option {
             position: relative;
@@ -1365,13 +1360,13 @@ async function handlePaymentSubmission(e, stripe, paymentEndpoint) {
         const data = await res.json();
         console.log("Fetch response data:", data);
 
-        if (data.id) {
-            console.log("Checkout session ID received:", data.id);
+        if (data.url) {
+            console.log("Checkout URL received:", data.url);
             payStatus.innerHTML = "Redirecting to payment...";
-            await stripe.redirectToCheckout({ sessionId: data.id });
+            window.location.href = data.url;
             console.log("Redirect to Stripe checkout initiated");
         } else {
-            console.warn("No session ID in response:", data);
+            console.warn("No checkout URL in response:", data);
             payStatus.innerHTML = data.error || "Payment failed. Please try again.";
             usernameInput.disabled = false;
             emailInput.disabled = false;
