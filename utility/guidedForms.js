@@ -563,6 +563,13 @@ class GuidedFormSystem {
      * Focus the first interactive element in a step
      */
     focusFirstElement(step) {
+        // Skip auto-focus on mobile devices to prevent unwanted keyboard appearance
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile) {
+            console.log('[GuidedForms] Skipping auto-focus on mobile device');
+            return;
+        }
+
         const focusableElements = step.element.querySelectorAll(
             'input:not([type="button"]):not([type="submit"]), textarea, select, .grid-item'
         );
