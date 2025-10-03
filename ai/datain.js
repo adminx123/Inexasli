@@ -1258,6 +1258,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             topContainer.style.display = 'flex'; // Keep top container visible for grid/payment/FAQ
             // Show: move container up
             dataContainer.classList.add('visible');
+            // Reset any keyboard-specific transforms when showing
+            dataContainer.style.transform = '';
+            dataContainer.dataset.keyboardAdjusted = 'false';
             document.body.style.overflow = 'hidden';
             setLocal('dataContainerState', 'visible');
             // Dispatch state change event
@@ -1275,6 +1278,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             bottomContainer.style.display = 'none';
             // Hide: move container down
             dataContainer.classList.remove('visible');
+            // Reset any keyboard-specific transforms
+            dataContainer.style.transform = '';
+            dataContainer.dataset.keyboardAdjusted = 'false';
             document.body.style.overflow = '';
             setLocal('dataContainerState', 'hidden');
             // Dispatch state change event
@@ -1692,6 +1698,42 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
 
+        // Track original viewport height to detect keyboard
+        let originalViewportHeight = window.innerHeight;
+        let keyboardVisible = false;
+
+        // Listen to visual viewport changes to detect keyboard appearance/disappearance
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                const currentHeight = window.visualViewport.height;
+                const heightDifference = originalViewportHeight - currentHeight;
+                const keyboardThreshold = 150; // Consider keyboard visible if height reduced by more than 150px
+
+                if (heightDifference > keyboardThreshold && !keyboardVisible) {
+                    // Keyboard appeared
+                    keyboardVisible = true;
+                    console.log('[DataIn] Keyboard detected, adjusting container position');
+                    adjustContainerForKeyboard(true, currentHeight);
+                } else if (heightDifference < keyboardThreshold && keyboardVisible) {
+                    // Keyboard disappeared
+                    keyboardVisible = false;
+                    console.log('[DataIn] Keyboard hidden, restoring container position');
+                    adjustContainerForKeyboard(false);
+                }
+            });
+        }
+
+        // Listen to container visibility changes to update viewport height
+        document.addEventListener('datain-state-changed', (event) => {
+            if (event.detail.state === 'visible') {
+                // Update original viewport height when container becomes visible
+                setTimeout(() => {
+                    originalViewportHeight = window.innerHeight;
+                    console.log('[DataIn] Updated original viewport height on container show:', originalViewportHeight);
+                }, 300); // Wait for animation to complete
+            }
+        });
+
         // Handle focus events on form inputs within the data container
         dataContainer.addEventListener('focusin', (event) => {
             const target = event.target;
@@ -1699,6 +1741,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Only handle focusable form elements (exclude buttons, etc.)
             if (target.matches('input:not([type="button"]):not([type="submit"]):not([type="hidden"]), textarea, select')) {
                 console.log('[DataIn] Input focused:', target.id || target.name || 'unnamed input');
+
+                // Update original viewport height on focus (in case orientation changed)
+                originalViewportHeight = window.innerHeight;
 
                 // Use setTimeout to allow the keyboard to appear before scrolling
                 setTimeout(() => {
@@ -1721,6 +1766,36 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }, 100);
             }
         });
+    }
+
+    /**
+     * Adjust the data container position when keyboard appears/disappears
+     * @param {boolean} keyboardUp - true if keyboard is appearing, false if disappearing
+     * @param {number} viewportHeight - current viewport height when keyboard is up
+     */
+    function adjustContainerForKeyboard(keyboardUp, viewportHeight = null) {
+        const dataContainer = document.getElementById('data-container-in');
+        if (!dataContainer) return;
+
+        if (keyboardUp && viewportHeight) {
+            // Move container up to stay above keyboard
+            // Calculate how much to move up based on viewport height
+            const containerHeight = dataContainer.offsetHeight;
+            const safeTopMargin = 20; // Keep some margin from top
+            const maxTopPosition = window.innerHeight - viewportHeight - safeTopMargin;
+
+            // Don't move up more than needed
+            const translateY = Math.max(-maxTopPosition, -containerHeight + viewportHeight - safeTopMargin);
+
+            dataContainer.style.transform = `translate(-50%, ${translateY}px)`;
+            dataContainer.dataset.keyboardAdjusted = 'true';
+            console.log(`[DataIn] Moved container up by ${translateY}px to avoid keyboard`);
+        } else {
+            // Restore original position based on visibility state
+            dataContainer.style.transform = '';
+            dataContainer.dataset.keyboardAdjusted = 'false';
+            console.log('[DataIn] Restored container to original position');
+        }
     }
 
     /**
