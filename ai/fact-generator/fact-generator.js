@@ -26,7 +26,7 @@ export default {
                 return new Response(JSON.stringify({
                     status: 'active',
                     lastGeneration: await env.FACT_STORE.get('last_generation_date'),
-                    modules: ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz', 'period', 'shop']
+                    modules: ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz', 'shop']
                 }), {
                     headers: {
                         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export default {
             }
 
             if (url.pathname === '/facts') {
-                const modules = ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz', 'period', 'shop'];
+                const modules = ['calorie', 'decision', 'enneagram', 'event', 'fashion', 'income', 'philosophy', 'quiz', 'shop'];
                 const moduleParam = url.searchParams.get('module');
                 if (moduleParam && modules.includes(moduleParam)) {
                     // Return facts for a single module

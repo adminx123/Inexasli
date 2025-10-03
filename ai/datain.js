@@ -449,13 +449,6 @@ function initializeFormPersistence(url) {
             singleSelection: ['category-selection'],
             multiSelection: []
         };
-    } else if (url.includes('/period/')) {
-        moduleType = 'period';
-        moduleConfig = {
-            singleSelection: ['period-cycle-regularity-container', 'period-flow-intensity-container'],
-            multiSelection: [],
-            splitTextareas: true // Special handling for split textarea entries
-        };
     } else {
         // Try to detect from URL path
         const pathParts = url.split('/');
@@ -599,7 +592,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         '/ai/event/eventiq.html',
         '/ai/fashion/fashioniq.html',
         '/ai/fitness/fitnessiq.html',
-        '/ai/period/periodiq.html',
         '/ai/philosophy/philosophyiq.html',
         '/ai/quiz/quiziq.html',
         '/ai/categories.html',

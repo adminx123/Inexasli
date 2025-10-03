@@ -684,10 +684,6 @@ function getAnalysisTypeFromPage() {
             console.log('[PDF] Matched speculation pattern');
             return { analysisType: 'speculation-analysis', title: 'Speculation Analysis' };
         }
-        if (url.includes('/period/') || url.includes('period')) {
-            console.log('[PDF] Matched period pattern');
-            return { analysisType: 'period-analysis', title: 'Period Analysis' };
-        }
         if (url.includes('/fashion/') || url.includes('fashion')) {
             console.log('[PDF] Matched fashion pattern');
             return { analysisType: 'fashion-analysis', title: 'Fashion Analysis' };

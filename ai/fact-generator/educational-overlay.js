@@ -240,16 +240,6 @@ function getFallbackFactsForModule(moduleName) {
             "Consumer reports help identify long-term product reliability",
             "Warranty terms often vary significantly between similar products"
         ],
-        'period': [
-            "The average menstrual cycle is 28 days, but normal can range from 21 to 35 days.",
-            "Tracking your cycle can help identify patterns in mood, energy, and symptoms.",
-            "Staying hydrated may help reduce bloating and cramps during your period.",
-            "Exercise can help relieve period pain and boost your mood.",
-            "It's normal for cycles to vary slightly month to month.",
-            "Severe pain or very heavy bleeding may be a sign to consult a healthcare provider.",
-            "Hormonal changes during your cycle can affect sleep, appetite, and emotions.",
-            "Logging symptoms helps you and your doctor spot trends and improve care."
-        ],
         'emotion': [
             "Deep breathing activates your calming system",
             "Exercise is as effective as medication for mild depression",

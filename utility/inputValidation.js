@@ -445,26 +445,6 @@ export const MODULE_VALIDATION_RULES = {
     'topic': { type: 'text', required: false, maxLength: 500 },
     'difficulty': { type: 'text', required: false, maxLength: 100 },
     'questions': { type: 'text', required: false, maxLength: 100 }
-  },
-  
-  period: {
-    // Date fields
-    'last-period-start-date': { type: 'text', required: false, maxLength: 20 },
-    'last-period-end-date': { type: 'text', required: false, maxLength: 20 },
-    'hormonal-method-start-date': { type: 'text', required: false, maxLength: 20 },
-    'iud-insertion-date': { type: 'text', required: false, maxLength: 20 },
-    
-    // Cycle info
-    'natural-cycle-length': { type: 'text', required: false, maxLength: 50 },
-    
-    // Birth control
-    'contraceptive-type': { type: 'text', required: false, maxLength: 100 },
-    'barrier-method-type': { type: 'text', required: false, maxLength: 100 },
-    'fertility-awareness-method': { type: 'text', required: false, maxLength: 100 },
-    
-    // Legacy fields
-    'period-entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 },
-    'entries': { type: 'array', required: false, itemType: 'text', maxLength: 500 }
   }
 };
 

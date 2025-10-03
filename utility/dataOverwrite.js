@@ -239,7 +239,6 @@ function clearCurrentFormData() {
             'income': ['incomeIqInput', 'incomeIqResponse', 'incomeIqinput1', 'incomeIqInput2', 'incomeIqExpense', 'incomeIqAssets', 'incomeIqLiabilities'],
             'philosophy': ['philosophyIqInput', 'philosophyIqResponse'],
             'quiz': ['quizIqInput', 'quizIqResponse'],
-            'period': ['periodIqInput', 'periodIqResponse'],
             'categories': ['categoriesIqInput', 'categoriesIqResponse']
         };
 
