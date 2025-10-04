@@ -348,7 +348,6 @@ const PRIVACY_POLICY = {
 
 **Email:** privacy@inexasli.com
 **Website:** https://inexasli.com
-**Business Address:** [To be updated with business address]
 
 **Data Protection Officer**
 For GDPR-related inquiries: dpo@inexasli.com
