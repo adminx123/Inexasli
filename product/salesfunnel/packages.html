@@ -199,44 +199,6 @@
             font-weight: bold;
         }
 
-        /* Floating Total Box */
-        .floating-total {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(76, 175, 80, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid #4CAF50;
-            border-radius: 12px;
-            padding: 12px 20px;
-            box-shadow: 0 4px 20px rgba(76, 175, 80, 0.2);
-            z-index: 100;
-            font-size: 18px;
-            font-weight: bold;
-            color: #4CAF50;
-            text-align: center;
-            min-width: 120px;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-
-        .floating-total.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .floating-total .amount {
-            font-size: 24px;
-            color: #4CAF50;
-        }
-
-        .floating-total .period {
-            font-size: 12px;
-            color: #4CAF50;
-            margin-left: 4px;
-        }
-
         .total-period {
             color: #ccc;
             font-size: 14px;
@@ -266,11 +228,7 @@
         <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
-    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
-        <!-- Floating Total Box -->
-        <div class="floating-total" id="floatingTotal">
-            <span class="amount" id="floatingAmount">$0</span><span class="period">/month</span>
-        </div>
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: relative; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
             
             <!-- Currency Selector -->
             <div class="currency-selector-container">
@@ -303,14 +261,14 @@
   <div class="package-card selected" data-package="basic">
     <h3>Basic Chat</h3>
     <p>AI chat widget for websites</p>
-    <div class="price">$99/month</div>
+    <div class="price" id="basic-price">$99/month</div>
     <ul><li>Conversational AI</li><li>Easy embed</li></ul>
   </div>
 
   <div class="package-card" data-package="social">
     <h3>Social Starter</h3>
     <p>AI chat + platform automation</p>
-    <div class="price">$149/month</div>
+    <div class="price" id="social-price">$149/month</div>
     <ul><li>Conversational AI</li><li>Platform selection</li></ul>
 
     <!-- Platform Selection (shown when selected) -->
@@ -388,9 +346,9 @@
 
   <div class="package-card" data-package="pro">
     <h3>Pro Bundle</h3>
-    <p>Chat + platform automation</p>
-    <div class="price">$299/month</div>
-    <ul><li>Combined features</li><li>Addon platforms</li></ul>
+    <p>Everything + advanced features</p>
+    <div class="price" id="pro-price">$299/month</div>
+    <ul><li>All AI features</li><li>All platforms</li><li>Advanced analytics</li></ul>
 
     <!-- Platform Selection (shown when selected) -->
     <div class="package-platforms" style="display: none;">
@@ -465,21 +423,87 @@
     </div>
   </div>
 
-  <div class="package-card" data-package="enterprise">
+    <div class="package-card" data-package="enterprise">
     <h3>Enterprise</h3>
-    <p>All features</p>
-    <div class="price">Custom</div>
-    <ul><li>White-label</li><li>Full support</li></ul>
+    <p>Custom solutions + white-label</p>
+    <div class="price" id="enterprise-price">$499/month</div>
+    <ul><li>Custom AI models</li><li>White-label solution</li><li>Dedicated support</li></ul>
+
+    <!-- Platform Selection (shown when selected) -->
+    <div class="package-platforms" style="display: none;">
+      <h4>Select Your Platform</h4>
+      <div class="platform-selection-grid">
+        <div class="platform-option" data-platform="instagram">
+          <i class="fab fa-instagram"></i>
+          <span class="extra-cost-indicator">+$15</span>
+        </div>
+        <div class="platform-option" data-platform="twitter">
+          <i class="fab fa-twitter"></i>
+          <span class="extra-cost-indicator">+$15</span>
+        </div>
+        <div class="platform-option" data-platform="facebook">
+          <i class="fab fa-facebook"></i>
+          <span class="extra-cost-indicator">+$15</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add-ons (shown when selected) -->
+    <div class="package-addons" style="display: none;">
+      <h4>Enhance Your Package</h4>
+      <div class="addons-grid">
+        <!-- Extra Photos -->
+        <div class="addon-card" data-addon="photos-10" data-price="50">
+          <div class="addon-selected-indicator">✓</div>
+          <div class="addon-name">+10 Photo Storage</div>
+          <div class="addon-description">Additional capacity for up to 10 more photos</div>
+          <div class="addon-price">+$50</div>
+        </div>
+
+        <!-- Extra Videos -->
+        <div class="addon-card" data-addon="videos-5" data-price="75">
+          <div class="addon-selected-indicator">✓</div>
+          <div class="addon-name">+5 Video Storage</div>
+          <div class="addon-description">Additional capacity for up to 5 more videos</div>
+          <div class="addon-price">+$75</div>
+        </div>
+
+        <!-- Extra Iterations -->
+        <div class="addon-card" data-addon="iterations-extra" data-price="150">
+          <div class="addon-selected-indicator">✓</div>
+          <div class="addon-name">+10 Content Refinements</div>
+          <div class="addon-description">Additional content refinement rounds</div>
+          <div class="addon-price">+$150</div>
+        </div>
+
+        <!-- AI Content Generation -->
+        <div class="addon-card" data-addon="ai-content-generation" data-price="200">
+          <div class="addon-selected-indicator">✓</div>
+          <div class="addon-name">AI Content Generation</div>
+          <div class="addon-description">AI-powered content creation</div>
+          <div class="addon-price">+$200</div>
+        </div>
+
+        <!-- Discount Options -->
+        <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-25">
+          <div class="addon-selected-indicator">✓</div>
+          <div class="addon-name">Basic Scheduling Only</div>
+          <div class="addon-description">Simple posting without analytics</div>
+          <div class="addon-price">-$25</div>
+        </div>
+
+        <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-15">
+          <div class="addon-selected-indicator">✓</div>
+          <div class="addon-name">Reduced Posting Frequency</div>
+          <div class="addon-description">Post 3x per week instead of daily</div>
+          <div class="addon-price">-$15</div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
 <!-- Continue Button -->
 <div class="continue-container">
-  <div class="total-display">
-    <span class="total-label">Total: </span>
-    <span id="totalAmount" class="total-amount">$0</span>
-    <span class="total-period">/month</span>
-  </div>
   <button id="continue-btn" class="btn-continue-to-quote" disabled>Continue to Customization</button>
 </div>
 
@@ -566,15 +590,39 @@
             let selectedPackage = null;
             let selectedAddons = [];
             let selectedPlatforms = [];
+            let packageSelections = {}; // Store selections per package
+            
+            // Base prices for each package (should never change)
+            const basePrices = {
+                basic: 99,
+                social: 149,
+                pro: 299,
+                enterprise: 499
+            };
+            
+            // Load saved selections from localStorage
+            try {
+                const saved = localStorage.getItem('packageSelections');
+                if (saved) {
+                    packageSelections = JSON.parse(saved);
+                    console.log('Loaded saved package selections:', packageSelections);
+                }
+            } catch (e) {
+                console.log('Could not load saved selections');
+            }
             
             // Initialize with basic package selected
             const basicCard = document.querySelector('.package-card[data-package="basic"]');
             if (basicCard) {
                 // Manually select the basic package instead of clicking
                 basicCard.classList.add('selected');
+                
+                // Show the package total
+                const basicTotal = basicCard.querySelector('.package-total');
+                if (basicTotal) basicTotal.style.display = 'block';
+                
                 const packageName = basicCard.querySelector('h3').textContent;
-                const packagePriceText = basicCard.querySelector('.price').textContent;
-                const monthlyPrice = parseFloat(packagePriceText.replace('$', '').replace('/month', ''));
+                const monthlyPrice = basePrices.basic;
                 
                 selectedPackage = {
                     type: 'basic',
@@ -596,32 +644,41 @@
                         // Hide expansion sections
                         const platforms = c.querySelector('.package-platforms');
                         const addons = c.querySelector('.package-addons');
+                        const total = c.querySelector('.package-total');
                         if (platforms) platforms.style.display = 'none';
                         if (addons) addons.style.display = 'none';
+                        if (total) total.style.display = 'none';
                     });
                     
                     // Select this card
                     this.classList.add('selected');
                     
+                    // Show package total for selected package
+                    const selectedTotal = this.querySelector('.package-total');
+                    if (selectedTotal) selectedTotal.style.display = 'block';
+                    
                     // Store selected package data
                     const packageType = this.dataset.package;
                     const packageName = this.querySelector('h3').textContent;
-                    const packagePriceText = this.querySelector('.price').textContent;
-                    const monthlyPrice = packageType === 'enterprise' ? 0 : 
-                                       parseFloat(packagePriceText.replace('$', '').replace('/month', ''));
                     
                     selectedPackage = {
                         type: packageType,
                         name: packageName,
-                        monthlyPrice: monthlyPrice,
-                        price: monthlyPrice * 12
+                        monthlyPrice: basePrices[packageType],
+                        price: basePrices[packageType] * 12
                     };
                     
-                    // Reset selections
-                    selectedPlatforms = [];
-                    selectedAddons = [];
+                    console.log(`Package selected: ${packageType}, base price: $${basePrices[packageType]}/month`);                    // Load saved selections for this package
+                    const savedPackageData = packageSelections[packageType] || { platforms: [], addons: [] };
+                    selectedPlatforms = [...savedPackageData.platforms];
+                    selectedAddons = [...savedPackageData.addons];
                     
-                    // Show expansion sections for social/pro packages
+                    console.log(`Loaded selections for ${packageType}: platforms [${selectedPlatforms.join(', ')}], addons: ${selectedAddons.length} items`);
+                    
+                    // Update visual state to match loaded selections
+                    updateVisualSelections();
+                    
+                    console.log('Visual state reset: all selections cleared');                    // Show expansion sections for social/pro packages
                     if (packageType === 'social' || packageType === 'pro') {
                         const platforms = this.querySelector('.package-platforms');
                         const addons = this.querySelector('.package-addons');
@@ -638,6 +695,7 @@
                     
                     // Update total
                     updateTotal();
+                    console.log('updateTotal called from package selection');
                     
                     // Enable continue button
                     const continueBtn = document.getElementById('continue-btn');
@@ -660,12 +718,16 @@
                 event.stopPropagation(); // Prevent event bubbling to package card
                 const platform = this.dataset.platform;
                 
+                console.log(`Platform ${platform} clicked, currently selected: ${this.classList.contains('selected')}`);
+                
                 if (this.classList.contains('selected')) {
                     this.classList.remove('selected');
                     selectedPlatforms = selectedPlatforms.filter(p => p !== platform);
+                    console.log(`Deselected ${platform}, platforms now: [${selectedPlatforms.join(', ')}]`);
                 } else {
                     this.classList.add('selected');
                     selectedPlatforms.push(platform);
+                    console.log(`Selected ${platform}, platforms now: [${selectedPlatforms.join(', ')}]`);
                 }
                 
                 // Show/hide extra cost indicators based on selection
@@ -694,6 +756,47 @@
                 }
                 
                 updateTotal();
+                console.log('updateTotal called from platform selection');
+                savePackageSelections();
+            }
+            
+            function updateVisualSelections() {
+                // Reset all visual selections first
+                document.querySelectorAll('.platform-option.selected').forEach(option => {
+                    option.classList.remove('selected');
+                });
+                document.querySelectorAll('.addon-card.selected').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // Apply current selections
+                selectedPlatforms.forEach(platform => {
+                    const option = document.querySelector(`.platform-option[data-platform="${platform}"]`);
+                    if (option) option.classList.add('selected');
+                });
+                
+                selectedAddons.forEach(addon => {
+                    const card = document.querySelector(`.addon-card[data-addon="${addon.id}"]`);
+                    if (card) card.classList.add('selected');
+                });
+                
+                console.log('Updated visual selections to match current data');
+            }
+            
+            function savePackageSelections() {
+                if (selectedPackage) {
+                    packageSelections[selectedPackage.type] = {
+                        platforms: [...selectedPlatforms],
+                        addons: [...selectedAddons]
+                    };
+                    
+                    try {
+                        localStorage.setItem('packageSelections', JSON.stringify(packageSelections));
+                        console.log(`Saved selections for ${selectedPackage.type}`);
+                    } catch (e) {
+                        console.log('Could not save selections');
+                    }
+                }
             }
             
             function setupAddonSelection(container) {
@@ -711,9 +814,12 @@
                 const addonPrice = parseFloat(this.dataset.price);
                 const addonName = this.querySelector('.addon-name').textContent;
                 
+                console.log(`Addon ${addonName} (${addonId}) clicked, price: $${addonPrice}, currently selected: ${this.classList.contains('selected')}`);
+                
                 if (this.classList.contains('selected')) {
                     this.classList.remove('selected');
                     selectedAddons = selectedAddons.filter(addon => addon.id !== addonId);
+                    console.log(`Deselected ${addonName}, addons now: ${selectedAddons.length} items`);
                 } else {
                     this.classList.add('selected');
                     selectedAddons.push({
@@ -721,44 +827,67 @@
                         name: addonName,
                         price: addonPrice
                     });
+                    console.log(`Selected ${addonName} (+$${addonPrice}), addons now: ${selectedAddons.length} items`);
                 }
                 
                 updateTotal();
+                savePackageSelections();
             }
             
             function updateTotal() {
                 if (!selectedPackage) {
-                    // Hide floating total when no package selected
-                    document.getElementById('floatingTotal').classList.remove('visible');
-                    document.getElementById('totalAmount').textContent = '$0';
-                    document.getElementById('floatingAmount').textContent = '$0';
+                    console.log('updateTotal called but no package selected');
                     return;
                 }
                 
+                console.log(`updateTotal called for ${selectedPackage.type}, base price: $${selectedPackage.monthlyPrice}`);
+                
                 let subtotal = selectedPackage.monthlyPrice;
+                console.log(`Starting subtotal: $${subtotal}`);
                 
                 // Add platform costs (1 included, additional $15 each)
                 if (selectedPlatforms.length > 1) {
                     const extraPlatforms = selectedPlatforms.length - 1;
-                    subtotal += extraPlatforms * 15;
+                    const platformCost = extraPlatforms * 15;
+                    subtotal += platformCost;
+                    console.log(`Added ${extraPlatforms} extra platforms: +$${platformCost}, subtotal now: $${subtotal}`);
+                } else {
+                    console.log(`No extra platforms selected (${selectedPlatforms.length} total)`);
                 }
                 
                 // Add addons
                 const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
                 const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
                 
-                subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
-                subtotal += negativeAddons.reduce((sum, addon) => sum + addon.price, 0);
+                const positiveTotal = positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
+                const negativeTotal = negativeAddons.reduce((sum, addon) => sum + addon.price, 0);
                 
-                // Update both total displays
-                document.getElementById('totalAmount').textContent = `$${subtotal}`;
-                document.getElementById('floatingAmount').textContent = `$${subtotal}`;
+                subtotal += positiveTotal;
+                subtotal += negativeTotal;
                 
-                // Show floating total
-                document.getElementById('floatingTotal').classList.add('visible');
+                console.log(`Addons: ${positiveAddons.length} positive (+$${positiveTotal}), ${negativeAddons.length} negative ($${negativeTotal}), subtotal now: $${subtotal}`);
+                
+                // Update price in selected package card
+                const priceElement = document.getElementById(`${selectedPackage.type}-price`);
+                if (priceElement) {
+                    priceElement.textContent = `$${subtotal}/month`;
+                    console.log(`Updated price element ${selectedPackage.type}-price to: $${subtotal}/month`);
+                } else {
+                    console.log(`Could not find price element ${selectedPackage.type}-price`);
+                }
             }
             
-            // Continue button handler
+            // Position floating total on window resize
+            window.addEventListener('resize', function() {
+                const floatingTotal = document.getElementById('floatingTotal');
+                if (floatingTotal && floatingTotal.classList.contains('visible')) {
+                    const deviceContainer = document.querySelector('.device-container');
+                    if (deviceContainer) {
+                        const containerRect = deviceContainer.getBoundingClientRect();
+                        floatingTotal.style.right = (window.innerWidth - containerRect.right + 20) + 'px';
+                    }
+                }
+            });
             const continueBtn = document.getElementById('continue-btn');
             if (continueBtn) {
                 continueBtn.addEventListener('click', function() {
