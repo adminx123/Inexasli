@@ -117,3 +117,7 @@ product/_social/
 product/_reply/
 product/collection/
 
+
+# Twitter webhook setup worker (contains sensitive credentials)
+product/setup-twitter-webhook.js
+product/wrangler-setup-webhook.toml
