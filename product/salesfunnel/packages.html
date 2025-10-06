@@ -271,9 +271,11 @@
     <div class="price" id="social-price">$149/month</div>
     <ul><li>Conversational AI</li><li>Platform selection</li></ul>
 
-    <!-- Platform Selection (shown when selected) -->
+    <!-- Package Customization (shown when selected) -->
     <div class="package-platforms" style="display: none;">
-      <h4>Select Your Platform</h4>
+      <h4>Customize Your Package</h4>
+      
+      <!-- Platform Selection -->
       <div class="platform-selection-grid">
         <div class="platform-option" data-platform="instagram">
           <i class="fab fa-instagram"></i>
@@ -288,11 +290,8 @@
           <span class="extra-cost-indicator">+$15</span>
         </div>
       </div>
-    </div>
-
-    <!-- Add-ons (shown when selected) -->
-    <div class="package-addons" style="display: none;">
-      <h4>Enhance Your Package</h4>
+      
+      <!-- Add-ons -->
       <div class="addons-grid">
         <!-- Extra Photos -->
         <div class="addon-card" data-addon="photos-10" data-price="50">
@@ -352,7 +351,7 @@
 
     <!-- Platform Selection (shown when selected) -->
     <div class="package-platforms" style="display: none;">
-      <h4>Select Your Platform</h4>
+      <h4>Customize Your Package</h4>
       <div class="platform-selection-grid">
         <div class="platform-option" data-platform="instagram">
           <i class="fab fa-instagram"></i>
@@ -367,11 +366,8 @@
           <span class="extra-cost-indicator">+$15</span>
         </div>
       </div>
-    </div>
 
-    <!-- Add-ons (shown when selected) -->
-    <div class="package-addons" style="display: none;">
-      <h4>Enhance Your Package</h4>
+      <!-- Add-ons -->
       <div class="addons-grid">
         <!-- Extra Photos -->
         <div class="addon-card" data-addon="photos-10" data-price="50">
@@ -431,7 +427,7 @@
 
     <!-- Platform Selection (shown when selected) -->
     <div class="package-platforms" style="display: none;">
-      <h4>Select Your Platform</h4>
+      <h4>Customize Your Package</h4>
       <div class="platform-selection-grid">
         <div class="platform-option" data-platform="instagram">
           <i class="fab fa-instagram"></i>
@@ -446,11 +442,8 @@
           <span class="extra-cost-indicator">+$15</span>
         </div>
       </div>
-    </div>
 
-    <!-- Add-ons (shown when selected) -->
-    <div class="package-addons" style="display: none;">
-      <h4>Enhance Your Package</h4>
+      <!-- Add-ons -->
       <div class="addons-grid">
         <!-- Extra Photos -->
         <div class="addon-card" data-addon="photos-10" data-price="50">
@@ -643,10 +636,8 @@
                         c.classList.remove('selected');
                         // Hide expansion sections
                         const platforms = c.querySelector('.package-platforms');
-                        const addons = c.querySelector('.package-addons');
                         const total = c.querySelector('.package-total');
                         if (platforms) platforms.style.display = 'none';
-                        if (addons) addons.style.display = 'none';
                         if (total) total.style.display = 'none';
                     });
                     
@@ -679,17 +670,13 @@
                     updateVisualSelections();
                     
                     console.log('Visual state reset: all selections cleared');                    // Show expansion sections for social/pro packages
-                    if (packageType === 'social' || packageType === 'pro') {
+                    if (packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
                         const platforms = this.querySelector('.package-platforms');
-                        const addons = this.querySelector('.package-addons');
                         if (platforms) {
                             platforms.style.display = 'block';
                             platforms.classList.remove('show-extra-cost'); // Reset extra cost indicators
                             setupPlatformSelection(platforms);
-                        }
-                        if (addons) {
-                            addons.style.display = 'block';
-                            setupAddonSelection(addons);
+                            setupAddonSelection(platforms); // Addons are now inside platforms
                         }
                     }
                     
