@@ -1,14 +1,66 @@
 // Step Navigation Handler for INEXASLI Sales Flow
 // Enables clicking on step indicators to navigate between pages
 
+// Load and inject step indicator component
+function loadStepIndicator() {
+    fetch('step-indicator.html')
+        .then(response => response.text())
+        .then(html => {
+            // Find where to inject the step indicator
+            const stepIndicatorPlaceholder = document.querySelector('.step-indicator-placeholder');
+            if (stepIndicatorPlaceholder) {
+                stepIndicatorPlaceholder.innerHTML = html;
+                // Update step states after injection
+                updateStepStates();
+            }
+        })
+        .catch(error => {
+            console.error('Error loading step indicator:', error);
+        });
+}
+
+// Update step states based on current page
+function updateStepStates() {
+    const currentPage = window.location.pathname.split('/').pop();
+    const stepPages = {
+        1: 'packages.html',
+        2: 'customization.html',
+        3: 'quote.html',
+        4: 'payment.html'
+    };
+    
+    let currentStep = 1;
+    Object.entries(stepPages).forEach(([step, page]) => {
+        if (currentPage === page) {
+            currentStep = parseInt(step);
+        }
+    });
+    
+    const steps = document.querySelectorAll('.step');
+    steps.forEach((step, index) => {
+        const stepNumber = index + 1;
+        
+        // Remove existing classes
+        step.classList.remove('completed', 'active', 'disabled');
+        
+        if (stepNumber < currentStep) {
+            step.classList.add('completed');
+        } else if (stepNumber === currentStep) {
+            step.classList.add('active');
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Load and inject step indicator
+    loadStepIndicator();
+    
     // Step navigation configuration
     const stepPages = {
         1: 'packages.html',
-        2: 'addons.html', 
-        3: 'customization.html',
-        4: 'quote.html',
-        5: 'payment.html'
+        2: 'customization.html',
+        3: 'quote.html',
+        4: 'payment.html'
     };
 
     // Get current page to determine which step we're on
@@ -81,10 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function getStepTitle(stepNumber) {
         const titles = {
             1: 'Choose Base Package',
-            2: 'Add Enhancements', 
-            3: 'Customize Content',
-            4: 'Review Order',
-            5: 'Payment'
+            2: 'Customize Content',
+            3: 'Review Order',
+            4: 'Payment'
         };
         return titles[stepNumber] || `Step ${stepNumber}`;
     }

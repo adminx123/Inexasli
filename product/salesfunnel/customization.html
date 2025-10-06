@@ -322,32 +322,7 @@
         <div class="setup-container">
         <div class="setup-header">
             <!-- Step Indicator -->
-            <div class="step-indicator">
-                <a href="packages.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number">1</div>
-                    <span>Base</span>
-                </a>
-                <a href="addons.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number">2</div>
-                    <span>Add</span>
-                </a>
-                <div class="step active">
-                    <div class="step-number">3</div>
-                    <span>Info</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <span>Review</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">5</div>
-                    <span>Pay</span>
-                </div>
-                <div class="step">
-                    <div class="step-number">6</div>
-                    <span>Link</span>
-                </div>
-            </div>
+            <div class="step-indicator-placeholder"></div>
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
@@ -460,7 +435,7 @@
         <button class="btn-continue-to-quote" onclick="submitCustomizationForm()" style="margin-top: 20px;">Continue to Quote</button>
         
         <!-- Back Button -->
-        <a href="addons.html" class="btn-back">← Back to Enhancements</a>
+        <a href="packages.html" class="btn-back">← Back to Packages</a>
         </div>
     </div>
     
@@ -627,7 +602,7 @@
     
     <script src="/utility/modal.js"></script>
     <script src="../legal/legalSocial.js"></script>
-    <script src="step-navigation.js"></script>
+    <script src="step-indicator.js"></script>
     <script type="module">
         import { BusinessFormPersistence } from './businessFormPersistence.js';
         import { setJSON } from '../../utility/setJSON.js';

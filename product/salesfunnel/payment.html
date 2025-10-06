@@ -37,27 +37,7 @@
 
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
             <!-- Step Indicator -->
-            <div class="step-indicator">
-                <a href="packages.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number">1</div>
-                    <span>Base</span>
-                </a>
-                <a href="addons.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number">2</div>
-                    <span>Add</span>
-                </a>
-                <a href="customization.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number">3</div>
-                    <span>Info</span>
-                </a>
-                <a href="quote.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number">4</div>
-                    <span>Review</span>
-                </a>
-                <div class="step active">
-                    <div class="step-number">5</div>
-                    <span>Pay</span>
-                </div>
+            <div class="step-indicator-placeholder"></div>
                 <div class="step">
                     <div class="step-number">6</div>
                     <span>Link</span>
@@ -356,7 +336,7 @@
     
     <script src="/utility/modal.js"></script>
     <script src="../legal/legalSocial.js"></script>
-    <script src="step-navigation.js"></script>
+    <script src="step-indicator.js"></script>
     
     <script type="module">
         import { getJSON } from '../../utility/getJSON.js';
