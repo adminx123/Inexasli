@@ -24,3 +24,10 @@ runtime vs deployment
 config injection vs fucniton injection
 
 Webhook (sent to me) vs Call (me send to something)
+
+
+Wizard flow - datain/out
+
+vs
+
+Dynamic Conversational flow - chat

@@ -121,3 +121,4 @@ product/collection/
 # Twitter webhook setup worker (contains sensitive credentials)
 product/setup-twitter-webhook.js
 product/wrangler-setup-webhook.toml
+product/architecture/saas-architecture.md
