@@ -532,6 +532,57 @@
             <p class="setup-subtitle">Tell us about your brand so we can create perfect content for your business</p>
         </div>
 
+        <!-- Main Configuration Section -->
+        <div class="card-style collapsed">
+            <h3 class="card-title">Main Configuration</h3>
+            <div class="card-content">
+            
+            <!-- Business Category Selection (shown for chat products) -->
+            <div class="form-group" id="businessCategoryGroup" style="display: none;">
+                <label class="form-label">Business Category *</label>
+                <div class="grid-selection" id="categoryGrid" data-type="single" data-name="businessCategory">
+                    <div class="grid-item" data-value="customer-facing">
+                        <div class="grid-item-text">Customer-Facing Operations</div>
+                    </div>
+                    <div class="grid-item" data-value="internal-productivity">
+                        <div class="grid-item-text">Internal Productivity and Operations</div>
+                    </div>
+                    <div class="grid-item" data-value="specialized-services">
+                        <div class="grid-item-text">Specialized Services</div>
+                    </div>
+                    <div class="grid-item" data-value="creative-entertainment">
+                        <div class="grid-item-text">Creative and Entertainment</div>
+                    </div>
+                    <div class="grid-item" data-value="industry-specific">
+                        <div class="grid-item-text">Industry-Specific</div>
+                    </div>
+                </div>
+                <input type="hidden" name="businessCategory" id="businessCategory" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="timezone">Timezone for Business Purposes *</label>
+                <select class="form-select" id="timezone" name="timezone" required>
+                    <option value="">Select your timezone</option>
+                    <option value="America/New_York">Eastern Time (ET)</option>
+                    <option value="America/Chicago">Central Time (CT)</option>
+                    <option value="America/Denver">Mountain Time (MT)</option>
+                    <option value="America/Los_Angeles">Pacific Time (PT)</option>
+                    <option value="America/Anchorage">Alaska Time (AKT)</option>
+                    <option value="Pacific/Honolulu">Hawaii Time (HT)</option>
+                    <option value="Europe/London">London (GMT)</option>
+                    <option value="Europe/Paris">Paris (CET)</option>
+                    <option value="Europe/Berlin">Berlin (CET)</option>
+                    <option value="Asia/Tokyo">Tokyo (JST)</option>
+                    <option value="Asia/Shanghai">Shanghai (CST)</option>
+                    <option value="Asia/Kolkata">India (IST)</option>
+                    <option value="Australia/Sydney">Sydney (AEST)</option>
+                    <option value="Pacific/Auckland">Auckland (NZST)</option>
+                </select>
+            </div>
+        </div>
+        </div>
+
         <!-- Social Media Configuration Section -->
         <div class="card-style collapsed" id="socialSection">
             <h3 class="card-title">Social Media Configuration</h3>
@@ -600,56 +651,7 @@
         </div>
         </div>
 
-        <!-- Main Configuration Section -->
-            <div class="card-style collapsed">
-                <h3 class="card-title">Main Configuration</h3>
-                <div class="card-content">
-                
-                <!-- Business Category Selection (shown for chat products) -->
-                <div class="form-group" id="businessCategoryGroup" style="display: none;">
-                    <label class="form-label">Business Category *</label>
-                    <div class="grid-selection" id="categoryGrid" data-type="single" data-name="businessCategory">
-                        <div class="grid-item" data-value="customer-facing">
-                            <div class="grid-item-text">Customer-Facing Operations</div>
-                        </div>
-                        <div class="grid-item" data-value="internal-productivity">
-                            <div class="grid-item-text">Internal Productivity and Operations</div>
-                        </div>
-                        <div class="grid-item" data-value="specialized-services">
-                            <div class="grid-item-text">Specialized Services</div>
-                        </div>
-                        <div class="grid-item" data-value="creative-entertainment">
-                            <div class="grid-item-text">Creative and Entertainment</div>
-                        </div>
-                        <div class="grid-item" data-value="industry-specific">
-                            <div class="grid-item-text">Industry-Specific</div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="businessCategory" id="businessCategory" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="timezone">Timezone for Business Purposes *</label>
-                    <select class="form-select" id="timezone" name="timezone" required>
-                        <option value="">Select your timezone</option>
-                        <option value="America/New_York">Eastern Time (ET)</option>
-                        <option value="America/Chicago">Central Time (CT)</option>
-                        <option value="America/Denver">Mountain Time (MT)</option>
-                        <option value="America/Los_Angeles">Pacific Time (PT)</option>
-                        <option value="America/Anchorage">Alaska Time (AKT)</option>
-                        <option value="Pacific/Honolulu">Hawaii Time (HT)</option>
-                        <option value="Europe/London">London (GMT)</option>
-                        <option value="Europe/Paris">Paris (CET)</option>
-                        <option value="Europe/Berlin">Berlin (CET)</option>
-                        <option value="Asia/Tokyo">Tokyo (JST)</option>
-                        <option value="Asia/Shanghai">Shanghai (CST)</option>
-                        <option value="Asia/Kolkata">India (IST)</option>
-                        <option value="Australia/Sydney">Sydney (AEST)</option>
-                        <option value="Pacific/Auckland">Auckland (NZST)</option>
-                    </select>
-                </div>
-            </div>
-            </div>            <!-- Conversational AI Configuration Section (Chat & Reply) -->
+        <!-- Conversational AI Configuration Section (Chat & Reply) -->
             <div class="card-style collapsed" id="conversationalSection" style="display: none;">
                 <h3 class="card-title">Conversational AI Configuration</h3>
                 <div class="card-content">
@@ -867,17 +869,43 @@
                     subtitle.textContent = `Configure your AI chat and reply assistants for your business needs (Customizing ${selectedPackage.name})`;
                 }
                 
-                // Show sections for conversational products
+                // Show/hide sections based on selected package
+                const packageType = selectedPackage.type; // 'basic', 'social', 'pro', 'enterprise'
+                
+                // Business category selection (shown for all packages since they all include chat)
                 const businessCategoryGroup = document.getElementById('businessCategoryGroup');
+                if (businessCategoryGroup) businessCategoryGroup.style.display = 'block';
+                
+                // Hide all config sections by default
                 const conversationalSection = document.getElementById('conversationalSection');
                 const replySection = document.getElementById('replySection');
                 const socialSection = document.getElementById('socialSection');
-                const title = document.querySelector('.setup-title');
                 
-                if (businessCategoryGroup) businessCategoryGroup.style.display = 'block';
-                if (conversationalSection) conversationalSection.style.display = 'block';
-                if (replySection) replySection.style.display = 'block';
-                if (socialSection) socialSection.style.display = 'block';
+                if (conversationalSection) conversationalSection.style.display = 'none';
+                if (replySection) replySection.style.display = 'none';
+                if (socialSection) socialSection.style.display = 'none';
+                
+                // Show sections based on package type
+                if (packageType === 'basic') {
+                    // Basic Chat: Show conversational AI config
+                    if (conversationalSection) conversationalSection.style.display = 'block';
+                } else if (packageType === 'social') {
+                    // Social Starter: Show social media + conversational AI config
+                    if (socialSection) socialSection.style.display = 'block';
+                    if (conversationalSection) conversationalSection.style.display = 'block';
+                } else if (packageType === 'pro') {
+                    // Pro Bundle: Show all configs
+                    if (socialSection) socialSection.style.display = 'block';
+                    if (conversationalSection) conversationalSection.style.display = 'block';
+                    if (replySection) replySection.style.display = 'block';
+                } else if (packageType === 'enterprise') {
+                    // Enterprise: Show all configs
+                    if (socialSection) socialSection.style.display = 'block';
+                    if (conversationalSection) conversationalSection.style.display = 'block';
+                    if (replySection) replySection.style.display = 'block';
+                }
+                
+                const title = document.querySelector('.setup-title');
                 if (title) title.textContent = 'Customize Your AI Automation';
             }
         });
