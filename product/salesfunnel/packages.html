@@ -267,6 +267,14 @@
             margin-top: 10px;
         }
         
+        .no-addons-message {
+            text-align: center;
+            color: #ccc;
+            font-size: 14px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+        
         /* Continue Button */
         .continue-container {
             text-align: center;
@@ -419,6 +427,13 @@
         <span class="feature-status">Included</span>
       </li>
     </ul>
+
+    <!-- Package Customization (shown when selected) -->
+    <div class="package-platforms" style="display: none;">
+      <h4>Customize Your Package</h4>
+      <p class="no-addons-message">No addons available for Basic Chat</p>
+    </div>
+
     <button class="package-continue-btn" style="display: none;">Continue to Customization</button>
   </div>
 
@@ -781,9 +796,17 @@
                 // Manually select the basic package instead of clicking
                 basicCard.classList.add('selected');
                 
-                // Show the package total
-                const basicTotal = basicCard.querySelector('.package-total');
-                if (basicTotal) basicTotal.style.display = 'block';
+                // Show the package platforms section for basic
+                const basicPlatforms = basicCard.querySelector('.package-platforms');
+                if (basicPlatforms) basicPlatforms.style.display = 'block';
+                
+                // Show the continue button for basic with delay
+                const basicContinueBtn = basicCard.querySelector('.package-continue-btn');
+                if (basicContinueBtn) {
+                    setTimeout(() => {
+                        basicContinueBtn.style.display = 'block';
+                    }, 300);
+                }
                 
                 const packageName = basicCard.querySelector('h3').textContent;
                 const monthlyPrice = basePrices.basic;
@@ -850,19 +873,26 @@
                     this.classList.add('selected');
                     packageCardsContainer.classList.add('has-selection');
                     
+                    // Store selected package data
+                    const packageType = this.dataset.package;
+                    const packageName = this.querySelector('h3').textContent;
+                    
                     // Show the continue button for this package
                     const packageContinueBtn = this.querySelector('.package-continue-btn');
                     if (packageContinueBtn) {
-                        packageContinueBtn.style.display = 'block';
+                        if (packageType === 'basic') {
+                            // Delay showing continue button for basic package to allow expansion to be visible first
+                            setTimeout(() => {
+                                packageContinueBtn.style.display = 'block';
+                            }, 300);
+                        } else {
+                            packageContinueBtn.style.display = 'block';
+                        }
                     }
                     
                     // Show package total for selected package
                     const selectedTotal = this.querySelector('.package-total');
                     if (selectedTotal) selectedTotal.style.display = 'block';
-                    
-                    // Store selected package data
-                    const packageType = this.dataset.package;
-                    const packageName = this.querySelector('h3').textContent;
                     
                     selectedPackage = {
                         type: packageType,
@@ -910,32 +940,35 @@
                         console.log(`Set default addons for ${packageType}: ${selectedAddons.map(a => a.id).join(', ')}`);
                     }
                     
-                    // Show expansion sections for social/pro packages
-                    if (packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
+                    // Show expansion sections for all packages
+                    if (packageType === 'basic' || packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
                         const platforms = this.querySelector('.package-platforms');
                         if (platforms) {
                             platforms.style.display = 'block';
-                            // Check if extra cost indicators should be shown based on current selection
-                            if (selectedPackage.type !== 'enterprise' && selectedPlatforms.length >= getIncludedPlatforms(selectedPackage.type)) {
-                                platforms.classList.add('show-extra-cost');
-                                // Show indicators on unselected platforms
-                                const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
-                                allIndicators.forEach(indicator => {
-                                    const platformOption = indicator.closest('.platform-option');
-                                    if (platformOption && !platformOption.classList.contains('selected')) {
-                                        indicator.style.opacity = '1';
-                                    }
-                                });
-                            } else {
-                                platforms.classList.remove('show-extra-cost');
-                                // Hide all indicators
-                                const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
-                                allIndicators.forEach(indicator => {
-                                    indicator.style.opacity = '0';
-                                });
+                            // Only setup platform and addon selection for packages that have them
+                            if (packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
+                                // Check if extra cost indicators should be shown based on current selection
+                                if (selectedPackage.type !== 'enterprise' && selectedPlatforms.length >= getIncludedPlatforms(selectedPackage.type)) {
+                                    platforms.classList.add('show-extra-cost');
+                                    // Show indicators on unselected platforms
+                                    const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
+                                    allIndicators.forEach(indicator => {
+                                        const platformOption = indicator.closest('.platform-option');
+                                        if (platformOption && !platformOption.classList.contains('selected')) {
+                                            indicator.style.opacity = '1';
+                                        }
+                                    });
+                                } else {
+                                    platforms.classList.remove('show-extra-cost');
+                                    // Hide all indicators
+                                    const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
+                                    allIndicators.forEach(indicator => {
+                                        indicator.style.opacity = '0';
+                                    });
+                                }
+                                setupPlatformSelection(platforms);
+                                setupAddonSelection(platforms); // Addons are now inside platforms
                             }
-                            setupPlatformSelection(platforms);
-                            setupAddonSelection(platforms); // Addons are now inside platforms
                         }
                     }
                     
