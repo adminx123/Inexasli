@@ -533,8 +533,10 @@
         </div>
 
         <!-- Main Configuration Section -->
-        <div class="card-style collapsed">
-            <h3 class="card-title">Main Configuration</h3>
+        <div class="package-card collapsed" data-section="main">
+            <div class="package-header">
+                <h3 class="card-title">Main Configuration</h3>
+            </div>
             <div class="card-content">
             
             <!-- Business Category Selection (shown for chat products) -->
@@ -584,11 +586,11 @@
         </div>
 
         <!-- Social Media Configuration Section -->
-        <div class="card-style collapsed" id="socialSection">
-            <h3 class="card-title">Social Media Configuration</h3>
-            <div class="card-content">
-
-            <div class="form-group">
+        <div class="package-card collapsed" id="socialSection" data-section="social">
+            <div class="package-header">
+                <h3 class="card-title">Social Media Configuration</h3>
+            </div>
+            <div class="card-content">            <div class="form-group">
                 <label class="form-label">Posting Schedule *</label>
                 <div class="posting-schedule-builder">
                     <div class="schedule-header">
@@ -652,8 +654,10 @@
         </div>
 
         <!-- Conversational AI Configuration Section (Chat & Reply) -->
-            <div class="card-style collapsed" id="conversationalSection" style="display: none;">
-                <h3 class="card-title">Conversational AI Configuration</h3>
+            <div class="package-card collapsed" id="conversationalSection" data-section="conversational" style="display: none;">
+                <div class="package-header">
+                    <h3 class="card-title">Conversational AI Configuration</h3>
+                </div>
                 <div class="card-content">
 
                 <div class="form-group">
@@ -748,8 +752,10 @@
             </div>
 
             <!-- Reply Logic Configuration Section -->
-            <div class="card-style collapsed" id="replySection" style="display: none;">
-                <h3 class="card-title">Social Media Reply Configuration</h3>
+            <div class="package-card collapsed" id="replySection" style="display: none;">
+                <div class="package-header">
+                    <h3 class="card-title">Social Media Reply Configuration</h3>
+                </div>
                 <div class="card-content">
 
                 <div class="form-group">
@@ -765,7 +771,8 @@
                 </div>
             </div>
             </div>
-            </div>            <div class="consultation-box">
+
+   <div class="consultation-box">
                 <div class="consultation-text">
                     <strong>Want personalized consultation?</strong><br>
                     Schedule a 15-minute brand strategy call for enhanced customization
@@ -774,12 +781,19 @@
                     📞 Schedule Call (Optional)
                 </a>
             </div>
-        
+
+ 
         <!-- Continue Button -->
         <button class="btn-continue-to-quote" onclick="submitCustomizationForm()" style="margin-top: 20px;">Continue to Quote</button>
         
+
         <!-- Back Button -->
         <a href="packages.html" class="btn-back">← Back to Packages</a>
+
+            </div>         
+            
+         
+       
     </div>
     
     <!-- Legal Footer -->
@@ -927,7 +941,7 @@
                 title.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    const section = this.closest('.card-style');
+                    const section = this.closest('.package-card');
                     section.classList.toggle('collapsed');
                 });
             });

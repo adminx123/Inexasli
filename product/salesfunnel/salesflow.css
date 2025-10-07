@@ -180,8 +180,26 @@ p {
     backdrop-filter: blur(15px);
     position: relative;
     transition: all 0.3s ease;
-    text-align: center;
+    text-align: left;
     cursor: pointer;
+    max-height: 2000px;
+    margin-bottom: 20px;
+}
+
+.package-card:hover {
+    transform: translateY(-8px);
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.4);
+}
+
+.package-card.collapsed {
+    max-height: 60px;
+    padding-bottom: 0;
+}
+
+.package-card.collapsed .card-content {
+    display: none;
 }
 
 .package-card:hover {
@@ -199,6 +217,16 @@ p {
 .package-card.most-popular:hover {
     background: rgba(16, 185, 129, 0.15);
     border-color: #10b981;
+}
+
+.package-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.package-header .card-title {
+    margin-bottom: 0;
 }
 
 .package-badge {
