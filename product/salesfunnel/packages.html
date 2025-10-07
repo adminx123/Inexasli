@@ -110,17 +110,32 @@
         .package-cards {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
+            gap: 10px;
+            margin: 15px 0;
+            align-items: center;
+        }
+        .package-cards.has-selection .package-card:not(.selected) {
+            filter: blur(2px);
+            opacity: 0.6;
+            transform: scale(0.98);
+            transition: all 0.3s ease;
+        }
+        .package-cards:not(.has-selection) .package-card {
+            filter: none;
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.3s ease;
         }
         .package-card {
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
-            padding: 15px;
+            padding: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             background: rgba(255,255,255,0.05);
             text-align: center;
+            width: 100%;
+            max-width: 400px;
         }
         .package-card:hover {
             border-color: rgba(16, 185, 129, 0.5);
@@ -130,30 +145,66 @@
             border-color: #10b981;
             background: rgba(16, 185, 129, 0.1);
         }
-        .package-card h3 {
-            margin: 0 0 5px 0;
-            color: #fff;
+        
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
         }
-        .package-card p {
-            margin: 0 0 10px 0;
-            color: #ccc;
-            font-size: 14px;
+        
+        .package-card h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 16px;
         }
         .package-card .price {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #10b981;
-            margin-bottom: 10px;
+            margin: 0;
+        }
+        .package-card p {
+            margin: 0 0 6px 0;
+            color: #ccc;
+            font-size: 13px;
         }
         .package-card ul {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            margin-top: 10px;
         }
-        .package-card li {
-            color: #ccc;
-            font-size: 14px;
-            margin: 5px 0;
+        .package-card li, .core-feature {
+            display: block;
+            position: relative;
+            color: #10b981;
+            font-size: 12px;
+            margin: 0;
+            background: rgba(16, 185, 129, 0.25);
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: left;
+            border: 1px solid #10b981;
+            cursor: default;
+        }
+
+        .feature-name {
+            color: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .feature-status {
+            color: #10b981;
+            font-size: 11px;
+            font-weight: bold;
+            float: right;
+            white-space: nowrap;
         }
         
         /* Package Expansion Sections */
@@ -221,6 +272,101 @@
             text-align: center;
             margin: 30px 0 20px 0;
         }
+
+        /* Addon Cards */
+        .addons-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .addon-card {
+            display: block;
+            position: relative;
+            color: #ccc;
+            font-size: 12px;
+            margin: 0;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            text-align: left;
+        }
+
+        .addon-card:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(16, 185, 129, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .addon-card.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #fff;
+        }
+
+        .addon-card.included {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: #10b981;
+            color: #10b981;
+        }
+
+        .addon-name {
+            color: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .addon-price {
+            color: #10b981;
+            font-size: 11px;
+            font-weight: bold;
+            float: right;
+            white-space: nowrap;
+        }
+
+        .addon-card.discount-addon .addon-price {
+            color: #ff6b6b;
+        }
+
+        .addon-card.included .addon-price {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+
+        .package-continue-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .package-continue-btn:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .package-continue-btn:disabled {
+            background: rgba(255,255,255,0.1);
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -228,7 +374,7 @@
         <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
-    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: relative; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; z-index: 1;">
             
             <!-- Currency Selector -->
             <div class="currency-selector-container">
@@ -259,17 +405,38 @@
 <!-- Package Cards -->
 <div class="package-cards">
   <div class="package-card selected" data-package="basic">
-    <h3>Basic Chat</h3>
-    <p>AI chat widget for websites</p>
-    <div class="price" id="basic-price">$99/month</div>
-    <ul><li>Conversational AI</li><li>Easy embed</li></ul>
+    <div class="package-header">
+      <h3>Basic Chat</h3>
+      <div class="price" id="basic-price">$99/month</div>
+    </div>
+    <ul>
+      <li class="core-feature included">
+        <span class="feature-name">AI chat widget for websites</span>
+        <span class="feature-status">Included</span>
+      </li>
+      <li class="core-feature included">
+        <span class="feature-name">Easy embed</span>
+        <span class="feature-status">Included</span>
+      </li>
+    </ul>
+    <button class="package-continue-btn" style="display: none;">Continue to Customization</button>
   </div>
 
   <div class="package-card" data-package="social">
-    <h3>Social Starter</h3>
-    <p>AI chat + platform automation</p>
-    <div class="price" id="social-price">$149/month</div>
-    <ul><li>Conversational AI</li><li>Platform selection</li></ul>
+    <div class="package-header">
+      <h3>Social Starter</h3>
+      <div class="price" id="social-price">$149/month</div>
+    </div>
+    <ul>
+      <li class="core-feature included">
+        <span class="feature-name">AI chat + AI-generated social content</span>
+        <span class="feature-status">Included</span>
+      </li>
+      <li class="core-feature included">
+        <span class="feature-name">1 platform included</span>
+        <span class="feature-status">Included</span>
+      </li>
+    </ul>
 
     <!-- Package Customization (shown when selected) -->
     <div class="package-platforms" style="display: none;">
@@ -295,59 +462,64 @@
       <div class="addons-grid">
         <!-- Extra Photos -->
         <div class="addon-card" data-addon="photos-10" data-price="50">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+10 Photo Storage</div>
-          <div class="addon-description">Additional capacity for up to 10 more photos</div>
-          <div class="addon-price">+$50</div>
+          <span class="addon-name">+10 Photo Storage</span>
+          <span class="addon-price">+$50</span>
         </div>
 
         <!-- Extra Videos -->
         <div class="addon-card" data-addon="videos-5" data-price="75">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+5 Video Storage</div>
-          <div class="addon-description">Additional capacity for up to 5 more videos</div>
-          <div class="addon-price">+$75</div>
+          <span class="addon-name">+5 Video Storage</span>
+          <span class="addon-price">+$75</span>
         </div>
 
         <!-- Extra Iterations -->
         <div class="addon-card" data-addon="iterations-extra" data-price="150">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+10 Content Refinements</div>
-          <div class="addon-description">Additional content refinement rounds</div>
-          <div class="addon-price">+$150</div>
+          <span class="addon-name">+10 Content Refinements</span>
+          <span class="addon-price">+$150</span>
         </div>
 
         <!-- AI Content Generation -->
         <div class="addon-card" data-addon="ai-content-generation" data-price="200">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">AI Content Generation</div>
-          <div class="addon-description">AI-powered content creation</div>
-          <div class="addon-price">+$200</div>
+          <span class="addon-name">AI Content Generation</span>
+          <span class="addon-price">+$200</span>
+        </div>
+
+        <!-- White-label Chat -->
+        <div class="addon-card" data-addon="white-label-chat" data-price="150">
+          <span class="addon-name">White-label Chat</span>
+          <span class="addon-price">+$150</span>
         </div>
 
         <!-- Discount Options -->
         <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-25">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">Basic Scheduling Only</div>
-          <div class="addon-description">Simple posting without analytics</div>
-          <div class="addon-price">-$25</div>
+          <span class="addon-name">Basic Scheduling Only</span>
+          <span class="addon-price">-$25</span>
         </div>
 
         <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-15">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">Reduced Posting Frequency</div>
-          <div class="addon-description">Post 3x per week instead of daily</div>
-          <div class="addon-price">-$15</div>
+          <span class="addon-name">Reduced Posting Frequency</span>
+          <span class="addon-price">-$15</span>
         </div>
       </div>
     </div>
+    <button class="package-continue-btn" style="display: none;">Continue to Customization</button>
   </div>
 
   <div class="package-card" data-package="pro">
-    <h3>Pro Bundle</h3>
-    <p>Everything + advanced features</p>
-    <div class="price" id="pro-price">$299/month</div>
-    <ul><li>All AI features</li><li>All platforms</li><li>Advanced analytics</li></ul>
+    <div class="package-header">
+      <h3>Pro Bundle</h3>
+      <div class="price" id="pro-price">$299/month</div>
+    </div>
+    <ul>
+      <li class="core-feature included">
+        <span class="feature-name">AI chat + message replies + AI social content</span>
+        <span class="feature-status">Included</span>
+      </li>
+      <li class="core-feature included">
+        <span class="feature-name">2 platforms included</span>
+        <span class="feature-status">Included</span>
+      </li>
+    </ul>
 
     <!-- Platform Selection (shown when selected) -->
     <div class="package-platforms" style="display: none;">
@@ -371,59 +543,63 @@
       <div class="addons-grid">
         <!-- Extra Photos -->
         <div class="addon-card" data-addon="photos-10" data-price="50">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+10 Photo Storage</div>
-          <div class="addon-description">Additional capacity for up to 10 more photos</div>
-          <div class="addon-price">+$50</div>
+          <span class="addon-name">+10 Photo Storage</span>
+          <span class="addon-price">+$50</span>
         </div>
 
         <!-- Extra Videos -->
         <div class="addon-card" data-addon="videos-5" data-price="75">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+5 Video Storage</div>
-          <div class="addon-description">Additional capacity for up to 5 more videos</div>
-          <div class="addon-price">+$75</div>
+          <span class="addon-name">+5 Video Storage</span>
+          <span class="addon-price">+$75</span>
         </div>
 
         <!-- Extra Iterations -->
         <div class="addon-card" data-addon="iterations-extra" data-price="150">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+10 Content Refinements</div>
-          <div class="addon-description">Additional content refinement rounds</div>
-          <div class="addon-price">+$150</div>
+          <span class="addon-name">+10 Content Refinements</span>
+          <span class="addon-price">+$150</span>
         </div>
 
         <!-- AI Content Generation -->
         <div class="addon-card" data-addon="ai-content-generation" data-price="200">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">AI Content Generation</div>
-          <div class="addon-description">AI-powered content creation</div>
-          <div class="addon-price">+$200</div>
+          <span class="addon-name">AI Content Generation</span>
+          <span class="addon-price">+$200</span>
+        </div>
+
+        <!-- White-label Chat -->
+        <div class="addon-card" data-addon="white-label-chat" data-price="150">
+          <span class="addon-name">White-label Chat</span>
+          <span class="addon-price">+$150</span>
         </div>
 
         <!-- Discount Options -->
         <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-25">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">Basic Scheduling Only</div>
-          <div class="addon-description">Simple posting without analytics</div>
-          <div class="addon-price">-$25</div>
+          <span class="addon-name">Basic Scheduling Only</span>
+          <span class="addon-price">-$25</span>
         </div>
 
         <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-15">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">Reduced Posting Frequency</div>
-          <div class="addon-description">Post 3x per week instead of daily</div>
-          <div class="addon-price">-$15</div>
+          <span class="addon-name">Reduced Posting Frequency</span>
+          <span class="addon-price">-$15</span>
         </div>
       </div>
     </div>
   </div>
 
-    <div class="package-card" data-package="enterprise">
-    <h3>Enterprise</h3>
-    <p>Custom solutions + white-label</p>
-    <div class="price" id="enterprise-price">$499/month</div>
-    <ul><li>Custom AI models</li><li>White-label solution</li><li>Dedicated support</li></ul>
+  <div class="package-card" data-package="enterprise">
+    <div class="package-header">
+      <h3>Enterprise</h3>
+      <div class="price" id="enterprise-price">$499/month</div>
+    </div>
+    <ul>
+      <li class="core-feature included">
+        <span class="feature-name">Full AI suite + all platforms + white-label</span>
+        <span class="feature-status">Included</span>
+      </li>
+      <li class="core-feature included">
+        <span class="feature-name">Dedicated support</span>
+        <span class="feature-status">Included</span>
+      </li>
+    </ul>
 
     <!-- Platform Selection (shown when selected) -->
     <div class="package-platforms" style="display: none;">
@@ -447,56 +623,52 @@
       <div class="addons-grid">
         <!-- Extra Photos -->
         <div class="addon-card" data-addon="photos-10" data-price="50">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+10 Photo Storage</div>
-          <div class="addon-description">Additional capacity for up to 10 more photos</div>
-          <div class="addon-price">+$50</div>
+          <span class="addon-name">+10 Photo Storage</span>
+          <span class="addon-price">+$50</span>
         </div>
 
         <!-- Extra Videos -->
         <div class="addon-card" data-addon="videos-5" data-price="75">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+5 Video Storage</div>
-          <div class="addon-description">Additional capacity for up to 5 more videos</div>
-          <div class="addon-price">+$75</div>
+          <span class="addon-name">+5 Video Storage</span>
+          <span class="addon-price">+$75</span>
         </div>
 
         <!-- Extra Iterations -->
         <div class="addon-card" data-addon="iterations-extra" data-price="150">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">+10 Content Refinements</div>
-          <div class="addon-description">Additional content refinement rounds</div>
-          <div class="addon-price">+$150</div>
+          <span class="addon-name">+10 Content Refinements</span>
+          <span class="addon-price">+$150</span>
         </div>
 
         <!-- AI Content Generation -->
         <div class="addon-card" data-addon="ai-content-generation" data-price="200">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">AI Content Generation</div>
-          <div class="addon-description">AI-powered content creation</div>
-          <div class="addon-price">+$200</div>
+          <span class="addon-name">AI Content Generation</span>
+          <span class="addon-price">+$200</span>
+        </div>
+
+        <!-- White-label Chat -->
+        <div class="addon-card" data-addon="white-label-chat" data-price="150">
+          <span class="addon-name">White-label Chat</span>
+          <span class="addon-price">+$150</span>
         </div>
 
         <!-- Discount Options -->
         <div class="addon-card discount-addon" data-addon="basic-scheduling" data-price="-25">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">Basic Scheduling Only</div>
-          <div class="addon-description">Simple posting without analytics</div>
-          <div class="addon-price">-$25</div>
+          <span class="addon-name">Basic Scheduling Only</span>
+          <span class="addon-price">-$25</span>
         </div>
 
         <div class="addon-card discount-addon" data-addon="reduced-frequency" data-price="-15">
-          <div class="addon-selected-indicator">✓</div>
-          <div class="addon-name">Reduced Posting Frequency</div>
-          <div class="addon-description">Post 3x per week instead of daily</div>
-          <div class="addon-price">-$15</div>
+          <span class="addon-name">Reduced Posting Frequency</span>
+          <span class="addon-price">-$15</span>
         </div>
       </div>
     </div>
+    <button class="package-continue-btn" style="display: none;">Continue to Customization</button>
   </div>
+</div>
 
 <!-- Continue Button -->
-<div class="continue-container">
+<div class="continue-container" style="display: none;">
   <button id="continue-btn" class="btn-continue-to-quote" disabled>Continue to Customization</button>
 </div>
 
@@ -555,8 +727,6 @@
                 setTimeout(() => {
                     splash.style.display = 'none';
                     main.style.position = 'static';
-                    main.style.left = 'auto';
-                    main.style.transform = 'none';
                 }, 1200);
             }, 1500); // Show splash for 1.5 seconds
         });
@@ -579,6 +749,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const packageCards = document.querySelectorAll('.package-card');
+            const packageCardsContainer = document.querySelector('.package-cards');
             
             let selectedPackage = null;
             let selectedAddons = [];
@@ -631,7 +802,36 @@
                 card.addEventListener('click', function() {
                     const clickedPackageType = this.dataset.package;
                     
-                    // Remove selected class from all cards
+                    // Check if this package is already selected (toggle behavior)
+                    if (this.classList.contains('selected')) {
+                        // Collapse: remove selection and hide sections
+                        this.classList.remove('selected');
+                        packageCardsContainer.classList.remove('has-selection');
+                        const platforms = this.querySelector('.package-platforms');
+                        const total = this.querySelector('.package-total');
+                        if (platforms) platforms.style.display = 'none';
+                        if (total) total.style.display = 'none';
+                        
+                        // Clear selections
+                        selectedPackage = null;
+                        selectedPlatforms = [];
+                        selectedAddons = [];
+                        updateVisualSelections();
+                        updateTotal();
+                        
+                        // Hide all package continue buttons
+                        document.querySelectorAll('.package-continue-btn').forEach(btn => {
+                            btn.style.display = 'none';
+                        });
+                        
+                        // Hide continue button
+                        const continueBtn = document.getElementById('continue-btn');
+                        if (continueBtn) continueBtn.disabled = true;
+                        
+                        return; // Exit early - we're collapsing
+                    }
+                    
+                    // Expand: Remove selected class from all cards and hide their sections
                     packageCards.forEach(c => {
                         c.classList.remove('selected');
                         // Hide expansion sections
@@ -641,8 +841,20 @@
                         if (total) total.style.display = 'none';
                     });
                     
+                    // Hide all continue buttons
+                    document.querySelectorAll('.package-continue-btn').forEach(btn => {
+                        btn.style.display = 'none';
+                    });
+                    
                     // Select this card
                     this.classList.add('selected');
+                    packageCardsContainer.classList.add('has-selection');
+                    
+                    // Show the continue button for this package
+                    const packageContinueBtn = this.querySelector('.package-continue-btn');
+                    if (packageContinueBtn) {
+                        packageContinueBtn.style.display = 'block';
+                    }
                     
                     // Show package total for selected package
                     const selectedTotal = this.querySelector('.package-total');
@@ -669,12 +881,59 @@
                     // Update visual state to match loaded selections
                     updateVisualSelections();
                     
-                    console.log('Visual state reset: all selections cleared');                    // Show expansion sections for social/pro packages
+                    console.log('Visual state reset: all selections cleared');                    // Set default addon selections based on package type
+                    if (selectedAddons.length === 0) { // Only set defaults if no saved selections
+                        if (packageType === 'social') {
+                            // Social Starter includes basic storage
+                            selectedAddons = [
+                                { id: 'photos-10', price: 50 },
+                                { id: 'videos-5', price: 75 }
+                            ];
+                        } else if (packageType === 'pro') {
+                            // Pro includes storage + content refinements + AI content
+                            selectedAddons = [
+                                { id: 'photos-10', price: 50 },
+                                { id: 'videos-5', price: 75 },
+                                { id: 'iterations-extra', price: 150 },
+                                { id: 'ai-content-generation', price: 200 }
+                            ];
+                        } else if (packageType === 'enterprise') {
+                            // Enterprise includes everything
+                            selectedAddons = [
+                                { id: 'photos-10', price: 50 },
+                                { id: 'videos-5', price: 75 },
+                                { id: 'iterations-extra', price: 150 },
+                                { id: 'ai-content-generation', price: 200 },
+                                { id: 'white-label-chat', price: 150 }
+                            ];
+                        }
+                        console.log(`Set default addons for ${packageType}: ${selectedAddons.map(a => a.id).join(', ')}`);
+                    }
+                    
+                    // Show expansion sections for social/pro packages
                     if (packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
                         const platforms = this.querySelector('.package-platforms');
                         if (platforms) {
                             platforms.style.display = 'block';
-                            platforms.classList.remove('show-extra-cost'); // Reset extra cost indicators
+                            // Check if extra cost indicators should be shown based on current selection
+                            if (selectedPackage.type !== 'enterprise' && selectedPlatforms.length >= getIncludedPlatforms(selectedPackage.type)) {
+                                platforms.classList.add('show-extra-cost');
+                                // Show indicators on unselected platforms
+                                const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
+                                allIndicators.forEach(indicator => {
+                                    const platformOption = indicator.closest('.platform-option');
+                                    if (platformOption && !platformOption.classList.contains('selected')) {
+                                        indicator.style.opacity = '1';
+                                    }
+                                });
+                            } else {
+                                platforms.classList.remove('show-extra-cost');
+                                // Hide all indicators
+                                const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
+                                allIndicators.forEach(indicator => {
+                                    indicator.style.opacity = '0';
+                                });
+                            }
                             setupPlatformSelection(platforms);
                             setupAddonSelection(platforms); // Addons are now inside platforms
                         }
@@ -691,6 +950,20 @@
                     }
                 });
             });
+            
+            function getIncludedPlatforms(packageType) {
+                if (packageType === 'social') return 1;
+                if (packageType === 'pro') return 2;
+                if (packageType === 'enterprise') return 3;
+                return 0;
+            }
+            
+            function getIncludedAddons(packageType) {
+                if (packageType === 'social') return ['photos-10', 'videos-5'];
+                if (packageType === 'pro') return ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation'];
+                if (packageType === 'enterprise') return ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation', 'white-label-chat'];
+                return [];
+            }
             
             function setupPlatformSelection(container) {
                 const platformOptions = container.querySelectorAll('.platform-option');
@@ -717,24 +990,22 @@
                     console.log(`Selected ${platform}, platforms now: [${selectedPlatforms.join(', ')}]`);
                 }
                 
-                // Show/hide extra cost indicators based on selection
+                // Show/hide extra cost indicators based on selection and package type
                 const platformsContainer = this.closest('.package-platforms');
-                if (platformsContainer) {
-                    if (selectedPlatforms.length > 0) {
+                if (platformsContainer && selectedPackage.type !== 'enterprise') { // Enterprise includes all platforms
+                    if (selectedPlatforms.length >= getIncludedPlatforms(selectedPackage.type)) {
                         platformsContainer.classList.add('show-extra-cost');
-                        // Directly show indicators on unselected platforms
+                        // Show indicators on ALL unselected platforms when at/beyond limit
                         const allIndicators = platformsContainer.querySelectorAll('.extra-cost-indicator');
                         allIndicators.forEach(indicator => {
                             const platformOption = indicator.closest('.platform-option');
                             if (platformOption && !platformOption.classList.contains('selected')) {
                                 indicator.style.opacity = '1';
-                            } else if (platformOption && platformOption.classList.contains('selected')) {
-                                indicator.style.opacity = '0';
                             }
                         });
                     } else {
                         platformsContainer.classList.remove('show-extra-cost');
-                        // Hide all indicators
+                        // Hide all indicators when under limit
                         const allIndicators = platformsContainer.querySelectorAll('.extra-cost-indicator');
                         allIndicators.forEach(indicator => {
                             indicator.style.opacity = '0';
@@ -753,7 +1024,7 @@
                     option.classList.remove('selected');
                 });
                 document.querySelectorAll('.addon-card.selected').forEach(card => {
-                    card.classList.remove('selected');
+                    card.classList.remove('selected', 'included');
                 });
                 
                 // Apply current selections
@@ -764,7 +1035,14 @@
                 
                 selectedAddons.forEach(addon => {
                     const card = document.querySelector(`.addon-card[data-addon="${addon.id}"]`);
-                    if (card) card.classList.add('selected');
+                    if (card) {
+                        card.classList.add('selected');
+                        // Mark as included if it's part of the package
+                        const includedAddons = getIncludedAddons(selectedPackage.type);
+                        if (includedAddons.includes(addon.id)) {
+                            card.classList.add('included');
+                        }
+                    }
                 });
                 
                 console.log('Updated visual selections to match current data');
@@ -788,10 +1066,37 @@
             
             function setupAddonSelection(container) {
                 const addonCards = container.querySelectorAll('.addon-card');
+                const includedAddons = getIncludedAddons(selectedPackage.type);
+                
                 addonCards.forEach(card => {
-                    // Remove existing listeners
-                    card.removeEventListener('click', handleAddonClick);
-                    card.addEventListener('click', handleAddonClick);
+                    const addonId = card.dataset.addon;
+                    const priceElement = card.querySelector('.addon-price');
+                    
+                    // Show all addon cards
+                    card.style.display = 'block';
+                    
+                    if (includedAddons.includes(addonId)) {
+                        // Mark as included - selected and strikethrough price
+                        card.classList.add('selected', 'included');
+                        if (priceElement) {
+                            priceElement.style.textDecoration = 'line-through';
+                            priceElement.style.opacity = '0.5';
+                        }
+                        // Remove click listener for included addons
+                        card.removeEventListener('click', handleAddonClick);
+                        card.style.cursor = 'default';
+                    } else {
+                        // Regular addon - remove included styling and add click listener
+                        card.classList.remove('included');
+                        if (priceElement) {
+                            priceElement.style.textDecoration = 'none';
+                            priceElement.style.opacity = '1';
+                        }
+                        card.style.cursor = 'pointer';
+                        // Remove existing listeners first
+                        card.removeEventListener('click', handleAddonClick);
+                        card.addEventListener('click', handleAddonClick);
+                    }
                 });
             }
             
@@ -800,6 +1105,11 @@
                 const addonId = this.dataset.addon;
                 const addonPrice = parseFloat(this.dataset.price);
                 const addonName = this.querySelector('.addon-name').textContent;
+                
+                // Don't allow clicking on included addons
+                if (this.classList.contains('included')) {
+                    return;
+                }
                 
                 console.log(`Addon ${addonName} (${addonId}) clicked, price: $${addonPrice}, currently selected: ${this.classList.contains('selected')}`);
                 
@@ -832,19 +1142,38 @@
                 let subtotal = selectedPackage.monthlyPrice;
                 console.log(`Starting subtotal: $${subtotal}`);
                 
-                // Add platform costs (1 included, additional $15 each)
-                if (selectedPlatforms.length > 1) {
-                    const extraPlatforms = selectedPlatforms.length - 1;
+                // Add platform costs based on package type
+                let includedPlatforms = 0;
+                if (selectedPackage.type === 'social') {
+                    includedPlatforms = 1; // Social Starter includes 1 platform
+                } else if (selectedPackage.type === 'pro') {
+                    includedPlatforms = 2; // Pro includes 2 platforms
+                } else if (selectedPackage.type === 'enterprise') {
+                    includedPlatforms = 3; // Enterprise includes all platforms
+                }
+                
+                if (selectedPlatforms.length > includedPlatforms) {
+                    const extraPlatforms = selectedPlatforms.length - includedPlatforms;
                     const platformCost = extraPlatforms * 15;
                     subtotal += platformCost;
                     console.log(`Added ${extraPlatforms} extra platforms: +$${platformCost}, subtotal now: $${subtotal}`);
                 } else {
-                    console.log(`No extra platforms selected (${selectedPlatforms.length} total)`);
+                    console.log(`No extra platforms needed (${selectedPlatforms.length}/${includedPlatforms} included)`);
                 }
                 
-                // Add addons
-                const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
-                const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
+                // Add addons (only charge for addons not included in package)
+                let includedAddons = [];
+                if (selectedPackage.type === 'social') {
+                    includedAddons = ['photos-10', 'videos-5'];
+                } else if (selectedPackage.type === 'pro') {
+                    includedAddons = ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation'];
+                } else if (selectedPackage.type === 'enterprise') {
+                    includedAddons = ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation', 'white-label-chat'];
+                }
+                
+                const chargeableAddons = selectedAddons.filter(addon => !includedAddons.includes(addon.id));
+                const positiveAddons = chargeableAddons.filter(addon => addon.price > 0);
+                const negativeAddons = chargeableAddons.filter(addon => addon.price < 0);
                 
                 const positiveTotal = positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
                 const negativeTotal = negativeAddons.reduce((sum, addon) => sum + addon.price, 0);
@@ -852,7 +1181,8 @@
                 subtotal += positiveTotal;
                 subtotal += negativeTotal;
                 
-                console.log(`Addons: ${positiveAddons.length} positive (+$${positiveTotal}), ${negativeAddons.length} negative ($${negativeTotal}), subtotal now: $${subtotal}`);
+                console.log(`Addons: ${positiveAddons.length} chargeable positive (+$${positiveTotal}), ${negativeAddons.length} chargeable negative ($${negativeTotal}), subtotal now: $${subtotal}`);
+                console.log(`Included addons (free): ${includedAddons.join(', ')}`);
                 
                 // Update price in selected package card
                 const priceElement = document.getElementById(`${selectedPackage.type}-price`);
