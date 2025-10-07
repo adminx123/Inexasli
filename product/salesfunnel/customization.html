@@ -104,8 +104,9 @@
             display: block;
             color: #fff;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             font-size: 14px;
+            text-align: center;
         }
         
         .form-input, .form-select, .form-textarea {
@@ -514,6 +515,52 @@
         .remove-time-btn:hover {
             background: rgba(239, 68, 68, 1);
         }
+        
+        .package-card h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 16px;
+        }
+        .package-card .price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #10b981;
+            margin: 0;
+        }
+        .package-card p {
+            margin: 0 0 6px 0;
+            color: #ccc;
+            font-size: 13px;
+        }
+        .package-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .package-card li, .core-feature {
+            display: block;
+            position: relative;
+            color: #10b981;
+            font-size: 12px;
+            margin: 0;
+            background: rgba(16, 185, 129, 0.25);
+            padding: 4px 8px;
+            border-radius: 4px;
+            text-align: left;
+            border: 1px solid #10b981;
+            cursor: default;
+        }
+        
+        .feature-name {
+            color: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -790,11 +837,7 @@
         <!-- Back Button -->
         <a href="packages.html" class="btn-back">← Back to Packages</a>
 
-            </div>         
-            
-         
-       
-    </div>
+          
     
     <!-- Legal Footer -->
     <div style="text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
@@ -805,6 +848,13 @@
             • Contact: support@inexasli.com
         </p>
     </div>
+    
+    </div>         
+            
+         
+       
+    
+    
     
     <script>
         // Splash screen transition
@@ -936,13 +986,16 @@
             });
             
             // Form section collapse/expand functionality
-            const sectionTitles = document.querySelectorAll('.card-title');
-            sectionTitles.forEach(title => {
-                title.addEventListener('click', function(e) {
+            const sectionTitles = document.querySelectorAll('.package-card');
+            sectionTitles.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Prevent collapse when clicking on form elements
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON' || e.target.closest('.grid-item')) {
+                        return;
+                    }
                     e.preventDefault();
                     e.stopPropagation();
-                    const section = this.closest('.package-card');
-                    section.classList.toggle('collapsed');
+                    this.classList.toggle('collapsed');
                 });
             });
         });
