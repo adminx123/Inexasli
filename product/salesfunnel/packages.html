@@ -822,7 +822,12 @@
             }
             
             packageCards.forEach(card => {
-                card.addEventListener('click', function() {
+                card.addEventListener('click', function(event) {
+                    // Prevent collapse when clicking the continue button
+                    if (event.target.tagName === 'BUTTON' && event.target.classList.contains('package-continue-btn')) {
+                        return;
+                    }
+                    
                     const clickedPackageType = this.dataset.package;
                     
                     // Check if this package is already selected (toggle behavior)
@@ -980,6 +985,54 @@
                     const continueBtn = document.getElementById('continue-btn');
                     if (continueBtn) {
                         continueBtn.disabled = false;
+                    }
+                });
+            });
+            
+            // Add click handlers for package continue buttons
+            document.querySelectorAll('.package-continue-btn').forEach(btn => {
+                btn.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    
+                    if (!selectedPackage) {
+                        alert('Please select a package first');
+                        return;
+                    }
+                    
+                    // Calculate final total
+                    let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
+                    
+                    // Add platform costs (1 included, additional $15 each)
+                    if (selectedPlatforms.length > 1) {
+                        const extraPlatforms = selectedPlatforms.length - 1;
+                        subtotal += extraPlatforms * 15;
+                    }
+                    
+                    // Add addons
+                    const positiveAddons = selectedAddons.filter(addon => addon.price > 0);
+                    const negativeAddons = selectedAddons.filter(addon => addon.price < 0);
+                    
+                    subtotal += positiveAddons.reduce((sum, addon) => sum + addon.price, 0);
+                    subtotal += negativeAddons.reduce((sum, addon) => sum + addon.price, 0);
+                    
+                    const total = subtotal;
+                    
+                    // Store quote data
+                    const quoteData = {
+                        package: selectedPackage,
+                        addons: selectedAddons,
+                        platforms: selectedPlatforms,
+                        total: total,
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('quoteData', JSON.stringify(quoteData));
+                    
+                    // Navigate to customization
+                    if (typeof navigateToStep === 'function') {
+                        navigateToStep(3);
+                    } else {
+                        window.location.href = 'customization.html';
                     }
                 });
             });

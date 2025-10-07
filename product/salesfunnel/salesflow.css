@@ -1601,3 +1601,93 @@ textarea {
     font-weight: bold;
     font-size: 16px;
 }
+
+/* ==========================================================================
+   REUSABLE CARD COMPONENTS - DRY CSS for Package Cards & Form Sections
+   ========================================================================== */
+
+.card-style {
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 15px;
+    text-align: left;
+    overflow: hidden;
+}
+
+.card-style:hover {
+    border-color: rgba(16, 185, 129, 0.5);
+    transform: translateY(-2px);
+}
+
+.card-style.collapsed {
+    max-height: 60px;
+    padding-bottom: 0;
+}
+
+.card-style.collapsed .card-content {
+    display: none;
+}
+
+.card-style.collapsed .card-title {
+    margin-bottom: 0;
+    padding-bottom: 15px;
+}
+
+.card-title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    position: relative;
+}
+
+.card-group {
+    margin-top: 20px;
+}
+
+.card-group:first-child {
+    margin-top: 0;
+}
+
+.card-label {
+    display: block;
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.card-input, .card-select, .card-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.card-input:hover, .card-select:hover, .card-textarea:hover {
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(0,0,0,0.4);
+}
+
+.card-input:focus, .card-select:focus, .card-textarea:focus {
+    outline: none;
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    transform: translateY(-1px);
+}
+
+.card-textarea {
+    min-height: 80px;
+    resize: vertical;
+}
