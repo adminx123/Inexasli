@@ -223,10 +223,22 @@ p {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .package-header .card-title {
     margin-bottom: 15px;
+}
+
+.package-card.completed .package-header::after {
+    content: '✓';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #10b981;
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .package-badge {
@@ -870,6 +882,34 @@ textarea {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border-color: #667eea;
+}
+
+.grid-item1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    color: #ccc;
+    text-align: center;
+    min-height: 32px;
+}
+
+.grid-item1:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+.grid-item1.selected {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
+    font-weight: 600;
 }
 
 /* Special Alert/Info Boxes */
@@ -1633,6 +1673,49 @@ textarea {
 /* ==========================================================================
    REUSABLE CARD COMPONENTS - DRY CSS for Package Cards & Form Sections
    ========================================================================== */
+
+.package-header {
+    position: relative;
+}
+
+.package-card.completed .package-header::after {
+    content: '✓';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #10b981;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.grid-item1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    color: #ccc;
+    text-align: center;
+    min-height: 32px;
+}
+
+.grid-item1:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+.grid-item1.selected {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: #10b981;
+    color: #10b981;
+    font-weight: 600;
+}
 
 .card-style {
     border: 1px solid rgba(255,255,255,0.2);
