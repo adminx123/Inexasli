@@ -564,13 +564,13 @@
                 enterprise: 499
             };
             
-            // Setup fees for each package (one-time payment)
-            const setupFees = {
-                basic: 199,
-                social: 299,
-                pro: 499,
-                enterprise: 999
-            };
+            // Setup fees for each package (one-time payment) - COMMENTED OUT
+            // const setupFees = {
+            //     basic: 199,
+            //     social: 299,
+            //     pro: 499,
+            //     enterprise: 999
+            // };
             
             // Package features
             function getPackageFeatures(packageType) {
@@ -631,7 +631,7 @@
                     type: 'basic',
                     name: packageName,
                     monthlyPrice: monthlyPrice,
-                    price: setupFees.basic,
+                    // price: setupFees.basic, // COMMENTED OUT - no setup fee
                     features: [
                         'AI chat widget for websites',
                         'Easy embed'
@@ -723,7 +723,7 @@
                         type: packageType,
                         name: packageName,
                         monthlyPrice: basePrices[packageType],
-                        price: setupFees[packageType],
+                        // price: setupFees[packageType], // COMMENTED OUT - no setup fee
                         features: getPackageFeatures(packageType)
                     };
                     
@@ -742,25 +742,25 @@
                         if (packageType === 'social') {
                             // Social Starter includes basic storage
                             selectedAddons = [
-                                { id: 'photos-10', price: 50 },
-                                { id: 'videos-5', price: 75 }
+                                { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
+                                { id: 'videos-5', name: '+5 Video Storage', price: 75 }
                             ];
                         } else if (packageType === 'pro') {
                             // Pro includes storage + content refinements + AI content
                             selectedAddons = [
-                                { id: 'photos-10', price: 50 },
-                                { id: 'videos-5', price: 75 },
-                                { id: 'iterations-extra', price: 150 },
-                                { id: 'ai-content-generation', price: 200 }
+                                { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
+                                { id: 'videos-5', name: '+5 Video Storage', price: 75 },
+                                { id: 'iterations-extra', name: '+10 Content Refinements', price: 150 },
+                                { id: 'ai-content-generation', name: 'AI Content Generation', price: 200 }
                             ];
                         } else if (packageType === 'enterprise') {
                             // Enterprise includes everything
                             selectedAddons = [
-                                { id: 'photos-10', price: 50 },
-                                { id: 'videos-5', price: 75 },
-                                { id: 'iterations-extra', price: 150 },
-                                { id: 'ai-content-generation', price: 200 },
-                                { id: 'white-label-chat', price: 150 }
+                                { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
+                                { id: 'videos-5', name: '+5 Video Storage', price: 75 },
+                                { id: 'iterations-extra', name: '+10 Content Refinements', price: 150 },
+                                { id: 'ai-content-generation', name: 'AI Content Generation', price: 200 },
+                                { id: 'white-label-chat', name: 'White-label Chat', price: 150 }
                             ];
                         }
                         console.log(`Set default addons for ${packageType}: ${selectedAddons.map(a => a.id).join(', ')}`);
@@ -833,8 +833,8 @@
                         return;
                     }
                     
-                    // Calculate final total (setup fee + first month recurring)
-                    let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
+                    // Calculate final total (first month recurring only - no setup fee)
+                    let subtotal = selectedPackage.monthlyPrice;
                     
                     // Add platform costs (1 included, additional $15 each)
                     if (selectedPlatforms.length > 1) {
@@ -1146,8 +1146,8 @@
                         return;
                     }
                     
-                    // Calculate final total (setup fee + first month recurring)
-                    let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
+                    // Calculate final total (first month recurring only - no setup fee)
+                    let subtotal = selectedPackage.monthlyPrice;
                     
                     // Add platform costs (1 included, additional $15 each)
                     if (selectedPlatforms.length > 1) {

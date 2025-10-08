@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="salesflow.css">
     <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
     <style>
+    .included-text {
+        color: #4CAF50 !important;
+        font-weight: bold;
+    }
+    .included-addon {
+        opacity: 0.8;
+    }
     </style>
 </head>
 <body>
@@ -21,23 +28,12 @@
 
             <!-- Page Title -->
             <h1 class="page-title">Review Monthly Plan</h1>
-            <p class="page-subtitle">Confirm your monthly subscription and one-time setup before proceeding to payment</p>
+            <p class="page-subtitle">Confirm your monthly subscription details before proceeding to payment</p>
 
             <!-- Quote Box -->
             <div class="quote-box">
                 <h3 class="quote-box-title">Monthly Plan Summary</h3>
                 
-                <!-- One-Time Fees Section -->
-                <div class="quote-section">
-                    <h4 class="quote-section-title">One-Time Fees</h4>
-                    
-                    <!-- Package Base Fee -->
-                    <div class="quote-line">
-                        <span class="quote-line-label" id="packageLine">Professional Package</span>
-                        <span class="quote-line-amount" id="packageAmount">$597</span>
-                    </div>
-                </div>
-
                 <!-- Monthly Fees Section -->
                 <div class="quote-section">
                     <h4 class="quote-section-title">Monthly Fees</h4>
@@ -62,8 +58,8 @@
 
                 <!-- Overall Total -->
                 <div class="quote-total">
-                    <span class="quote-total-label">Total Due Today</span>
-                    <span class="quote-total-amount" id="totalAmount">$794</span>
+                    <span class="quote-total-label">Monthly Total</span>
+                    <span class="quote-total-amount" id="totalAmount">$197/month</span>
                 </div>
             </div>
 
@@ -150,15 +146,32 @@
             // Get monthly fee from package data or fallback to calculation
             const monthlyFee = pkg.monthlyPrice || getMonthlyFee(pkg.type);
             
-            // Package price is one-time
-            document.getElementById('packageLine').textContent = `${pkg.name} Package`;
-            document.getElementById('packageAmount').textContent = `$${pkg.price}`;
+            // Package price is no longer used (subscription-only)
 
-            // Add addon lines to monthly section (add-ons are recurring)
+            // Get included addons for this package type
+            const includedAddonIds = getIncludedAddons(pkg.type);
+            
+            // Separate addons into included (free) and extra (paid)
+            const includedAddons = addons.filter(addon => includedAddonIds.includes(addon.id));
+            const extraAddons = addons.filter(addon => !includedAddonIds.includes(addon.id));
+
+            // Add included addon lines (marked as included)
             const addonsContainer = document.getElementById('addonsLines');
             addonsContainer.innerHTML = '';
             
-            addons.forEach(addon => {
+            includedAddons.forEach(addon => {
+                const addonLine = document.createElement('div');
+                addonLine.className = 'quote-line included-addon';
+                
+                addonLine.innerHTML = `
+                    <span class="quote-line-label">${getAddonName(addon)}</span>
+                    <span class="quote-line-amount included-text">Included</span>
+                `;
+                addonsContainer.appendChild(addonLine);
+            });
+
+            // Add extra addon lines (charged)
+            extraAddons.forEach(addon => {
                 const addonLine = document.createElement('div');
                 addonLine.className = 'quote-line';
                 
@@ -168,15 +181,15 @@
                     : `-$${Math.abs(addon.price)}/month`;
                 
                 addonLine.innerHTML = `
-                    <span class="quote-line-label">${addon.name}</span>
+                    <span class="quote-line-label">${getAddonName(addon)}</span>
                     <span class="quote-line-amount">${priceDisplay}</span>
                 `;
                 addonsContainer.appendChild(addonLine);
             });
 
-            // Calculate monthly recurring total (base monthly + add-ons)
-            const addonsTotal = addons.reduce((sum, addon) => sum + addon.price, 0);
-            const monthlyRecurringTotal = monthlyFee + addonsTotal;
+            // Calculate monthly recurring total (base monthly + extra add-ons only)
+            const extraAddonsTotal = extraAddons.reduce((sum, addon) => sum + addon.price, 0);
+            const monthlyRecurringTotal = monthlyFee + extraAddonsTotal;
             
             // Only show monthly recurring total if there are addons
             const monthlyRecurringElement = document.getElementById('monthlyRecurringTotal');
@@ -194,9 +207,9 @@
             // Update monthly amount display
             document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
 
-            // Update overall total (one-time package + first month recurring)
-            const totalDueToday = pkg.price + monthlyRecurringTotal;
-            document.getElementById('totalAmount').textContent = `$${totalDueToday}`;
+            // Update overall total (monthly subscription only)
+            const totalDueToday = monthlyRecurringTotal;
+            document.getElementById('totalAmount').textContent = `$${totalDueToday}/month`;
 
             // Update package features
             const featuresContainer = document.getElementById('packageFeatures');
@@ -206,7 +219,7 @@
 
             // Update platforms
             const platformsContainer = document.getElementById('packagePlatforms');
-            platformsContainer.innerHTML = pkg.platforms.map(platform => 
+            platformsContainer.innerHTML = platforms.map(platform => 
                 `<p style="color: white; margin: 5px 0;">${platform}</p>`
             ).join('');
         }
@@ -214,6 +227,30 @@
         function getMonthlyFee(packageType) {
             const fees = { starter: 127, professional: 197, enterprise: 297 };
             return fees[packageType] || 197;
+        }
+
+        function getAddonName(addon) {
+            if (addon.name) return addon.name;
+            
+            // Fallback: derive name from ID
+            const nameMap = {
+                'photos-10': '+10 Photo Storage',
+                'videos-5': '+5 Video Storage', 
+                'iterations-extra': '+10 Content Refinements',
+                'ai-content-generation': 'AI Content Generation',
+                'white-label-chat': 'White-label Chat',
+                'basic-scheduling': 'Basic Scheduling Only',
+                'reduced-frequency': 'Reduced Posting Frequency'
+            };
+            
+            return nameMap[addon.id] || addon.id;
+        }
+
+        function getIncludedAddons(packageType) {
+            if (packageType === 'social') return ['photos-10', 'videos-5'];
+            if (packageType === 'pro') return ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation'];
+            if (packageType === 'enterprise') return ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation', 'white-label-chat'];
+            return [];
         }
 
         function proceedToPayment() {
