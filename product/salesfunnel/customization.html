@@ -8,16 +8,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
     <style>
+        /* Pure Black & White High Contrast Theme */
+        body {
+            background: #000000;
+            color: #ffffff;
+        }
+        
         .device-container {
             max-width: 480px;
             margin: 0 auto;
             padding: 40px 20px;
+            background: #000000;
         }
         
         .progress-bar {
             width: 100%;
             height: 8px;
-            background: rgba(255,255,255,0.1);
+            background: #ffffff;
             border-radius: 4px;
             margin-bottom: 30px;
             overflow: hidden;
@@ -26,7 +33,7 @@
         .progress-fill {
             width: 60%;
             height: 100%;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: #000000;
             border-radius: 4px;
             animation: progressLoad 1s ease-out;
         }
@@ -37,19 +44,19 @@
         }
         
         .form-section {
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             padding: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.05);
+            background: #000000;
             margin-bottom: 15px;
             text-align: left;
             overflow: hidden;
         }
         
         .form-section:hover {
-            border-color: rgba(16, 185, 129, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
         
@@ -76,12 +83,12 @@
         }
         
         .section-title {
-            color: #fff;
+            color: #ffffff;
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 20px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
         }
         
@@ -91,7 +98,7 @@
             right: 0;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255,255,255,0.6);
+            color: #ffffff;
             font-size: 14px;
             transition: transform 0.3s ease;
         }
@@ -102,7 +109,7 @@
         
         .form-label {
             display: block;
-            color: #fff;
+            color: #ffffff;
             font-weight: 600;
             margin-bottom: 12px;
             font-size: 14px;
@@ -112,40 +119,34 @@
         .form-input, .form-select, .form-textarea {
             width: 100%;
             padding: 12px 15px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            color: #fff;
+            color: #ffffff;
             font-size: 14px;
             transition: all 0.3s ease;
         }
         
         .form-input:hover, .form-select:hover, .form-textarea:hover {
-            border-color: rgba(255,255,255,0.4);
-            background: rgba(0,0,0,0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: #000000;
         }
         
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: #000000;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
             transform: translateY(-1px);
         }
         
-        .form-input:invalid, .form-select:invalid, .form-textarea:invalid {
-            border-color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
-        }
-        
         .form-input::placeholder, .form-select::placeholder, .form-textarea::placeholder {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.5);
             opacity: 1;
         }
         
         .form-input:focus::placeholder, .form-select:focus::placeholder, .form-textarea:focus::placeholder {
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.3);
         }
         
         .form-textarea {
@@ -155,18 +156,19 @@
         
         .grid-selection {
             display: grid;
-            grid-template-columns: 1fr; /* One per row */
-            gap: 8px; /* Reduced gap */
+            grid-template-columns: 1fr;
+            gap: 8px;
             margin-top: 15px;
         }
         
+        /* ONLY color in the entire design - green border for grid items */
         .grid-item1 {
             display: block;
             position: relative;
-            color: #10b981;
+            color: #ffffff;
             font-size: 12px;
             margin: 0;
-            background: rgba(16, 185, 129, 0.25);
+            background: #000000;
             padding: 4px 8px;
             border-radius: 4px;
             text-align: left;
@@ -177,13 +179,14 @@
         }
         
         .grid-item1:hover {
-            background: rgba(16, 185, 129, 0.35);
+            background: #000000;
         }
         
         .grid-item1.selected {
-            background: rgba(16, 185, 129, 0.5);
-            color: #fff;
+            background: #000000;
+            color: #ffffff;
             font-weight: 600;
+            border: 1px solid #10b981;
         }
         
         .grid-item-text {
@@ -199,8 +202,8 @@
         }
         
         .consultation-box {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 20px;
             margin: 30px 0;
@@ -208,15 +211,15 @@
         }
         
         .consultation-text {
-            color: #fff;
+            color: #ffffff;
             margin-bottom: 15px;
             font-size: 14px;
         }
         
         .btn-consultation {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 12px 25px;
             border-radius: 8px;
             font-weight: 600;
@@ -228,6 +231,8 @@
         
         .btn-consultation:hover {
             transform: translateY(-2px);
+            background: #ffffff;
+            color: #000000;
         }
         
         .form-actions {
@@ -238,36 +243,39 @@
         
         .btn-primary {
             flex: 1;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px 30px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
         }
         
         .btn-primary:hover {
             transform: translateY(-2px);
+            background: #000000;
+            color: #ffffff;
         }
         
         .btn-secondary {
             flex: 1;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 15px 30px;
             border-radius: 8px;
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         
         .btn-secondary:hover {
-            background: rgba(255,255,255,0.2);
+            background: #ffffff;
+            color: #000000;
         }
         
         .setup-header {
@@ -276,13 +284,13 @@
         }
         
         .setup-title {
-            color: #fff;
+            color: #ffffff;
             font-size: 2.2em;
             margin-bottom: 10px;
         }
         
         .setup-subtitle {
-            color: #ccc;
+            color: #ffffff;
             font-size: 16px;
         }
         
@@ -301,11 +309,11 @@
             align-items: center;
             gap: 4px;
             padding: 1.5px 3px;
-            background: rgba(255,255,255,0.1);
+            background: #000000;
             border-radius: 25px;
             font-size: 13px;
-            color: #ccc;
-            border: 1px solid rgba(255,255,255,0.2);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: all 0.3s ease;
             user-select: none;
@@ -315,30 +323,32 @@
         }
         
         .step:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.4);
+            background: #ffffff;
+            color: #000000;
             transform: translateY(-2px);
         }
         
         .step.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-color: #667eea;
+            background: #ffffff;
+            color: #000000;
+            border-color: rgba(255, 255, 255, 0.2);
         }
         
         .step.active:hover {
-            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            background: #000000;
+            color: #ffffff;
             transform: translateY(-2px);
         }
         
         .step.completed {
-            background: rgba(40, 167, 69, 0.3);
-            color: #90ee90;
-            border-color: #28a745;
+            background: #000000;
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.2);
         }
         
         .step.completed:hover {
-            background: rgba(40, 167, 69, 0.5);
+            background: #ffffff;
+            color: #000000;
             transform: translateY(-2px);
         }
         
@@ -346,7 +356,8 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.2);
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -356,17 +367,18 @@
         }
         
         .step.completed .step-number {
-            background: #28a745;
-            color: white;
+            background: #ffffff;
+            color: #000000;
         }
         
         .step.active .step-number {
-            background: rgba(255,255,255,0.3);
-            color: white;
+            background: #000000;
+            color: #ffffff;
         }
         
         .posting-schedule-builder {
-            background: rgba(0,0,0,0.2);
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 20px;
             margin-top: 15px;
@@ -377,7 +389,7 @@
         }
         
         .schedule-label {
-            color: #fff;
+            color: #ffffff;
             font-size: 14px;
             font-weight: 600;
         }
@@ -386,14 +398,15 @@
             display: flex;
             gap: 8px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         
         .day-toggle {
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
+            background: #000000;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -404,19 +417,19 @@
         }
         
         .day-toggle:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(16, 185, 129, 0.5);
+            background: #ffffff;
+            color: #000000;
             transform: translateY(-2px);
         }
         
         .day-toggle.active {
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-color: #10b981;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            background: #ffffff;
+            color: #000000;
+            border-color: rgba(255, 255, 255, 0.2);
         }
         
         .day-label {
-            color: #fff;
+            color: inherit;
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 2px;
@@ -427,9 +440,10 @@
             top: -30px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            color: #fff;
+            background: #000000;
+            color: #ffffff;
             padding: 4px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 4px;
             font-size: 12px;
             opacity: 0;
@@ -443,7 +457,7 @@
         }
         
         .time-slots {
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
             padding-top: 20px;
         }
         
@@ -455,25 +469,27 @@
         }
         
         .time-slot-header span {
-            color: #fff;
+            color: #ffffff;
             font-size: 14px;
             font-weight: 600;
         }
         
         .add-time-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            border: none;
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 8px 16px;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
         }
         
         .add-time-btn:hover {
             transform: translateY(-1px);
+            background: #000000;
+            color: #ffffff;
         }
         
         .posting-time-item {
@@ -482,29 +498,30 @@
             gap: 10px;
             margin-bottom: 10px;
             padding: 10px;
-            background: rgba(255,255,255,0.05);
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 6px;
         }
         
         .posting-time-item input[type="time"] {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 4px;
-            color: #fff;
+            color: #ffffff;
             padding: 6px 8px;
             font-size: 14px;
         }
         
         .posting-time-item input[type="time"]:focus {
             outline: none;
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: #000000;
         }
         
         .remove-time-btn {
-            background: rgba(239, 68, 68, 0.8);
-            color: white;
-            border: none;
+            background: #000000;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -513,22 +530,23 @@
             align-items: center;
             justify-content: center;
             font-size: 12px;
-            transition: background 0.3s;
+            transition: all 0.3s;
         }
         
         .remove-time-btn:hover {
-            background: rgba(239, 68, 68, 1);
+            background: #ffffff;
+            color: #000000;
         }
         
-        .package-card h3 {
+        .package-card h3, .card-title {
             margin: 0;
-            color: #fff;
+            color: #ffffff;
             font-size: 16px;
         }
         .package-card .price {
             font-size: 16px;
             font-weight: bold;
-            color: #10b981;
+            color: #ffffff;
             margin: 0;
         }
         .package-card p {

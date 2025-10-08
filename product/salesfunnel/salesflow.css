@@ -123,15 +123,15 @@ p {
 }
 
 .platform-option:hover {
-    border-color: rgba(255,255,255,0.6);
-    background: rgba(255,255,255,0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: #000000;
     transform: scale(1.05);
 }
 
 .platform-option.selected {
-    border-color: #10b981;
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
+    border-color: rgba(255, 255, 255, 0.2);
+    background: #000000;
+    color: #ffffff;
     transform: scale(1.05);
 }
 
@@ -144,12 +144,12 @@ p {
 .platform-selection-counter {
     text-align: center;
     font-size: 12px;
-    color: #ccc;
+    color: #ffffff;
     margin-top: 10px;
 }
 
 .platform-selection-counter .selected-count {
-    color: #10b981;
+    color: #ffffff;
     font-weight: bold;
 }
 
@@ -173,10 +173,10 @@ p {
 }
 
 .package-card {
-    background: rgba(255,255,255,0.1);
+    background: #000000;
     border-radius: 15px;
     padding: 20px;
-    border: 2px solid rgba(255,255,255,0.2);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(15px);
     position: relative;
     transition: all 0.3s ease;
@@ -188,9 +188,9 @@ p {
 
 .package-card:hover {
     transform: translateY(-8px);
-    background: rgba(255,255,255,0.15);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    border-color: rgba(255,255,255,0.4);
+    background: #000000;
+    box-shadow: 0 20px 40px rgba(255,255,255,0.2);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .package-card.collapsed {
@@ -204,19 +204,19 @@ p {
 
 .package-card:hover {
     transform: translateY(-8px);
-    background: rgba(255,255,255,0.15);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    border-color: rgba(255,255,255,0.4);
+    background: #000000;
+    box-shadow: 0 20px 40px rgba(255,255,255,0.2);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .package-card.most-popular {
-    border-color: #10b981;
-    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: #000000;
 }
 
 .package-card.most-popular:hover {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: #10b981;
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .package-header {
@@ -236,7 +236,7 @@ p {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    color: #10b981;
+    color: #ffffff;
     font-size: 18px;
     font-weight: bold;
 }
@@ -246,8 +246,8 @@ p {
     top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    background: #10b981;
-    color: white;
+    background: #ffffff;
+    color: #000000;
     padding: 8px 20px;
     border-radius: 20px;
     font-size: 12px;
@@ -266,7 +266,7 @@ p {
 .package-price {
     font-size: 2.5em;
     font-weight: bold;
-    color: #10b981;
+    color: #ffffff;
     margin-bottom: 5px;
 }
 
@@ -348,11 +348,12 @@ p {
 }
 
 .package-card.most-popular .btn-select-package {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: #ffffff;
+    color: #000000;
 }
 
 .package-card.most-popular .btn-select-package:hover {
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.4);
 }
 
 /* Add-ons Selection */
@@ -362,8 +363,8 @@ p {
 }
 
 .selected-package-summary {
-    background: rgba(16, 185, 129, 0.1);
-    border: 2px solid rgba(16, 185, 129, 0.3);
+    background: #000000;
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 25px;
@@ -371,7 +372,7 @@ p {
 }
 
 .selected-package-title {
-    color: #10b981;
+    color: #ffffff;
     font-size: 1.5em;
     font-weight: bold;
     margin-bottom: 10px;
@@ -422,15 +423,15 @@ p {
 }
 
 .addon-card:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(16, 185, 129, 0.5);
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.2);
     transform: scale(1.05);
 }
 
 .addon-card.selected {
-    background: rgba(16, 185, 129, 0.2) !important;
-    border-color: #10b981 !important;
-    color: #10b981 !important;
+    background: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
 }
 
 .addon-name {
@@ -451,7 +452,7 @@ p {
     padding: 0;
     border-radius: 0;
     position: static;
-    color: #10b981;
+    color: #ffffff;
 }
 
 .addon-selected-indicator {
@@ -459,34 +460,34 @@ p {
 }
 
 .addon-card.discount-addon:hover {
-    background: rgba(34, 197, 94, 0.15);
-    border-color: rgba(34, 197, 94, 0.5);
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 .addon-card.discount-addon.selected {
-    background: rgba(34, 197, 94, 0.2) !important;
-    border-color: #22c55e !important;
-    color: #22c55e !important;
+    background: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
 }
 
 .addon-card.discount-addon .addon-price {
-    color: #22c55e;
+    color: #ffffff;
 }
 
 .addon-card.selected.included {
-    background: rgba(16, 185, 129, 0.3) !important;
-    border-color: #10b981 !important;
+    background: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
     opacity: 0.8;
 }
 
 .addon-card.selected.included .addon-price {
-    color: #10b981;
+    color: #ffffff;
     font-weight: normal;
     text-decoration: line-through;
 }
 
 .addons-total {
-    background: rgba(255,255,255,0.1);
+    background: #000000;
     border-radius: 15px;
     padding: 20px;
     text-align: center;
@@ -500,14 +501,14 @@ p {
 }
 
 .addons-total-amount {
-    color: #10b981;
+    color: #ffffff;
     font-size: 2.5em;
     font-weight: bold;
 }
 
 .btn-continue-to-quote {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
+    background: #ffffff;
+    color: #000000;
     border: none;
     padding: 12px 24px;
     border-radius: 50px;
@@ -702,14 +703,14 @@ p {
 }
 
 .btn-secondary:hover {
-    background: rgba(255,255,255,0.2);
-    border-color: rgba(255,255,255,0.5);
+    background: #000000;
+    border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
 }
 
 .btn-consultation {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
+    background: #ffffff;
+    color: #000000;
     border: none;
     padding: 12px 24px;
     border-radius: 50px;
@@ -889,26 +890,26 @@ textarea {
     align-items: center;
     justify-content: center;
     padding: 8px 12px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: #000000;
+    border: 1px solid #10b981;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 12px;
-    color: #ccc;
+    color: #ffffff;
     text-align: center;
     min-height: 32px;
 }
 
 .grid-item1:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(16, 185, 129, 0.5);
+    background: #000000;
+    border-color: #10b981;
 }
 
 .grid-item1.selected {
-    background: rgba(16, 185, 129, 0.2);
+    background: #000000;
     border-color: #10b981;
-    color: #10b981;
+    color: #ffffff;
     font-weight: 600;
 }
 
@@ -1316,8 +1317,8 @@ textarea {
     position: absolute;
     top: -10px;
     right: 10px;
-    background: #10b981;
-    color: #fff;
+    background: #ffffff;
+    color: #000000;
     padding: 5px 10px;
     border-radius: 15px;
     font-size: 12px;
@@ -1385,8 +1386,8 @@ textarea {
 }
 
 .guarantee-box {
-    background: rgba(16, 185, 129, 0.2);
-    border: 1px solid #10b981;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 15px;
     border-radius: 10px;
     display: inline-block;
@@ -1394,7 +1395,7 @@ textarea {
 }
 
 .guarantee-text {
-    color: #10b981;
+    color: #ffffff;
     font-weight: bold;
     font-size: 16px;
 }
@@ -1684,7 +1685,7 @@ textarea {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    color: #10b981;
+    color: #ffffff;
     font-size: 18px;
     font-weight: bold;
 }
@@ -1694,26 +1695,26 @@ textarea {
     align-items: center;
     justify-content: center;
     padding: 8px 12px;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: #000000;
+    border: 1px solid #10b981;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 12px;
-    color: #ccc;
+    color: #ffffff;
     text-align: center;
     min-height: 32px;
 }
 
 .grid-item1:hover {
-    background: rgba(255,255,255,0.15);
-    border-color: rgba(16, 185, 129, 0.5);
+    background: #000000;
+    border-color: #10b981;
 }
 
 .grid-item1.selected {
-    background: rgba(16, 185, 129, 0.2);
+    background: #000000;
     border-color: #10b981;
-    color: #10b981;
+    color: #ffffff;
     font-weight: 600;
 }
 
