@@ -6,15 +6,6 @@
     <title>Your Quote - INEXASLI</title>
     <link rel="stylesheet" href="salesflow.css">
     <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
-    <style>
-    .included-text {
-        color: #4CAF50 !important;
-        font-weight: bold;
-    }
-    .included-addon {
-        opacity: 0.8;
-    }
-    </style>
 </head>
 <body>
     <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
@@ -32,47 +23,28 @@
 
             <!-- Quote Box -->
             <div class="quote-box">
-                <h3 class="quote-box-title">Monthly Plan Summary</h3>
+                <h3 class="quote-box-title">Plan Summary</h3>
                 
-                <!-- Monthly Fees Section -->
-                <div class="quote-section">
-                    <h4 class="quote-section-title">Monthly Fees</h4>
-                    
-                    <!-- Add-ons Lines -->
-                    <div id="addonsLines">
-                        <!-- Add-on lines will be inserted here -->
-                    </div>
-
-                    <!-- Monthly Ongoing -->
-                    <div class="quote-line-monthly">
-                        <span class="quote-line-label">Monthly Subscription (Starting Month 1)</span>
-                        <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
-                    </div>
-                    
-                    <!-- Monthly Subtotal (only show when addons exist) -->
-                    <div id="monthlyRecurringContainer" class="quote-subtotal" style="display: none;">
-                        <span class="quote-subtotal-label">Monthly Recurring Total</span>
-                        <span class="quote-subtotal-amount" id="monthlyRecurringTotal">$197/month</span>
-                    </div>
+                <!-- Package Features Cards -->
+                <div id="packageFeaturesCards">
+                    <!-- Feature cards will be inserted here -->
+                </div>
+                
+                <!-- Package Price Line -->
+                <div class="quote-line package-line">
+                    <span class="quote-line-label" id="packageNameLabel">Enterprise Package</span>
+                    <span class="quote-line-amount" id="packagePriceAmount">$499/month</span>
+                </div>
+                
+                <!-- Add-ons Lines -->
+                <div id="addonsLines">
+                    <!-- Add-on lines will be inserted here -->
                 </div>
 
                 <!-- Overall Total -->
                 <div class="quote-total">
                     <span class="quote-total-label">Monthly Total</span>
                     <span class="quote-total-amount" id="totalAmount">$197/month</span>
-                </div>
-            </div>
-
-            <!-- Package Details -->
-            <div class="info-grid">
-                <div class="info-card">
-                    <h4>What's Included</h4>
-                    <div id="packageFeatures">
-                        <!-- Features will be loaded here -->
-                    </div>
-                    <div id="packagePlatforms">
-                        <!-- Platforms will be loaded here -->
-                    </div>
                 </div>
             </div>
 
@@ -155,6 +127,10 @@
             const includedAddons = addons.filter(addon => includedAddonIds.includes(addon.id));
             const extraAddons = addons.filter(addon => !includedAddonIds.includes(addon.id));
 
+            // Update package name and price in plan summary
+            document.getElementById('packageNameLabel').textContent = `${pkg.name || pkg.type.charAt(0).toUpperCase() + pkg.type.slice(1)} Package`;
+            document.getElementById('packagePriceAmount').textContent = `$${monthlyFee}/month`;
+
             // Add included addon lines (marked as included)
             const addonsContainer = document.getElementById('addonsLines');
             addonsContainer.innerHTML = '';
@@ -191,36 +167,14 @@
             const extraAddonsTotal = extraAddons.reduce((sum, addon) => sum + addon.price, 0);
             const monthlyRecurringTotal = monthlyFee + extraAddonsTotal;
             
-            // Only show monthly recurring total if there are addons
-            const monthlyRecurringElement = document.getElementById('monthlyRecurringTotal');
-            const monthlyRecurringContainer = document.getElementById('monthlyRecurringContainer');
-            
-            if (addons.length > 0) {
-                // Show monthly recurring total when there are addons
-                monthlyRecurringElement.textContent = `$${monthlyRecurringTotal}/month`;
-                monthlyRecurringContainer.style.display = 'block';
-            } else {
-                // Hide monthly recurring total when no addons
-                monthlyRecurringContainer.style.display = 'none';
-            }
-            
-            // Update monthly amount display
-            document.getElementById('monthlyAmount').textContent = `$${monthlyFee}/month`;
-
             // Update overall total (monthly subscription only)
             const totalDueToday = monthlyRecurringTotal;
             document.getElementById('totalAmount').textContent = `$${totalDueToday}/month`;
 
-            // Update package features
-            const featuresContainer = document.getElementById('packageFeatures');
+            // Update package features as cards within quote
+            const featuresContainer = document.getElementById('packageFeaturesCards');
             featuresContainer.innerHTML = pkg.features.map(feature => 
-                `<p style="color: white; margin: 5px 0;">${feature}</p>`
-            ).join('');
-
-            // Update platforms
-            const platformsContainer = document.getElementById('packagePlatforms');
-            platformsContainer.innerHTML = platforms.map(platform => 
-                `<p style="color: white; margin: 5px 0;">${platform}</p>`
+                `<div class="core-feature" style="margin: 8px 0; display: block;">${feature}</div>`
             ).join('');
         }
 

@@ -2285,3 +2285,13 @@ textarea {
     min-height: 80px;
     resize: vertical;
 }
+
+/* Quote page specific styles */
+.included-text {
+    color: #4CAF50 !important;
+    font-weight: bold;
+}
+
+.included-addon {
+    opacity: 0.8;
+}
