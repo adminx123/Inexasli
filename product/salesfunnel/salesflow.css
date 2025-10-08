@@ -551,6 +551,21 @@ body {
     margin: 0;
 }
 
+.card-status {
+    margin: 0;
+}
+
+.status-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #ff4444; /* Red for "To Do" */
+    margin: 0;
+}
+
+.package-card.completed .status-text {
+    color: #10b981; /* Green for completed */
+}
+
 .package-card p {
     margin: 0 0 6px 0;
     color: #cccccc;
