@@ -10,8 +10,7 @@
         2: 'customization.html',
         3: 'quote.html',
         4: 'payment.html',
-        5: 'oauth.html',
-        6: 'setup.html'
+        5: 'oauth-connect.html'
     };
 
     const stepTitles = {
@@ -19,8 +18,7 @@
         2: 'Customize Automation',
         3: 'Review Quote',
         4: 'Payment',
-        5: 'OAuth Setup',
-        6: 'Setup Complete'
+        5: 'Connect Socials'
     };
 
     // HTML Template
@@ -42,13 +40,9 @@
                 <div class="step-number">4</div>
                 <span>Payment</span>
             </a>
-            <a href="oauth.html" class="step" data-step="5">
+            <a href="oauth-connect.html" class="step" data-step="5">
                 <div class="step-number">5</div>
-                <span>OAuth</span>
-            </a>
-            <a href="setup.html" class="step" data-step="6">
-                <div class="step-number">6</div>
-                <span>Complete</span>
+                <span>Connect</span>
             </a>
         </div>
     `;
@@ -59,20 +53,20 @@
             display: flex;
             justify-content: center;
             margin: 10px 0 20px 0;
-            gap: 8px;
-            flex-wrap: nowrap;
-            overflow-x: auto;
+            gap: 6px;
+            flex-wrap: wrap;
             padding: 0 5px;
+            max-width: 100%;
         }
 
         .step {
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 1.5px 3px;
+            gap: 3px;
+            padding: 1px 2px;
             background: rgba(255,255,255,0.1);
-            border-radius: 25px;
-            font-size: 13px;
+            border-radius: 20px;
+            font-size: 12px;
             color: #ccc;
             border: 1px solid rgba(255,255,255,0.2);
             cursor: pointer;
@@ -125,15 +119,15 @@
         }
 
         .step-number {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 9px;
             flex-shrink: 0;
         }
 
