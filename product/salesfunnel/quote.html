@@ -35,109 +35,100 @@
         <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
-    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; z-index: 1;">
+            
             <!-- Step Indicator -->
             <div class="step-indicator-placeholder"></div>
-                <div class="step">
-                    <div class="step-number">6</div>
-                    <span>Link</span>
-                </div>
-            </div>
 
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
 
-            <!-- Quote Results Container -->
-            <div class="quote-results-container">
-                <div class="quote-header">
-                    <h1 class="quote-title">Review Your Monthly Plan</h1>
-                    <p class="quote-subtitle">Confirm your monthly subscription and one-time setup before proceeding to payment</p>
-                </div>
+            <!-- Page Title -->
+            <h1 class="page-title">Review Your Monthly Plan</h1>
+            <p class="page-subtitle">Confirm your monthly subscription and one-time setup before proceeding to payment</p>
 
-                <!-- Quote Box -->
-                <div class="quote-box">
-                    <h3 class="quote-box-title">Monthly Plan Summary</h3>
+            <!-- Quote Box -->
+            <div class="quote-box">
+                <h3 class="quote-box-title">Monthly Plan Summary</h3>
+                
+                <!-- One-Time Fees Section -->
+                <div class="quote-section">
+                    <h4 class="quote-section-title">One-Time Fees</h4>
                     
-                    <!-- One-Time Fees Section -->
-                    <div class="quote-section">
-                        <h4 class="quote-section-title">One-Time Fees</h4>
-                        
-                        <!-- Package Base Fee -->
-                        <div class="quote-line">
-                            <span class="quote-line-label" id="packageLine">Professional Package</span>
-                            <span class="quote-line-amount" id="packageAmount">$597</span>
-                        </div>
-                    </div>
-
-                    <!-- Monthly Fees Section -->
-                    <div class="quote-section">
-                        <h4 class="quote-section-title">Monthly Fees</h4>
-                        
-                        <!-- Add-ons Lines -->
-                        <div id="addonsLines">
-                            <!-- Add-on lines will be inserted here -->
-                        </div>
-
-                        <!-- Monthly Ongoing -->
-                        <div class="quote-line-monthly">
-                            <span class="quote-line-label">Monthly Subscription (Starting Month 1)</span>
-                            <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
-                        </div>
-                        
-                        <!-- Monthly Subtotal (only show when addons exist) -->
-                        <div id="monthlyRecurringContainer" class="quote-subtotal" style="display: none;">
-                            <span class="quote-subtotal-label">Monthly Recurring Total</span>
-                            <span class="quote-subtotal-amount" id="monthlyRecurringTotal">$197/month</span>
-                        </div>
-                    </div>
-
-                    <!-- Overall Total -->
-                    <div class="quote-total">
-                        <span class="quote-total-label">Total Due Today</span>
-                        <span class="quote-total-amount" id="totalAmount">$794</span>
+                    <!-- Package Base Fee -->
+                    <div class="quote-line">
+                        <span class="quote-line-label" id="packageLine">Professional Package</span>
+                        <span class="quote-line-amount" id="packageAmount">$597</span>
                     </div>
                 </div>
 
-                <!-- Package Details -->
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h4>What's Included</h4>
-                        <div id="packageFeatures">
-                            <!-- Features will be loaded here -->
-                        </div>
-                        <div id="packagePlatforms">
-                            <!-- Platforms will be loaded here -->
-                        </div>
+                <!-- Monthly Fees Section -->
+                <div class="quote-section">
+                    <h4 class="quote-section-title">Monthly Fees</h4>
+                    
+                    <!-- Add-ons Lines -->
+                    <div id="addonsLines">
+                        <!-- Add-on lines will be inserted here -->
+                    </div>
+
+                    <!-- Monthly Ongoing -->
+                    <div class="quote-line-monthly">
+                        <span class="quote-line-label">Monthly Subscription (Starting Month 1)</span>
+                        <span class="quote-line-amount" id="monthlyAmount">$197/month</span>
+                    </div>
+                    
+                    <!-- Monthly Subtotal (only show when addons exist) -->
+                    <div id="monthlyRecurringContainer" class="quote-subtotal" style="display: none;">
+                        <span class="quote-subtotal-label">Monthly Recurring Total</span>
+                        <span class="quote-subtotal-amount" id="monthlyRecurringTotal">$197/month</span>
                     </div>
                 </div>
 
-                <!-- Payment Disclaimer -->
-                <div class="payment-disclaimer">
-                    By proceeding, you agree to our <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>.
-                    Your payment information is secured with bank-level encryption.
+                <!-- Overall Total -->
+                <div class="quote-total">
+                    <span class="quote-total-label">Total Due Today</span>
+                    <span class="quote-total-amount" id="totalAmount">$794</span>
                 </div>
-
-                <!-- Proceed Button -->
-                <button class="proceed-button" onclick="proceedToPayment()" style="margin-top: 20px;">Proceed to Payment</button>
-
-                <!-- Back Button -->
-                <a href="customization.html" class="btn-back">← Back to Customization</a>
             </div>
-            
-            <!-- Legal Footer -->
-            <div style="text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-                <p style="color: #ccc; font-size: 12px; margin: 0;">
-                    <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
-                    • 
-                    <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
-                    • Contact: support@inexasli.com
-                </p>
-            </div>
-            </div>
-        </div>
-    </div>
 
+            <!-- Package Details -->
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>What's Included</h4>
+                    <div id="packageFeatures">
+                        <!-- Features will be loaded here -->
+                    </div>
+                    <div id="packagePlatforms">
+                        <!-- Platforms will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Disclaimer -->
+            <div class="payment-disclaimer">
+                By proceeding, you agree to our <a href="#" onclick="showTerms()">Terms of Service</a> and <a href="#" onclick="showPrivacy()">Privacy Policy</a>.
+                Your payment information is secured with bank-level encryption.
+            </div>
+
+            <!-- Proceed Button -->
+            <button class="proceed-button" onclick="proceedToPayment()" style="margin-top: 20px;">Proceed to Payment</button>
+
+            <!-- Back Button -->
+            <a href="customization.html" class="btn-back">← Back to Customization</a>
+
+<!-- Legal Footer -->
+<div style="text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+    <p style="color: #ccc; font-size: 12px; margin: 0;">
+        <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
+        • 
+        <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
+        • Contact: support@inexasli.com
+    </p>
+</div>
+
+</div>
+    
     <script>
         // Splash screen transition
         const splash = document.getElementById('splashContainer');
