@@ -13,75 +13,65 @@
         <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
-    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; z-index: 1;">
+            
             <!-- Step Indicator -->
             <div class="step-indicator-placeholder"></div>
-                <div class="step">
-                    <div class="step-number">6</div>
-                    <span>Link</span>
-                </div>
-            </div>
 
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
 
-            <!-- Payment Section -->
-            <div class="quote-results-container" id="paymentSection">
-                <div class="quote-header">
-                    <h1 class="quote-title">Complete Your Order</h1>
-                    <p class="quote-subtitle">Secure payment processing powered by Stripe</p>
-                </div>
-                
-                <!-- Order Summary -->
-                <div class="quote-box" id="orderSummary">
-                    <h3 class="quote-box-title">Order Summary</h3>
-                    <!-- Order details will be populated by JavaScript -->
-                </div>
+            <!-- Page Title -->
+            <h1 class="page-title">Complete Your Order</h1>
+            <p class="page-subtitle">Secure payment processing powered by Stripe</p>
 
-                <!-- Customer Information -->
-                <div class="form-section" style="max-width: 500px; margin: 30px auto;">
-                    <h3>Billing Information</h3>
-                    <form id="paymentForm">
-                        <div class="form-fields">
-                            <input type="email" id="email" placeholder="Email Address" required>
-                            <input type="text" id="fullName" placeholder="Full Name" required>
-                            <input type="text" id="company" placeholder="Company Name (Optional)">
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- Payment Disclaimer -->
-                <div class="payment-disclaimer">
-                    <strong>Secure payment by Stripe</strong> • SSL encrypted<br>
-                    You will receive an email confirmation with your order details and Stripe receipt
-                </div>
-                
-                <!-- Buttons -->
-                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 10px 0;">
-                    <button id="submit-payment" class="proceed-button">
-                        Complete Payment
-                    </button>
-                    <button onclick="goBack()" class="btn-back">
-                        ← Back to Quote
-                    </button>
-                </div>
-                
-                </div>
+            <!-- Order Summary -->
+            <div class="quote-box" id="orderSummary">
+                <h3 class="quote-box-title">Order Summary</h3>
+                <!-- Order details will be populated by JavaScript -->
             </div>
-        </div>
-    </div>
-    
-    <!-- Legal Footer -->
-    <div style="text-align: center; margin: 5px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-        <p style="color: #ccc; font-size: 12px; margin: 0;">
-            <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
-            • 
-            <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
-            • Contact: support@inexasli.com
-        </p>
-    </div>
 
+            <!-- Customer Information -->
+            <div class="form-section" style="margin: 30px auto;">
+                <h3>Billing Information</h3>
+                <form id="paymentForm">
+                    <div class="form-fields">
+                        <input type="email" id="email" placeholder="Email Address" required>
+                        <input type="text" id="fullName" placeholder="Full Name" required>
+                        <input type="text" id="company" placeholder="Company Name (Optional)">
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Payment Disclaimer -->
+            <div class="payment-disclaimer">
+                <strong>Secure payment by Stripe</strong> • SSL encrypted<br>
+                You will receive an email confirmation with your order details and Stripe receipt
+            </div>
+            
+            <!-- Buttons -->
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin: 10px 0;">
+                <button id="submit-payment" class="proceed-button">
+                    Complete Payment
+                </button>
+                <button onclick="goBack()" class="btn-back">
+                    ← Back to Quote
+                </button>
+            </div>
+
+<!-- Legal Footer -->
+<div style="text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+    <p style="color: #ccc; font-size: 12px; margin: 0;">
+        <a href="#" onclick="showSocialTerms(); return false;" style="color: #4CAF50; text-decoration: none;">Terms of Service</a>
+        • 
+        <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
+        • Contact: support@inexasli.com
+    </p>
+</div>
+
+</div>
+    
     <script>
         // Splash screen transition
         const splash = document.getElementById('splashContainer');
