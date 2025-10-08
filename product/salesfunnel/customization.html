@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Final Setup - INEXASLI</title>
+    <title>Customize AI Automation - INEXASLI</title>
     <link rel="stylesheet" href="salesflow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
@@ -579,7 +579,7 @@
             <div class="progress-bar">
                 <div class="progress-fill"></div>
             </div>
-            <h1 class="setup-title">Customize Your Automation</h1>
+            <h1 class="setup-title">Customize AI Automation</h1>
             <p class="setup-subtitle">Tell us about your brand so we can create perfect content for your business</p>
         </div>
 
@@ -592,7 +592,7 @@
             
             <!-- Business Category Selection (shown for chat products) -->
             <div class="form-group" id="businessCategoryGroup" style="display: none;">
-                <label class="form-label">Business Category *</label>
+                <label class="form-label">Business Category</label>
                 <div class="grid-selection" id="categoryGrid" data-type="single" data-name="businessCategory">
                     <div class="grid-item1" data-value="customer-facing">
                         <div class="grid-item-text">Customer-Facing Operations</div>
@@ -614,7 +614,7 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="timezone">Timezone for Business Purposes *</label>
+                <label class="form-label" for="timezone">Timezone for Business Purposes</label>
                 <select class="form-select" id="timezone" name="timezone" required>
                     <option value="">Select your timezone</option>
                     <option value="America/New_York">Eastern Time (ET)</option>
@@ -642,10 +642,10 @@
                 <h3 class="card-title">Social Media Configuration</h3>
             </div>
             <div class="card-content">            <div class="form-group">
-                <label class="form-label">Posting Schedule *</label>
+                <label class="form-label">Posting Schedule</label>
                 <div class="posting-schedule-builder">
                     <div class="schedule-header">
-                        <span class="schedule-label">Select days and times for automated posting:</span>
+                        <span class="schedule-label">Select preferred posting days:</span>
                     </div>
                     <div class="days-selector">
                         <div class="day-toggle" data-day="monday">
@@ -677,27 +677,24 @@
                             <div class="day-full">Sunday</div>
                         </div>
                     </div>
-                    <div class="time-slots" id="timeSlots" style="display: none;">
-                        <div class="time-slot-header">
-                            <span>Posting Times (in your selected timezone)</span>
-                            <button type="button" class="add-time-btn" onclick="addPostingTime()">+ Add Time</button>
-                        </div>
-                        <div id="postingTimesContainer">
-                            <!-- Time inputs will be added here dynamically -->
-                        </div>
-                    </div>
                 </div>
                 <input type="hidden" name="postingSchedule" id="postingSchedule" required>
             </div>
 
+                        <div class="form-group">
+                <label class="form-label" for="scheduleDetails">Schedule Details & Preferences</label>
+                <textarea class="form-textarea" id="scheduleDetails" name="scheduleDetails"
+                    placeholder="Describe your posting preferences (e.g., preferred times, posting frequency, any other scheduling requirements or preferences we should discuss)" required></textarea>
+            </div>
+
             <div class="form-group">
-                <label class="form-label" for="contentFocus">Content Focus *</label>
+                <label class="form-label" for="contentFocus">Content Focus</label>
                 <textarea class="form-textarea" id="contentFocus" name="contentFocus"
                     placeholder="What topics or themes should the posts focus on? (e.g., industry insights, customer success stories, educational content)" required></textarea>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="targetAudience">Target Audience *</label>
+                <label class="form-label" for="targetAudience">Target Audience</label>
                 <textarea class="form-textarea" id="targetAudience" name="targetAudience"
                     placeholder="Describe your target audience (e.g., age range, interests, pain points, what they care about)" required></textarea>
             </div>
@@ -712,7 +709,7 @@
                 <div class="card-content">
 
                 <div class="form-group">
-                    <label class="form-label" for="industry">Business Industry *</label>
+                    <label class="form-label" for="industry">Business Industry</label>
                     <select class="form-select" id="industry" name="industry" required>
                         <option value="">Select your industry</option>
                         <option value="restaurant">Restaurant/Food Service</option>
@@ -729,7 +726,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">AI Communication Tone *</label>
+                    <label class="form-label">AI Communication Tone</label>
                     <div class="grid-selection" id="toneGrid" data-type="single" data-name="tone">
                         <div class="grid-item1" data-value="professional">
                             <div class="grid-item-text">Professional</div>
@@ -747,17 +744,15 @@
                     <input type="hidden" name="tone" id="tone" required>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="chatPurpose">Chat Purpose *</label>
+                                <div class="form-group">
+                    <label class="form-label" for="chatPurpose">Chat Purpose</label>
                     <textarea class="form-textarea" id="chatPurpose" name="chatPurpose"
                         placeholder="Describe how you'll use the chat (e.g., customer support, role-playing, task management)" required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="chatAudience">Target Users *</label>
-                    <textarea class="form-textarea" id="chatAudience" name="chatAudience"
-                        placeholder="Describe who will interact with the chat (e.g., customers, employees, general public)" required></textarea>
-                </div>
+                    <label class="form-label" for="chatAudience">Target Users</label>
+                    <textarea class="form-textarea" id="chatAudience" name="chatAudience">
 
                 <div class="form-group">
                     <label class="form-label" for="contentRestrictions">Content Restrictions</label>
@@ -810,13 +805,13 @@
                 <div class="card-content">
 
                 <div class="form-group">
-                    <label class="form-label" for="replyGuidelines">Comment Reply Guidelines *</label>
+                    <label class="form-label" for="replyGuidelines">Comment Reply Guidelines</label>
                     <textarea class="form-textarea" id="replyGuidelines" name="replyGuidelines"
                         placeholder="Specific guidelines for how the AI should respond to comments on social media posts (e.g., always be positive, focus on engagement, maintain brand voice)" required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="platformConsiderations">Platform Considerations *</label>
+                    <label class="form-label" for="platformConsiderations">Platform Considerations</label>
                     <textarea class="form-textarea" id="platformConsiderations" name="platformConsiderations"
                         placeholder="Platform-specific considerations for comment replies (e.g., Instagram comments should be under 900 characters, Twitter replies should be concise)" required></textarea>
                 </div>
@@ -977,9 +972,13 @@
             
             // Load selected package and adapt form
             const packageData = localStorage.getItem('quoteData');
+            console.log('Package data from localStorage:', packageData);
+            
             if (packageData) {
                 const quoteData = JSON.parse(packageData);
                 const selectedPackage = quoteData.package;
+                console.log('Selected package:', selectedPackage);
+                console.log('Package type:', selectedPackage.type);
                 
                 // Optional: Add package info to page
                 const subtitle = document.querySelector('.setup-subtitle');
@@ -999,32 +998,56 @@
                 const replySection = document.getElementById('replySection');
                 const socialSection = document.getElementById('socialSection');
                 
-                if (conversationalSection) conversationalSection.style.display = 'none';
-                if (replySection) replySection.style.display = 'none';
-                if (socialSection) socialSection.style.display = 'none';
+                console.log('Section elements found:', {
+                    conversational: !!conversationalSection,
+                    reply: !!replySection,
+                    social: !!socialSection
+                });
+                
+                console.log('Conversational element details:', conversationalSection);
+                console.log('All elements with package-card class:', document.querySelectorAll('.package-card'));
+                
+                if (conversationalSection) {
+                    console.log('Setting conversationalSection display to none');
+                    conversationalSection.style.display = 'none';
+                }
+                if (replySection) {
+                    console.log('Setting replySection display to none');
+                    replySection.style.display = 'none';
+                }
+                if (socialSection) {
+                    console.log('Setting socialSection display to none');
+                    socialSection.style.display = 'none';
+                }
                 
                 // Show sections based on package type
                 if (packageType === 'basic') {
                     // Basic Chat: Show conversational AI config
+                    console.log('Showing Basic Chat sections');
                     if (conversationalSection) conversationalSection.style.display = 'block';
                 } else if (packageType === 'social') {
                     // Social Starter: Show social media + conversational AI config
+                    console.log('Showing Social Starter sections');
                     if (socialSection) socialSection.style.display = 'block';
                     if (conversationalSection) conversationalSection.style.display = 'block';
                 } else if (packageType === 'pro') {
                     // Pro Bundle: Show all configs
+                    console.log('Showing Pro Bundle sections');
                     if (socialSection) socialSection.style.display = 'block';
                     if (conversationalSection) conversationalSection.style.display = 'block';
                     if (replySection) replySection.style.display = 'block';
                 } else if (packageType === 'enterprise') {
                     // Enterprise: Show all configs
+                    console.log('Showing Enterprise sections');
                     if (socialSection) socialSection.style.display = 'block';
                     if (conversationalSection) conversationalSection.style.display = 'block';
                     if (replySection) replySection.style.display = 'block';
                 }
                 
                 const title = document.querySelector('.setup-title');
-                if (title) title.textContent = 'Customize Your AI Automation';
+                if (title) title.textContent = 'Customize AI Automation';
+            } else {
+                console.log('No package data found in localStorage');
             }
         });
 
@@ -1035,7 +1058,6 @@
             dayToggles.forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     this.classList.toggle('active');
-                    updateTimeSlotsVisibility();
                 });
             });
             
@@ -1054,45 +1076,9 @@
             });
         });
 
-        function updateTimeSlotsVisibility() {
-            const activeDays = document.querySelectorAll('.day-toggle.active');
-            const timeSlots = document.getElementById('timeSlots');
-            
-            if (activeDays.length > 0) {
-                timeSlots.style.display = 'block';
-                // Add a default time slot if none exist
-                const container = document.getElementById('postingTimesContainer');
-                if (container.children.length === 0) {
-                    addPostingTime();
-                }
-            } else {
-                timeSlots.style.display = 'none';
-            }
-        }
-
-        function addPostingTime() {
-            const container = document.getElementById('postingTimesContainer');
-            const timeItem = document.createElement('div');
-            timeItem.className = 'posting-time-item';
-            timeItem.innerHTML = `
-                <input type="time" placeholder="HH:MM" required>
-                <button type="button" class="remove-time-btn" onclick="removePostingTime(this)">×</button>
-            `;
-            container.appendChild(timeItem);
-        }
-
-        function removePostingTime(button) {
-            button.closest('.posting-time-item').remove();
-        }
-
         function collectPostingSchedule() {
             const activeDays = Array.from(document.querySelectorAll('.day-toggle.active')).map(toggle => toggle.dataset.day);
-            const timeInputs = Array.from(document.querySelectorAll('.posting-time-item input[type="time"]')).map(input => input.value).filter(time => time);
-            
-            return {
-                days: activeDays,
-                times: timeInputs
-            };
+            return activeDays;
         }
 
         function submitCustomizationForm() {
@@ -1144,8 +1130,13 @@
                 return;
             }
             
-            if (!setupData.postingSchedule || setupData.postingSchedule.days.length === 0) {
-                alert('Please select at least one day and time for posting.');
+            if (!setupData.postingSchedule || setupData.postingSchedule.length === 0) {
+                alert('Please select at least one day for posting.');
+                return;
+            }
+            
+            if (!setupData.scheduleDetails) {
+                alert('Please fill in your schedule details and preferences.');
                 return;
             }
             
