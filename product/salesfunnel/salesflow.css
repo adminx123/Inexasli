@@ -971,9 +971,9 @@ p {
 }
 
 .addon-card.discount-addon.selected {
-    background: #000000 !important;
-    border-color: rgba(255, 255, 255, 0.2) !important;
-    color: #ffffff !important;
+    background: rgba(220, 53, 69, 0.25) !important;
+    border-color: rgba(220, 53, 69, 0.4) !important;
+    color: #dc3545 !important;
 }
 
 .addon-card.discount-addon .addon-price {
