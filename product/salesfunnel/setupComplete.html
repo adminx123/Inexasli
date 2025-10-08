@@ -242,12 +242,13 @@
         <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
-    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
-        <div class="success-container">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; z-index: 1;">
+        
             <!-- Step Indicator -->
             <div class="step-indicator-placeholder"></div>
-                    <span>Link</span>
-                </a>
+
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
             
             <div class="success-icon">
@@ -298,7 +299,6 @@
         
         <!-- Test Post Result Display -->
         <div id="testResult" style="margin-top: 20px; display: none;"></div>
-    </div>
     
     <!-- Legal Footer -->
     <div style="text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
@@ -309,7 +309,8 @@
             • Contact: support@inexasli.com
         </p>
     </div>
-    
+
+    </div>
     <script src="../../utility/modal.js"></script>
     <script src="../legal/legalSocial.js"></script>
     <script src="step-indicator.js"></script>

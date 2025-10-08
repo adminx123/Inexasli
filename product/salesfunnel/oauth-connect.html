@@ -70,26 +70,6 @@
             letter-spacing: 0.5px;
         }
         
-        .page-title {
-            color: white;
-            font-size: 2.2em;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-        
-        .page-subtitle {
-            color: #ccc;
-            font-size: 1.1em;
-            line-height: 1.6;
-            text-align: center;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
         .info-box {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -238,10 +218,6 @@
         
         /* Responsive design */
         @media (max-width: 768px) {
-            .page-title {
-                font-size: 1.8em;
-            }
-            
             .oauth-button {
                 min-width: 260px;
                 font-size: 1.1em;
@@ -260,26 +236,18 @@
         <img src="../../images/favicon.svg" alt="INEXASLI Logo" class="splash-logo" style="margin-top: 20px;">
     </div>
 
-    <div class="device-container" id="mainContent" style="opacity: 0; display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1;">
+    <div class="device-container" id="mainContent" style="opacity: 0; display: block; z-index: 1;">
+            
             <!-- Step Indicator -->
             <div class="step-indicator-placeholder"></div>
-                </a>
-                <a href="payment.html" class="step completed" style="cursor: pointer; text-decoration: none;">
-                    <div class="step-number"><i class="fas fa-check"></i></div>
-                    <span>Pay</span>
-                </a>
-                <div class="step active">
-                    <div class="step-number">6</div>
-                    <span>Link</span>
-                </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
             
             <!-- Page Title -->
-            <h1 class="page-title">Connect Your Social Media Accounts</h1>
-            <p class="page-subtitle">
-                Securely authorize INEXASLI to create and post content to your social media accounts using our AI automation system.
-                <strong style="color: #10b981;">Connect at least one platform to continue.</strong>
-            </p>
+            <h1 class="page-title">Connect Socials</h1>
+            <p class="page-subtitle">Authorize at least one platform to enable AI content automation</p>
             
             <!-- Payment Success Note -->
             <div class="info-box" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
@@ -332,7 +300,7 @@
                     • Contact: support@inexasli.com
                 </p>
             </div>
-        </div>
+
     </div>
 
     <script>
