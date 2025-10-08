@@ -774,17 +774,30 @@
                             // Only setup platform and addon selection for packages that have them
                             if (packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
                                 // Check if extra cost indicators should be shown based on current selection
+                                console.log(`Package ${packageType} selected, selectedPlatforms: [${selectedPlatforms.join(', ')}], included: ${getIncludedPlatforms(selectedPackage.type)}`);
                                 if (selectedPackage.type !== 'enterprise' && selectedPlatforms.length >= getIncludedPlatforms(selectedPackage.type)) {
+                                    console.log('Adding show-extra-cost');
                                     platforms.classList.add('show-extra-cost');
-                                    // Show indicators on unselected platforms
+                                    // Show indicators on unselected platforms, hide on selected
                                     const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
-                                    allIndicators.forEach(indicator => {
+                                    console.log(`Found ${allIndicators.length} indicators`);
+                                    allIndicators.forEach((indicator, index) => {
                                         const platformOption = indicator.closest('.platform-option');
-                                        if (platformOption && !platformOption.classList.contains('selected')) {
-                                            indicator.style.opacity = '1';
+                                        if (platformOption) {
+                                            const platform = platformOption.dataset.platform;
+                                            const isSelected = platformOption.classList.contains('selected');
+                                            console.log(`Indicator ${index} for ${platform}: selected=${isSelected}`);
+                                            if (isSelected) {
+                                                indicator.style.opacity = '0';
+                                                console.log(`Set ${platform} indicator to 0`);
+                                            } else {
+                                                indicator.style.opacity = '1';
+                                                console.log(`Set ${platform} indicator to 1`);
+                                            }
                                         }
                                     });
                                 } else {
+                                    console.log('Removing show-extra-cost');
                                     platforms.classList.remove('show-extra-cost');
                                     // Hide all indicators
                                     const allIndicators = platforms.querySelectorAll('.extra-cost-indicator');
@@ -900,17 +913,30 @@
                 // Show/hide extra cost indicators based on selection and package type
                 const platformsContainer = this.closest('.package-platforms');
                 if (platformsContainer && selectedPackage.type !== 'enterprise') { // Enterprise includes all platforms
+                    console.log(`After click: selectedPlatforms: [${selectedPlatforms.join(', ')}], included: ${getIncludedPlatforms(selectedPackage.type)}`);
                     if (selectedPlatforms.length >= getIncludedPlatforms(selectedPackage.type)) {
+                        console.log('Adding show-extra-cost in click handler');
                         platformsContainer.classList.add('show-extra-cost');
-                        // Show indicators on ALL unselected platforms when at/beyond limit
+                        // Show indicators on unselected platforms, hide on selected
                         const allIndicators = platformsContainer.querySelectorAll('.extra-cost-indicator');
-                        allIndicators.forEach(indicator => {
+                        console.log(`Found ${allIndicators.length} indicators in click`);
+                        allIndicators.forEach((indicator, index) => {
                             const platformOption = indicator.closest('.platform-option');
-                            if (platformOption && !platformOption.classList.contains('selected')) {
-                                indicator.style.opacity = '1';
+                            if (platformOption) {
+                                const plat = platformOption.dataset.platform;
+                                const isSel = platformOption.classList.contains('selected');
+                                console.log(`Click indicator ${index} for ${plat}: selected=${isSel}`);
+                                if (isSel) {
+                                    indicator.style.opacity = '0';
+                                    console.log(`Set ${plat} indicator to 0 in click`);
+                                } else {
+                                    indicator.style.opacity = '1';
+                                    console.log(`Set ${plat} indicator to 1 in click`);
+                                }
                             }
                         });
                     } else {
+                        console.log('Removing show-extra-cost in click handler');
                         platformsContainer.classList.remove('show-extra-cost');
                         // Hide all indicators when under limit
                         const allIndicators = platformsContainer.querySelectorAll('.extra-cost-indicator');
@@ -936,12 +962,12 @@
                 
                 // Apply current selections
                 selectedPlatforms.forEach(platform => {
-                    const option = document.querySelector(`.platform-option[data-platform="${platform}"]`);
+                    const option = document.querySelector(`.package-card.selected .platform-option[data-platform="${platform}"]`);
                     if (option) option.classList.add('selected');
                 });
                 
                 selectedAddons.forEach(addon => {
-                    const card = document.querySelector(`.addon-card[data-addon="${addon.id}"]`);
+                    const card = document.querySelector(`.package-card.selected .addon-card[data-addon="${addon.id}"]`);
                     if (card) {
                         card.classList.add('selected');
                         // Mark as included if it's part of the package
