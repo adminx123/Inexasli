@@ -179,7 +179,7 @@
         function displayQuote() {
             if (!quoteData) return;
 
-            const { package: pkg, addons, total } = quoteData;
+            const { package: pkg, addons, platforms, total } = quoteData;
 
             // Get monthly fee from package data or fallback to calculation
             const monthlyFee = pkg.monthlyPrice || getMonthlyFee(pkg.type);
@@ -305,7 +305,7 @@
         });
     </script>
     
-    <script src="/utility/modal.js"></script>
+    <script src="../../utility/modal.js"></script>
     <script src="../legal/legalSocial.js"></script>
     <script src="step-indicator.js"></script>
 </body>

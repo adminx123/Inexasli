@@ -198,7 +198,7 @@
                 <!-- Overall Total -->
                 <div class="quote-total">
                     <span class="quote-total-label">Total Due Today</span>
-                    <span class="quote-total-amount">$${selectedPackage.price + (selectedPackage.monthlyPrice || 127) + filteredAddons.reduce((sum, addon) => sum + addon.price, 0)}</span>
+                    <span class="quote-total-amount">$${selectedPackage.price + filteredAddons.reduce((sum, addon) => sum + addon.price, 0)}</span>
                 </div>
             `;
             
@@ -334,7 +334,7 @@
         });
     </script>
     
-    <script src="/utility/modal.js"></script>
+    <script src="../../utility/modal.js"></script>
     <script src="../legal/legalSocial.js"></script>
     <script src="step-indicator.js"></script>
     

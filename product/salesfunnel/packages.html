@@ -592,6 +592,37 @@
                 enterprise: 499
             };
             
+            // Setup fees for each package (one-time payment)
+            const setupFees = {
+                basic: 199,
+                social: 299,
+                pro: 499,
+                enterprise: 999
+            };
+            
+            // Package features
+            function getPackageFeatures(packageType) {
+                const features = {
+                    basic: [
+                        'AI chat widget for websites',
+                        'Easy embed'
+                    ],
+                    social: [
+                        'AI chat + AI-generated social content',
+                        '1 platform included'
+                    ],
+                    pro: [
+                        'AI chat + message replies + AI social content',
+                        '2 platforms included'
+                    ],
+                    enterprise: [
+                        'Full AI suite + all platforms + white-label',
+                        'Dedicated support'
+                    ]
+                };
+                return features[packageType] || [];
+            }
+            
             // Load saved selections from localStorage
             try {
                 const saved = localStorage.getItem('packageSelections');
@@ -628,7 +659,11 @@
                     type: 'basic',
                     name: packageName,
                     monthlyPrice: monthlyPrice,
-                    price: monthlyPrice * 12
+                    price: setupFees.basic,
+                    features: [
+                        'AI chat widget for websites',
+                        'Easy embed'
+                    ]
                 };
                 
                 updateTotal();
@@ -716,7 +751,8 @@
                         type: packageType,
                         name: packageName,
                         monthlyPrice: basePrices[packageType],
-                        price: basePrices[packageType] * 12
+                        price: setupFees[packageType],
+                        features: getPackageFeatures(packageType)
                     };
                     
                     console.log(`Package selected: ${packageType}, base price: $${basePrices[packageType]}/month`);                    // Load saved selections for this package
@@ -812,7 +848,7 @@
                         return;
                     }
                     
-                    // Calculate final total
+                    // Calculate final total (setup fee + first month recurring)
                     let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
                     
                     // Add platform costs (1 included, additional $15 each)
@@ -1112,7 +1148,7 @@
                         return;
                     }
                     
-                    // Calculate final total
+                    // Calculate final total (setup fee + first month recurring)
                     let subtotal = selectedPackage.price + selectedPackage.monthlyPrice;
                     
                     // Add platform costs (1 included, additional $15 each)
