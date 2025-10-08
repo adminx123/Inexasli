@@ -30,6 +30,9 @@
             to { width: 20%; }
         }
         
+        /* Page-specific styles for packages.html */
+        /* Package-card styles moved to salesflow.css */
+        
         /* Platform Selection Grid - Single Row Layout */
         .platform-selection-grid {
             display: flex;
@@ -106,99 +109,11 @@
             font-size: 16px;
             margin: 0 0 30px 0;
         }
-        /* Package Cards */
-        .package-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
-            align-items: center;
-        }
-        .package-cards.has-selection .package-card:not(.selected) {
-            filter: blur(2px);
-            opacity: 0.6;
-            transform: scale(0.98);
-            transition: all 0.3s ease;
-        }
-        .package-cards:not(.has-selection) .package-card {
-            filter: none;
-            opacity: 1;
-            transform: scale(1);
-            transition: all 0.3s ease;
-        }
-        .package-card {
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            padding: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.05);
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-        .package-card:hover {
-            border-color: rgba(16, 185, 129, 0.5);
-            transform: translateY(-2px);
-        }
-        .package-card.selected {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-        }
         
-        .package-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 6px;
-        }
+        /* Page-specific styles for packages.html */
+        /* Package-card styles moved to salesflow.css */
         
-        .package-card h3 {
-            margin: 0;
-            color: #fff;
-            font-size: 16px;
-        }
-        .package-card .price {
-            font-size: 16px;
-            font-weight: bold;
-            color: #10b981;
-            margin: 0;
-        }
-        .package-card p {
-            margin: 0 0 6px 0;
-            color: #ccc;
-            font-size: 13px;
-        }
-        .package-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 6px;
-            margin-top: 10px;
-        }
-        .package-card li, .core-feature {
-            display: block;
-            position: relative;
-            color: #10b981;
-            font-size: 12px;
-            margin: 0;
-            background: rgba(16, 185, 129, 0.25);
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-align: left;
-            border: 1px solid #10b981;
-            cursor: default;
-        }
-
-        .feature-name {
-            color: inherit;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-        }
-
+        /* Addon card state management */
         .feature-status {
             color: #10b981;
             font-size: 11px;
@@ -488,7 +403,7 @@
         </div>
 
         <!-- Extra Iterations -->
-        <div class="addon-card" data-addon="iterations-extra" data-price="150">
+        <div class="addon-card included" data-addon="iterations-extra" data-price="150">
           <span class="addon-name">+10 Content Refinements</span>
           <span class="addon-price">+$150</span>
         </div>
