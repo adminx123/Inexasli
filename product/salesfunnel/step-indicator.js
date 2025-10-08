@@ -102,19 +102,19 @@
         }
 
         .step.completed {
-            background: rgba(40, 167, 69, 0.3);
-            color: #90ee90;
-            border-color: #28a745;
+            background: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+            border-color: #10b981;
         }
 
         .step.completed:hover {
-            background: rgba(40, 167, 69, 0.5);
+            background: rgba(16, 185, 129, 0.5);
             transform: translateY(-2px);
         }
 
         .step.disabled {
             background: rgba(255,255,255,0.05);
-            color: #666;
+            color: #ccc;
             cursor: not-allowed;
             border-color: rgba(255,255,255,0.1);
         }
