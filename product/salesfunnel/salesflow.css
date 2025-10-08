@@ -526,6 +526,11 @@ body {
     background: #000000;
 }
 
+/* Collapsed state for package cards in customization */
+.package-card.collapsed .card-content {
+    display: none;
+}
+
 .package-header {
     display: flex;
     justify-content: space-between;
