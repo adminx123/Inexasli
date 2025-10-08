@@ -31,9 +31,9 @@ body {
 /* Progress Bar */
 .progress-bar {
     width: 100%;
-    height: 8px;
+    height: 10px;
     background: #ffffff;
-    border-radius: 4px;
+    border-radius: 5px;
     margin-bottom: 30px;
     overflow: hidden;
 }
@@ -41,8 +41,8 @@ body {
 .progress-fill {
     width: 60%;
     height: 100%;
-    background: #000000;
-    border-radius: 4px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 5px;
     animation: progressLoad 1s ease-out;
 }
 
@@ -647,9 +647,10 @@ body {
 
 /* Typography Hierarchy */
 .page-title {
-    font-size: 2.2em;
-    color: white;
-    margin-bottom: 15px;
+    text-align: center;
+    font-size: 24px;
+    color: #fff;
+    margin: 20px 0 10px 0;
     font-weight: 700;
     letter-spacing: 1px;
 }
@@ -659,9 +660,10 @@ body {
 }
 
 .page-subtitle {
-    font-size: 1.1em;
-    color: white;
-    margin-bottom: 30px;
+    text-align: center;
+    font-size: 16px;
+    color: #ccc;
+    margin: 0 0 30px 0;
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;

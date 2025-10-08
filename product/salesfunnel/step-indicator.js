@@ -9,14 +9,18 @@
         1: 'packages.html',
         2: 'customization.html',
         3: 'quote.html',
-        4: 'payment.html'
+        4: 'payment.html',
+        5: 'oauth.html',
+        6: 'setup.html'
     };
 
     const stepTitles = {
-        1: 'Choose Base Package',
-        2: 'Customize Content',
-        3: 'Review Order',
-        4: 'Payment'
+        1: 'Choose Package',
+        2: 'Customize Automation',
+        3: 'Review Quote',
+        4: 'Payment',
+        5: 'OAuth Setup',
+        6: 'Setup Complete'
     };
 
     // HTML Template
@@ -24,19 +28,27 @@
         <div class="step-indicator">
             <a href="packages.html" class="step" data-step="1">
                 <div class="step-number">1</div>
-                <span>Base</span>
+                <span>Packages</span>
             </a>
             <a href="customization.html" class="step" data-step="2">
                 <div class="step-number">2</div>
-                <span>Info</span>
+                <span>Customize</span>
             </a>
             <a href="quote.html" class="step" data-step="3">
                 <div class="step-number">3</div>
-                <span>Review</span>
+                <span>Quote</span>
             </a>
             <a href="payment.html" class="step" data-step="4">
                 <div class="step-number">4</div>
-                <span>Pay</span>
+                <span>Payment</span>
+            </a>
+            <a href="oauth.html" class="step" data-step="5">
+                <div class="step-number">5</div>
+                <span>OAuth</span>
+            </a>
+            <a href="setup.html" class="step" data-step="6">
+                <div class="step-number">6</div>
+                <span>Complete</span>
             </a>
         </div>
     `;
@@ -79,13 +91,13 @@
         }
 
         .step.active {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            border-color: #667eea;
+            border-color: #10b981;
         }
 
         .step.active:hover {
-            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-2px);
         }
 

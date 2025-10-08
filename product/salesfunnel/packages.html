@@ -95,20 +95,6 @@
         .package-platforms.show-extra-cost .extra-cost-indicator {
             opacity: 1;
         }
-        /* Page Title and Subtitle */
-        .page-title {
-            text-align: center;
-            color: #fff;
-            font-size: 24px;
-            margin: 20px 0 10px 0;
-        }
-        
-        .page-subtitle {
-            text-align: center;
-            color: #ccc;
-            font-size: 16px;
-            margin: 0 0 30px 0;
-        }
         
         /* Page-specific styles for packages.html */
         /* Package-card styles moved to salesflow.css */
@@ -120,38 +106,6 @@
             font-weight: bold;
             float: right;
             white-space: nowrap;
-        }
-        
-        /* Package Expansion Sections */
-        .package-platforms, .package-addons {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .package-platforms h4, .package-addons h4 {
-            margin: 0 0 15px 0;
-            color: #4CAF50;
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .platform-note {
-            font-size: 12px;
-            color: #ccc;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .total-display {
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .total-label {
@@ -202,63 +156,6 @@
             grid-template-columns: 1fr;
             gap: 6px;
             margin-top: 10px;
-        }
-
-        .addon-card {
-            display: block;
-            position: relative;
-            color: #ccc;
-            font-size: 12px;
-            margin: 0;
-            background: rgba(255,255,255,0.1);
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-            text-align: left;
-        }
-
-        .addon-card:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(16, 185, 129, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .addon-card.selected {
-            background: rgba(16, 185, 129, 0.2);
-            border-color: #10b981;
-            color: #fff;
-        }
-
-        .addon-card.included {
-            background: rgba(16, 185, 129, 0.25);
-            border-color: #10b981;
-            color: #10b981;
-        }
-
-        .addon-name {
-            color: inherit;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-        }
-
-        .addon-price {
-            color: #10b981;
-            font-size: 11px;
-            font-weight: bold;
-            float: right;
-            white-space: nowrap;
-        }
-
-        .addon-card.discount-addon .addon-price {
-            color: #ff6b6b;
-        }
-
-        .addon-card.included .addon-price {
-            text-decoration: line-through;
-            opacity: 0.6;
         }
 
         .package-continue-btn {
