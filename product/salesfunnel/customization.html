@@ -342,42 +342,60 @@
     </script>
     
     <script>
+        // Global function for checking card completion
+        function checkCardCompletion(card) {
+            const grids = card.querySelectorAll('.grid-selection');
+            let allGridsCompleted = true;
+            grids.forEach(grid => {
+                const items = grid.querySelectorAll('.grid-item1');
+                const hasSelection = Array.from(items).some(i => i.classList.contains('selected'));
+                if (!hasSelection) allGridsCompleted = false;
+            });
+            
+            // Also check required form elements (selects and inputs)
+            const requiredSelects = card.querySelectorAll('select[required]');
+            let allSelectsCompleted = true;
+            requiredSelects.forEach(select => {
+                if (!select.value) allSelectsCompleted = false;
+            });
+            
+            const requiredInputs = card.querySelectorAll('input[required]');
+            let allInputsCompleted = true;
+            requiredInputs.forEach(input => {
+                if (!input.value) allInputsCompleted = false;
+            });
+            
+            const requiredTextareas = card.querySelectorAll('textarea[required]');
+            let allTextareasCompleted = true;
+            requiredTextareas.forEach(textarea => {
+                if (!textarea.value.trim()) allTextareasCompleted = false;
+            });
+            
+            // Check for day toggles (at least one must be active)
+            const dayToggles = card.querySelectorAll('.day-toggle');
+            let hasActiveDayToggle = true; // Default to true if no day toggles exist
+            if (dayToggles.length > 0) {
+                hasActiveDayToggle = Array.from(dayToggles).some(toggle => toggle.classList.contains('active'));
+            }
+            
+            const isComplete = allGridsCompleted && allSelectsCompleted && allInputsCompleted && allTextareasCompleted && hasActiveDayToggle;
+            
+            if (isComplete) {
+                card.classList.add('completed');
+                const statusText = card.querySelector('.status-text');
+                if (statusText) statusText.textContent = '✓';
+            } else {
+                card.classList.remove('completed');
+                const statusText = card.querySelector('.status-text');
+                if (statusText) statusText.textContent = 'To Do';
+            }
+        }
+    </script>
+    
+    <script>
         // Grid selection functionality
         document.addEventListener('DOMContentLoaded', function() {
             const gridSelections = document.querySelectorAll('.grid-selection');
-            
-            function checkCardCompletion(card) {
-                const grids = card.querySelectorAll('.grid-selection');
-                let allGridsCompleted = true;
-                grids.forEach(grid => {
-                    const items = grid.querySelectorAll('.grid-item1');
-                    const hasSelection = Array.from(items).some(i => i.classList.contains('selected'));
-                    if (!hasSelection) allGridsCompleted = false;
-                });
-                
-                // Also check required form elements (selects and inputs)
-                const requiredSelects = card.querySelectorAll('select[required]');
-                let allSelectsCompleted = true;
-                requiredSelects.forEach(select => {
-                    if (!select.value) allSelectsCompleted = false;
-                });
-                
-                const requiredInputs = card.querySelectorAll('input[required]');
-                let allInputsCompleted = true;
-                requiredInputs.forEach(input => {
-                    if (!input.value) allInputsCompleted = false;
-                });
-                
-                if (allGridsCompleted && allSelectsCompleted && allInputsCompleted) {
-                    card.classList.add('completed');
-                    const statusText = card.querySelector('.status-text');
-                    if (statusText) statusText.textContent = '✓';
-                } else {
-                    card.classList.remove('completed');
-                    const statusText = card.querySelector('.status-text');
-                    if (statusText) statusText.textContent = 'To Do';
-                }
-            }
             
             gridSelections.forEach(grid => {
                 const type = grid.dataset.type; // 'single' or 'multiple'
@@ -424,6 +442,14 @@
             const requiredInputs = document.querySelectorAll('input[required]');
             requiredInputs.forEach(input => {
                 input.addEventListener('input', function() {
+                    const card = this.closest('.package-card');
+                    if (card) checkCardCompletion(card);
+                });
+            });
+            
+            const requiredTextareas = document.querySelectorAll('textarea[required]');
+            requiredTextareas.forEach(textarea => {
+                textarea.addEventListener('input', function() {
                     const card = this.closest('.package-card');
                     if (card) checkCardCompletion(card);
                 });
@@ -508,6 +534,14 @@
             } else {
                 console.log('No package data found in localStorage');
             }
+            
+            // After form persistence loads, check completion status of all cards
+            setTimeout(() => {
+                const allCards = document.querySelectorAll('.package-card');
+                allCards.forEach(card => {
+                    checkCardCompletion(card);
+                });
+            }, 300); // Delay to ensure form persistence has loaded
         });
 
         // Posting schedule functionality
@@ -517,6 +551,20 @@
             dayToggles.forEach(toggle => {
                 toggle.addEventListener('click', function() {
                     this.classList.toggle('active');
+                    // Update hidden input for form persistence
+                    const postingScheduleInput = document.getElementById('postingSchedule');
+                    if (postingScheduleInput) {
+                        const activeDays = Array.from(document.querySelectorAll('.day-toggle.active')).map(t => t.dataset.day);
+                        postingScheduleInput.value = JSON.stringify(activeDays);
+                    }
+                    // Check completion status of the social media card
+                    const socialCard = document.querySelector('.package-card[data-section="social"]');
+                    if (socialCard) {
+                        console.log('Found social card, checking completion');
+                        checkCardCompletion(socialCard);
+                    } else {
+                        console.log('Social card not found');
+                    }
                 });
             });
             

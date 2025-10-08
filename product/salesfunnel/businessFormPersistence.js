@@ -61,9 +61,20 @@ class BusinessFormPersistence {
         });
 
         // Listen to grid item selections
-        const gridItems = this.form.querySelectorAll('.grid-item');
+        const gridItems = this.form.querySelectorAll('.grid-item, .grid-item1');
         gridItems.forEach(item => {
             item.addEventListener('click', () => {
+                // Small delay to ensure selection state is updated
+                setTimeout(() => {
+                    this.debouncedSave();
+                }, 50);
+            });
+        });
+
+        // Listen to day toggle selections
+        const dayToggles = this.form.querySelectorAll('.day-toggle');
+        dayToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
                 // Small delay to ensure selection state is updated
                 setTimeout(() => {
                     this.debouncedSave();
@@ -141,7 +152,7 @@ class BusinessFormPersistence {
             gridContainers.forEach(container => {
                 const containerId = container.id;
                 if (containerId) {
-                    const selectedItems = container.querySelectorAll('.grid-item.selected');
+                    const selectedItems = container.querySelectorAll('.grid-item.selected, .grid-item1.selected');
                     const selectedValues = Array.from(selectedItems).map(item => item.dataset.value || item.textContent.trim());
                     if (selectedValues.length > 0) {
                         formData.gridSelections[containerId] = selectedValues;
@@ -150,7 +161,18 @@ class BusinessFormPersistence {
                 }
             });
 
-            // Save to localStorage
+            // Collect day toggle selections
+            const dayToggles = this.form.querySelectorAll('.day-toggle.active');
+            if (dayToggles.length > 0) {
+                formData.dayToggles = {};
+                dayToggles.forEach(toggle => {
+                    const day = toggle.dataset.day || toggle.id;
+                    if (day) {
+                        formData.dayToggles[day] = true;
+                    }
+                });
+                console.log(`[BusinessFormPersistence] Saving day toggles:`, Object.keys(formData.dayToggles));
+            }
             const saved = setJSON(this.storageKey, formData);
             if (saved) {
                 console.log('Form data saved successfully');
@@ -200,7 +222,7 @@ class BusinessFormPersistence {
                     if (container && Array.isArray(selectedValues)) {
                         console.log(`[BusinessFormPersistence] Restoring ${selectedValues.length} selections for ${containerId}`);
                         // First, clear all selections in this container
-                        container.querySelectorAll('.grid-item.selected').forEach(item => {
+                        container.querySelectorAll('.grid-item.selected, .grid-item1.selected').forEach(item => {
                             item.classList.remove('selected');
                         });
 
@@ -225,6 +247,20 @@ class BusinessFormPersistence {
                         });
                     } else {
                         console.warn(`[BusinessFormPersistence] Could not find container ${containerId} or invalid selectedValues`);
+                    }
+                });
+            }
+
+            // Restore day toggle selections
+            if (savedData.dayToggles) {
+                console.log('[BusinessFormPersistence] Restoring day toggles:', savedData.dayToggles);
+                Object.keys(savedData.dayToggles).forEach(day => {
+                    const toggle = this.form.querySelector(`.day-toggle[data-day="${day}"]`) || this.form.querySelector(`#${day}`);
+                    if (toggle) {
+                        toggle.classList.add('active');
+                        console.log(`[BusinessFormPersistence] Restored day toggle: ${day}`);
+                    } else {
+                        console.warn(`[BusinessFormPersistence] Could not find day toggle: ${day}`);
                     }
                 });
             }
