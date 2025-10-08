@@ -9,16 +9,14 @@
         1: 'packages.html',
         2: 'customization.html',
         3: 'quote.html',
-        4: 'payment.html',
-        5: 'oauth-connect.html'
+        4: 'oauth-connect.html'
     };
 
     const stepTitles = {
         1: 'Choose Package',
         2: 'Customize Automation',
-        3: 'Review Quote',
-        4: 'Payment',
-        5: 'Connect Socials'
+        3: 'Review & Pay',
+        4: 'Connect Socials'
     };
 
     // HTML Template
@@ -34,14 +32,10 @@
             </a>
             <a href="quote.html" class="step" data-step="3">
                 <div class="step-number">3</div>
-                <span>Quote</span>
+                <span>Review & Pay</span>
             </a>
-            <a href="payment.html" class="step" data-step="4">
+            <a href="oauth-connect.html" class="step" data-step="4">
                 <div class="step-number">4</div>
-                <span>Payment</span>
-            </a>
-            <a href="oauth-connect.html" class="step" data-step="5">
-                <div class="step-number">5</div>
                 <span>Connect</span>
             </a>
         </div>
