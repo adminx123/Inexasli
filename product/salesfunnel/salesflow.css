@@ -2083,18 +2083,26 @@ textarea {
 }
 
 .proceed-button {
+    max-width: 250px;
+    margin: 20px auto 0 auto;
+    padding: 12px;
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
     border: none;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 1em;
+    border-radius: 8px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    margin: 10px;
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: block;
+}
+
+.proceed-button:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .next-steps-box {
