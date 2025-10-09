@@ -184,7 +184,7 @@
             <h1 class="page-title">Choose Package</h1>
             <p class="page-subtitle">Select the type of AI solution that fits your business needs.</p><!-- Package Cards -->
 <div class="package-cards">
-  <div class="package-card selected" data-package="basic">
+  <div class="package-card" data-package="basic">
     <div class="package-header">
       <h3>Basic Chat</h3>
       <div class="price" id="basic-price">$99/month</div>
@@ -590,40 +590,40 @@
                 console.log('Could not load saved selections');
             }
             
-            // Initialize with basic package selected
-            const basicCard = document.querySelector('.package-card[data-package="basic"]');
-            if (basicCard) {
-                // Manually select the basic package instead of clicking
-                basicCard.classList.add('selected');
+            // No package selected by default
+            // const basicCard = document.querySelector('.package-card[data-package="basic"]');
+            // if (basicCard) {
+            //     // Manually select the basic package instead of clicking
+            //     basicCard.classList.add('selected');
                 
-                // Show the package platforms section for basic
-                const basicPlatforms = basicCard.querySelector('.package-platforms');
-                if (basicPlatforms) basicPlatforms.style.display = 'block';
+            //     // Keep the package platforms section collapsed for basic
+            //     // const basicPlatforms = basicCard.querySelector('.package-platforms');
+            //     // if (basicPlatforms) basicPlatforms.style.display = 'block';
                 
-                // Show the continue button for basic with delay
-                const basicContinueBtn = basicCard.querySelector('.package-continue-btn');
-                if (basicContinueBtn) {
-                    setTimeout(() => {
-                        basicContinueBtn.style.display = 'block';
-                    }, 300);
-                }
+            //     // Show the continue button for basic with delay
+            //     const basicContinueBtn = basicCard.querySelector('.package-continue-btn');
+            //     if (basicContinueBtn) {
+            //         setTimeout(() => {
+            //             basicContinueBtn.style.display = 'block';
+            //         }, 300);
+            //     }
                 
-                const packageName = basicCard.querySelector('h3').textContent;
-                const monthlyPrice = basePrices.basic;
+            //     const packageName = basicCard.querySelector('h3').textContent;
+            //     const monthlyPrice = basePrices.basic;
                 
-                selectedPackage = {
-                    type: 'basic',
-                    name: packageName,
-                    monthlyPrice: monthlyPrice,
-                    // price: setupFees.basic, // COMMENTED OUT - no setup fee
-                    features: [
-                        'AI chat widget for websites',
-                        'Easy embed'
-                    ]
-                };
+            //     selectedPackage = {
+            //         type: 'basic',
+            //         name: packageName,
+            //         monthlyPrice: monthlyPrice,
+            //         // price: setupFees.basic, // COMMENTED OUT - no setup fee
+            //         features: [
+            //             'AI chat widget for websites',
+            //             'Easy embed'
+            //         ]
+            //     };
                 
-                updateTotal();
-            }
+            //     updateTotal();
+            // }
             
             packageCards.forEach(card => {
                 card.addEventListener('click', function(event) {
