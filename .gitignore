@@ -105,7 +105,7 @@ ai/rate-limiter/rate-limiter.js
 ai/master.js
 
 # Payment processing worker
-payment/stripeintegration.js
+ai/payment/stripe-app.js
 
 # any folder named hide
 hide
@@ -121,4 +121,9 @@ product/collection/
 # Twitter webhook setup worker (contains sensitive credentials)
 product/setup-twitter-webhook.js
 product/wrangler-setup-webhook.toml
-product/architecture/saas-architecture.md
+product/architecture/
+
+# Payment folders (contain sensitive Stripe keys and configurations)
+Payment/
+ai/payment/
+product/payment/
