@@ -1040,8 +1040,8 @@ p {
 }
 
 .package-continue-btn {
-    width: 100%;
-    margin-top: 20px;
+    max-width: 250px;
+    margin: 20px auto 0 auto;
     padding: 12px;
     background: linear-gradient(135deg, #10b981, #059669);
     color: white;
@@ -1053,6 +1053,7 @@ p {
     transition: all 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    display: block;
 }
 
 .package-continue-btn:hover {

@@ -203,6 +203,8 @@
                     <textarea class="form-textarea" id="chatAudience" name="chatAudience"
                         placeholder="Describe your target users (e.g., age, interests, demographics)" required></textarea>
                 </div>
+
+                <div class="form-group">
                     <label class="form-label" for="contentRestrictions">Content Restrictions</label>
                     <textarea class="form-textarea" id="contentRestrictions" name="contentRestrictions"
                         placeholder="Any topics or responses the AI should avoid? (Applies to both chat and social replies)"></textarea>
@@ -575,7 +577,19 @@
                     }
                     e.preventDefault();
                     e.stopPropagation();
-                    this.classList.toggle('collapsed');
+                    
+                    // If this card is collapsed, expand it and collapse all others
+                    if (this.classList.contains('collapsed')) {
+                        // Collapse all cards first
+                        sectionTitles.forEach(otherCard => {
+                            otherCard.classList.add('collapsed');
+                        });
+                        // Then expand this one
+                        this.classList.remove('collapsed');
+                    } else {
+                        // If already expanded, collapse it
+                        this.classList.add('collapsed');
+                    }
                 });
             });
         });
