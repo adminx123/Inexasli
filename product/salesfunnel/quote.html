@@ -213,7 +213,7 @@
         }
 
         function getMonthlyFee(packageType) {
-            const fees = { starter: 127, professional: 197, enterprise: 297 };
+            const fees = { basic: 99, social: 149, pro: 299, enterprise: 499 };
             return fees[packageType] || 197;
         }
 
@@ -235,6 +235,7 @@
         }
 
         function getIncludedAddons(packageType) {
+            if (packageType === 'basic') return [];
             if (packageType === 'social') return ['photos-10', 'videos-5'];
             if (packageType === 'pro') return ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation'];
             if (packageType === 'enterprise') return ['photos-10', 'videos-5', 'iterations-extra', 'ai-content-generation', 'white-label-chat'];
