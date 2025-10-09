@@ -174,19 +174,7 @@
 
     <div class="device-container" id="mainContent" style="opacity: 0; display: block; z-index: 1;">
             
-            <!-- Currency Selector -->
-            <div class="currency-selector-container">
-                <div class="currency-selector">
-                    <span class="currency-label">Your Currency:</span>
-                    <select id="currencySelect" class="currency-select">
-                        <option value="CAD" data-symbol="$">🇨🇦 CAD ($)</option>
-                        <option value="USD" data-symbol="$">🇺🇸 USD ($)</option>
-                        <option value="EUR" data-symbol="€">🇪🇺 EUR (€)</option>
-                        <option value="GBP" data-symbol="£">🇬🇧 GBP (£)</option>
-                        <option value="AUD" data-symbol="$">🇦🇺 AUD ($)</option>
-                    </select>
-                </div>
-            </div>
+     
 
             <!-- Step Indicator -->
                         <!-- Step Indicator -->
@@ -512,9 +500,6 @@
             const splash = document.getElementById('splashContainer');
             const main = document.getElementById('mainContent');
             
-            // Initialize currency selector
-            initializeCurrencySelector();
-            
             // Start main content fade-in immediately
             main.style.transition = 'opacity 1.2s ease-in';
             
@@ -543,7 +528,6 @@
     <script src="https://144a1766.master-widget.pages.dev/masterWidget.js"></script>
     
     <script src="../../utility/modal.js"></script>
-    <script src="../../utility/currency.js"></script>
     <script src="../legal/legalSocial.js"></script>
     <script src="step-indicator.js"></script>
     <script>
