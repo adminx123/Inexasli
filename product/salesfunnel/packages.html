@@ -721,34 +721,34 @@
                     // Update visual state to match loaded selections
                     updateVisualSelections();
                     
-                    console.log('Visual state reset: all selections cleared');                    // Set default addon selections based on package type
-                    if (selectedAddons.length === 0) { // Only set defaults if no saved selections
-                        if (packageType === 'social') {
-                            // Social Starter includes basic storage
-                            selectedAddons = [
-                                { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
-                                { id: 'videos-5', name: '+5 Video Storage', price: 75 }
-                            ];
-                        } else if (packageType === 'pro') {
-                            // Pro includes storage + content refinements + AI content
-                            selectedAddons = [
-                                { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
-                                { id: 'videos-5', name: '+5 Video Storage', price: 75 },
-                                { id: 'iterations-extra', name: '+10 Content Refinements', price: 150 },
-                                { id: 'ai-content-generation', name: 'AI Content Generation', price: 200 }
-                            ];
-                        } else if (packageType === 'enterprise') {
-                            // Enterprise includes everything
-                            selectedAddons = [
-                                { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
-                                { id: 'videos-5', name: '+5 Video Storage', price: 75 },
-                                { id: 'iterations-extra', name: '+10 Content Refinements', price: 150 },
-                                { id: 'ai-content-generation', name: 'AI Content Generation', price: 200 },
-                                { id: 'white-label-chat', name: 'White-label Chat', price: 150 }
-                            ];
-                        }
-                        console.log(`Set default addons for ${packageType}: ${selectedAddons.map(a => a.id).join(', ')}`);
+                    console.log('Visual state reset: all selections cleared');                    // Always set default addon selections based on package type (reset any saved expensive addons)
+                    if (packageType === 'social') {
+                        // Social Starter includes basic storage
+                        selectedAddons = [
+                            { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
+                            { id: 'videos-5', name: '+5 Video Storage', price: 75 }
+                        ];
+                    } else if (packageType === 'pro') {
+                        // Pro includes storage + content refinements + AI content
+                        selectedAddons = [
+                            { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
+                            { id: 'videos-5', name: '+5 Video Storage', price: 75 },
+                            { id: 'iterations-extra', name: '+10 Content Refinements', price: 150 },
+                            { id: 'ai-content-generation', name: 'AI Content Generation', price: 200 }
+                        ];
+                    } else if (packageType === 'enterprise') {
+                        // Enterprise includes everything
+                        selectedAddons = [
+                            { id: 'photos-10', name: '+10 Photo Storage', price: 50 },
+                            { id: 'videos-5', name: '+5 Video Storage', price: 75 },
+                            { id: 'iterations-extra', name: '+10 Content Refinements', price: 150 },
+                            { id: 'ai-content-generation', name: 'AI Content Generation', price: 200 },
+                            { id: 'white-label-chat', name: 'White-label Chat', price: 150 }
+                        ];
+                    } else {
+                        selectedAddons = [];
                     }
+                    console.log(`Set default addons for ${packageType}: ${selectedAddons.map(a => a.id).join(', ')}`);
                     
                     // Show expansion sections for all packages
                     if (packageType === 'basic' || packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
