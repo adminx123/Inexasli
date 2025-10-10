@@ -594,12 +594,38 @@
             });
         });
 
-        function collectPostingSchedule() {
-            const activeDays = Array.from(document.querySelectorAll('.day-toggle.active')).map(toggle => toggle.dataset.day);
-            return activeDays;
+        function getRelevantSections(packageType) {
+            const sections = ['main']; // Main config always included
+            
+            if (packageType === 'basic' || packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
+                sections.push('conversational'); // All packages include chat
+            }
+            
+            if (packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
+                sections.push('social'); // Social media packages
+            }
+            
+            if (packageType === 'pro' || packageType === 'enterprise') {
+                sections.push('reply'); // Reply logic for higher tiers
+            }
+            
+            return sections;
         }
 
         function submitCustomizationForm() {
+            // Get current package to determine which sections should be included
+            const packageData = localStorage.getItem('quoteData');
+            if (!packageData) {
+                alert('Package data not found. Please start over.');
+                window.location.href = 'packages.html';
+                return;
+            }
+            const quoteData = JSON.parse(packageData);
+            const packageType = quoteData.package.type;
+            
+            // Determine which sections are relevant for this package
+            const relevantSections = getRelevantSections(packageType);
+            
             // Collect form data manually since no form element
             const setupData = {};
             
@@ -615,56 +641,89 @@
                 }
             });
             
-            // Handle grid selections
-            const toneGrid = document.querySelector('[data-name="tone"]');
-            const selectedTone = toneGrid.querySelectorAll('.grid-item1.selected');
-            setupData.tone = selectedTone.length > 0 ? selectedTone[0].dataset.value : null;
+            // Handle grid selections - only if section is relevant
+            if (relevantSections.includes('main')) {
+                const toneGrid = document.querySelector('[data-name="tone"]');
+                const selectedTone = toneGrid.querySelectorAll('.grid-item1.selected');
+                setupData.tone = selectedTone.length > 0 ? selectedTone[0].dataset.value : null;
+                
+                const colorGrid = document.querySelector('[data-name="chatColors"]');
+                const selectedColor = colorGrid.querySelectorAll('.grid-item1.selected');
+                setupData.chatColors = selectedColor.length > 0 ? selectedColor[0].dataset.value : null;
+            }
             
-            const colorGrid = document.querySelector('[data-name="chatColors"]');
-            const selectedColor = colorGrid.querySelectorAll('.grid-item1.selected');
-            setupData.chatColors = selectedColor.length > 0 ? selectedColor[0].dataset.value : null;
+            // Collect posting schedule - only if social section is relevant
+            if (relevantSections.includes('social')) {
+                const postingScheduleInput = document.getElementById('postingSchedule');
+                setupData.postingSchedule = postingScheduleInput ? JSON.parse(postingScheduleInput.value || '[]') : [];
+            }
             
-            // Collect posting schedule
-            setupData.postingSchedule = collectPostingSchedule();
+            // Filter setupData to only include fields from relevant sections
+            const fieldSectionMap = {
+                businessCategory: 'main',
+                timezone: 'main',
+                industry: 'conversational',
+                tone: 'conversational',
+                chatPurpose: 'conversational',
+                chatAudience: 'conversational',
+                chatWidgetName: 'conversational',
+                chatColors: 'conversational',
+                knowledgeBase: 'conversational',
+                contentRestrictions: 'conversational',
+                postingSchedule: 'social',
+                scheduleDetails: 'social',
+                contentFocus: 'social',
+                targetAudience: 'social',
+                replyGuidelines: 'reply',
+                platformConsiderations: 'reply'
+            };
             
-            // Validate required fields
-            if (!setupData.businessCategory) {
+            const filteredSetupData = {};
+            for (const [key, value] of Object.entries(setupData)) {
+                const section = fieldSectionMap[key];
+                if (!section || relevantSections.includes(section)) {
+                    filteredSetupData[key] = value;
+                }
+            }
+            
+            // Validate required fields based on relevant sections
+            if (relevantSections.includes('main') && !filteredSetupData.businessCategory) {
                 alert('Please select a business category.');
                 return;
             }
             
-            if (!setupData.tone) {
+            if (relevantSections.includes('conversational') && !filteredSetupData.tone) {
                 alert('Please select a chat tone.');
                 return;
             }
             
-            if (!setupData.chatPurpose || !setupData.chatAudience) {
+            if (relevantSections.includes('conversational') && (!filteredSetupData.chatPurpose || !filteredSetupData.chatAudience)) {
                 alert('Please fill in the chat purpose and target users.');
                 return;
             }
             
-            if (!setupData.replyGuidelines || !setupData.platformConsiderations) {
+            if (relevantSections.includes('reply') && (!filteredSetupData.replyGuidelines || !filteredSetupData.platformConsiderations)) {
                 alert('Please fill in reply guidelines and platform considerations.');
                 return;
             }
             
-            if (!setupData.postingSchedule || setupData.postingSchedule.length === 0) {
+            if (relevantSections.includes('social') && (!filteredSetupData.postingSchedule || filteredSetupData.postingSchedule.length === 0)) {
                 alert('Please select at least one day for posting.');
                 return;
             }
             
-            if (!setupData.scheduleDetails) {
+            if (relevantSections.includes('social') && (!filteredSetupData.scheduleDetails)) {
                 alert('Please fill in your schedule details and preferences.');
                 return;
             }
             
-            if (!setupData.contentFocus || !setupData.targetAudience) {
+            if (relevantSections.includes('social') && (!filteredSetupData.contentFocus || !filteredSetupData.targetAudience)) {
                 alert('Please fill in content focus and target audience.');
                 return;
             }
             
             // Store customization data for Stripe integration
-            setJSON('customizationData', setupData);
+            setJSON('customizationData', filteredSetupData);
             
             // Redirect to quote page
             window.location.href = 'quote.html';
