@@ -125,5 +125,8 @@ product/architecture/
 
 # Payment folders (contain sensitive Stripe keys and configurations)
 Payment/
-ai/payment/
-product/payment/
+ai/payment/stripe-app.js
+ai/payment/wrangler-stripe-app.toml
+product/payment/stripe-saas.js
+product/payment/wrangler-stripe-saas.toml
+product/payment/wrangler-stripeintegration.toml
