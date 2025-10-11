@@ -32,29 +32,6 @@
             </div>
             <div class="card-content">
             
-            <!-- Business Category Selection (shown for chat products) -->
-            <div class="form-group" id="businessCategoryGroup" style="display: none;">
-                <label class="form-label">Business Category</label>
-                <div class="grid-selection" id="categoryGrid" data-type="single" data-name="businessCategory">
-                    <div class="grid-item1" data-value="customer-facing">
-                        <div class="grid-item-text">Customer-Facing Operations</div>
-                    </div>
-                    <div class="grid-item1" data-value="internal-productivity">
-                        <div class="grid-item-text">Internal Productivity and Operations</div>
-                    </div>
-                    <div class="grid-item1" data-value="specialized-services">
-                        <div class="grid-item-text">Specialized Services</div>
-                    </div>
-                    <div class="grid-item1" data-value="creative-entertainment">
-                        <div class="grid-item-text">Creative and Entertainment</div>
-                    </div>
-                    <div class="grid-item1" data-value="industry-specific">
-                        <div class="grid-item-text">Industry-Specific</div>
-                    </div>
-                </div>
-                <input type="hidden" name="businessCategory" id="businessCategory" required>
-            </div>
-
             <div class="form-group">
                 <label class="form-label" for="timezone">Timezone for Business Purposes</label>
                 <select class="form-select" id="timezone" name="timezone" required>
@@ -117,61 +94,81 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">AI Communication Tone</label>
-                    <div class="grid-selection" id="toneGrid" data-type="single" data-name="tone">
-                        <div class="grid-item1" data-value="professional">
-                            <div class="grid-item-text">Professional</div>
+
+
+                <!-- Operational Focus Selection -->
+                <div class="form-group" id="roleScopeGroup">
+                    <label class="form-label">Operational Focus</label>
+                    <div class="grid-selection" id="roleScopeGrid" data-type="single" data-name="roleScope">
+                        <div class="grid-item1" data-value="internal">
+                            <div class="grid-item-text">Internal</div>
                         </div>
-                        <div class="grid-item1" data-value="approachable">
-                            <div class="grid-item-text">Approachable</div>
-                        </div>
-                        <div class="grid-item1" data-value="engaging">
-                            <div class="grid-item-text">Engaging</div>
-                        </div>
-                        <div class="grid-item1" data-value="helpful">
-                            <div class="grid-item-text">Helpful</div>
+                        <div class="grid-item1" data-value="external">
+                            <div class="grid-item-text">External</div>
                         </div>
                     </div>
-                    <input type="hidden" name="tone" id="tone" required>
+                    <input type="hidden" name="roleScope" id="roleScope" required>
                 </div>
 
-                                <div class="form-group">
-                    <label class="form-label" for="chatPurpose">Chat Purpose</label>
-                    <textarea class="form-textarea" id="chatPurpose" name="chatPurpose"
-                        placeholder="Describe how you'll use the chat (e.g., customer support, role-playing, task management)" required></textarea>
+                <!-- Department Selection -->
+                <div class="form-group" id="functionGroup" style="display: none;">
+                    <label class="form-label">Departments</label>
+                    <div class="grid-selection" id="functionGrid" data-type="multiple" data-name="functions">
+                        <div class="grid-item1" data-value="sales" data-scope="both">
+                            <div class="grid-item-text">Sales</div>
+                        </div>
+                        <div class="grid-item1" data-value="support" data-scope="both">
+                            <div class="grid-item-text">Support</div>
+                        </div>
+                        <div class="grid-item1" data-value="admin" data-scope="internal">
+                            <div class="grid-item-text">Admin</div>
+                        </div>
+                        <div class="grid-item1" data-value="hr" data-scope="internal">
+                            <div class="grid-item-text">HR</div>
+                        </div>
+                        <div class="grid-item1" data-value="operations" data-scope="both">
+                            <div class="grid-item-text">Operations</div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="functions" id="functions" required>
+                </div>
+
+                <!-- Role Selection -->
+                <div class="form-group" id="roleGroup" style="display: none;">
+                    <label class="form-label">AI Chat Role Support</label>
+                    <div class="grid-selection" id="roleGrid" data-type="multiple" data-name="roles">
+                        <div class="grid-item1" data-value="customer-service-rep" data-scope="external" data-function="support">
+                            <div class="grid-item-text">Customer Service Rep</div>
+                        </div>
+                        <div class="grid-item1" data-value="sales-assistant" data-scope="both" data-function="sales">
+                            <div class="grid-item-text">Sales Assistant</div>
+                        </div>
+                        <div class="grid-item1" data-value="support-technician" data-scope="both" data-function="support">
+                            <div class="grid-item-text">Support Technician</div>
+                        </div>
+                        <div class="grid-item1" data-value="hr-assistant" data-scope="internal" data-function="hr">
+                            <div class="grid-item-text">HR Assistant</div>
+                        </div>
+                        <div class="grid-item1" data-value="admin-assistant" data-scope="internal" data-function="admin">
+                            <div class="grid-item-text">Admin Assistant</div>
+                        </div>
+                        <div class="grid-item1" data-value="order-fulfillment" data-scope="external" data-function="operations">
+                            <div class="grid-item-text">Order Fulfillment Staff</div>
+                        </div>
+                        <div class="grid-item1" data-value="it-support" data-scope="internal" data-function="operations">
+                            <div class="grid-item-text">IT Support</div>
+                        </div>
+                        <div class="grid-item1" data-value="team-coordinator" data-scope="internal" data-function="operations">
+                            <div class="grid-item-text">Team Coordinator</div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="roles" id="roles" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="chatAudience">Target Users</label>
+                    <label class="form-label">Chat Users</label>
                     <textarea class="form-textarea" id="chatAudience" name="chatAudience"
                         placeholder="Describe your target users (e.g., age, interests, demographics)" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="contentRestrictions">Content Restrictions</label>
-                    <textarea class="form-textarea" id="contentRestrictions" name="contentRestrictions"
-                        placeholder="Any topics or responses the AI should avoid? (Applies to both chat and social replies)"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="chatWidgetName">Chat Widget Name</label>
-                    <input type="text" class="form-input" id="chatWidgetName" name="chatWidgetName"
-                        placeholder="e.g., INEXASLI Assistant, Support Bot">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Chat Widget Color Scheme</label>
-                    <textarea class="form-textarea" id="chatColorScheme" name="chatColorScheme" rows="5"
-                        placeholder="Describe in detail the color scheme you want for your chat widget. Include:&#10;&#10;• Main background color (light/dark theme)&#10;• Primary brand color for headers/buttons&#10;• Accent color for highlights and links&#10;• Text colors (if different from default)&#10;• Any specific hex codes, brand colors, or color names&#10;&#10;Examples: 'Dark blue (#1a365d) background with white text and green (#38a169) accent buttons' or 'Match our website colors - navy blue and gold'"></textarea>
-                    <small style="color: rgba(255,255,255,0.7); font-size: 12px;">Be as specific as possible. We'll create a professional design based on your description.</small>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="knowledgeBase">Knowledge Base Documents</label>
-                    <input type="file" class="form-input" id="knowledgeBase" name="knowledgeBase" multiple
-                        accept=".pdf,.doc,.docx,.txt,.md">
-                    <small style="color: rgba(255,255,255,0.7); font-size: 12px;">Upload documents for AI training (PDF, DOC, TXT, MD)</small>
                 </div>
             </div>
             </div>
@@ -413,6 +410,90 @@
     </script>
     
     <script>
+        // Restore grid selections from hidden inputs
+        function restoreGridSelections() {
+            // Restore role scope
+            const roleScopeInput = document.getElementById('roleScope');
+            if (roleScopeInput && roleScopeInput.value) {
+                const scopeItem = document.querySelector(`#roleScopeGrid .grid-item1[data-value="${roleScopeInput.value}"]`);
+                if (scopeItem) {
+                    scopeItem.classList.add('selected');
+                }
+            }
+            
+            // Restore functions
+            const functionsInput = document.getElementById('functions');
+            if (functionsInput && functionsInput.value) {
+                const functionValues = functionsInput.value.split(',');
+                functionValues.forEach(value => {
+                    const funcItem = document.querySelector(`#functionGrid .grid-item1[data-value="${value.trim()}"]`);
+                    if (funcItem) {
+                        funcItem.classList.add('selected');
+                    }
+                });
+            }
+            
+            // Restore roles
+            const rolesInput = document.getElementById('roles');
+            if (rolesInput && rolesInput.value) {
+                const roleValues = rolesInput.value.split(',');
+                roleValues.forEach(value => {
+                    const roleItem = document.querySelector(`#roleGrid .grid-item1[data-value="${value.trim()}"]`);
+                    if (roleItem) {
+                        roleItem.classList.add('selected');
+                    }
+                });
+            }
+        }
+        
+        // Update visibility of functions and roles based on scope
+        function updateVisibility() {
+            const selectedScopeItem = document.querySelector('#roleScopeGrid .grid-item1.selected');
+            const selectedScope = selectedScopeItem ? selectedScopeItem.dataset.value : null;
+            
+            if (selectedScope) {
+                document.getElementById('functionGroup').style.display = 'block';
+                
+                // Filter functions
+                const functions = document.querySelectorAll('#functionGrid .grid-item1');
+                functions.forEach(item => {
+                    const scope = item.dataset.scope;
+                    if (scope === selectedScope || scope === 'both') {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                        item.classList.remove('selected');
+                    }
+                });
+                
+                // Check selected functions
+                const selectedFunctions = document.querySelectorAll('#functionGrid .grid-item1.selected');
+                const selectedFunctionValues = Array.from(selectedFunctions).map(item => item.dataset.value);
+                
+                if (selectedFunctions.length > 0) {
+                    document.getElementById('roleGroup').style.display = 'block';
+                    
+                    // Filter roles
+                    const roles = document.querySelectorAll('#roleGrid .grid-item1');
+                    roles.forEach(item => {
+                        const scope = item.dataset.scope;
+                        const func = item.dataset.function;
+                        if ((scope === selectedScope || scope === 'both') && selectedFunctionValues.includes(func)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                            item.classList.remove('selected');
+                        }
+                    });
+                } else {
+                    document.getElementById('roleGroup').style.display = 'none';
+                }
+            } else {
+                document.getElementById('functionGroup').style.display = 'none';
+                document.getElementById('roleGroup').style.display = 'none';
+            }
+        }
+        
         // Grid selection functionality
         document.addEventListener('DOMContentLoaded', function() {
             const gridSelections = document.querySelectorAll('.grid-selection');
@@ -443,12 +524,23 @@
                             // Update form data (will be handled in form submission)
                         }
                         
+                        // Progressive disclosure and filtering
+                        updateVisibility();
+                        
                         // Check card completion
                         const card = this.closest('.package-card');
                         if (card) checkCardCompletion(card);
                     });
                 });
             });
+            
+            // Initial visibility update
+            updateVisibility();
+            
+            // Wait for form persistence to complete, then update visibility
+            setTimeout(() => {
+                updateVisibility();
+            }, 500);
             
             // Add listeners for required form elements
             const requiredSelects = document.querySelectorAll('select[required]');
@@ -681,12 +773,13 @@
             
             // Filter setupData to only include fields from relevant sections
             const fieldSectionMap = {
-                businessCategory: 'main',
                 timezone: 'main',
                 industry: 'conversational',
+                roleScope: 'conversational',
+                functions: 'conversational',
+                roles: 'conversational',
                 tone: 'conversational',
-                chatPurpose: 'conversational',
-                chatAudience: 'conversational',
+                useCaseDetails: 'conversational',
                 chatWidgetName: 'conversational',
                 chatColors: 'conversational',
                 knowledgeBase: 'conversational',
@@ -708,8 +801,18 @@
             }
             
             // Validate required fields based on relevant sections
-            if (relevantSections.includes('main') && !filteredSetupData.businessCategory) {
-                alert('Please select a business category.');
+            if (relevantSections.includes('main') && !filteredSetupData.roleScope) {
+                alert('Please select an operational focus.');
+                return;
+            }
+            
+            if (relevantSections.includes('main') && !filteredSetupData.functions) {
+                alert('Please select departments.');
+                return;
+            }
+            
+            if (relevantSections.includes('main') && !filteredSetupData.roles) {
+                alert('Please select AI chat role support.');
                 return;
             }
             
