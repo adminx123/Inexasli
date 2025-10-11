@@ -130,3 +130,6 @@ ai/payment/wrangler-stripe-app.toml
 product/payment/stripe-saas.js
 product/payment/wrangler-stripe-saas.toml
 product/payment/wrangler-stripeintegration.toml
+
+# Client-specific configurations and knowledge (contains sensitive client data)
+*client/

@@ -75,81 +75,25 @@
                     <option value="Pacific/Auckland">Auckland (NZST)</option>
                 </select>
             </div>
-        </div>
-        </div>
 
-        <!-- Social Media Configuration Section -->
-        <div class="package-card collapsed" id="socialSection" data-section="social">
-            <div class="package-header">
-                <h3 class="card-title">Social Media Configuration</h3>
-                <div class="card-status">
-                    <span class="status-text">To Do</span>
-                </div>
-            </div>
-            <div class="card-content">            <div class="form-group">
-                <label class="form-label">Posting Schedule</label>
-                <div class="posting-schedule-builder">
-                    <div class="schedule-header">
-                        <span class="schedule-label">Select preferred posting days:</span>
-                    </div>
-                    <div class="days-selector">
-                        <div class="day-toggle" data-day="monday">
-                            <div class="day-label">M</div>
-                            <div class="day-full">Monday</div>
-                        </div>
-                        <div class="day-toggle" data-day="tuesday">
-                            <div class="day-label">T</div>
-                            <div class="day-full">Tuesday</div>
-                        </div>
-                        <div class="day-toggle" data-day="wednesday">
-                            <div class="day-label">W</div>
-                            <div class="day-full">Wednesday</div>
-                        </div>
-                        <div class="day-toggle" data-day="thursday">
-                            <div class="day-label">T</div>
-                            <div class="day-full">Thursday</div>
-                        </div>
-                        <div class="day-toggle" data-day="friday">
-                            <div class="day-label">F</div>
-                            <div class="day-full">Friday</div>
-                        </div>
-                        <div class="day-toggle" data-day="saturday">
-                            <div class="day-label">S</div>
-                            <div class="day-full">Saturday</div>
-                        </div>
-                        <div class="day-toggle" data-day="sunday">
-                            <div class="day-label">S</div>
-                            <div class="day-full">Sunday</div>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" name="postingSchedule" id="postingSchedule" required>
-            </div>
-
-                        <div class="form-group">
-                <label class="form-label" for="scheduleDetails">Schedule Details & Preferences</label>
-                <textarea class="form-textarea" id="scheduleDetails" name="scheduleDetails"
-                    placeholder="Describe your posting preferences (e.g., preferred times, posting frequency, any other scheduling requirements or preferences we should discuss)" required></textarea>
+            <div class="form-group">
+                <label class="form-label" for="brandName">Brand Name</label>
+                <input type="text" class="form-input" id="brandName" name="brandName"
+                    placeholder="e.g., INEXASLI, Your Company Name" required>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="contentFocus">Content Focus</label>
-                <textarea class="form-textarea" id="contentFocus" name="contentFocus"
-                    placeholder="What topics or themes should the posts focus on? (e.g., industry insights, customer success stories, educational content)" required></textarea>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="targetAudience">Target Audience</label>
-                <textarea class="form-textarea" id="targetAudience" name="targetAudience"
-                    placeholder="Describe your target audience (e.g., age range, interests, pain points, what they care about)" required></textarea>
+                <label class="form-label" for="brandVoice">Brand Voice</label>
+                <textarea class="form-textarea" id="brandVoice" name="brandVoice"
+                    placeholder="Describe your brand's voice and personality (e.g., professional yet approachable, practical philosophy expert)" required></textarea>
             </div>
         </div>
         </div>
 
-        <!-- Conversational AI Configuration Section (Chat & Reply) -->
+        <!-- Chat AI Configuration Section -->
             <div class="package-card collapsed" id="conversationalSection" data-section="conversational" style="display: none;">
                 <div class="package-header">
-                    <h3 class="card-title">Conversational AI Configuration</h3>
+                    <h3 class="card-title">Chat AI Configuration</h3>
                     <div class="card-status">
                         <span class="status-text">To Do</span>
                     </div>
@@ -217,25 +161,10 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Chat Widget Colors</label>
-                    <div class="grid-selection" id="colorGrid" data-type="single" data-name="chatColors">
-                        <div class="grid-item1" data-value="professional-dark">
-                            <div class="grid-item-text">Professional Dark</div>
-                        </div>
-                        <div class="grid-item1" data-value="modern-blue">
-                            <div class="grid-item-text">Modern Blue</div>
-                        </div>
-                        <div class="grid-item1" data-value="warm-green">
-                            <div class="grid-item-text">Warm Green</div>
-                        </div>
-                        <div class="grid-item1" data-value="vibrant-purple">
-                            <div class="grid-item-text">Vibrant Purple</div>
-                        </div>
-                        <div class="grid-item1" data-value="custom">
-                            <div class="grid-item-text">Custom Colors</div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="chatColors" id="chatColors">
+                    <label class="form-label">Chat Widget Color Scheme</label>
+                    <textarea class="form-textarea" id="chatColorScheme" name="chatColorScheme" rows="5"
+                        placeholder="Describe in detail the color scheme you want for your chat widget. Include:&#10;&#10;• Main background color (light/dark theme)&#10;• Primary brand color for headers/buttons&#10;• Accent color for highlights and links&#10;• Text colors (if different from default)&#10;• Any specific hex codes, brand colors, or color names&#10;&#10;Examples: 'Dark blue (#1a365d) background with white text and green (#38a169) accent buttons' or 'Match our website colors - navy blue and gold'"></textarea>
+                    <small style="color: rgba(255,255,255,0.7); font-size: 12px;">Be as specific as possible. We'll create a professional design based on your description.</small>
                 </div>
 
                 <div class="form-group">
@@ -247,7 +176,99 @@
             </div>
             </div>
 
-            <!-- Reply Logic Configuration Section -->
+        <!-- Social Posting Configuration Section -->
+        <div class="package-card collapsed" id="socialSection" data-section="social">
+            <div class="package-header">
+                <h3 class="card-title">Social Posting Configuration</h3>
+                <div class="card-status">
+                    <span class="status-text">To Do</span>
+                </div>
+            </div>
+            <div class="card-content">            <div class="form-group">
+                <label class="form-label">Posting Schedule</label>
+                <div class="posting-schedule-builder">
+                    <div class="schedule-header">
+                        <span class="schedule-label">Select preferred posting days:</span>
+                    </div>
+                    <div class="days-selector">
+                        <div class="day-toggle" data-day="monday">
+                            <div class="day-label">M</div>
+                            <div class="day-full">Monday</div>
+                        </div>
+                        <div class="day-toggle" data-day="tuesday">
+                            <div class="day-label">T</div>
+                            <div class="day-full">Tuesday</div>
+                        </div>
+                        <div class="day-toggle" data-day="wednesday">
+                            <div class="day-label">W</div>
+                            <div class="day-full">Wednesday</div>
+                        </div>
+                        <div class="day-toggle" data-day="thursday">
+                            <div class="day-label">T</div>
+                            <div class="day-full">Thursday</div>
+                        </div>
+                        <div class="day-toggle" data-day="friday">
+                            <div class="day-label">F</div>
+                            <div class="day-full">Friday</div>
+                        </div>
+                        <div class="day-toggle" data-day="saturday">
+                            <div class="day-label">S</div>
+                            <div class="day-full">Saturday</div>
+                        </div>
+                        <div class="day-toggle" data-day="sunday">
+                            <div class="day-label">S</div>
+                            <div class="day-full">Sunday</div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="postingSchedule" id="postingSchedule" required>
+            </div>
+
+                        <div class="form-group">
+                <label class="form-label" for="scheduleDetails">Schedule Details & Preferences</label>
+                <textarea class="form-textarea" id="scheduleDetails" name="scheduleDetails"
+                    placeholder="Describe your posting preferences (e.g., preferred times, posting frequency, any other scheduling requirements or preferences we should discuss)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="contentFocus">Content Focus</label>
+                <textarea class="form-textarea" id="contentFocus" name="contentFocus"
+                    placeholder="What topics or themes should the posts focus on? (e.g., industry insights, customer success stories, educational content)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="imagePromptTemplate">Image Generation Prompt Template</label>
+                <textarea class="form-textarea" id="imagePromptTemplate" name="imagePromptTemplate"
+                    placeholder="Template for AI image generation (e.g., 'Create [style] for: [content]... Incorporate [elements] with [mood] mood. [colors]. [composition].')" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="targetAudience">Target Audience</label>
+                <textarea class="form-textarea" id="targetAudience" name="targetAudience"
+                    placeholder="Describe your target audience (e.g., age range, interests, pain points, what they care about)" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="instagramHandle">Instagram Handle</label>
+                <input type="text" class="form-input" id="instagramHandle" name="instagramHandle"
+                    placeholder="e.g., @yourbrand">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="twitterHandle">Twitter Handle</label>
+                <input type="text" class="form-input" id="twitterHandle" name="twitterHandle"
+                    placeholder="e.g., @yourbrand">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="facebookHandle">Facebook Page ID or Handle</label>
+                <input type="text" class="form-input" id="facebookHandle" name="facebookHandle"
+                    placeholder="e.g., 1234567890 or @yourbrand">
+            </div>
+        </div>
+        </div>
+
+        <!-- Social Posting Configuration Section -->
             <div class="package-card collapsed" id="replySection" style="display: none;">
                 <div class="package-header">
                     <h3 class="card-title">Social Media Reply Configuration</h3>
