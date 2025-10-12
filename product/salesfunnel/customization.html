@@ -97,9 +97,9 @@
 
 
                 <!-- Operational Focus Selection -->
-                <div class="form-group" id="roleScopeGroup">
+                <div class="form-group" id="roleScopeGroupChat">
                     <label class="form-label">Operational Focus</label>
-                    <div class="grid-selection" id="roleScopeGrid" data-type="single" data-name="roleScope">
+                    <div class="grid-selection" id="roleScopeGridChat" data-type="single" data-name="roleScopeChat">
                         <div class="grid-item1" data-value="internal">
                             <div class="grid-item-text">Internal</div>
                         </div>
@@ -107,13 +107,13 @@
                             <div class="grid-item-text">External</div>
                         </div>
                     </div>
-                    <input type="hidden" name="roleScope" id="roleScope" required>
+                    <input type="hidden" name="roleScopeChat" id="roleScopeChat" required>
                 </div>
 
                 <!-- Department Selection -->
-                <div class="form-group" id="functionGroup" style="display: none;">
+                <div class="form-group" id="functionGroupChat" style="display: none;">
                     <label class="form-label">Departments</label>
-                    <div class="grid-selection" id="functionGrid" data-type="multiple" data-name="functions">
+                    <div class="grid-selection" id="functionGridChat" data-type="multiple" data-name="functionsChat">
                         <div class="grid-item1" data-value="sales" data-scope="both">
                             <div class="grid-item-text">Sales</div>
                         </div>
@@ -130,13 +130,13 @@
                             <div class="grid-item-text">Operations</div>
                         </div>
                     </div>
-                    <input type="hidden" name="functions" id="functions" required>
+                    <input type="hidden" name="functionsChat" id="functionsChat" required>
                 </div>
 
                 <!-- Role Selection -->
-                <div class="form-group" id="roleGroup" style="display: none;">
+                <div class="form-group" id="roleGroupChat" style="display: none;">
                     <label class="form-label">AI Chat Role Support</label>
-                    <div class="grid-selection" id="roleGrid" data-type="multiple" data-name="roles">
+                    <div class="grid-selection" id="roleGridChat" data-type="multiple" data-name="rolesChat">
                         <div class="grid-item1" data-value="customer-service-rep" data-scope="external" data-function="support">
                             <div class="grid-item-text">Customer Service Rep</div>
                         </div>
@@ -162,7 +162,7 @@
                             <div class="grid-item-text">Team Coordinator</div>
                         </div>
                     </div>
-                    <input type="hidden" name="roles" id="roles" required>
+                    <input type="hidden" name="rolesChat" id="rolesChat" required>
                 </div>
 
                 <div class="form-group">
@@ -502,14 +502,18 @@
         
         // Update visibility of functions and roles based on scope
         function updateVisibility() {
-            const selectedScopeItem = document.querySelector('#roleScopeGrid .grid-item1.selected');
+            // Main section has no grids requiring progressive disclosure
+        }
+        
+        function updateVisibilityChat() {
+            const selectedScopeItem = document.querySelector('#roleScopeGridChat .grid-item1.selected');
             const selectedScope = selectedScopeItem ? selectedScopeItem.dataset.value : null;
             
             if (selectedScope) {
-                document.getElementById('functionGroup').style.display = 'block';
+                document.getElementById('functionGroupChat').style.display = 'block';
                 
                 // Filter functions
-                const functions = document.querySelectorAll('#functionGrid .grid-item1');
+                const functions = document.querySelectorAll('#functionGridChat .grid-item1');
                 functions.forEach(item => {
                     const scope = item.dataset.scope;
                     if (scope === selectedScope || scope === 'both') {
@@ -521,14 +525,14 @@
                 });
                 
                 // Check selected functions
-                const selectedFunctions = document.querySelectorAll('#functionGrid .grid-item1.selected');
+                const selectedFunctions = document.querySelectorAll('#functionGridChat .grid-item1.selected');
                 const selectedFunctionValues = Array.from(selectedFunctions).map(item => item.dataset.value);
                 
                 if (selectedFunctions.length > 0) {
-                    document.getElementById('roleGroup').style.display = 'block';
+                    document.getElementById('roleGroupChat').style.display = 'block';
                     
                     // Filter roles
-                    const roles = document.querySelectorAll('#roleGrid .grid-item1');
+                    const roles = document.querySelectorAll('#roleGridChat .grid-item1');
                     roles.forEach(item => {
                         const scope = item.dataset.scope;
                         const func = item.dataset.function;
@@ -540,11 +544,11 @@
                         }
                     });
                 } else {
-                    document.getElementById('roleGroup').style.display = 'none';
+                    document.getElementById('roleGroupChat').style.display = 'none';
                 }
             } else {
-                document.getElementById('functionGroup').style.display = 'none';
-                document.getElementById('roleGroup').style.display = 'none';
+                document.getElementById('functionGroupChat').style.display = 'none';
+                document.getElementById('roleGroupChat').style.display = 'none';
             }
         }
         
@@ -585,7 +589,11 @@
                         }
                         
                         // Progressive disclosure and filtering
-                        updateVisibility();
+                        if (grid.id.includes('Chat')) {
+                            updateVisibilityChat();
+                        } else {
+                            updateVisibility();
+                        }
                         
                         // Check card completion
                         const card = this.closest('.package-card');
@@ -595,11 +603,11 @@
             });
             
             // Initial visibility update
-            updateVisibility();
+            updateVisibilityChat();
             
             // Wait for form persistence to complete, then update visibility
             setTimeout(() => {
-                updateVisibility();
+                updateVisibilityChat();
             }, 500);
             
             // Add listeners for required form elements
@@ -833,9 +841,12 @@
             const fieldSectionMap = {
                 timezone: 'main',
                 industry: 'conversational',
-                roleScope: 'conversational',
-                functions: 'conversational',
-                roles: 'conversational',
+                roleScope: 'main',
+                functions: 'main',
+                roles: 'main',
+                roleScopeChat: 'conversational',
+                functionsChat: 'conversational',
+                rolesChat: 'conversational',
                 chatWidgetName: 'conversational',
                 chatColors: 'conversational',
                 knowledgeBase: 'conversational',

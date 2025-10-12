@@ -130,7 +130,7 @@ class BusinessFormPersistence {
             // Collect input, select, and textarea values
             const formElements = this.form.querySelectorAll('input, select, textarea');
             formElements.forEach(element => {
-                if (element.id) {
+                if (element.id && element.type !== 'file') {
                     let value = element.value;
                     
                     // Special handling for different input types
@@ -201,7 +201,7 @@ class BusinessFormPersistence {
             if (savedData.inputs) {
                 Object.entries(savedData.inputs).forEach(([elementId, value]) => {
                     const element = document.getElementById(elementId);
-                    if (element && value !== null && value !== undefined && value !== '') {
+                    if (element && value !== null && value !== undefined && value !== '' && element.type !== 'file') {
                         if (element.type === 'checkbox') {
                             element.checked = value;
                         } else {
