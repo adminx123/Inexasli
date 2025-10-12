@@ -361,50 +361,80 @@
     <script>
         // Global function for checking card completion
         function checkCardCompletion(card) {
+            console.log('Checking completion for card:', card.querySelector('.card-title')?.textContent);
+            
             const grids = card.querySelectorAll('.grid-selection');
             let allGridsCompleted = true;
             grids.forEach(grid => {
+                if (grid.style.display === 'none') {
+                    console.log('Skipping hidden grid:', grid.id);
+                    return; // Skip hidden grids
+                }
                 const items = grid.querySelectorAll('.grid-item1');
-                const hasSelection = Array.from(items).some(i => i.classList.contains('selected'));
+                const selectedItems = Array.from(items).filter(i => i.classList.contains('selected'));
+                const hasSelection = selectedItems.length > 0;
+                console.log('Grid', grid.id, 'has selection:', hasSelection, 'selected items:', selectedItems.map(i => i.dataset.value));
                 if (!hasSelection) allGridsCompleted = false;
             });
+            console.log('All grids completed:', allGridsCompleted);
             
             // Also check required form elements (selects and inputs)
             const requiredSelects = card.querySelectorAll('select[required]');
             let allSelectsCompleted = true;
             requiredSelects.forEach(select => {
-                if (!select.value) allSelectsCompleted = false;
+                const hasValue = !!select.value;
+                console.log('Select', select.id, 'has value:', hasValue, 'value:', select.value);
+                if (!hasValue) allSelectsCompleted = false;
             });
+            console.log('All selects completed:', allSelectsCompleted);
             
             const requiredInputs = card.querySelectorAll('input[required]');
             let allInputsCompleted = true;
             requiredInputs.forEach(input => {
-                if (!input.value) allInputsCompleted = false;
+                const hasValue = !!input.value;
+                console.log('Input', input.id, 'has value:', hasValue, 'value:', input.value);
+                if (!hasValue) allInputsCompleted = false;
             });
+            console.log('All inputs completed:', allInputsCompleted);
             
             const requiredTextareas = card.querySelectorAll('textarea[required]');
             let allTextareasCompleted = true;
             requiredTextareas.forEach(textarea => {
-                if (!textarea.value.trim()) allTextareasCompleted = false;
+                const hasValue = !!textarea.value.trim();
+                console.log('Textarea', textarea.id, 'has value:', hasValue, 'value length:', textarea.value.length);
+                if (!hasValue) allTextareasCompleted = false;
             });
+            console.log('All textareas completed:', allTextareasCompleted);
             
             // Check for day toggles (at least one must be active)
             const dayToggles = card.querySelectorAll('.day-toggle');
             let hasActiveDayToggle = true; // Default to true if no day toggles exist
             if (dayToggles.length > 0) {
                 hasActiveDayToggle = Array.from(dayToggles).some(toggle => toggle.classList.contains('active'));
+                console.log('Day toggles found:', dayToggles.length, 'active:', hasActiveDayToggle);
+            } else {
+                console.log('No day toggles in this card');
             }
             
             const isComplete = allGridsCompleted && allSelectsCompleted && allInputsCompleted && allTextareasCompleted && hasActiveDayToggle;
+            console.log('Card completion status:', isComplete, {
+                allGridsCompleted,
+                allSelectsCompleted,
+                allInputsCompleted,
+                allTextareasCompleted,
+                hasActiveDayToggle
+            });
             
             if (isComplete) {
                 card.classList.add('completed');
                 const statusText = card.querySelector('.status-text');
                 if (statusText) statusText.textContent = '✓';
+                console.log('Card marked as completed');
             } else {
                 card.classList.remove('completed');
                 const statusText = card.querySelector('.status-text');
                 if (statusText) statusText.textContent = 'To Do';
+                console.log('Card marked as To Do');
             }
         }
     </script>
@@ -521,7 +551,13 @@
                             // Multiple selection - toggle this item
                             this.classList.toggle('selected');
                             
-                            // Update form data (will be handled in form submission)
+                            // Update hidden input with selected values
+                            const selectedItems = grid.querySelectorAll('.grid-item1.selected');
+                            const selectedValues = Array.from(selectedItems).map(i => i.dataset.value);
+                            const hiddenInput = document.getElementById(name);
+                            if (hiddenInput) {
+                                hiddenInput.value = selectedValues.join(',');
+                            }
                         }
                         
                         // Progressive disclosure and filtering

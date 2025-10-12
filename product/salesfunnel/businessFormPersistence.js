@@ -245,6 +245,16 @@ class BusinessFormPersistence {
                                 console.warn(`[BusinessFormPersistence] Could not find grid item with data-value="${value}" in ${containerId}`);
                             }
                         });
+
+                        // For multiple selections, update the hidden input with all selected values
+                        const gridContainer = container;
+                        if (gridContainer && gridContainer.dataset.type === 'multiple') {
+                            const hiddenInput = document.getElementById(gridContainer.dataset.name);
+                            if (hiddenInput) {
+                                hiddenInput.value = selectedValues.join(',');
+                                console.log(`[BusinessFormPersistence] Updated hidden input ${gridContainer.dataset.name} to ${hiddenInput.value}`);
+                            }
+                        }
                     } else {
                         console.warn(`[BusinessFormPersistence] Could not find container ${containerId} or invalid selectedValues`);
                     }
@@ -339,14 +349,18 @@ class BusinessFormPersistence {
 // Create and export a default instance
 const businessFormPersistence = new BusinessFormPersistence();
 
-// Auto-initialize when DOM is ready
+// Auto-initialize when DOM is ready (only if default form exists)
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-        businessFormPersistence.init();
+        if (document.getElementById('socialAutomationForm')) {
+            businessFormPersistence.init();
+        }
     });
 } else {
     // DOM is already ready
-    businessFormPersistence.init();
+    if (document.getElementById('socialAutomationForm')) {
+        businessFormPersistence.init();
+    }
 }
 
 export { BusinessFormPersistence, businessFormPersistence };
