@@ -492,6 +492,7 @@ body {
     text-align: center;
     width: 100%;
     max-width: 400px;
+    position: relative;
 }
 
 .package-card:hover {
@@ -503,6 +504,28 @@ body {
     border-color: rgba(255, 255, 255, 0.2);
     background: #000000;
 }
+
+.coming-soon-banner {
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    background: #ff4444;
+    color: white;
+    padding: 5px 40px;
+    transform: rotate(45deg);
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+}
+/* TO ENABLE PRO BUNDLE AND ENTERPRISE PACKAGES:
+   1. Remove or comment out the .coming-soon-banner CSS class above
+   2. Remove the <div class="coming-soon-banner">Coming Soon</div> from both Pro and Enterprise package cards in packages.html
+   3. In packages.html JavaScript, change the expansion condition from:
+      if (packageType === 'basic' || packageType === 'social')
+      back to:
+      if (packageType === 'basic' || packageType === 'social' || packageType === 'pro' || packageType === 'enterprise')
+   4. Remove the conditions preventing continue buttons and package totals from showing for 'pro' and 'enterprise'
+*/
 
 /* Collapsed state for package cards in customization */
 .package-card.collapsed .card-content {

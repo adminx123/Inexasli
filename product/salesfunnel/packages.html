@@ -297,6 +297,7 @@
       <h3>Pro Bundle</h3>
       <div class="price" id="pro-price">$299/month</div>
     </div>
+    <div class="coming-soon-banner">Coming Soon</div> <!-- REMOVE THIS LINE WHEN ENABLING PRO BUNDLE -->
     <ul>
       <li class="core-feature included">
         <span class="feature-name">AI chat + message replies + AI social content</span>
@@ -378,6 +379,7 @@
       <h3>Enterprise</h3>
       <div class="price" id="enterprise-price">$499/month</div>
     </div>
+    <div class="coming-soon-banner">Coming Soon</div> <!-- REMOVE THIS LINE WHEN ENABLING ENTERPRISE -->
     <ul>
       <li class="core-feature included">
         <span class="feature-name">Full AI suite + all platforms + white-label</span>
@@ -694,14 +696,17 @@
                             setTimeout(() => {
                                 packageContinueBtn.style.display = 'block';
                             }, 300);
-                        } else {
+                        } else if (packageType !== 'pro' && packageType !== 'enterprise') {
+                            // Don't show continue button for coming soon packages
+                            // TO ENABLE: Remove the condition and use: packageContinueBtn.style.display = 'block';
                             packageContinueBtn.style.display = 'block';
                         }
                     }
                     
                     // Show package total for selected package
                     const selectedTotal = this.querySelector('.package-total');
-                    if (selectedTotal) selectedTotal.style.display = 'block';
+                    if (selectedTotal && packageType !== 'pro' && packageType !== 'enterprise') selectedTotal.style.display = 'block';
+                    // TO ENABLE: Remove the packageType condition and use: if (selectedTotal) selectedTotal.style.display = 'block';
                     
                     selectedPackage = {
                         type: packageType,
@@ -751,7 +756,9 @@
                     console.log(`Set default addons for ${packageType}: ${selectedAddons.map(a => a.id).join(', ')}`);
                     
                     // Show expansion sections for all packages
-                    if (packageType === 'basic' || packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
+                    // Commented out expansion for 'pro' and 'enterprise' as they are coming soon
+                    // TO ENABLE: Change back to: if (packageType === 'basic' || packageType === 'social' || packageType === 'pro' || packageType === 'enterprise') {
+                    if (packageType === 'basic' || packageType === 'social') {
                         const platforms = this.querySelector('.package-platforms');
                         if (platforms) {
                             platforms.style.display = 'block';
@@ -801,9 +808,10 @@
                     
                     // Enable continue button
                     const continueBtn = document.getElementById('continue-btn');
-                    if (continueBtn) {
+                    if (continueBtn && packageType !== 'pro' && packageType !== 'enterprise') {
                         continueBtn.disabled = false;
                     }
+                    // TO ENABLE: Remove the packageType condition and use: if (continueBtn) { continueBtn.disabled = false; }
                 });
             });
             
