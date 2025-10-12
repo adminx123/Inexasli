@@ -170,6 +170,25 @@
                     <textarea class="form-textarea" id="chatAudience" name="chatAudience"
                         placeholder="Describe your target users (e.g., age, interests, demographics)" required></textarea>
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label">Chat Widget Name</label>
+                    <input type="text" class="form-input" id="chatWidgetName" name="chatWidgetName"
+                        placeholder="Enter a name for your chat widget" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Chat Colours</label>
+                    <textarea class="form-textarea" id="chatColors" name="chatColors"
+                        placeholder="Describe your preferred chat colours (e.g., blue theme, green accents)" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Knowledge Base</label>
+                    <input type="file" class="form-input" id="knowledgeBase" name="knowledgeBase" multiple
+                        accept=".txt,.pdf,.doc,.docx" required>
+                    <small style="color: #666; font-size: 0.9em;">Upload documents to train your AI (TXT, PDF, DOC, DOCX)</small>
+                </div>
             </div>
             </div>
 
@@ -391,8 +410,13 @@
             const requiredInputs = card.querySelectorAll('input[required]');
             let allInputsCompleted = true;
             requiredInputs.forEach(input => {
-                const hasValue = !!input.value;
-                console.log('Input', input.id, 'has value:', hasValue, 'value:', input.value);
+                let hasValue = false;
+                if (input.type === 'file') {
+                    hasValue = input.files.length > 0;
+                } else {
+                    hasValue = !!input.value;
+                }
+                console.log('Input', input.id, 'has value:', hasValue, 'value:', input.value, 'files:', input.files?.length);
                 if (!hasValue) allInputsCompleted = false;
             });
             console.log('All inputs completed:', allInputsCompleted);
@@ -784,7 +808,7 @@
                 if (input.type === 'checkbox') {
                     setupData[input.name] = input.checked;
                 } else if (input.type === 'file') {
-                    setupData[input.name] = input.files[0];
+                    setupData[input.name] = input.multiple ? Array.from(input.files) : input.files[0];
                 } else {
                     setupData[input.name] = input.value;
                 }
@@ -792,13 +816,11 @@
             
             // Handle grid selections - only if section is relevant
             if (relevantSections.includes('main')) {
-                const toneGrid = document.querySelector('[data-name="tone"]');
-                const selectedTone = toneGrid.querySelectorAll('.grid-item1.selected');
-                setupData.tone = selectedTone.length > 0 ? selectedTone[0].dataset.value : null;
-                
-                const colorGrid = document.querySelector('[data-name="chatColors"]');
-                const selectedColor = colorGrid.querySelectorAll('.grid-item1.selected');
-                setupData.chatColors = selectedColor.length > 0 ? selectedColor[0].dataset.value : null;
+                // No grids for main section
+            }
+            
+            if (relevantSections.includes('conversational')) {
+                // Tone collection removed - grid not present in HTML
             }
             
             // Collect posting schedule - only if social section is relevant
@@ -814,12 +836,9 @@
                 roleScope: 'conversational',
                 functions: 'conversational',
                 roles: 'conversational',
-                tone: 'conversational',
-                useCaseDetails: 'conversational',
                 chatWidgetName: 'conversational',
                 chatColors: 'conversational',
                 knowledgeBase: 'conversational',
-                contentRestrictions: 'conversational',
                 postingSchedule: 'social',
                 scheduleDetails: 'social',
                 contentFocus: 'social',
@@ -852,13 +871,8 @@
                 return;
             }
             
-            if (relevantSections.includes('conversational') && !filteredSetupData.tone) {
-                alert('Please select a chat tone.');
-                return;
-            }
-            
-            if (relevantSections.includes('conversational') && (!filteredSetupData.chatPurpose || !filteredSetupData.chatAudience)) {
-                alert('Please fill in the chat purpose and target users.');
+            if (relevantSections.includes('conversational') && !filteredSetupData.chatAudience) {
+                alert('Please fill in the target users.');
                 return;
             }
             
