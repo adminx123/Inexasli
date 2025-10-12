@@ -837,7 +837,8 @@
                 setupData.postingSchedule = postingScheduleInput ? JSON.parse(postingScheduleInput.value || '[]') : [];
             }
             
-            // Filter setupData to only include fields from relevant sections
+            // Package-aware data filtering: Filter setupData to only include fields from relevant sections
+            // This prevents data contamination by excluding fields from sections not applicable to the current package
             const fieldSectionMap = {
                 timezone: 'main',
                 industry: 'conversational',
