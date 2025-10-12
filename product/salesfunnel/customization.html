@@ -183,11 +183,16 @@
                         placeholder="Describe your preferred chat colours (e.g., blue theme, green accents)" required></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Knowledge Base</label>
-                    <input type="file" class="form-input" id="knowledgeBase" name="knowledgeBase" multiple
-                        accept=".txt,.pdf,.doc,.docx" required>
-                    <small style="color: #666; font-size: 0.9em;">Upload documents to train your AI (TXT, PDF, DOC, DOCX)</small>
+                <div class="form-group" id="roleDocuments" style="display: none;">
+                    <label class="form-label">Role-Specific Documents</label>
+                    <p style="color: #666; font-size: 0.9em;">Upload documents and check off the core documents they cover from the checklist below.</p>
+                    <input type="file" class="form-input" id="roleDocs" name="roleDocs" multiple accept=".txt,.pdf,.doc,.docx" style="display:none;">
+                    <button type="button" id="uploadBtn" onclick="document.getElementById('roleDocs').click()">Upload Files</button>
+                    <div id="fileList"></div>
+                    <div id="categoryGrid" style="display:none; margin-top:20px;">
+                        <p>Select all core documents covered by your uploaded files:</p>
+                        <div class="grid-selection"></div>
+                    </div>
                 </div>
             </div>
             </div>
@@ -440,13 +445,44 @@
                 console.log('No day toggles in this card');
             }
             
-            const isComplete = allGridsCompleted && allSelectsCompleted && allInputsCompleted && allTextareasCompleted && hasActiveDayToggle;
+            // Check role documents completion
+            let roleDocsCompleted = true;
+            if (card.id === 'conversationalSection') {
+                const selectedRoles = getSelectedRoles();
+                if (selectedRoles.length > 0) {
+                    const covered = new Set();
+                    const categoryGrid = document.getElementById('categoryGrid');
+                    if (categoryGrid.style.display !== 'none') {
+                        const grid = categoryGrid.querySelector('.grid-selection');
+                        if (grid) {
+                            const selectedItems = grid.querySelectorAll('.grid-item1.selected');
+                            Array.from(selectedItems).forEach(item => {
+                                covered.add(item.dataset.value);
+                            });
+                        }
+                    }
+                    const required = new Set();
+                    selectedRoles.forEach(role => {
+                        roleCategories[role].forEach(cat => required.add(cat));
+                    });
+                    const missing = Array.from(required).filter(cat => !covered.has(cat));
+                    if (missing.length > 0) {
+                        roleDocsCompleted = false;
+                        console.log('Role docs not completed, missing:', missing);
+                    } else {
+                        console.log('Role docs completed');
+                    }
+                }
+            }
+            
+            const isComplete = allGridsCompleted && allSelectsCompleted && allInputsCompleted && allTextareasCompleted && hasActiveDayToggle && roleDocsCompleted;
             console.log('Card completion status:', isComplete, {
                 allGridsCompleted,
                 allSelectsCompleted,
                 allInputsCompleted,
                 allTextareasCompleted,
-                hasActiveDayToggle
+                hasActiveDayToggle,
+                roleDocsCompleted
             });
             
             if (isComplete) {
@@ -908,6 +944,34 @@
                 return;
             }
             
+            // Validate role documents
+            if (relevantSections.includes('conversational')) {
+                const selectedRoles = getSelectedRoles();
+                if (selectedRoles.length > 0) {
+                    const covered = new Set();
+                    const fileListDiv = document.getElementById('fileList');
+                    const fileDivs = fileListDiv.children;
+                    Array.from(fileDivs).forEach(fileDiv => {
+                        const grid = fileDiv.querySelector('.grid-selection');
+                        if (grid) {
+                            const selectedItems = grid.querySelectorAll('.grid-item1.selected');
+                            Array.from(selectedItems).forEach(item => {
+                                covered.add(item.dataset.value);
+                            });
+                        }
+                    });
+                    const required = new Set();
+                    selectedRoles.forEach(role => {
+                        roleCategories[role].forEach(cat => required.add(cat));
+                    });
+                    const missing = Array.from(required).filter(cat => !covered.has(cat));
+                    if (missing.length > 0) {
+                        alert(`Please ensure all required categories are covered. Missing: ${missing.join(', ')}`);
+                        return;
+                    }
+                }
+            }
+            
             // Store customization data for Stripe integration
             setJSON('customizationData', filteredSetupData);
             
@@ -919,6 +983,117 @@
             // TODO: Integrate with Calendly or your scheduling system
             alert('Consultation scheduling coming soon! We\'ll contact you within 2-5 days.');
         }
+
+        // Role categories for document requirements
+        const roleCategories = {
+            'customer-service-rep': ['FAQs', 'Support Scripts'],
+            'sales-assistant': ['Sales Strategy', 'Product List', 'Addons'],
+            'support-technician': ['Technical FAQs', 'Troubleshooting Guides'],
+            'hr-assistant': ['Policies', 'Procedures'],
+            'admin-assistant': ['Daily Tasks', 'Scheduling'],
+            'order-fulfillment': ['Order Processing', 'Inventory Management'],
+            'it-support': ['Hardware/Software Inventory', 'User Support Procedures'],
+            'team-coordinator': ['Team Structure', 'Meeting Schedules']
+        };
+
+        function getSelectedRoles() {
+            const rolesInput = document.getElementById('rolesChat');
+            if (rolesInput && rolesInput.value) {
+                const value = rolesInput.value;
+                if (value.startsWith('[')) {
+                    return JSON.parse(value);
+                } else {
+                    return value.split(',').map(s => s.trim());
+                }
+            }
+            return [];
+        }
+
+        function updateRoleDocuments() {
+            const selectedRoles = getSelectedRoles();
+            console.log('Updating role documents, selected roles:', selectedRoles);
+            if (selectedRoles.length > 0) {
+                document.getElementById('roleDocuments').style.display = 'block';
+                // Expand the card if collapsed
+                document.getElementById('conversationalSection').classList.remove('collapsed');
+                // Update file list display
+                const fileListDiv = document.getElementById('fileList');
+                if (uploadedFiles.length === 0) {
+                    fileListDiv.innerHTML = '';
+                    document.getElementById('categoryGrid').style.display = 'none';
+                } else {
+                    fileListDiv.innerHTML = '';
+                    uploadedFiles.forEach((file, index) => {
+                        const fileDiv = document.createElement('div');
+                        fileDiv.style.marginBottom = '10px';
+                        fileDiv.innerHTML = `<strong style="color: green;">${file.name}</strong>`;
+                        fileListDiv.appendChild(fileDiv);
+                    });
+                    document.getElementById('categoryGrid').style.display = 'block';
+                    populateCategoryGrid();
+                }
+            } else {
+                document.getElementById('roleDocuments').style.display = 'none';
+                document.getElementById('categoryGrid').style.display = 'none';
+            }
+        }
+
+        let uploadedFiles = [];
+
+        // Load saved file names from localStorage
+        const savedFileNames = JSON.parse(localStorage.getItem('uploadedFiles') || '[]');
+        uploadedFiles = savedFileNames.map(name => ({ name }));
+
+        function populateCategoryGrid() {
+            const categoryGridDiv = document.getElementById('categoryGrid');
+            const grid = categoryGridDiv.querySelector('.grid-selection');
+            grid.innerHTML = '';
+            const selectedRoles = getSelectedRoles();
+            const allCategories = new Set();
+            selectedRoles.forEach(role => {
+                roleCategories[role].forEach(cat => allCategories.add(cat));
+            });
+            allCategories.forEach(cat => {
+                const item = document.createElement('div');
+                item.className = 'grid-item1';
+                item.dataset.value = cat;
+                item.textContent = cat;
+                item.addEventListener('click', () => {
+                    item.classList.toggle('selected');
+                    // Trigger completion check
+                    checkCardCompletion(document.getElementById('conversationalSection'));
+                });
+                grid.appendChild(item);
+            });
+        }
+
+        function handleFileSelect(event) {
+            const newFiles = Array.from(event.target.files);
+            // Add new files to the list
+            uploadedFiles.push(...newFiles);
+            // Clear the input to allow selecting the same files again or new ones
+            event.target.value = '';
+            // Update the display
+            updateRoleDocuments();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('roleDocs').addEventListener('change', handleFileSelect);
+            // Listen for role changes
+            const rolesInput = document.getElementById('rolesChat');
+            if (rolesInput) {
+                rolesInput.addEventListener('change', updateRoleDocuments);
+            }
+            // Specific listener for role grid clicks
+            document.getElementById('roleGridChat').addEventListener('click', function(e) {
+                if (e.target.closest('.grid-item1')) {
+                    setTimeout(updateRoleDocuments, 10);
+                }
+            });
+            // Initial check
+            updateRoleDocuments();
+        });
     </script>
     
     <script src="../../utility/modal.js"></script>
@@ -936,6 +1111,7 @@
         setTimeout(() => {
             const customizationPersistence = new BusinessFormPersistence('mainContent', 'customization-form-data');
             customizationPersistence.init();
+            updateRoleDocuments(); // Ensure role documents section updates after load
         }, 100);
     </script>
 </body>
