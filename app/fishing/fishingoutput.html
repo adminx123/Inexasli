@@ -189,9 +189,9 @@
     </div>
   </div>
 
-  <script type="module">
-    // Import required utilities
-    import { getLocal } from '/utility/getlocal.js';
+  <script>
+    // Utility functions are available globally via window
+    const getLocal = window.getLocal;
 
     // Load and display fishing results
     document.addEventListener('DOMContentLoaded', async function() {
