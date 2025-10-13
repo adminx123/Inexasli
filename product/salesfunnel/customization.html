@@ -829,7 +829,7 @@
             return sections;
         }
 
-        function submitCustomizationForm() {
+        async function submitCustomizationForm() {
             // Get current package to determine which sections should be included
             const packageData = localStorage.getItem('quoteData');
             if (!packageData) {
@@ -970,6 +970,52 @@
                         return;
                     }
                 }
+            }
+            
+            // Upload files to R2 storage if any exist
+            if (uploadedFiles.length > 0) {
+                console.log('Uploading files to R2 storage...');
+                
+                // Show loading indicator
+                const continueBtn = document.querySelector('.package-continue-btn');
+                const originalText = continueBtn.textContent;
+                continueBtn.textContent = 'Uploading Files...';
+                continueBtn.disabled = true;
+                
+                try {
+                    // Create FormData with files
+                    const formData = new FormData();
+                    uploadedFiles.forEach((file, index) => {
+                        formData.append(`file_${index}`, file);
+                    });
+                    
+                    // Upload to stripe-saas worker
+                    const uploadResponse = await fetch('https://stripe-saas.inexasli.workers.dev/upload-files', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (!uploadResponse.ok) {
+                        throw new Error(`Upload failed: ${uploadResponse.status}`);
+                    }
+                    
+                    const uploadResult = await uploadResponse.json();
+                    console.log('File upload successful:', uploadResult);
+                    
+                    // Add file URLs to customization data
+                    filteredSetupData.uploadedFiles = uploadResult.files;
+                    
+                } catch (error) {
+                    console.error('File upload error:', error);
+                    alert('Failed to upload files. Please try again.');
+                    continueBtn.textContent = originalText;
+                    continueBtn.disabled = false;
+                    return;
+                }
+                
+                // Restore button
+                continueBtn.textContent = originalText;
+                continueBtn.disabled = false;
             }
             
             // Store customization data for Stripe integration
