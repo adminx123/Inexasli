@@ -4,7 +4,7 @@
 // - /utility/termsConsentManager.js - Uses window.openModal() for displaying terms and conditions
 // - /utility/dataConsentManager.js - Uses window.openModal() for legal/consent displays
 //
-// Educational loading overlay moved to: /ai/fact-generator/educational-overlay.js
+// Educational loading overlay moved to: /app/fact-generator/educational-overlay.js
 // Note: paymentform.js has its own separate modal system and does NOT use this file.
 
 // Define global variables to track active event listeners

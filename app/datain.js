@@ -10,11 +10,11 @@ import { getLocal } from '/utility/getlocal.js';
 import { setLocal } from '/utility/setlocal.js';
 import { FormPersistence } from '/utility/formPersistence.js';
 import { initializeBidirectionalSwipe, initializeSimpleVerticalSwipe } from '/utility/swipeFunctionality.js';
-import { initAutoExpandTextareas, createSplitTextarea, createSplitCalendarText, deleteEntry, handleConditionalInput, addEntryButton, cleanupHiddenFieldData } from '/ai/styles/inputFunctionality.js';
+import { initAutoExpandTextareas, createSplitTextarea, createSplitCalendarText, deleteEntry, handleConditionalInput, addEntryButton, cleanupHiddenFieldData } from '/app/styles/inputFunctionality.js';
 import '/utility/enhancedUI.js';
 import '/utility/copy.js';
 import '/utility/dataOverwrite.js';
-import '/ai/faq.js'; // Add FAQ modal script
+import '/app/faq.js'; // Add FAQ modal script
 
 // Import additional utility functions for centralized exposure
 import { getJSON } from '/utility/getJSON.js';
@@ -62,7 +62,7 @@ import {
 } from '/utility/inputValidation.js';
 
 // Import rate limiting utilities centrally
-import { getFingerprintForWorker, incrementRequestCount, isRateLimited, canSendRequest, handleRateLimitResponse, createWorkerPayload } from '/ai/rate-limiter/rateLimiter.js';
+import { getFingerprintForWorker, incrementRequestCount, isRateLimited, canSendRequest, handleRateLimitResponse, createWorkerPayload } from '/app/rate-limiter/rateLimiter.js';
 
 // Import image upload utility
 import '/utility/piexif.js';
@@ -553,7 +553,7 @@ function initializeCategoryModule() {
         }
         
         // Add product selection logic
-        if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/ai/')) {
+        if (e.target.classList.contains('grid-item') && e.target.getAttribute('data-value') && e.target.getAttribute('data-value').startsWith('/app/')) {
             const url = e.target.getAttribute('data-value');
             console.log('[DataIn] Product selected:', url);
             
@@ -585,39 +585,39 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     // Define files that should use inputstyles.css
     const inputFiles = [
-        '/ai/calorie/calorieiq.html',
-        '/ai/decision/decisioniq.html',
-        '/ai/shop/shopiq.html',
-        '/ai/enneagram/enneagramiq.html',
-        '/ai/event/eventiq.html',
-        '/ai/fashion/fashioniq.html',
-        '/ai/fitness/fitnessiq.html',
-        '/ai/philosophy/philosophyiq.html',
-        '/ai/quiz/quiziq.html',
-        '/ai/categories.html',
-        '/ai/income/incomeiq.html'
+        '/app/calorie/calorieiq.html',
+        '/app/decision/decisioniq.html',
+        '/app/shop/shopiq.html',
+        '/app/enneagram/enneagramiq.html',
+        '/app/event/eventiq.html',
+        '/app/fashion/fashioniq.html',
+        '/app/fitness/fitnessiq.html',
+        '/app/philosophy/philosophyiq.html',
+        '/app/quiz/quiziq.html',
+        '/app/categories.html',
+        '/app/income/incomeiq.html'
     ];
     
     // Define files that should use incomestyles.css
-    const incomeFiles = ['/ai/income/incomeiq.html'];
+    const incomeFiles = ['/app/income/incomeiq.html'];
     
     // Function to check if current page needs specific CSS
     function shouldLoadInputStyles() {
         const currentPath = window.location.pathname;
         return inputFiles.some(file => currentPath.includes(file.replace('.html', ''))) || 
-               document.querySelector('[data-value*="/ai/calorie/"], [data-value*="/ai/decision/"], [data-value*="/ai/enneagram/"], [data-value*="/ai/event/"], [data-value*="/ai/fashion/"], [data-value*="/ai/fitness/"], [data-value*="/ai/philosophy/"], [data-value*="/ai/quiz/"], [data-value*="/ai/income/"], [data-value*="/ai/categories.html"]');
+               document.querySelector('[data-value*="/app/calorie/"], [data-value*="/app/decision/"], [data-value*="/app/enneagram/"], [data-value*="/app/event/"], [data-value*="/app/fashion/"], [data-value*="/app/fitness/"], [data-value*="/app/philosophy/"], [data-value*="/app/quiz/"], [data-value*="/app/income/"], [data-value*="/app/categories.html"]');
     }
     
     function shouldLoadIncomeStyles() {
         const currentPath = window.location.pathname;
         return incomeFiles.some(file => currentPath.includes(file.replace('.html', ''))) ||
-               document.querySelector('[data-value*="/ai/income/"]');
+               document.querySelector('[data-value*="/app/income/"]');
     }
     
     // Load inputstyles.css only for input files
     if (shouldLoadInputStyles() && !document.querySelector('link[href*="inputstyles.css"]')) {
         const inputStylesLink = document.createElement('link');
-        inputStylesLink.href = '/ai/styles/inputstyles.css';
+        inputStylesLink.href = '/app/styles/inputstyles.css';
         inputStylesLink.rel = 'stylesheet';
         document.head.appendChild(inputStylesLink);
     }
@@ -625,7 +625,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Load incomestyles.css only for income files
     if (shouldLoadIncomeStyles() && !document.querySelector('link[href*="incomestyles.css"]')) {
         const incomeStylesLink = document.createElement('link');
-        incomeStylesLink.href = '/ai/styles/incomestyles.css';
+        incomeStylesLink.href = '/app/styles/incomestyles.css';
         incomeStylesLink.rel = 'stylesheet';
         document.head.appendChild(incomeStylesLink);
     }
@@ -642,7 +642,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Check if URL matches input files and load inputstyles.css
         if (inputFiles.includes(url) && !document.querySelector('link[href*="inputstyles.css"]')) {
             const inputStylesLink = document.createElement('link');
-            inputStylesLink.href = '/ai/styles/inputstyles.css';
+            inputStylesLink.href = '/app/styles/inputstyles.css';
             inputStylesLink.rel = 'stylesheet';
             document.head.appendChild(inputStylesLink);
             console.log('[DataIn] Loaded inputstyles.css for:', url);
@@ -651,7 +651,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Check if URL matches income files and load incomestyles.css
         if (incomeFiles.includes(url) && !document.querySelector('link[href*="incomestyles.css"]')) {
             const incomeStylesLink = document.createElement('link');
-            incomeStylesLink.href = '/ai/styles/incomestyles.css';
+            incomeStylesLink.href = '/app/styles/incomestyles.css';
             incomeStylesLink.rel = 'stylesheet';
             document.head.appendChild(incomeStylesLink);
             console.log('[DataIn] Loaded incomestyles.css for:', url);
@@ -738,7 +738,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     console.log('[DataIn] Content revealed after guided forms initialization');
 
                     // Initialize swipe functionality for guided forms ONLY if form elements are present AND it's not the categories page
-                    const isCategoriesPage = url.includes('/ai/categories.html');
+                    const isCategoriesPage = url.includes('/app/categories.html');
                     if (window.guidedForms && typeof window.guidedForms.showStep === 'function' && hasFormElements && !isCategoriesPage) {
                         console.log('[DataIn] Initializing bidirectional swipe for guided forms on .data-content (form elements detected, not categories page)');
                         
@@ -1567,11 +1567,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                     toggleDataContainer();
                     // Wait a moment for the expansion animation to complete, then load content
                     setTimeout(() => {
-                        loadStoredContent('/ai/categories.html');
+                        loadStoredContent('/app/categories.html');
                     }, 100);
                 } else {
                     // Container is already expanded, load content immediately
-                    loadStoredContent('/ai/categories.html');
+                    loadStoredContent('/app/categories.html');
                 }
             });
         }
@@ -1656,7 +1656,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 
                 // Trigger animation when arrow becomes visible on first step (but not on categories page)
                 const lastGridItemUrl = getLocal('lastGridItemUrl') || '';
-                const isCategoriesPage = lastGridItemUrl.includes('/ai/categories.html') || lastGridItemUrl.includes('%2Fai%2Fcategories.html');
+                const isCategoriesPage = lastGridItemUrl.includes('/app/categories.html') || lastGridItemUrl.includes('%2Fapp%2Fcategories.html');
                 
                 if (!wasNextIconVisible && nextIcon.style.opacity === '1' && state.currentStep === 0 && !isCategoriesPage) {
                     startRightArrowAnimation(nextIcon);
@@ -1836,9 +1836,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         let lastGridItemUrl = getLocal('lastGridItemUrl');
         if (!lastGridItemUrl) {
             if (typeof window.setLocal === 'function') {
-                window.setLocal('lastGridItemUrl', '/ai/categories.html');
+                window.setLocal('lastGridItemUrl', '/app/categories.html');
             } else {
-                localStorage.setItem('lastGridItemUrl', '/ai/categories.html');
+                localStorage.setItem('lastGridItemUrl', '/app/categories.html');
             }
         }
 

@@ -491,17 +491,17 @@ function enforceEmbedOnly() {
             let redirectPath = '/';
             
             if (currentPath.includes('enneagram')) {
-                redirectPath = '/ai/enneagram/enneagramiq.html';
+                redirectPath = '/app/enneagram/enneagramiq.html';
             } else if (currentPath.includes('decision')) {
-                redirectPath = '/ai/decision/decisioniq.html';
+                redirectPath = '/app/decision/decisioniq.html';
             } else if (currentPath.includes('calorie')) {
-                redirectPath = '/ai/calorie/calorieiq.html';
+                redirectPath = '/app/calorie/calorieiq.html';
             } else if (currentPath.includes('fitness')) {
-                redirectPath = '/ai/fitness/fitnessiq.html';
+                redirectPath = '/app/fitness/fitnessiq.html';
             } else if (currentPath.includes('philosophy')) {
-                redirectPath = '/ai/philosophy/philosophyiq.html';
+                redirectPath = '/app/philosophy/philosophyiq.html';
             } else if (currentPath.includes('quiz')) {
-                redirectPath = '/ai/quiz/quiziq.html';
+                redirectPath = '/app/quiz/quiziq.html';
             }
             
             // Show warning before redirect
@@ -569,7 +569,7 @@ function checkIfEmbedded() {
         }
         
         // Check if we're part of the landing page structure
-        if (window.location.pathname.includes('/ai/landing/') || 
+        if (window.location.pathname.includes('/app/landing/') || 
             document.querySelector('.landing-container') || 
             document.querySelector('.main-grid-wrapper') ||
             document.querySelector('[data-landing="true"]')) {

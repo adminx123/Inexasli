@@ -220,8 +220,8 @@ function clearCurrentFormData() {
             return;
         }
 
-        // Extract module name from URL pattern like /ai/calorie/calorieiq.html
-        const moduleMatch = lastGridItemUrl.match(/\/ai\/([^\/]+)\//);
+        // Extract module name from URL pattern like /app/calorie/calorieiq.html
+        const moduleMatch = lastGridItemUrl.match(/\/app\/([^\/]+)\//);
         if (!moduleMatch || !moduleMatch[1]) {
             showClearFormError('Could not identify current module');
             return;

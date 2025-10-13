@@ -176,48 +176,48 @@
 <div class="row1" data-step-label="Products">
     <div class="grid-items1">
         <!-- Health Products -->
-        <div class="product-item" data-category="health" data-value="/ai/calorie/calorieiq.html">
+        <div class="product-item" data-category="health" data-value="/app/calorie/calorieiq.html">
             <i class="bx bx-calculator product-icon"></i>
             <span class="product-description">Personal nutrition educational tool</span>
         </div>
         
         <!-- Business Products -->
-        <div class="product-item" data-category="business,productivity" data-value="/ai/decision/decisioniq.html">
+        <div class="product-item" data-category="business,productivity" data-value="/app/decision/decisioniq.html">
             <i class="bx bx-brain product-icon"></i>
             <span class="product-description">Decision-making informational tool</span>
         </div>
 
-        <div class="product-item" data-category="business,lifestyle" data-value="/ai/shop/shopiq.html">
+        <div class="product-item" data-category="business,lifestyle" data-value="/app/shop/shopiq.html">
             <i class="bx bx-search-alt product-icon"></i>
             <span class="product-description">Product research informational tool</span>
         </div>
         
         <!-- Finance Products -->
-        <div class="product-item" data-category="finance" data-value="/ai/income/incomeiq.html">
+        <div class="product-item" data-category="finance" data-value="/app/income/incomeiq.html">
             <i class="bx bx-dollar-circle product-icon"></i>
             <span class="product-description">Personal finance informational tool</span>
         </div>
         
         <!-- Lifestyle Products -->
-        <div class="product-item" data-category="lifestyle" data-value="/ai/event/eventiq.html">
+        <div class="product-item" data-category="lifestyle" data-value="/app/event/eventiq.html">
             <i class="bx bx-calendar-event product-icon"></i>
             <span class="product-description">Event planning informational tool</span>
         </div>
-        <div class="product-item" data-category="lifestyle" data-value="/ai/fashion/fashioniq.html">
+        <div class="product-item" data-category="lifestyle" data-value="/app/fashion/fashioniq.html">
             <i class="bx bx-closet product-icon"></i>
             <span class="product-description">Style informational tool</span>
         </div>
-        <div class="product-item" data-category="lifestyle,learning" data-value="/ai/philosophy/philosophyiq.html">
+        <div class="product-item" data-category="lifestyle,learning" data-value="/app/philosophy/philosophyiq.html">
             <i class="bx bx-book-open product-icon"></i>
             <span class="product-description">Philosophy exploration tool</span>
         </div>
-        <div class="product-item" data-category="lifestyle" data-value="/ai/enneagram/enneagramiq.html">
+        <div class="product-item" data-category="lifestyle" data-value="/app/enneagram/enneagramiq.html">
             <i class="bx bx-user-circle product-icon"></i>
             <span class="product-description">Personality educational tool</span>
         </div>
         
         <!-- Learning Products -->
-        <div class="product-item" data-category="learning" data-value="/ai/quiz/quiziq.html">
+        <div class="product-item" data-category="learning" data-value="/app/quiz/quiziq.html">
             <i class="bx bx-question-mark product-icon"></i>
             <span class="product-description">Learning quiz tool</span>
         </div>
@@ -442,7 +442,7 @@ if (deviceContainer) {
         }
 
         // Handle product selection clicks (if it's a product URL)
-        if (gridItem.dataset.value.startsWith('/ai/')) {
+        if (gridItem.dataset.value.startsWith('/app/')) {
             e.stopPropagation(); // Stop the event from bubbling up to datain.js modal handlers
             // Set lastGridItemUrl so datain.js can remember the selection
             localStorage.setItem('lastGridItemUrl', gridItem.dataset.value);

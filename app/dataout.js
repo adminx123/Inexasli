@@ -320,19 +320,19 @@ document.addEventListener('DOMContentLoaded', async function () {
             const url = e.detail.url;
             console.log(`Received promptGridItemSelected event with URL: ${url} (dataout.js)`);
             const outputMap = {
-                '/ai/calorie/calorieiq.html': '/ai/calorie/calorieoutput.html',
-                '/ai/shop/shopiq.html': '/ai/shop/shopoutput.html',
-                '/ai/symptom/symptomiq.html': '/ai/symptom/symptomoutput.html',
-                '/ai/book/bookiq.html': '/ai/book/bookoutput.html',
-                '/ai/adventure/adventureiq.html': '/ai/adventure/adventureoutput.html',
-                '/ai/decision/decisioniq.html': '/ai/decision/decisionoutput.html',
-                '/ai/enneagram/enneagramiq.html': '/ai/enneagram/enneagramoutput.html',
-                '/ai/event/eventiq.html': '/ai/event/eventoutput.html',
-                '/ai/fashion/fashioniq.html': '/ai/fashion/fashionoutput.html',
-                '/ai/income/incomeiq.html': '/ai/income/incomeoutput.html',
-                '/ai/quiz/quiziq.html': '/ai/quiz/quizoutput.html',
-                '/ai/speculation/speculationiq.html': '/ai/speculation/speculationoutput.html',
-                '/ai/philosophy/philosophyiq.html': '/ai/philosophy/philosophyoutput.html'
+                '/app/calorie/calorieiq.html': '/app/calorie/calorieoutput.html',
+                '/app/shop/shopiq.html': '/app/shop/shopoutput.html',
+                '/app/symptom/symptomiq.html': '/app/symptom/symptomoutput.html',
+                '/app/book/bookiq.html': '/app/book/bookoutput.html',
+                '/app/adventure/adventureiq.html': '/app/adventure/adventureoutput.html',
+                '/app/decision/decisioniq.html': '/app/decision/decisionoutput.html',
+                '/app/enneagram/enneagramiq.html': '/app/enneagram/enneagramoutput.html',
+                '/app/event/eventiq.html': '/app/event/eventoutput.html',
+                '/app/fashion/fashioniq.html': '/app/fashion/fashionoutput.html',
+                '/app/income/incomeiq.html': '/app/income/incomeoutput.html',
+                '/app/quiz/quiziq.html': '/app/quiz/quizoutput.html',
+                '/app/speculation/speculationiq.html': '/app/speculation/speculationoutput.html',
+                '/app/philosophy/philosophyiq.html': '/app/philosophy/philosophyoutput.html'
             };
             const outUrl = outputMap[url];
             if (outUrl) {
@@ -353,18 +353,18 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             const moduleName = e.detail.module;
             const moduleOutputMap = {
-                'calorieiq': '/ai/calorie/calorieoutput.html',
-                'shopiq': '/ai/shop/shopoutput.html',
-                'symptomiq': '/ai/symptom/symptomoutput.html',
-                'adventureiq': '/ai/adventure/adventureoutput.html',
-                'decisioniq': '/ai/decision/decisionoutput.html',
-                'enneagramiq': '/ai/enneagram/enneagramoutput.html',
-                'eventiq': '/ai/event/eventoutput.html',
-                'incomeiq': '/ai/income/incomeoutput.html',
-                'quiziq': '/ai/quiz/quizoutput.html',
-                'speculationiq': '/ai/speculation/speculationoutput.html',
-                'philosophyiq': '/ai/philosophy/philosophyoutput.html',
-                'fashioniq': '/ai/fashion/fashionoutput.html'
+                'calorieiq': '/app/calorie/calorieoutput.html',
+                'shopiq': '/app/shop/shopoutput.html',
+                'symptomiq': '/app/symptom/symptomoutput.html',
+                'adventureiq': '/app/adventure/adventureoutput.html',
+                'decisioniq': '/app/decision/decisionoutput.html',
+                'enneagramiq': '/app/enneagram/enneagramoutput.html',
+                'eventiq': '/app/event/eventoutput.html',
+                'incomeiq': '/app/income/incomeoutput.html',
+                'quiziq': '/app/quiz/quizoutput.html',
+                'speculationiq': '/app/speculation/speculationoutput.html',
+                'philosophyiq': '/app/philosophy/philosophyoutput.html',
+                'fashioniq': '/app/fashion/fashionoutput.html'
             };
             const outUrl = moduleOutputMap[moduleName];
             if (outUrl) {

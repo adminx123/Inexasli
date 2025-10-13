@@ -58,9 +58,9 @@ future/
 secret.js
 
 # Catch-all patterns for any missed worker files
-ai/**/*worker*.js
+app/**/*worker*.js
 /*worker.js
-ai/*.secret.js
+app/*.secret.js
 
 # Environment files
 .env
@@ -70,7 +70,7 @@ ai/*.secret.js
 .env.production.local
 
 # Private rate limiter logic
-ai/rate-limiter/rateLimit.js
+app/rate-limiter/rateLimit.js
 
 # API keys and secrets
 *.pem
@@ -102,10 +102,10 @@ logs
 *.swo
 
 ai/rate-limiter/rate-limiter.js
-ai/master.js
+app/master.js
 
 # Payment processing worker
-ai/payment/stripe-app.js
+app/payment/stripe-app.js
 
 # any folder named hide
 hide
@@ -125,8 +125,8 @@ product/architecture/
 
 # Payment folders (contain sensitive Stripe keys and configurations)
 Payment/
-ai/payment/stripe-app.js
-ai/payment/wrangler-stripe-app.toml
+app/payment/stripe-app.js
+app/payment/wrangler-stripe-app.toml
 product/payment/stripe-saas.js
 product/payment/wrangler-stripe-saas.toml
 product/payment/wrangler-stripeintegration.toml

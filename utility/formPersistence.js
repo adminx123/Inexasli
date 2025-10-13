@@ -228,8 +228,8 @@ class FormPersistence {
         try {
             const lastUrl = getLocal('lastGridItemUrl', null);
             if (!lastUrl) return null;
-            // Example: /ai/calorie/calorieiq.html or /ai/fitness/fitnessiq.html
-            const matches = lastUrl.match(/\/ai\/([^\/]+)\//);
+            // Example: /app/calorie/calorieiq.html or /app/fitness/fitnessiq.html
+            const matches = lastUrl.match(/\/app\/([^\/]+)\//);
             if (matches && matches[1]) {
                 return matches[1].toLowerCase();
             }
