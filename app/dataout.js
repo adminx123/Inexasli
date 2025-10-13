@@ -329,6 +329,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 '/app/enneagram/enneagramiq.html': '/app/enneagram/enneagramoutput.html',
                 '/app/event/eventiq.html': '/app/event/eventoutput.html',
                 '/app/fashion/fashioniq.html': '/app/fashion/fashionoutput.html',
+                '/app/fishing/fishingiq.html': '/app/fishing/fishingoutput.html',
                 '/app/income/incomeiq.html': '/app/income/incomeoutput.html',
                 '/app/quiz/quiziq.html': '/app/quiz/quizoutput.html',
                 '/app/speculation/speculationiq.html': '/app/speculation/speculationoutput.html',
