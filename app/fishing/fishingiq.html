@@ -43,21 +43,23 @@
   </div>
 
   <!-- Stage 4: Conditional Content -->
-  <div id="fishing-planning-stage" class="row1" style="display: none;">
-    <label class="category-label">What fish are you trying to catch?</label>
-    <input id="target-species" type="text" placeholder="Target species (e.g., salmon, trout, bass)">
-  </div>
+  <div id="conditional-stage" class="row1" style="display: none;">
+    <div id="fishing-planning-stage" style="display: none;">
+      <label class="category-label">What fish are you trying to catch?</label>
+      <input id="target-species" type="text" placeholder="Target species (e.g., salmon, trout, bass)">
+    </div>
 
-  <div id="fishing-caught-stage" class="row1" style="display: none;">
-    <label class="category-label">Upload a photo of your catch</label>
-    <div id="fish-image-upload-container" class="image-upload-container" data-image-upload data-module="fishing" data-max-images="1"></div>
+    <div id="fishing-caught-stage" style="display: none;">
+      <label class="category-label">Upload a photo of your catch</label>
+      <div id="fish-image-upload-container" class="image-upload-container" data-image-upload data-module="fishing" data-max-images="1"></div>
+    </div>
   </div>
 
 </div>
 
 <script type="module">
 // Import required utilities
-import { initializeGuidedForms } from '/utility/guidedForms.js';
+// Note: initializeGuidedForms is available globally via window.initGuidedForms
 
 // Initialize guided forms for 4-stage flow
 document.addEventListener('DOMContentLoaded', function() {
@@ -69,12 +71,16 @@ document.addEventListener('DOMContentLoaded', function() {
     { id: 'conditional-stage', required: true }     // Stage 4 (planning or caught)
   ];
 
-  // Initialize guided forms
-  initializeGuidedForms('fishingiq-device-container', stages, {
-    onStageChange: function(currentStage, direction) {
-      updateConditionalContent();
-    }
-  });
+  // Initialize guided forms using global function
+  if (window.initGuidedForms) {
+    window.initGuidedForms({
+      autoAdvance: true,
+      showProgressIndicator: true,
+      smoothTransitions: true,
+      enableSkipping: true,
+      autoStart: true
+    });
+  }
 
   // Handle intent selection changes
   document.getElementById('fishing-intent').addEventListener('click', function(e) {
@@ -101,6 +107,10 @@ document.addEventListener('DOMContentLoaded', function() {
           window.initializeImageUpload();
         }
       }
+    } else {
+      // No intent selected, hide both
+      planningStage.style.display = 'none';
+      caughtStage.style.display = 'none';
     }
   }
 });
