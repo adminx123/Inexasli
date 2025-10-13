@@ -591,6 +591,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         '/app/enneagram/enneagramiq.html',
         '/app/event/eventiq.html',
         '/app/fashion/fashioniq.html',
+        '/app/fishing/fishingiq.html',
         '/app/fitness/fitnessiq.html',
         '/app/philosophy/philosophyiq.html',
         '/app/quiz/quiziq.html',
