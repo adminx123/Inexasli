@@ -42,14 +42,14 @@
     <input id="fishing-location" type="text" placeholder="Fishing Location (e.g., Fraser River, Vancouver Island)">
   </div>
 
-  <!-- Stage 4: Conditional Content -->
-  <div id="conditional-stage" class="row1" style="display: none;">
-    <div id="fishing-planning-stage" style="display: none;">
+  <!-- Stage 4: Content -->
+  <div id="conditional-stage" class="row1">
+    <div id="fishing-planning-stage">
       <label class="category-label">What fish are you trying to catch?</label>
       <input id="target-species" type="text" placeholder="Target species (e.g., salmon, trout, bass)">
     </div>
 
-    <div id="fishing-caught-stage" style="display: none;">
+    <div id="fishing-caught-stage">
       <label class="category-label">Upload a photo of your catch</label>
       <div id="fish-image-upload-container" class="image-upload-container" data-image-upload data-module="fishing" data-max-images="1"></div>
     </div>
@@ -57,61 +57,3 @@
 
 </div>
 
-<script type="module">
-// Import required utilities
-// Note: initializeGuidedForms is available globally via window.initGuidedForms
-
-// Initialize guided forms for 4-stage flow
-document.addEventListener('DOMContentLoaded', function() {
-  // Define the stages
-  const stages = [
-    { id: 'product-description', required: false }, // Stage 1
-    { id: 'fishing-intent', required: true },       // Stage 2
-    { id: 'fishing-location', required: true },     // Stage 3
-    { id: 'conditional-stage', required: true }     // Stage 4 (planning or caught)
-  ];
-
-  // Initialize guided forms using global function
-  if (window.initGuidedForms) {
-    window.initGuidedForms({
-      autoAdvance: true,
-      showProgressIndicator: true,
-      smoothTransitions: true,
-      enableSkipping: true,
-      autoStart: true
-    });
-  }
-
-  // Handle intent selection changes
-  document.getElementById('fishing-intent').addEventListener('click', function(e) {
-    if (e.target.classList.contains('grid-item')) {
-      updateConditionalContent();
-    }
-  });
-
-  function updateConditionalContent() {
-    const selectedIntent = document.querySelector('#fishing-intent .grid-item.selected');
-    const planningStage = document.getElementById('fishing-planning-stage');
-    const caughtStage = document.getElementById('fishing-caught-stage');
-
-    if (selectedIntent) {
-      const intent = selectedIntent.getAttribute('data-value');
-      if (intent === 'planning') {
-        planningStage.style.display = 'block';
-        caughtStage.style.display = 'none';
-      } else if (intent === 'caught') {
-        planningStage.style.display = 'none';
-        caughtStage.style.display = 'block';
-        // Initialize image upload for caught fish
-        if (typeof window.initializeImageUpload === 'function') {
-          window.initializeImageUpload();
-        }
-      }
-    } else {
-      // No intent selected, hide both
-      planningStage.style.display = 'none';
-      caughtStage.style.display = 'none';
-    }
-  }
-});
-</script>
