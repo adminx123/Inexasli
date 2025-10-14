@@ -42,18 +42,111 @@
     <input id="fishing-location" type="text" placeholder="Fishing Location (e.g., Fraser River, Vancouver Island)">
   </div>
 
-  <!-- Stage 4: Content -->
-  <div id="conditional-stage" class="row1">
-    <div id="fishing-planning-stage">
+  <!-- Stage 4: Conditional Content -->
+  <div id="conditional-stage" class="row1" style="display: none;">
+    <div id="fishing-planning-stage" style="display: none;">
       <label class="category-label">What fish are you trying to catch?</label>
       <input id="target-species" type="text" placeholder="Target species (e.g., salmon, trout, bass)">
     </div>
 
-    <div id="fishing-caught-stage">
+    <div id="fishing-caught-stage" style="display: none;">
       <label class="category-label">Upload a photo of your catch</label>
       <div id="fish-image-upload-container" class="image-upload-container" data-image-upload data-module="fishing" data-max-images="1"></div>
     </div>
   </div>
 
+  <!-- Feedback Area -->
+  <div id="feedback-area" class="row1" style="display: none; margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">
+    <p id="feedback-text"></p>
+  </div>
+
 </div>
 
+<script type="module">
+// Handle intent selection changes
+console.log('[FishingIQ] Script executing');
+document.getElementById('fishing-intent').addEventListener('click', function(e) {
+  console.log('[FishingIQ] Intent clicked, target:', e.target);
+  if (e.target.classList.contains('grid-item')) {
+    console.log('[FishingIQ] Grid item clicked, calling updateConditionalContent');
+    updateConditionalContent();
+  }
+});
+
+// Use MutationObserver to watch for 'selected' class changes on grid-items
+const observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+      const target = mutation.target;
+      if (target.classList.contains('grid-item') && target.classList.contains('selected')) {
+        console.log('[FishingIQ] Grid item selected via observer, calling updateConditionalContent');
+        updateConditionalContent();
+      }
+    }
+  });
+});
+
+const gridContainer = document.getElementById('fishing-intent');
+if (gridContainer) {
+  observer.observe(gridContainer, {
+    attributes: true,
+    subtree: true,
+    attributeFilter: ['class']
+  });
+  console.log('[FishingIQ] MutationObserver set up for grid-container');
+}
+
+// Handle input changes for minimal feedback
+document.getElementById('target-species').addEventListener('input', function() {
+  showFeedback('Target species updated.');
+});
+
+document.getElementById('fishing-location').addEventListener('input', function() {
+  showFeedback('Location updated.');
+});
+
+function updateConditionalContent() {
+  console.log('[FishingIQ] updateConditionalContent called');
+  const selectedIntent = document.querySelector('#fishing-intent .grid-item.selected');
+  console.log('[FishingIQ] selectedIntent:', selectedIntent);
+  const conditionalStage = document.getElementById('conditional-stage');
+  const planningStage = document.getElementById('fishing-planning-stage');
+  const caughtStage = document.getElementById('fishing-caught-stage');
+
+  if (selectedIntent) {
+    console.log('[FishingIQ] Showing conditional stage');
+    conditionalStage.style.display = 'block'; // Show the conditional stage
+    const intent = selectedIntent.getAttribute('data-value');
+    console.log('[FishingIQ] Intent value:', intent);
+    if (intent === 'planning') {
+      planningStage.style.display = 'block';
+      caughtStage.style.display = 'none';
+      showFeedback('Planning mode: Enter target species.');
+    } else if (intent === 'caught') {
+      planningStage.style.display = 'none';
+      caughtStage.style.display = 'block';
+      showFeedback('Caught mode: Upload photo.');
+      // Initialize image upload for caught fish
+      if (typeof window.initializeImageUpload === 'function') {
+        window.initializeImageUpload();
+      }
+    }
+  } else {
+    console.log('[FishingIQ] No selected intent, hiding conditional stage');
+    // No intent selected, hide conditional stage
+    conditionalStage.style.display = 'none';
+    hideFeedback();
+  }
+}
+
+function showFeedback(text) {
+  const feedbackArea = document.getElementById('feedback-area');
+  const feedbackText = document.getElementById('feedback-text');
+  feedbackText.textContent = text;
+  feedbackArea.style.display = 'block';
+}
+
+function hideFeedback() {
+  document.getElementById('feedback-area').style.display = 'none';
+}
+</script>
