@@ -443,6 +443,12 @@ function initializeFormPersistence(url) {
         moduleType = 'quiz'; // UNDO: revert to original key for quiz module
     } else if (url.includes('/fashion/')) {
         moduleType = 'fashion';
+    } else if (url.includes('/fishing/')) {
+        moduleType = 'fishing';
+        moduleConfig = {
+            singleSelection: ['fishing-intent'],
+            multiSelection: []
+        };
     } else if (url.includes('/categories.html')) {
         moduleType = 'categories';
         moduleConfig = {
