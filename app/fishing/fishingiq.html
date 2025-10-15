@@ -53,14 +53,11 @@
       <label class="category-label">Upload a photo of your catch</label>
       <div id="fish-image-upload-container" class="image-upload-container" data-image-upload data-module="fishing" data-max-images="1"></div>
     </div>
+
+    <button class="generate-btn" id="generate-fishing-btn" disabled style="margin-top: 15px;">Generate Analysis</button>
   </div>
 
-  <!-- Feedback Area -->
-  <div id="feedback-area" class="row1" style="display: none; margin-top: 15px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">
-    <p id="feedback-text"></p>
   </div>
-
-</div>
 
 <script type="module">
 // Handle intent selection changes
@@ -96,15 +93,6 @@ if (gridContainer) {
   console.log('[FishingIQ] MutationObserver set up for grid-container');
 }
 
-// Handle input changes for minimal feedback
-document.getElementById('target-species').addEventListener('input', function() {
-  showFeedback('Target species updated.');
-});
-
-document.getElementById('fishing-location').addEventListener('input', function() {
-  showFeedback('Location updated.');
-});
-
 function updateConditionalContent() {
   console.log('[FishingIQ] updateConditionalContent called');
   const selectedIntent = document.querySelector('#fishing-intent .grid-item.selected');
@@ -121,32 +109,114 @@ function updateConditionalContent() {
     if (intent === 'planning') {
       planningStage.style.display = 'block';
       caughtStage.style.display = 'none';
-      showFeedback('Planning mode: Enter target species.');
     } else if (intent === 'caught') {
       planningStage.style.display = 'none';
       caughtStage.style.display = 'block';
-      showFeedback('Caught mode: Upload photo.');
       // Initialize image upload for caught fish
       if (typeof window.initializeImageUpload === 'function') {
         window.initializeImageUpload();
       }
     }
+    // Update button state when conditional stage is shown
+    updateButtonState();
   } else {
     console.log('[FishingIQ] No selected intent, hiding conditional stage');
     // No intent selected, hide conditional stage
     conditionalStage.style.display = 'none';
-    hideFeedback();
   }
 }
 
-function showFeedback(text) {
-  const feedbackArea = document.getElementById('feedback-area');
-  const feedbackText = document.getElementById('feedback-text');
-  feedbackText.textContent = text;
-  feedbackArea.style.display = 'block';
+// Button state management
+function updateButtonState() {
+  const generateBtn = document.getElementById('generate-fishing-btn');
+  if (!generateBtn) {
+    console.log('[FishingIQ] Generate button not found');
+    return;
+  }
+  
+  // Check if FormPersistence is ready
+  if (!window.fishingFormPersistence) {
+    console.log('[FishingIQ] FormPersistence not ready yet');
+    // Try again in a moment
+    setTimeout(updateButtonState, 100);
+    return;
+  }
+  
+  const formData = window.fishingFormPersistence.getSavedFormData();
+  console.log('[FishingIQ] Form data for button state:', formData);
+  let isComplete = false;
+
+  if (formData && formData.location) {
+    if (formData.intent === 'planning' && formData.species) {
+      isComplete = true;
+    } else if (formData.intent === 'caught' && formData.images && formData.images.length > 0) {
+      isComplete = true;
+    }
+  }
+
+  console.log('[FishingIQ] Form complete:', isComplete);
+  if (isComplete) {
+    generateBtn.disabled = false;
+    generateBtn.style.display = 'block';
+    console.log('[FishingIQ] Button enabled and visible');
+  } else {
+    generateBtn.disabled = true;
+    generateBtn.style.display = 'block'; // Keep visible but disabled
+    console.log('[FishingIQ] Button disabled but visible');
+  }
 }
 
-function hideFeedback() {
-  document.getElementById('feedback-area').style.display = 'none';
-}
+// Generate button handler
+(function() {
+  async function handleGenerateFishingIq() {
+    try {
+      const formData = window.fishingFormPersistence.getSavedFormData();
+      if (!formData) {
+        alert('Please complete the form before generating fishing regulations.');
+        return;
+      }
+
+      // For caught fish, check if image is uploaded
+      if (formData.intent === 'caught') {
+        const dataUrlImages = formData.images || [];
+        if (dataUrlImages.length === 0) {
+          alert('Please upload a photo of your catch before generating analysis.');
+          return;
+        }
+      }
+
+      await window.handleGenerateRequest('fishing', {
+        alertMessage: 'Please complete the form before generating fishing regulations.'
+      });
+      
+    } catch (error) {
+      console.error('[FishingIQ] Error in fishing generation:', error);
+    }
+  }
+
+  // Initialize button
+  const generateFishingBtn = document.getElementById('generate-fishing-btn');
+  if (generateFishingBtn) {
+    generateFishingBtn.addEventListener('click', handleGenerateFishingIq);
+    generateFishingBtn.dataset.handlerAttached = 'true';
+  }
+
+  // Listen for changes to update button state
+  document.addEventListener('imageUploadChanged', updateButtonState);
+  document.addEventListener('formpersistence:repopulated', updateButtonState);
+  document.addEventListener('input', updateButtonState);
+  document.addEventListener('change', updateButtonState);
+  
+  // Initial check
+  updateButtonState();
+
+  // Export for external access
+  window.fishingIq = { 
+    getFormData: () => window.fishingFormPersistence ? window.fishingFormPersistence.getSavedFormData() : null,
+    saveFormData: () => window.fishingFormPersistence ? window.fishingFormPersistence.saveFormData() : null,
+    updateButtonState: updateButtonState
+  };
+
+})();
+</script>
 </script>
