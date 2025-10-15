@@ -471,6 +471,7 @@ textarea:focus {
 
 
 /* Button */
+/*
 button {
   background-color: #6b7280;
   color: white;
@@ -483,13 +484,14 @@ button {
   transition: background-color 0.2s ease;
   font-family: "Geist", sans-serif;
   width: 100%;
-  max-width: 460px; /* Match inputs/selects/textarea */
+  max-width: 460px;
   display: block;
 }
 
 button:hover {
   background-color: #4b5563;
 }
+*/
 
 /* Generate Button */
 .generate-btn {
