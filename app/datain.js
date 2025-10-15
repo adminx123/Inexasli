@@ -480,6 +480,14 @@ function initializeFormPersistence(url) {
             moduleConfig.multiSelection = [];
         }
         
+        // For fishing, specify singleSelection containers
+        if (moduleType === 'fishing') {
+            moduleConfig.singleSelection = [
+                'fishing-intent'
+            ];
+            moduleConfig.multiSelection = [];
+        }
+        
         const formPersistence = FormPersistence.getInstance(moduleType, moduleConfig);
         formPersistence.init({ moduleName: moduleType, ...moduleConfig });
         // Attach to window for module scripts to use

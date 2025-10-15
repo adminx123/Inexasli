@@ -38,7 +38,7 @@ import { validateText, validateNumber } from './inputValidation.js';
  */
 class FormPersistence {
     // Image-enabled modules whitelist - only these modules can handle images
-    static IMAGE_ENABLED_MODULES = ['fashion'];
+    static IMAGE_ENABLED_MODULES = ['fashion', 'fishing'];
     
     static _instances = {};
     static getInstance(moduleName, options = {}) {

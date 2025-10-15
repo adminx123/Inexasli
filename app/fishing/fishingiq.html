@@ -146,10 +146,10 @@ function updateButtonState() {
   console.log('[FishingIQ] Form data for button state:', formData);
   let isComplete = false;
 
-  if (formData && formData.location) {
-    if (formData.intent === 'planning' && formData.species) {
+  if (formData && formData['fishing-location']) {
+    if (formData['fishing-intent'] === 'planning' && formData['target-species']) {
       isComplete = true;
-    } else if (formData.intent === 'caught' && formData.images && formData.images.length > 0) {
+    } else if (formData['fishing-intent'] === 'caught' && formData.images && formData.images.length > 0) {
       isComplete = true;
     }
   }
@@ -169,7 +169,10 @@ function updateButtonState() {
 // Generate button handler
 (function() {
   async function handleGenerateFishingIq() {
+    console.log('[FishingIQ] Generate button clicked - handler called');
     try {
+      console.log('[FishingIQ DEBUG] Starting generation...');
+      
       const formData = window.fishingFormPersistence.getSavedFormData();
       if (!formData) {
         alert('Please complete the form before generating fishing regulations.');
@@ -177,15 +180,26 @@ function updateButtonState() {
       }
 
       // For caught fish, check if image is uploaded
-      if (formData.intent === 'caught') {
+      if (formData['fishing-intent'] === 'caught') {
         const dataUrlImages = formData.images || [];
+        console.log('[FishingIQ DEBUG] Images from FormPersistence:', dataUrlImages.length);
+        
         if (dataUrlImages.length === 0) {
+          console.log('[FishingIQ DEBUG] No images found in saved data - showing alert');
           alert('Please upload a photo of your catch before generating analysis.');
           return;
         }
       }
 
+      // Create custom form data for fishing module
+      const fishingFormData = {
+        ...formData,
+        images: formData.images || [] // Include images for caught fish
+      };
+
+      // Use centralized handler with custom form data
       await window.handleGenerateRequest('fishing', {
+        customFormData: fishingFormData,
         alertMessage: 'Please complete the form before generating fishing regulations.'
       });
       
@@ -196,9 +210,13 @@ function updateButtonState() {
 
   // Initialize button
   const generateFishingBtn = document.getElementById('generate-fishing-btn');
+  console.log('[FishingIQ] Looking for generate button:', generateFishingBtn);
   if (generateFishingBtn) {
+    console.log('[FishingIQ] Attaching click event listener to button');
     generateFishingBtn.addEventListener('click', handleGenerateFishingIq);
     generateFishingBtn.dataset.handlerAttached = 'true';
+  } else {
+    console.error('[FishingIQ] Generate button not found!');
   }
 
   // Listen for changes to update button state
@@ -208,6 +226,7 @@ function updateButtonState() {
   document.addEventListener('change', updateButtonState);
   
   // Initial check
+  console.log('[FishingIQ] Running initial button state check');
   updateButtonState();
 
   // Export for external access
@@ -218,5 +237,4 @@ function updateButtonState() {
   };
 
 })();
-</script>
 </script>
