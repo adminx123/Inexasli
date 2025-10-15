@@ -23,7 +23,7 @@
         "deploy:oauth": "npx wrangler deploy --env oauth",
         "deploy:stripe-integration": "npx wrangler deploy --config ai/payment/wrangler-stripe-app.toml",
         "deploy:reply-inexasli": "npx wrangler deploy --config products/reply/reply-inexasli.toml",
-        "deploy:inexasli": "npx wrangler deploy --config product/_hub/clients/hub-inexasli.toml",
+        "deploy:inexasli": "npx wrangler deploy --config product/client/INEXASLI/hub/hub-inexasli.toml",
         "deploy:meofia": "npx wrangler deploy --config product/_social/clients/social-meofia.toml --env meofia"
     },
     "keywords": [],
