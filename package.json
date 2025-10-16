@@ -11,7 +11,7 @@
         "deploy:master": "npx wrangler deploy --config app/wrangler-master.toml --env master",
         "deploy:rate-limiter": "npx wrangler deploy -e rate-limiter",
         
-        "deploy:oauth": "npx wrangler deploy --env oauth",
+        "deploy:oauth": "npx wrangler deploy --config product/_social/wrangler-oauth.toml",
         "deploy:stripe-app": "npx wrangler deploy --config app/payment/wrangler-stripe-app.toml",
         "deploy:reply-inexasli": "npx wrangler deploy --config products/reply/reply-inexasli.toml",
         "deploy:inexasli": "npx wrangler deploy --config product/client/INEXASLI/hub/hub-inexasli.toml",
