@@ -8,7 +8,235 @@
   <link rel="icon" type="image/x-icon" href="../../images/newLogo.jpg">
   <link rel="stylesheet" href="salesflow.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
- 
+  <style>
+    /* Page-specific styles for social.html */
+
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .promo-badge-outer {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 3px;
+        border-radius: 50px;
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+
+    .promo-badge-inner {
+        background: linear-gradient(135deg, #4f46e5, #3730a3);
+        padding: 8px 20px;
+        border-radius: 50px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .hero-title {
+        font-size: 3.2em;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4em;
+        color: white;
+        margin-bottom: 30px;
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-strong {
+        color: white;
+    }
+
+    /* Urgency Section */
+    .urgency-section {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin: 25px 0;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .urgency-title {
+        color: white;
+        margin-bottom: 15px;
+        font-size: 2.2em;
+    }
+
+    .urgency-text {
+        color: white;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+
+    .urgency-timing-box {
+        background: rgba(255,255,255,0.2);
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+        backdrop-filter: blur(5px);
+    }
+
+    .urgency-timing-main {
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .urgency-timing-sub {
+        color: white;
+        font-size: 14px;
+    }
+
+    /* Benefit Card Enhanced */
+    .benefit-card-enhanced {
+        border: 2px solid #28a745;
+        position: relative;
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .most-popular-badge {
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        background: #ffffff;
+        color: #000000;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .solution-title {
+        text-align: center;
+        font-size: 2.0em;
+        margin-bottom: 25px;
+        color: white;
+    }
+
+    /* Stats Section */
+    .stats-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: nowrap;
+        margin-bottom: 20px;
+        align-items: center;
+    }
+
+    .stat-item {
+        background: rgba(255,255,255,0.1);
+        padding: 10px 12px;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        flex: 1;
+        max-width: 180px;
+        min-width: 140px;
+        text-align: center;
+        height: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .stat-number {
+        color: #a855f7;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .stat-label {
+        color: white;
+        font-size: 12px;
+        font-weight: 500;
+        line-height: 1.2;
+        margin-top: 5px;
+        white-space: nowrap;
+    }
+
+    /* Problem Section */
+    .problem-section {
+        background: rgba(220, 53, 69, 0.1);
+        border: 1px solid rgba(220, 53, 69, 0.3);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        backdrop-filter: blur(15px);
+    }
+
+    .problem-title {
+        color: #dc2626;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+    }
+
+    .problem-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .problem-item {
+        text-align: center;
+    }
+
+    .problem-emoji {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .problem-text {
+        color: white;
+    }
+
+    /* CTA Section */
+    .cta-header {
+        text-align: center;
+        margin: 30px 0 20px 0;
+    }
+
+    .cta-title {
+        font-size: 2.8em;
+        color: white;
+        margin-bottom: 15px;
+    }
+
+    .cta-subtitle {
+        font-size: 1.3em;
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .guarantee-box {
+        background: #000000;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        display: inline-block;
+        backdrop-filter: blur(10px);
+    }
+
+    .guarantee-text {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 16px;
+    }
+  </style>
 </head>
 <body>
     <div class="floating-particles">
