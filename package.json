@@ -8,14 +8,15 @@
         "build": "webpack --mode production",
         "test": "jest",
         "login": "npx wrangler login",
-        "deploy:master": "npx wrangler deploy --config app/wrangler-master.toml --env master",
+        "deploy:master": "npx wrangler deploy --config app/master.toml --env master",
         "deploy:rate-limiter": "npx wrangler deploy -e rate-limiter",
         
-        "deploy:oauth": "npx wrangler deploy --config product/_social/wrangler-oauth.toml",
-        "deploy:stripe-app": "npx wrangler deploy --config app/payment/wrangler-stripe-app.toml",
+        "deploy:oauth": "npx wrangler deploy --config product/_social/oauth.toml",
+        "deploy:stripe-app": "npx wrangler deploy --config app/payment/stripe-app.toml",
         "deploy:reply-inexasli": "npx wrangler deploy --config products/reply/reply-inexasli.toml",
         "deploy:inexasli": "npx wrangler deploy --config product/client/INEXASLI/hub/hub-inexasli.toml",
-        "deploy:meofia": "npx wrangler deploy --config product/_social/clients/social-meofia.toml --env meofia"
+        "deploy:meofia": "npx wrangler deploy --config product/_social/clients/social-meofia.toml --env meofia",
+        "deploy:train": "npx wrangler deploy --config product/_hub/train.toml --env train"
     },
     "keywords": [],
     "author": "",

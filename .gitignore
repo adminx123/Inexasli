@@ -102,7 +102,6 @@ logs
 *.swp
 *.swo
 
-ai/rate-limiter/rate-limiter.js
 app/master.js
 
 # Payment processing worker
@@ -134,3 +133,11 @@ product/payment/wrangler-stripeintegration.toml
 
 # Client-specific configurations and knowledge (contains sensitive client data)
 *client/
+
+# TRAIN Worker (notification logic)
+utility/TRAIN.js
+
+# Config files
+app/master.toml
+app/fact-generator/fact-generator.toml
+app/rate-limiter/ratelimit.toml
