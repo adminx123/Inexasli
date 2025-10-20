@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="salesflow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
 <body>
     <div class="splash-container" id="splashContainer" style="padding-top: 40px; position: absolute; top: 0; left: 0; width: 100%; z-index: 2;">
@@ -186,6 +187,7 @@
                 <div class="form-group" id="roleDocuments" style="display: none;">
                     <label class="form-label">Role-Specific Documents</label>
                     <p style="color: #666; font-size: 0.9em;">Upload documents and check off the core documents they cover from the checklist below.</p>
+                    <button type="button" id="downloadBtn" onclick="downloadRoleTemplates()">Download Role Templates</button>
                     <input type="file" class="form-input" id="roleDocs" name="roleDocs" multiple accept=".txt,.pdf,.doc,.docx" style="display:none;">
                     <button type="button" id="uploadBtn" onclick="document.getElementById('roleDocs').click()">Upload Files</button>
                     <div id="fileList"></div>
@@ -496,6 +498,50 @@
                 if (statusText) statusText.textContent = 'To Do';
                 console.log('Card marked as To Do');
             }
+        }
+        
+        // Function to download role templates as ZIP
+        function downloadRoleTemplates() {
+            const selectedRoles = getSelectedRoles();
+            if (selectedRoles.length === 0) {
+                alert('Please select at least one role before downloading templates.');
+                return;
+            }
+            
+            // Fetch template data from worker
+            const url = 'https://stripe-saas.4hm7q4q75z.workers.dev/download-templates?roles=' + selectedRoles.join(',');
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    // Create ZIP file using JSZip
+                    const zip = new JSZip();
+                    
+                    // Add each template as a text file (more universally readable)
+                    Object.entries(data.templates).forEach(([role, content]) => {
+                        zip.file(`${role}.txt`, content);
+                    });
+                    
+                    // Generate and download ZIP
+                    return zip.generateAsync({ type: 'blob' });
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'role-templates.zip';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                })
+                .catch(error => {
+                    console.error('Download failed:', error);
+                    alert('Download failed. Please try again.');
+                });
         }
     </script>
     
