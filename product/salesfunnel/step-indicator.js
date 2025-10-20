@@ -19,37 +19,7 @@
         4: 'Connect Socials'
     };
 
-    // HTML Template
-    const stepIndicatorHTML = `
-        <div class="step-indicator">
-            <div class="step currency-step" id="currencyStep">
-                <div class="currency-display" id="currencyDisplay">🇨🇦 CAD ($)</div>
-                <div class="currency-dropdown" id="currencyDropdown">
-                    <div class="currency-option" data-currency="CAD" data-symbol="$">🇨🇦 CAD ($)</div>
-                    <div class="currency-option" data-currency="USD" data-symbol="$">🇺🇸 USD ($)</div>
-                    <div class="currency-option" data-currency="EUR" data-symbol="€">🇪🇺 EUR (€)</div>
-                    <div class="currency-option" data-currency="GBP" data-symbol="£">🇬🇧 GBP (£)</div>
-                    <div class="currency-option" data-currency="AUD" data-symbol="$">🇦🇺 AUD ($)</div>
-                </div>
-            </div>
-            <a href="packages.html" class="step" data-step="1">
-                <div class="step-number">1</div>
-                <span>Packages</span>
-            </a>
-            <a href="customization.html" class="step" data-step="2">
-                <div class="step-number">2</div>
-                <span>Customize</span>
-            </a>
-            <a href="quote.html" class="step" data-step="3">
-                <div class="step-number">3</div>
-                <span>Review & Pay</span>
-            </a>
-            <a href="oauth-connect.html" class="step" data-step="4">
-                <div class="step-number">4</div>
-                <span>Connect</span>
-            </a>
-        </div>
-    `;
+    // HTML Template - generated dynamically in injectHTML
 
     // CSS Styles
     const stepIndicatorCSS = `
@@ -603,6 +573,42 @@
 
     // Inject HTML into placeholder
     function injectHTML() {
+        const currentPage = window.location.pathname.split('/').pop();
+        const currencyHTML = currentPage === 'packages.html' ? `
+            <div class="step currency-step" id="currencyStep">
+                <div class="currency-display" id="currencyDisplay">🇨🇦 CAD ($)</div>
+                <div class="currency-dropdown" id="currencyDropdown">
+                    <div class="currency-option" data-currency="CAD" data-symbol="$">🇨🇦 CAD ($)</div>
+                    <div class="currency-option" data-currency="USD" data-symbol="$">🇺🇸 USD ($)</div>
+                    <div class="currency-option" data-currency="EUR" data-symbol="€">🇪🇺 EUR (€)</div>
+                    <div class="currency-option" data-currency="GBP" data-symbol="£">🇬🇧 GBP (£)</div>
+                    <div class="currency-option" data-currency="AUD" data-symbol="$">🇦🇺 AUD ($)</div>
+                </div>
+            </div>
+        ` : '';
+
+        const stepIndicatorHTML = `
+            <div class="step-indicator">
+                ${currencyHTML}
+                <a href="packages.html" class="step" data-step="1">
+                    <div class="step-number">1</div>
+                    <span>Packages</span>
+                </a>
+                <a href="customization.html" class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <span>Customize</span>
+                </a>
+                <a href="quote.html" class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <span>Review & Pay</span>
+                </a>
+                <a href="oauth-connect.html" class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <span>Connect</span>
+                </a>
+            </div>
+        `;
+
         const placeholder = document.querySelector('.step-indicator-placeholder');
         if (placeholder) {
             placeholder.innerHTML = stepIndicatorHTML;
