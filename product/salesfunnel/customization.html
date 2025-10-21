@@ -951,17 +951,17 @@
             }
             
             // Validate required fields based on relevant sections
-            if (relevantSections.includes('main') && !filteredSetupData.roleScope) {
+            if (relevantSections.includes('conversational') && !filteredSetupData.roleScopeChat) {
                 alert('Please select an operational focus.');
                 return;
             }
             
-            if (relevantSections.includes('main') && !filteredSetupData.functions) {
+            if (relevantSections.includes('conversational') && !filteredSetupData.functionsChat) {
                 alert('Please select departments.');
                 return;
             }
             
-            if (relevantSections.includes('main') && !filteredSetupData.roles) {
+            if (relevantSections.includes('conversational') && !filteredSetupData.rolesChat) {
                 alert('Please select AI chat role support.');
                 return;
             }
@@ -992,21 +992,20 @@
             }
             
             // Validate role documents
-            if (relevantSections.includes('conversational')) {
+            if (relevantSections.includes('conversational') && uploadedFiles.length > 0) {
                 const selectedRoles = getSelectedRoles();
                 if (selectedRoles.length > 0) {
                     const covered = new Set();
-                    const fileListDiv = document.getElementById('fileList');
-                    const fileDivs = fileListDiv.children;
-                    Array.from(fileDivs).forEach(fileDiv => {
-                        const grid = fileDiv.querySelector('.grid-selection');
+                    const categoryGrid = document.getElementById('categoryGrid');
+                    if (categoryGrid && categoryGrid.style.display !== 'none') {
+                        const grid = categoryGrid.querySelector('.grid-selection');
                         if (grid) {
                             const selectedItems = grid.querySelectorAll('.grid-item1.selected');
                             Array.from(selectedItems).forEach(item => {
                                 covered.add(item.dataset.value);
                             });
                         }
-                    });
+                    }
                     const required = new Set();
                     selectedRoles.forEach(role => {
                         roleCategories[role].forEach(cat => required.add(cat));
@@ -1037,7 +1036,7 @@
                     });
                     
                     // Upload to stripe-saas worker
-                    const uploadResponse = await fetch('https://stripe-saas.inexasli.workers.dev/upload-files', {
+                    const uploadResponse = await fetch('https://stripe-saas.4hm7q4q75z.workers.dev/upload-files', {
                         method: 'POST',
                         body: formData
                     });
