@@ -1217,6 +1217,30 @@ p {
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
 }
 
+.action-button {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 3px 6px;
+    border-radius: 50px;
+    font-size: 0.25em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    width: auto;
+    text-align: center;
+    margin: 10px 0;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
 .btn-full-width {
     width: 100%;
     display: block;
