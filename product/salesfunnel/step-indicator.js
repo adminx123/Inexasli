@@ -255,7 +255,7 @@
     }
 
     function loadCurrencyPreference() {
-        return localStorage.getItem('selectedCurrency') || 'CAD';
+        return localStorage.getItem('selectedCurrency') || 'USD';
     }
 
     function updatePagePricing(currency) {
@@ -365,11 +365,11 @@
         
         // Create custom dropdown structure
         const currencies = [
-            { code: 'CAD', symbol: '$', name: '🇨🇦 CAD ($)' },
-            { code: 'USD', symbol: '$', name: '🇺🇸 USD ($)' },
-            { code: 'EUR', symbol: '€', name: '🇪🇺 EUR (€)' },
-            { code: 'GBP', symbol: '£', name: '🇬🇧 GBP (£)' },
-            { code: 'AUD', symbol: '$', name: '🇦🇺 AUD ($)' }
+            { code: 'CAD', symbol: '$', name: '🇨🇦 CAD $' },
+            { code: 'USD', symbol: '$', name: '🇺🇸 USD $' },
+            { code: 'EUR', symbol: '€', name: '🇪🇺 EUR €' },
+            { code: 'GBP', symbol: '£', name: '🇬🇧 GBP £' },
+            { code: 'AUD', symbol: '$', name: '🇦🇺 AUD $' }
         ];
         
         const savedCurrency = loadCurrencyPreference();
@@ -576,20 +576,19 @@
         const currentPage = window.location.pathname.split('/').pop();
         const currencyHTML = currentPage === 'packages.html' ? `
             <div class="step currency-step" id="currencyStep">
-                <div class="currency-display" id="currencyDisplay">🇨🇦 CAD ($)</div>
+                <div class="currency-display" id="currencyDisplay">🇺🇸 USD $</div>
                 <div class="currency-dropdown" id="currencyDropdown">
-                    <div class="currency-option" data-currency="CAD" data-symbol="$">🇨🇦 CAD ($)</div>
-                    <div class="currency-option" data-currency="USD" data-symbol="$">🇺🇸 USD ($)</div>
-                    <div class="currency-option" data-currency="EUR" data-symbol="€">🇪🇺 EUR (€)</div>
-                    <div class="currency-option" data-currency="GBP" data-symbol="£">🇬🇧 GBP (£)</div>
-                    <div class="currency-option" data-currency="AUD" data-symbol="$">🇦🇺 AUD ($)</div>
+                    <div class="currency-option" data-currency="CAD" data-symbol="$">🇨🇦 CAD $</div>
+                    <div class="currency-option" data-currency="USD" data-symbol="$">🇺🇸 USD $</div>
+                    <div class="currency-option" data-currency="EUR" data-symbol="€">🇪🇺 EUR €</div>
+                    <div class="currency-option" data-currency="GBP" data-symbol="£">🇬🇧 GBP £</div>
+                    <div class="currency-option" data-currency="AUD" data-symbol="$">🇦🇺 AUD $</div>
                 </div>
             </div>
         ` : '';
 
         const stepIndicatorHTML = `
             <div class="step-indicator">
-                ${currencyHTML}
                 <a href="packages.html" class="step" data-step="1">
                     <div class="step-number">1</div>
                     <span>Packages</span>
@@ -606,6 +605,7 @@
                     <div class="step-number">4</div>
                     <span>Connect</span>
                 </a>
+                ${currencyHTML}
             </div>
         `;
 
@@ -673,31 +673,33 @@
             if (currencyStep && currencyDropdown && currencyDisplay) {
                 console.log('Currency elements found');
                 // Load saved currency
-                const savedCurrency = loadCurrencyPreference();
+                const savedCurrency = 'USD'; // Force to USD for now
+                saveCurrencyPreference('USD');
                 const currencies = [
-                    { code: 'CAD', name: '🇨🇦 CAD ($)' },
-                    { code: 'USD', name: '🇺🇸 USD ($)' },
-                    { code: 'EUR', name: '🇪🇺 EUR (€)' },
-                    { code: 'GBP', name: '🇬🇧 GBP (£)' },
-                    { code: 'AUD', name: '🇦🇺 AUD ($)' }
+                    { code: 'CAD', name: '🇨🇦 CAD $' },
+                    { code: 'USD', name: '🇺🇸 USD $' },
+                    { code: 'EUR', name: '🇪🇺 EUR €' },
+                    { code: 'GBP', name: '🇬🇧 GBP £' },
+                    { code: 'AUD', name: '🇦🇺 AUD $' }
                 ];
                 const current = currencies.find(c => c.code === savedCurrency) || currencies[0];
                 currencyDisplay.textContent = current.name;
+                updatePagePricing('USD');
                 console.log('Currency display set to:', current.name);
 
-                // Toggle dropdown
-        currencyStep.addEventListener('click', function(event) {
-            event.stopPropagation();
-            const dropdown = document.querySelector('.currency-dropdown');
-            if (currencyStep.classList.contains('active')) {
-                currencyStep.classList.remove('active');
-            } else {
-                const rect = currencyStep.getBoundingClientRect();
-                dropdown.style.top = rect.bottom + 'px';
-                dropdown.style.left = rect.left + 'px';
-                currencyStep.classList.add('active');
-            }
-        });                // Close on outside click
+                // Toggle dropdown - DISABLED FOR NOW
+        // currencyStep.addEventListener('click', function(event) {
+        //     event.stopPropagation();
+        //     const dropdown = document.querySelector('.currency-dropdown');
+        //     if (currencyStep.classList.contains('active')) {
+        //         currencyStep.classList.remove('active');
+        //     } else {
+        //         const rect = currencyStep.getBoundingClientRect();
+        //         dropdown.style.top = rect.bottom + 'px';
+        //         dropdown.style.left = rect.left + 'px';
+        //         currencyStep.classList.add('active');
+        //     }
+        // });                // Close on outside click
                 document.addEventListener('click', function() {
                     currencyStep.classList.remove('active');
                 });
