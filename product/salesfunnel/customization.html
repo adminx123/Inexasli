@@ -951,10 +951,18 @@
             }
             
             // Validate required fields based on relevant sections
-            if (relevantSections.includes('conversational') && !filteredSetupData.roleScopeChat) {
-                alert('Please select an operational focus.');
-                return;
-            }
+            // First check if all relevant cards are completed
+            let allCardsCompleted = true;
+            const allCards = document.querySelectorAll('.package-card');
+            allCards.forEach(card => {
+                const section = card.dataset.section;
+                if (relevantSections.includes(section) && !card.classList.contains('completed')) {
+                    allCardsCompleted = false;
+                    alert(`Please complete the ${card.querySelector('.card-title').textContent} section before continuing.`);
+                    return;
+                }
+            });
+            if (!allCardsCompleted) return;
             
             if (relevantSections.includes('conversational') && !filteredSetupData.functionsChat) {
                 alert('Please select departments.');
