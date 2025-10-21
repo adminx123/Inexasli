@@ -271,7 +271,7 @@
       <!-- Urgency & Social Proof -->
       <div class="stats-container">
         <div class="stat-item">
-          <div class="stat-label">Save Up To</div>
+          <div class="stat-label">Potentially Save</div>
           <div class="stat-number" data-target="50000">0</div>
           <div class="stat-label">$ Per Employee</div>
         </div>
@@ -426,23 +426,63 @@
 <script src="../../utility/modal.js"></script>
 <script src="../legal/legalSocial.js"></script>
 <script>
-  // Counter animation for stats
+  // Counter animation for stats with two-phase speed
   function animateCounters() {
     const counters = document.querySelectorAll('.stat-number');
     
     counters.forEach(counter => {
       const target = parseInt(counter.getAttribute('data-target'));
-      const increment = target / 100; // Animate over 100 steps
+      const labels = counter.parentElement.querySelectorAll('.stat-label');
+      const labelText = Array.from(labels).map(l => l.textContent).join(' ');
+      
+      // Define first phase targets and max values for two-phase animation
+      let firstPhaseTarget, maxValue, slowIncrement;
+      
+      if (labelText.includes('$ Per Employee')) {
+        firstPhaseTarget = 20000;
+        maxValue = 50000;
+        slowIncrement = 300; // Slower increment for second phase
+      } else if (labelText.includes('Customers')) {
+        firstPhaseTarget = 250;
+        maxValue = 1000;
+        slowIncrement = 8;
+      } else if (labelText.includes('Hours Per Day') && labelText.includes('Save')) {
+        firstPhaseTarget = 8;
+        maxValue = 8;
+        slowIncrement = 0; // No second phase for this one
+      } else {
+        // Default single-phase animation for other stats
+        firstPhaseTarget = target;
+        maxValue = target;
+        slowIncrement = 0;
+      }
+      
+      const fastIncrement = firstPhaseTarget / 100; // Fast phase: 100 steps
       let current = 0;
+      let phase = 1;
       
       const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          counter.textContent = target + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
-          clearInterval(timer);
+        if (phase === 1) {
+          // Fast phase
+          current += fastIncrement;
+          if (current >= firstPhaseTarget) {
+            current = firstPhaseTarget;
+            phase = 2;
+          }
+        } else if (phase === 2 && slowIncrement > 0) {
+          // Slow phase
+          current += slowIncrement;
+          if (current >= maxValue) {
+            current = maxValue;
+            clearInterval(timer);
+          }
         } else {
-          counter.textContent = Math.floor(current) + (counter.parentElement.querySelector('.stat-label').textContent.includes('Time') ? '%' : '+');
+          clearInterval(timer);
         }
+        
+        // Format display
+        const suffix = labelText.includes('Languages') || labelText.includes('Customers') || labelText.includes('Days') || labelText.includes('$ Per Employee') ? '+' : '';
+        counter.textContent = Math.floor(current).toLocaleString() + suffix;
       }, 20);
     });
   }
