@@ -1619,6 +1619,9 @@ textarea {
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
     gap: 15px;
     margin: 25px 0;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .benefit-card {
@@ -1630,6 +1633,11 @@ textarea {
     position: relative;
     transition: all 0.3s ease;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 200px;
 }
 
 .benefit-card:hover {
@@ -1641,13 +1649,28 @@ textarea {
 .benefit-card h3 {
     margin-bottom: 15px;
     font-size: 1.2em;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .benefit-card p {
     color: #ccc;
     margin: 0;
     font-size: 0.95em;
-    line-height: 1.5;
+    line-height: 1.6;
+    text-align: center;
+    width: 100%;
+    flex: 1;
+}
+
+.benefit-card p strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #fff;
+    font-size: 1.05em;
 }
 
 /* Device Container - Centered Layout */
