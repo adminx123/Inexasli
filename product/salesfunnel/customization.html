@@ -1037,8 +1037,10 @@
                 continueBtn.disabled = true;
                 
                 try {
-                    // Create FormData with files
+                    // Create FormData with files and brand name
                     const formData = new FormData();
+                    const brandName = document.getElementById('brandName').value.trim() || 'unknown';
+                    formData.append('brandName', brandName);
                     uploadedFiles.forEach((file, index) => {
                         formData.append(`file_${index}`, file);
                     });
