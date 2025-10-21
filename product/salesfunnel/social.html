@@ -131,7 +131,7 @@
         display: flex;
         justify-content: center;
         gap: 15px;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
         margin-bottom: 20px;
         align-items: center;
     }
@@ -142,15 +142,17 @@
         border-radius: 10px;
         backdrop-filter: blur(10px);
         border: 1px solid rgba(255,255,255,0.2);
-        flex: 1;
-        max-width: 180px;
-        min-width: 140px;
+        flex: 1 1 calc(33.333% - 10px);
+        max-width: 140px;
+        min-width: 120px;
         text-align: center;
-        height: 70px;
+        height: 90px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        word-wrap: break-word;
+        white-space: normal;
     }
 
     .stat-number {
@@ -165,7 +167,8 @@
         font-weight: 500;
         line-height: 1.2;
         margin-top: 5px;
-        white-space: nowrap;
+        white-space: normal;
+        word-wrap: break-word;
     }
 
     /* Problem Section */
@@ -261,23 +264,41 @@
         Automate Your Business While You Sleep
       </h1>
       <p class="hoead-2 hero-subtitle">
-        Generate engaging content, create stunning visuals, and post automatically across all platforms. 
-        <strong class="hero-strong">Turn 5 hours of daily work into 5 minutes of setup.</strong>
+        AI-powered solutions for social media, customer chat, and automated replies. Generate content, handle inquiries, and engage customers 24/7. 
+        <strong class="hero-strong">Turn hours of daily work into minutes with minimal setup.</strong>
       </p>
       
       <!-- Urgency & Social Proof -->
       <div class="stats-container">
         <div class="stat-item">
-          <div class="stat-number" data-target="5">0</div>
-          <div class="stat-label">Businesses Automated</div>
+          <div class="stat-label">Save Up To</div>
+          <div class="stat-number" data-target="50000">0</div>
+          <div class="stat-label">$ Per Employee</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-target="50">0</div>
-          <div class="stat-label">Posts Generated</div>
+          <div class="stat-label">Serve Simultaneously</div>
+          <div class="stat-number" data-target="1000">0</div>
+          <div class="stat-label">Customers</div>
         </div>
         <div class="stat-item">
-          <div class="stat-number" data-target="85">0</div>
-          <div class="stat-label">Time Saved</div>
+          <div class="stat-label">Capture Sales</div>
+          <div class="stat-number" data-target="24">0</div>
+          <div class="stat-label">Hours Per Day</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Support</div>
+          <div class="stat-number" data-target="100">0</div>
+          <div class="stat-label">+ Languages</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Save</div>
+          <div class="stat-number" data-target="8">0</div>
+          <div class="stat-label">+ Hours Per Day</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Available</div>
+          <div class="stat-number" data-target="365">0</div>
+          <div class="stat-label">Days Per Year</div>
         </div>
       </div>
     </div>
@@ -304,10 +325,14 @@
     <!-- Solution/Benefits Section -->
     <h2 class="solution-title" style="font-size: 2.0em; line-height: 1.2;">How Our System Fixes That Forever</h2>
     <div class="benefits">
-      <div class="benefit-card benefit-card-enhanced">
+            <div class="benefit-card benefit-card-enhanced">
         <div class="most-popular-badge">MOST POPULAR</div>
-        <h3>AI Content Generation</h3>
-        <p><strong>Save hours daily</strong> - AI creates engaging posts, captions, and quotes tailored to your brand voice</p>
+        <h3>AI Customer Chat</h3>
+        <p><strong>24/7 sales conversion</strong> - AI engages inquiries instantly, converting customers after-hours when competitors are offline. No employees needed - no hiring, firing, sick days, or management overhead.</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Multilingual Support</h3>
+        <p><strong>Serve global customers instantly</strong> - AI communicates in 100+ languages, opening markets traditional employees can't reach. Break language barriers and expand your customer base worldwide.</p>
       </div>
       <div class="benefit-card">
         <h3>Auto Visual Creation</h3>
@@ -328,6 +353,10 @@
       <div class="benefit-card">
         <h3>Professional Setup</h3>
         <p><strong>We handle the technical work</strong> - From initial setup to ongoing maintenance and optimization</p>
+      </div>
+      <div class="benefit-card">
+        <h3>Unlimited Scalability</h3>
+        <p><strong>Convert inquiries to sales 24/7</strong> - Handle 1000+ customers simultaneously, capturing sales after-hours when competitors are closed. Zero employee costs or management overhead.</p>
       </div>
     </div>
     
