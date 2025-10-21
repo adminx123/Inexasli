@@ -1221,9 +1221,9 @@ p {
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
-    padding: 3px 6px;
+    padding: 6px 12px;
     border-radius: 50px;
-    font-size: 0.25em;
+    font-size: 0.5em;
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
