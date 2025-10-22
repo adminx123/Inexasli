@@ -498,6 +498,85 @@ We respond to privacy inquiries within 5 business days and fulfill data requests
     ]
 };
 
+// Data Deletion Instructions content
+const DATA_DELETION = {
+    title: "Data Deletion Instructions - INEXASLI",
+    
+    sections: [
+        {
+            title: "Right to Data Deletion",
+            content: `Under GDPR, CCPA, and other privacy laws, you have the right to request deletion of your personal data. INEXASLI respects your privacy and will process data deletion requests in accordance with applicable laws.`
+        },
+        {
+            title: "What Data Will Be Deleted",
+            content: `When you request data deletion, we will delete the following types of data associated with your account:
+- Business information and contact details
+- Brand guidelines and marketing materials
+- Social media account access credentials and tokens
+- Service usage history and analytics
+- Posted content data and engagement metrics
+- Support interaction records
+- Payment information (processed by our payment provider)`
+        },
+        {
+            title: "What Data Cannot Be Deleted",
+            content: `Certain data may be retained as required by law or for legitimate business purposes:
+- Data necessary for legal compliance or regulatory requirements
+- Data required to complete current transactions
+- Data needed to protect against fraud or security threats
+- Anonymized or aggregated data that cannot be linked back to you
+- Content already posted on social media platforms (which becomes your property)`
+        },
+        {
+            title: "How to Request Data Deletion",
+            content: `**Step 1:** Send an email to our Data Protection Officer at privacy@inexasli.com with the subject line "Data Deletion Request"
+
+**Step 2:** Include the following information in your request:
+- Your full name
+- Your business name (if applicable)
+- The email address associated with your account
+- Any account IDs or reference numbers you may have
+- A brief description of the data you want deleted
+- Reason for deletion (optional but helpful)
+
+**Step 3:** We will verify your identity and process your request within 30 days
+
+**Step 4:** You will receive confirmation once the deletion is complete`
+        },
+        {
+            title: "Processing Timeline",
+            content: `- **Initial Response:** Within 5 business days of receiving your request
+- **Verification:** We may need to verify your identity before proceeding
+- **Deletion:** Completed within 30 days of verification
+- **Confirmation:** You will receive email confirmation of deletion`
+        },
+        {
+            title: "Account Termination",
+            content: `If you have an active service account, requesting data deletion will also terminate your account and stop all automated services. You can cancel your account separately if you wish to stop services but retain your data for a period.`
+        },
+        {
+            title: "Appeals and Questions",
+            content: `If you believe your data deletion request was not properly handled, you can appeal the decision by contacting our Data Protection Officer. We will review and respond to appeals within 15 business days.`
+        },
+        {
+            title: "Contact Information",
+            content: `- **Data Protection Officer:** privacy@inexasli.com
+- **General Support:** support@inexasli.com`
+        },
+        {
+            title: "Additional Rights",
+            content: `In addition to data deletion, you have the right to:
+- Access your personal data
+- Correct inaccurate data
+- Data portability
+- Object to processing
+- Withdraw consent
+
+For more information about your rights, please refer to our Privacy Policy.`
+        }
+    ]
+};
+
 // CSS styles for the modal
 function createLegalSocialModal() {
     const sectionsHtml = generateSectionsHtml(TERMS_OF_SERVICE.sections);
@@ -542,6 +621,21 @@ function createPrivacyModal() {
     });
 }
 
+function createDataDeletionModal() {
+    const sectionsHtml = generateSectionsHtml(DATA_DELETION.sections);
+    
+    const htmlContent = `
+        <div class="markdown-content" style="text-align: left; font-family: 'Inter', sans-serif; width: 100%; max-height: 70vh; overflow-y: auto;">
+            <h2 style="color: #2d5a3d; margin-top: 0; margin-bottom: 16px; font-size: 1.2em; font-family: 'Geist', sans-serif; text-align: center; line-height: 1.2;">${DATA_DELETION.title}</h2>
+            ${sectionsHtml}
+        </div>
+    `;
+
+    window.openCustomModal(htmlContent, {
+        maxWidth: '500px'
+    });
+}
+
 function generateSectionsHtml(sections) {
     let sectionsHtml = '';
     sections.forEach((section, index) => {
@@ -567,6 +661,12 @@ function showSocialPrivacy() {
     return createPrivacyModal();
 }
 
+// Show Data Deletion
+function showSocialDataDeletion() {
+    console.log('[LegalSocial] Opening Data Deletion modal');
+    return createDataDeletionModal();
+}
+
 /**
  * Public API functions for external access
  */
@@ -578,6 +678,11 @@ function openSocialLegalModal() {
 function openSocialPrivacyModal() {
     console.log('[LegalSocial] Opening Privacy Policy modal');
     return createPrivacyModal();
+}
+
+function openSocialDataDeletionModal() {
+    console.log('[LegalSocial] Opening Data Deletion modal');
+    return createDataDeletionModal();
 }
 
 /**
@@ -594,8 +699,10 @@ function showSocialTermsOfService() {
 // Global functions for external access
 window.showSocialTerms = showSocialTerms;
 window.showSocialPrivacy = showSocialPrivacy;
+window.showSocialDataDeletion = showSocialDataDeletion;
 window.openSocialLegalModal = openSocialLegalModal;
 window.openSocialPrivacyModal = openSocialPrivacyModal;
+window.openSocialDataDeletionModal = openSocialDataDeletionModal;
 window.openSocialTermsOfService = openSocialTermsOfService;
 window.showSocialTermsOfService = showSocialTermsOfService;
 
