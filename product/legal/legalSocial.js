@@ -1,88 +1,166 @@
 /**
- * Legal Modal System - Social Media Automation Business Terms
- * Displays comprehensive legal content for INEXASLI social media automation services
+ * Legal Modal System - B2B SaaS Terms (All Products)
+ * Displays comprehensive legal content for INEXASLI business services
+ * Products: Social Media Automation, Chat Widget, DM Reply Automation
  */
 
 console.log('[LegalSocial] Script loading...');
 
-// Terms of Service content for Social Media Automation Business
+// Terms of Service content for All INEXASLI B2B Services
 const TERMS_OF_SERVICE = {
-    title: "Terms of Service for INEXASLI Social Media Automation Services",
+    title: "Terms of Service for INEXASLI Business Services",
     
     // Main disclaimer at the top
-    disclaimer: `INEXASLI provides managed social media automation services for businesses using proprietary AI technology. These services include automated content creation, posting, and social media management across multiple platforms. By purchasing our automation services, businesses acknowledge that all content is AI-generated and should be reviewed before posting. INEXASLI is not responsible for third-party platform restrictions, account actions, or the accuracy of AI-generated content.
+    disclaimer: `INEXASLI provides AI-powered business automation services including social media automation, chat widget services, and DM reply automation. By purchasing our services, businesses acknowledge that all content is AI-generated and should be reviewed before deployment. INEXASLI is not responsible for third-party platform restrictions, account actions, or the accuracy of AI-generated content.
 
-*Disclaimer: INEXASLI social media automation services are designed for business marketing and engagement purposes. All content is generated using artificial intelligence systems and should be reviewed by businesses before posting. While our technology aims to create engaging, brand-appropriate content, businesses are responsible for ensuring all posts comply with platform guidelines and accurately represent their brand. AI can make mistakes or produce content that may not align with your brand voice. For best results, businesses should monitor automated posts and provide feedback for continuous improvement. Any use of our automation services is at the business's own risk.*`,
+*CRITICAL AI DISCLAIMER: All INEXASLI services use artificial intelligence systems that may produce inaccurate, inappropriate, or copyrighted content. AI-generated outputs should NEVER be deployed without human review. Businesses are solely responsible for ensuring all AI-generated content complies with applicable laws, platform policies, and does not infringe third-party intellectual property rights. INEXASLI provides technology tools only - businesses remain legally responsible for all content published using our services.*`,
 
     sections: [
         {
             title: "Introduction",
-            content: `This document outlines the terms of service for INEXASLI's managed social media automation services (the "Services") provided by INEXASLI, a technology company specializing in AI-powered business automation (hereinafter referred to as the "Company"). By purchasing our automation services, you (the "Client" or "Business") agree to be bound by these terms of service. If you do not agree with these terms, you must not use the Services.
+            content: `This document outlines the terms of service for INEXASLI's AI-powered business automation services (the "Services") provided by INEXASLI (hereinafter referred to as the "Company"). By purchasing our services, you (the "Client" or "Business") agree to be bound by these terms of service.
 
-Company Definition: INEXASLI is a technology company that provides managed social media automation services for businesses. We specialize in AI-powered content creation, automated posting, and social media management across multiple platforms including Instagram, Facebook, LinkedIn, and X (formerly Twitter). Our core business is developing and operating automation technology that creates and publishes social media content on behalf of our business clients.
+**Company Definition**: INEXASLI is a technology company that provides AI-powered business automation services including:
+• Social Media Automation - AI content creation and automated posting
+• Chat Widget Services - AI-powered customer chat widgets for business websites
+• DM Reply Automation - Automated Instagram/social media direct message responses
 
-Service Description: Our Services include automated social media content creation, scheduled posting, hashtag optimization, and basic engagement monitoring. Businesses purchase managed automation services where INEXASLI operates the technology on their behalf. Clients do not receive ownership of the underlying technology, software, or code - they purchase access to our managed automation service.`
+**Service Description**: Our Services provide managed AI automation where INEXASLI operates the technology on behalf of business clients. Clients purchase access to managed automation services, not ownership of underlying technology, software, or code.`
         },
         {
-            title: "Social Media Automation Services",
+            title: "AI Copyright and Content Liability",
+            content: `**AI-Generated Content Risks**
+- All content generated by INEXASLI services is created using artificial intelligence and may inadvertently reproduce copyrighted material, trademarks, or proprietary content.
+- INEXASLI cannot guarantee that AI-generated content is free from copyright infringement, trademark violations, or other intellectual property issues.
+- Businesses are solely responsible for monitoring AI-generated content and taking corrective action if issues arise.
+
+**Client Responsibilities for AI Content**
+- Businesses acknowledge that automated services post content immediately without pre-publication review.
+- Clients are responsible for monitoring all published AI-generated content as soon as reasonably possible after posting.
+- Businesses must immediately remove any infringing, inappropriate, or problematic content discovered after publication.
+- Clients are responsible for ensuring AI-generated content does not violate third-party copyrights, trademarks, rights of publicity, or other intellectual property rights.
+- Businesses must notify INEXASLI immediately at legal@inexasli.com of any content-related issues or legal claims.
+
+**Indemnification for AI Content**
+- Businesses agree to indemnify and hold harmless INEXASLI from any claims, damages, or legal actions arising from AI-generated content published using our services.
+- This includes but is not limited to copyright infringement claims, trademark disputes, defamation claims, and privacy violations.
+- INEXASLI's liability is limited to providing technology tools - all publication decisions and legal responsibility rest with the business client.
+- Businesses accept all risks associated with automated content deployment and immediate publication.
+
+**No Pre-Publication Review**
+- INEXASLI does not manually review AI-generated content before it is posted or deployed.
+- Content is generated and published automatically by AI systems without human oversight from INEXASLI.
+- Businesses acknowledge that INEXASLI operates as a technology provider only, not a content moderator or publisher.
+- Any content moderation, legal review, or compliance checks are the sole responsibility of the business client.`
+        },
+        {
+            title: "Product-Specific Terms: Social Media Automation",
             content: `**Managed Automation for Businesses**
 - INEXASLI provides comprehensive social media automation including content creation, posting schedules, and basic engagement monitoring.
 - Services include automated posting to Instagram, Facebook, LinkedIn, and X (formerly Twitter) based on client's selected package.
-- All content is generated using proprietary AI technology and should be considered AI-generated material.
-- Businesses purchase access to managed services, not ownership of the underlying technology, software, or code.
+- All content is AI-generated and posted automatically without pre-publication review - businesses must monitor posts after publication.
 
-**Platform Compliance and Responsibilities**
+**Platform Compliance**
 - Businesses must comply with all applicable social media platform terms of service and community guidelines.
-- Clients must provide accurate business information, branding guidelines, and content preferences.
 - INEXASLI is not responsible for third-party platform restrictions, outages, algorithm changes, or account actions.
-- Businesses are responsible for maintaining their social media accounts in good standing.
+- Clients must maintain their social media accounts in good standing and ensure all posted content complies with platform policies.
 
-**Content Review and Approval**
-- All AI-generated content should be considered draft material requiring business review.
-- Businesses are responsible for monitoring automated posts and reporting any inappropriate content immediately.
+**Content Review Process**
+- Businesses should monitor automated posts and report any inappropriate content immediately.
 - INEXASLI provides content creation and posting automation but does not guarantee content accuracy, appropriateness, or platform compliance.
-- Clients should establish internal review processes for AI-generated content to ensure brand alignment.
-
-**Account Access and Setup**
-- Businesses must provide necessary account access and authentication for social media platforms.
-- INEXASLI requires appropriate permissions to post content on behalf of the business.
-- Businesses retain ownership of their social media accounts and can revoke access at any time.
-- INEXASLI will not access or modify account settings beyond those necessary for content posting.`
+- Clients should establish internal review processes to ensure brand alignment and legal compliance.`
         },
         {
-            title: "Intellectual Property",
-            content: `**Service Technology Ownership**
-- All rights, title, and interest in INEXASLI's automation technology, software, algorithms, and systems remain the exclusive property of INEXASLI.
-- Businesses are granted a limited, non-exclusive, non-transferable license to use our managed automation services during the service period.
-- No source code, algorithms, or proprietary technology is transferred to clients.
+            title: "Product-Specific Terms: Chat Widget Services",
+            content: `**Chat Widget Description**
+- INEXASLI provides embeddable AI-powered chat widgets for business websites.
+- Chat widgets collect visitor queries and provide AI-generated responses based on business-provided context and knowledge base.
+- Widgets are hosted and operated by INEXASLI on behalf of business clients.
 
-**Client Content and Brand Materials**
-- Businesses retain ownership of their brand materials, logos, and provided content.
-- By engaging our services, businesses grant INEXASLI permission to use their brand materials solely for the purpose of creating and posting social media content.
-- AI-generated content created for clients becomes the property of the client upon posting.
+**Data Collection and Processing**
+- Chat widgets collect end-user messages, session data, and browser information necessary for chat functionality.
+- INEXASLI acts as data processor for chat data - businesses are the data controllers for their website visitors.
+- Businesses must display appropriate privacy notices and obtain necessary consents from website visitors before chat widget interaction.
 
-**Generated Content Ownership**
-- Social media content generated by our AI systems becomes the property of the client business.
-- INEXASLI retains the right to use aggregated, anonymized data for service improvement.
-- Clients may use AI-generated content across their marketing channels beyond social media.`
+**Client Responsibilities for Chat Widgets**
+- Businesses must provide privacy notices to end users that disclose: (1) data is collected through chat widget, (2) AI is responding to queries, (3) data is processed by INEXASLI as subprocessor.
+- Clients must ensure chat widgets are only embedded on websites where they have legal authority to collect visitor data.
+- Businesses are responsible for compliance with GDPR, CCPA, and other applicable privacy laws for end-user data collected through widgets.
+
+**AI Response Liability**
+- Chat widget responses are AI-generated and may be inaccurate, inappropriate, or provide incorrect information.
+- Businesses are responsible for monitoring chat interactions and correcting inaccurate AI responses.
+- INEXASLI is not liable for damages arising from incorrect AI responses, including but not limited to business losses, misinformation, or customer harm.
+
+**Third-Party Data Processing**
+- Chat messages are processed through xAI (X.AI Corp) API for AI response generation.
+- Businesses acknowledge that chat data is transmitted to third-party AI providers as subprocessors.
+- Businesses must disclose subprocessor relationships to end users in their privacy policies.`
         },
         {
-            title: "Service Packages and Billing",
-            content: `**Package Structure**
-- Services are offered in tiered packages: Starter ($397), Professional ($697), and Enterprise ($997).
-- Each package includes specific numbers of platforms, posts, and additional features.
-- Add-on services available for additional photos, videos, and extra platforms.
+            title: "Product-Specific Terms: DM Reply Automation",
+            content: `**DM Automation Description**
+- INEXASLI provides automated response services for Instagram direct messages and social media inquiries.
+- AI analyzes incoming messages and generates contextual responses posted on behalf of the business.
+- Services designed to handle high-volume customer inquiries with AI-powered automation.
 
-**Billing and Payment Terms**
-- All packages require upfront payment for setup and first month of service.
-- Monthly billing begins after initial setup completion (typically 2-3 business days).
-- Payments processed securely through Stripe payment processing.
-- All sales are final - no refunds after service setup begins.
+**AI Disclosure Requirements**
+- Businesses must disclose to end users that AI is responding to their messages.
+- Automated responses should include clear indication that messages are AI-generated (e.g., "This is an AI assistant for [Business]").
+- Businesses are responsible for ensuring AI disclosure compliance with FTC Act Section 5 and Meta Platform Terms.
 
-**Service Modifications**
-- Package upgrades available at any time with prorated pricing.
-- Service cancellation requires 30-day notice to avoid next month's billing.
-- Downgrades take effect at the next billing cycle.`
+**Platform Compliance**
+- Instagram and Meta require disclosure when automation is used to engage with users.
+- Businesses must comply with Meta Platform Terms Section 3.2 prohibiting deceptive automation practices.
+- INEXASLI is not responsible for account suspension or platform actions resulting from business use of automation services.
+
+**End-User Privacy**
+- DM content is processed through INEXASLI systems and transmitted to xAI API for response generation.
+- Businesses are responsible for obtaining appropriate consents for automated processing of user messages.
+- Clients must provide privacy disclosures to end users explaining that their messages are processed by AI automation services.
+
+**Content Monitoring**
+- Businesses must monitor automated DM responses for accuracy and appropriateness.
+- INEXASLI does not manually review or approve automated responses before they are sent to end users.
+- Businesses are solely responsible for any harm, offense, or misinformation in automated responses.`
+        },
+        {
+            title: "Data Processing and Subprocessors",
+            content: `**Third-Party Subprocessors**
+INEXASLI utilizes the following third-party subprocessors to deliver services:
+
+1. **xAI (X.AI Corp)** - AI content generation and natural language processing
+   • Purpose: Generate social media content, chat responses, and DM replies
+   • Data Shared: User queries, business context, conversation history
+   • Location: United States
+   • Privacy Policy: https://x.ai/legal/privacy-policy
+
+2. **Cloudflare, Inc.** - Cloud infrastructure and content delivery
+   • Purpose: Host Workers (serverless functions), R2 storage, network infrastructure
+   • Data Shared: All service data passes through Cloudflare infrastructure
+   • Location: Global (data centers worldwide)
+   • Privacy Policy: https://www.cloudflare.com/privacypolicy/
+
+3. **Stripe, Inc.** - Payment processing
+   • Purpose: Process subscription payments and manage billing
+   • Data Shared: Payment card information, billing details, transaction history
+   • Location: United States
+   • Privacy Policy: https://stripe.com/privacy
+
+**Subprocessor Changes**
+- INEXASLI reserves the right to add, remove, or change subprocessors with 30-days notice to clients.
+- Clients will be notified via email of any subprocessor changes.
+- Continued use of services after subprocessor changes constitutes acceptance.
+
+**Data Processing Agreement (DPA)**
+- Enterprise clients requiring formal DPA should contact legal@inexasli.com.
+- DPA available as separate agreement for GDPR compliance.
+- Standard Contractual Clauses available for EU data transfers upon request.
+
+**Client Responsibilities as Data Controllers**
+- For Chat Widget and DM Reply services, businesses are data controllers for end-user data.
+- Clients must execute their own DPAs with end users and disclose INEXASLI as subprocessor.
+- Businesses responsible for GDPR Art. 13/14 disclosures to end users about data processing.`
         },
         {
             title: "Platform-Specific Terms",
@@ -107,48 +185,110 @@ Service Description: Our Services include automated social media content creatio
 - Content must comply with X's community guidelines.`
         },
         {
+            title: "Intellectual Property",
+            content: `**Service Technology Ownership**
+- All rights, title, and interest in INEXASLI's automation technology, software, algorithms, and systems remain the exclusive property of INEXASLI.
+- Businesses are granted a limited, non-exclusive, non-transferable license to use our managed automation services during the service period.
+- No source code, algorithms, or proprietary technology is transferred to clients.
+
+**Client Content and Brand Materials**
+- Businesses retain ownership of their brand materials, logos, and provided content.
+- By engaging our services, businesses grant INEXASLI permission to use their brand materials solely for service delivery purposes.
+- AI-generated content created for clients becomes the property of the client.
+
+**AI-Generated Content and Copyright Risk**
+- AI-generated content may inadvertently include copyrighted material, and INEXASLI cannot guarantee originality.
+- Clients assume all risk and liability for copyright infringement in AI-generated content.
+- Businesses must conduct their own copyright review before publishing AI-generated content.`
+        },
+        {
+            title: "Service Packages and Billing",
+            content: `**Package Structure**
+- Services are offered in tiered packages with varying features and capabilities.
+- Each package includes specific service levels, platforms, and support options.
+- Add-on services available for enhanced features and additional capacity.
+
+**Billing and Payment Terms**
+- Payments processed securely through Stripe payment processing.
+- Monthly or annual billing options available depending on service package.
+- All sales are final after service activation - see Refund Policy section for details.
+
+**Service Modifications**
+- Package upgrades available at any time with prorated pricing.
+- Service cancellation requires 30-day written notice.
+- Downgrades take effect at the next billing cycle.`
+        },
+        {
             title: "Limitation of Liability",
             content: `**Service Limitations**
-- INEXASLI provides automation technology "as is" without warranties of any kind.
-- We do not guarantee specific engagement rates, follower growth, or business outcomes.
-- Social media platform algorithm changes may affect content performance.
+- INEXASLI provides automation technology "as is" without warranties of any kind, express or implied.
+- We do not guarantee specific engagement rates, follower growth, business outcomes, or AI accuracy.
+- Social media platform and third-party API changes may affect service functionality.
 
-**Business Automation Liability**
-- INEXASLI is not liable for business losses, missed posts, reputational harm, or third-party platform actions.
-- Not responsible for account suspension, removal, or platform policy violations.
-- Maximum liability limited to the amount paid for services in the preceding month.
+**AI-Specific Limitations**
+- AI-generated content may be inaccurate, inappropriate, offensive, defamatory, or infringe third-party intellectual property rights.
+- AI systems may hallucinate facts, produce biased content, or generate outputs that violate platform policies.
+- INEXASLI not liable for AI errors, misinformation, copyright infringement, or any harm caused by AI-generated content.
+- Businesses acknowledge AI limitations and accept all risks associated with deploying AI-generated content.
 
-**Content Disclaimer**
-- AI-generated content may occasionally be inaccurate, inappropriate, or off-brand.
-- Businesses are responsible for monitoring and approving all automated content.
-- INEXASLI not liable for reputational damage from AI-generated content.
+**Maximum Liability**
+- INEXASLI's total liability for all claims arising from services is limited to the amount paid by client in the preceding month.
+- This limitation applies regardless of the form of action (contract, tort, negligence, strict liability, or otherwise).
+- Some jurisdictions do not allow limitation of liability for certain damages - in such cases, liability limited to maximum extent permitted by law.
+
+**Excluded Damages**
+- INEXASLI not liable for indirect, incidental, consequential, special, or punitive damages including but not limited to:
+  • Business losses or lost profits
+  • Reputational harm or brand damage
+  • Copyright infringement claims from AI content
+  • Defamation or privacy violation claims
+  • Customer harm from inaccurate AI responses
+  • Account suspension or platform bans
+  • Data loss or security breaches at third-party platforms
+  • End-user claims arising from chat widget or DM automation
 
 **Third-Party Platform Risks**
-- Social media platforms may change policies, APIs, or terms of service without notice.
-- Platform outages or technical issues may temporarily interrupt service.
-- INEXASLI will work to resolve platform-related issues but cannot guarantee continuous service.`
+- Social media and third-party platforms may change policies, APIs, or terms of service without notice affecting service functionality.
+- Platform outages or technical issues may temporarily or permanently interrupt services.
+- INEXASLI will attempt to adapt to platform changes but cannot guarantee continuous service availability.`
         },
         {
             title: "Privacy and Data Handling",
             content: `**Business Data Collection**
-- We collect business information necessary to provide automation services.
-- Information includes business name, industry, brand guidelines, and content preferences.
+- We collect business information necessary to provide automation services across all products.
+- Information includes business name, industry, brand guidelines, content preferences, and service configuration.
 - Social media account access tokens stored securely for posting purposes.
+- For chat widgets: End-user queries, session data, and conversation history.
+- For DM automation: Instagram message content, user metadata, and interaction history.
+
+**End-User Data (Chat Widget & DM Automation)**
+- Businesses are data controllers for end-user data collected through chat widgets and DM automation.
+- INEXASLI acts as data processor on behalf of business clients.
+- Businesses must provide privacy notices to end users disclosing data collection and AI processing.
+- End-user data transmitted to xAI as subprocessor for AI response generation.
+
+**Data Sharing with Subprocessors**
+- All service data processed through Cloudflare Workers infrastructure and may be stored in Cloudflare R2.
+- User queries and business context sent to xAI (X.AI Corp) for AI content generation.
+- Payment information processed by Stripe (not stored by INEXASLI).
+- See "Data Processing and Subprocessors" section for complete list and details.
 
 **Content Data Usage**
-- Posted content data used for service improvement and analytics.
-- Aggregated, anonymized data may be used for platform optimization.
-- Individual business content remains confidential and is not shared with third parties.
-
-**Platform Integration Data**
-- Social media platform APIs may collect additional data per their privacy policies.
-- Businesses should review privacy policies of all connected social media platforms.
-- INEXASLI acts as a data processor for social media posting purposes only.
+- Posted content, chat logs, and DM interactions used for service improvement and analytics.
+- Aggregated, anonymized data may be used for AI model optimization and platform enhancement.
+- Individual business content remains confidential and is not shared with parties other than disclosed subprocessors.
 
 **Data Security**
-- All business data encrypted in transit and at rest.
-- Social media access tokens stored using industry-standard security practices.
-- Regular security audits and updates to protect client information.`
+- All business and end-user data encrypted in transit using TLS/HTTPS.
+- Authentication tokens stored using industry-standard security practices.
+- Regular security monitoring and updates to protect information.
+- Note: DM content currently transmitted to xAI without additional encryption layer (TLS only).
+
+**Data Retention**
+- Chat conversation history retained for service delivery and improvement purposes.
+- DM interaction logs retained for automation optimization.
+- Businesses may request data deletion upon service termination (see Termination section).
+- Some data may be retained for legal compliance or dispute resolution purposes.`
         },
         {
             title: "Service Level Agreement",
