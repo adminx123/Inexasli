@@ -64,6 +64,7 @@ const TERMS_OF_SERVICE = {
 - Businesses must comply with all applicable social media platform terms of service and community guidelines.
 - INEXASLI is not responsible for third-party platform restrictions, outages, algorithm changes, or account actions.
 - Clients must maintain their social media accounts in good standing and ensure all posted content complies with platform policies.
+- Clients must promptly notify INEXASLI of any changes to account information, social media handles, or configuration details. INEXASLI is not liable for service disruptions or errors resulting from client's failure to provide accurate, up-to-date information.
 
 **Content Review Process**
 - Businesses should monitor automated posts and report any inappropriate content immediately.
@@ -323,6 +324,7 @@ INEXASLI utilizes the following third-party subprocessors to deliver services:
 - Services may be terminated for violation of terms of service.
 - Termination for non-payment after 7-day grace period.
 - Immediate termination for illegal use or platform policy violations.
+- INEXASLI reserves the right to terminate services at any time for any reason, providing a prorated refund for any unused portion of the service period.
 
 **Data Retention After Termination**
 - Posted content remains on social media platforms (client property).
