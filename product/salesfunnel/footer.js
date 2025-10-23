@@ -2,6 +2,18 @@
 // Dynamically injects footer with legal links into pages
 
 (function() {
+    // Dynamically load legal scripts
+    function loadScript(src) {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = false; // Load synchronously to ensure functions are available
+        document.head.appendChild(script);
+    }
+    
+    // Load legal scripts
+    loadScript('../legal/legalSocial.js');
+    loadScript('../legal/legalDPA.js');
+    
     function createFooter() {
         const footer = document.createElement('div');
         footer.style.cssText = 'text-align: center; margin: 10px 0 20px 0; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);';
@@ -12,7 +24,7 @@
                 • 
                 <a href="#" onclick="showSocialPrivacy(); return false;" style="color: #4CAF50; text-decoration: none;">Privacy Policy</a>
                 • 
-                <a href="/product/legal/dpa.html" style="color: #4CAF50; text-decoration: none;" target="_blank">Data Processing Agreement</a>
+                <a href="#" onclick="showDPA(); return false;" style="color: #4CAF50; text-decoration: none;">Data Processing Agreement</a>
                 • <a href="mailto:support@inexasli.com" style="color: #4CAF50; text-decoration: none;">support@inexasli.com</a>
             </p>
         `;
