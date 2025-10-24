@@ -16,8 +16,7 @@
         "deploy:reply-inexasli": "npx wrangler deploy --config products/reply/reply-inexasli.toml",
         "deploy:inexasli": "npx wrangler deploy --config product/client/INEXASLI/hub/hub-inexasli.toml",
         "deploy:widget": "npx wrangler pages deploy product/_chat/widget --project-name=master-widget",
-        "deploy:meofia": "npx wrangler deploy --config product/_social/clients/social-meofia.toml --env meofia",
-        "deploy:train": "npx wrangler deploy --config product/_hub/train.toml --env train"
+        "deploy:meofia": "npx wrangler deploy --config product/_social/clients/social-meofia.toml --env meofia"
     },
     "keywords": [],
     "author": "",
