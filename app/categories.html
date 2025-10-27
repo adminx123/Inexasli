@@ -28,15 +28,16 @@
 
 .favorite-icon {
     position: absolute;
-    top: 8px;
+    top: 50%;
     right: 8px;
+    transform: translateY(-50%);
     font-size: 20px;
     cursor: pointer;
     color: #ccc;
 }
 
 .favorite-icon.favorited {
-    color: gold;
+    color: #4a90e2;
 }
 
 /* Add space for the favorite icon on product items */
@@ -47,8 +48,9 @@
 
     
     .favorite-icon {
-        top: 4px;
+        top: 50%;
         right: 6px;
+        transform: translateY(-50%);
         font-size: 18px;
         /* Expand touch area on mobile */
         padding: 8px;
@@ -73,8 +75,9 @@
     }
     
     .favorite-icon {
-        top: 3px;
+        top: 50%;
         right: 6px;
+        transform: translateY(-50%);
         /* Ensure expanded touch area on smaller screens */
         padding: 10px;
         margin: -10px;
@@ -104,14 +107,21 @@
 
 /* Product items - copy of grid-item styles but without :active state to prevent unwanted activation when favoriting */
 .product-item {
-  background-color: rgba(248, 250, 252, 0.9);
+  background-color: rgba(2, 2, 2, 0.95);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: #4b5563;
+  color: #fff;
   padding: 1rem;
   border-radius: 16px;
-  border: none;
-  box-shadow: 0 4px 16px rgba(107, 114, 128, 0.08), 0 2px 8px rgba(107, 114, 128, 0.06), 0 1px 3px rgba(107, 114, 128, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 16px rgba(0, 0, 0, 0.2), 
+    0 2px 8px rgba(0, 0, 0, 0.1), 
+    0 1px 3px rgba(0, 0, 0, 0.05);
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -128,24 +138,39 @@
 
 .product-item:hover {
   transform: translateY(-2px);
-  background-color: rgba(243, 244, 246, 0.95);
+  background-color: rgba(5, 5, 5, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 6px 24px rgba(107, 114, 128, 0.12), 0 3px 12px rgba(107, 114, 128, 0.08), 0 1px 4px rgba(107, 114, 128, 0.06);
-  border: 1px solid rgba(107, 114, 128, 0.3);
-  color: #4b5563;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 6px 24px rgba(0, 0, 0, 0.3), 
+    0 3px 12px rgba(0, 0, 0, 0.2), 
+    0 1px 4px rgba(0, 0, 0, 0.1);
+  color: #fff;
 }
 
 /* No :active state to prevent activation when favoriting */
 
 .product-item.selected {
-  background-color: #e5e7eb;
+  background-color: rgba(1, 1, 1, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  color: #222;
-  box-shadow: 0 6px 24px rgba(107, 114, 128, 0.2), 0 3px 12px rgba(107, 114, 128, 0.15), 0 1px 4px rgba(107, 114, 128, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 6px 24px rgba(0, 0, 0, 0.4),
+    0 3px 12px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.2);
 }
+
 </style>
 
 <div class="device-container">

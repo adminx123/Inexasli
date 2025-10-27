@@ -932,17 +932,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 max-width: 480px;
                 transform: translate(-50%, calc(100% - 38.5px));
                 height: 90vh;
-                background-color: rgba(255, 255, 255, 0.97);
+                background-color: rgba(0, 0, 0, 0.95);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(49, 49, 49, 0.92);
+                border: 1px solid rgba(255, 255, 255, 0.1);
                 border-bottom: none;
                 border-radius: 24px 24px 0 0;
-                /* Strong shadow at the bottom, fading upward */
-                box-shadow:
-                  0 -2px 24px 8px rgba(49,49,49,0.38), /* darkest, tightest at edge */
-                  0 -12px 48px 16px rgba(49,49,49,0.22), /* mid fade */
-                  0 -32px 96px 32px rgba(49,49,49,0.10); /* far fade */
                 z-index: 1000;
                 font-family: "Inter", sans-serif;
                 display: flex;
@@ -1099,25 +1094,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         dataContainer.innerHTML = `
             <div class="container-header">
                 <div class="utility-buttons-container" id="utility-buttons-top">
-                    <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-category-btn" title="Open Categories" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-grid-alt" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-payment-btn" title="Premium Features" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <span style="font-size: 14px; font-weight: normal;">$</span>
                     </button>
-                    <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-overwrite-btn" title="Clear All Data" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-trash" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-copy-btn" title="Copy to clipboard" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-copy" style="font-size: 14px;"></i>
                     </button>
-                    <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-faq-btn" title="Tips & FAQ" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i class="bx bx-question-mark" style="font-size: 16px;"></i>
                     </button>
-                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-guided-prev-btn" title="Previous Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i id="datain-guided-prev-icon" class="bx bx-left-arrow-alt" style="font-size: 14px; opacity: 0.3; transition: opacity 0.2s ease, transform 0.15s ease;"></i>
                     </button>
-                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #000; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
+                    <button id="datain-guided-next-btn" title="Next Step" style="width: 28px; height: 28px; border: none; background-color: transparent; color: #fff; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;">
                         <i id="datain-guided-next-icon" class="bx bx-right-arrow-alt" style="font-size: 14px; opacity: 0.3; transition: opacity 0.2s ease, transform 0.15s ease;"></i>
                     </button>
                 </div>
