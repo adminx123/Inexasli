@@ -164,6 +164,45 @@ INEXASLI utilizes the following third-party subprocessors to deliver services:
 - Businesses responsible for GDPR Art. 13/14 disclosures to end users about data processing.`
         },
         {
+            title: "Product-Specific Terms: SMS Knowledge Updates",
+            content: `**SMS Knowledge Update Feature**
+- INEXASLI provides optional SMS-based AI training where clients receive text notifications when the AI encounters unknown questions.
+- Clients may respond via SMS to provide training data that updates the AI's knowledge base.
+- SMS feature is opt-in only and requires client consent during onboarding.
+
+**SMS Data Processing**
+- Client phone numbers are collected and stored for SMS delivery purposes only.
+- SMS messages containing training questions and client responses are processed to update AI knowledge.
+- All SMS communications are encrypted in transit using Twilio's secure infrastructure.
+- SMS data is retained for a maximum of 30 days for service delivery and compliance purposes.
+- Personal information in end user questions is automatically redacted before SMS alerts to clients.
+
+**Client Responsibilities for SMS**
+- Clients must provide accurate phone numbers and maintain them current.
+- Businesses are responsible for the accuracy and appropriateness of SMS training responses.
+- Clients must ensure SMS responses do not contain sensitive, confidential, or illegal information.
+- Businesses acknowledge that SMS training data becomes part of the AI knowledge base and may be used in future responses.
+
+**Privacy and Consent**
+- SMS feature requires explicit opt-in consent from authorized business representatives.
+- Clients may opt-out of SMS services at any time via account settings or by replying "STOP".
+- INEXASLI will not send marketing SMS messages or share phone numbers with third parties.
+- SMS communications are limited to AI training notifications and service-related updates.
+- Questions containing personal information (PII) will be redacted before SMS transmission to protect end user privacy.
+
+**Liability for SMS Training**
+- INEXASLI is not liable for any inaccuracies or issues arising from client-provided SMS training data.
+- Businesses indemnify INEXASLI against claims arising from inappropriate or harmful training responses.
+- Clients are responsible for monitoring AI responses after SMS training updates.
+- INEXASLI reserves the right to disable SMS features if training responses violate service terms.
+
+**SMS Technical Limitations**
+- SMS delivery depends on cellular network availability and may experience delays.
+- INEXASLI is not responsible for SMS delivery failures due to network issues or carrier restrictions.
+- SMS messages are limited to 160 characters; longer training responses may be truncated.
+- International SMS may incur additional carrier fees passed to the client.`
+        },
+        {
             title: "Platform-Specific Terms",
             content: `**Instagram Automation**
 - Requires Instagram Business account for API access.

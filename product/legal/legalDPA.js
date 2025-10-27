@@ -66,6 +66,9 @@ INEXASLI is authorized to process personal data only for the following purposes:
 • Store conversation history for service delivery and quality improvement
 • Analyze interaction data to optimize AI response accuracy
 • Provide customer support and troubleshooting assistance
+• Send SMS notifications to clients for AI knowledge updates (client phone numbers only)
+• Process client SMS responses to train AI systems
+• Automatically redact personal information (PII) from end user questions before SMS transmission
 
 **Processing Limitations:**
 - INEXASLI will not process personal data for any purpose other than those specified above
@@ -128,6 +131,14 @@ Controller authorizes INEXASLI to engage the following sub-processors:
    • Location: United States
    • Security: PCI DSS Level 1 certified
    • Privacy Policy: https://stripe.com/privacy
+
+**4. Twilio, Inc.**
+   • Service: SMS delivery for AI knowledge update notifications
+   • Data Processed: Client phone numbers, SMS message content (training questions/responses)
+   • Location: United States
+   • Security: SOC 2 Type II certified, GDPR compliant
+   • Privacy Policy: https://www.twilio.com/legal/privacy
+   • DPA: Available at https://www.twilio.com/legal/data-protection-addendum
 
 **Sub-processor Changes:**
 - INEXASLI will provide 30 days' advance notice of any new sub-processors via email
