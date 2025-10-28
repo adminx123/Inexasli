@@ -134,9 +134,6 @@ product/payment/wrangler-stripeintegration.toml
 # Client-specific configurations and knowledge (contains sensitive client data)
 *client/
 
-# TRAIN Worker (notification logic)
-utility/TRAIN.js
-
 # Config files
 app/master.toml
 app/fact-generator/fact-generator.toml
