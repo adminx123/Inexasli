@@ -138,3 +138,6 @@ product/payment/wrangler-stripeintegration.toml
 app/master.toml
 app/fact-generator/fact-generator.toml
 app/rate-limiter/ratelimit.toml
+
+# All markdown files
+*.md
