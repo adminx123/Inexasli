@@ -51,7 +51,27 @@ const TERMS_OF_SERVICE = {
 - INEXASLI does not manually review AI-generated content before it is posted or deployed.
 - Content is generated and published automatically by AI systems without human oversight from INEXASLI.
 - Businesses acknowledge that INEXASLI operates as a technology provider only, not a content moderator or publisher.
-- Any content moderation, legal review, or compliance checks are the sole responsibility of the business client.`
+- Any content moderation, legal review, or compliance checks are the sole responsibility of the business client.
+
+**Direct AI Harm and Malpractice**
+- AI systems may provide incorrect information, make wrong recommendations, or exhibit biased behavior that could cause harm.
+- Examples include: incorrect appointment bookings, wrong medical/financial advice, discriminatory outputs, or other forms of AI malpractice.
+- INEXASLI is not liable for damages arising from AI-generated recommendations, decisions, or automated actions.
+- Users acknowledge that AI outputs should not be relied upon for critical decisions without professional verification and human oversight.
+- Businesses indemnify INEXASLI against claims arising from AI harm, malpractice, biased outputs, or negligent AI behavior.
+
+**System Reliability and Outages**
+- Services may experience extended downtime due to AI provider outages, infrastructure failures, maintenance, or technical issues.
+- Complete unavailability may occur during third-party service disruptions (xAI, Cloudflare, social media platforms, etc.).
+- Data loss may result from system failures, though INEXASLI implements reasonable backup procedures.
+- INEXASLI is not liable for damages from service interruptions, outages, data loss, or degraded performance.
+
+**Emerging AI Risks and Future Developments**
+- AI technology evolves rapidly and may introduce new types of failures, vulnerabilities, or unexpected behaviors.
+- Regulatory requirements for AI systems may change without notice, affecting service capabilities or legal compliance.
+- Advanced persistent threats, novel attack vectors, or emerging AI security risks may impact services.
+- INEXASLI is not liable for damages arising from emerging AI risks, new failure modes, evolving regulations, or future AI developments.
+- Services are provided based on current AI capabilities and regulatory understanding at time of delivery.`
         },
         {
             title: "Product-Specific Terms: Social Media Automation",

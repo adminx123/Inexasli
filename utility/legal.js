@@ -172,7 +172,13 @@ Privacy Policy Compliance:
 
 **Downtime Disclaimer**
 - The technology platform may experience downtime due to maintenance, updates, technical issues, or third-party provider outages.
-- The Developer does not guarantee uninterrupted access and shall not be liable for damages arising from platform downtime.`
+- The Developer does not guarantee uninterrupted access and shall not be liable for damages arising from platform downtime.
+
+**AI-Specific Liability Exclusions**
+- The Developer is not liable for damages arising from AI-generated content inaccuracies, biases, inappropriate outputs, or harmful recommendations.
+- AI systems may exhibit unexpected behaviors, provide incorrect information, or cause direct harm through automated actions (such as wrong appointment bookings or incorrect advice).
+- The Developer is not liable for AI system failures, extended outages due to AI provider disruptions, or emerging AI risks and vulnerabilities.
+- Users acknowledge that AI technology evolves rapidly and may introduce new failure modes or regulatory compliance issues beyond the Developer's control.`
         },
         {
             title: "Indemnification",

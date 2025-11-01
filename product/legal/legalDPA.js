@@ -325,6 +325,15 @@ Subject to applicable law, INEXASLI's total liability for all claims arising und
 • Gross negligence or willful misconduct
 • Data breach caused by failure to implement required security measures
 
+**AI-Specific Liability Exclusions:**
+INEXASLI's liability excludes damages arising from:
+• AI-generated content inaccuracies, biases, or inappropriate outputs
+• AI system failures, hallucinations, or unexpected behaviors
+• Direct harm caused by AI recommendations or automated actions
+• Service interruptions due to AI provider outages or technical issues
+• Emerging AI risks, new failure modes, or evolving regulatory requirements
+• Indirect or consequential damages from AI system limitations
+
 **Indemnification:**
 Each party will indemnify the other for fines, penalties, or damages imposed by supervisory authorities resulting from the indemnifying party's violation of its obligations under this DPA or GDPR.`
         },
