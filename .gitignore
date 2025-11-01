@@ -141,3 +141,6 @@ app/rate-limiter/ratelimit.toml
 
 # All markdown files
 *.md
+
+# Experimental MCP server (proprietary business logic)
+product/New/
