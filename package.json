@@ -10,7 +10,6 @@
         "login": "npx wrangler login",
         "deploy:master": "npx wrangler deploy --config app/master.toml --env master",
         "deploy:rate-limiter": "npx wrangler deploy -e rate-limiter",
-        
         "deploy:oauth": "npx wrangler deploy --config product/_social/oauth.toml",
         "deploy:stripe-app": "npx wrangler deploy --config app/payment/stripe-app.toml",
         "deploy:reply-inexasli": "npx wrangler deploy --config products/reply/reply-inexasli.toml",
@@ -23,6 +22,7 @@
     "license": "ISC",
     "dependencies": {
         "html5-qrcode": "^2.3.8",
+        "langchain": "^1.0.2",
         "webpack": "^5.0.0",
         "webpack-cli": "^4.0.0",
         "webpack-dev-server": "^3.0.0"
