@@ -144,3 +144,10 @@ app/rate-limiter/ratelimit.toml
 
 # Experimental MCP server (proprietary business logic)
 product/New/
+
+# Product folder - Cloudflare Workers and dependencies
+product/
+
+# Exception: Keep salesfunnel HTML files and legal documents
+!product/salesfunnel/*.html
+!product/legal/*.html

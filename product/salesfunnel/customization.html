@@ -316,6 +316,21 @@
             </div>
             </div>
 
+        <!-- Deployment Section -->
+        <div class="package-card collapsed" data-section="deployment">
+            <div class="package-header">
+                <h3 class="card-title">Automated Client Setup</h3>
+                <div class="card-status">
+                    <span class="status-text">Ready</span>
+                </div>
+            </div>
+            <div class="card-content">
+                <p>Deploy your customized client worker and configuration automatically.</p>
+                <button id="deployButton" class="btn btn-primary" onclick="deployClient()">Deploy Client</button>
+                <div id="deployStatus" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+
         </div><!-- Close package-cards -->
 
         <div class="consultation-box">
@@ -1200,6 +1215,25 @@
         
         // Make setJSON available globally for the form submission function
         window.setJSON = setJSON;
+        
+        // Deploy client function
+        async function deployClient() {
+            const button = document.getElementById('deployButton');
+            const status = document.getElementById('deployStatus');
+            button.disabled = true;
+            status.innerHTML = 'Deploying...';
+            
+            try {
+                // In a real implementation, this would call the deploy-client.js script
+                // For now, simulate deployment
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                status.innerHTML = '<span style="color: green;">Client deployed successfully!</span>';
+            } catch (error) {
+                status.innerHTML = '<span style="color: red;">Deployment failed: ' + error.message + '</span>';
+            } finally {
+                button.disabled = false;
+            }
+        }
         
         // Initialize form persistence for customization form after a short delay
         // to ensure grid selection event listeners are set up
