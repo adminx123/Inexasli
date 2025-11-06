@@ -1,18 +1,3 @@
-# Ignore Cloudflare Worker file with credentials
-business/x.js
-
-# OAuth worker (contains sensitive OAuth credentials and secrets)
-business/oauth.js
-
-# Master/Business Worker Architecture (contains sensitive patterns)
-business/masterSocial.js
-business/businessTemplate.js
-
-# Business client workers (contains client-specific credentials)
-business/clients/
-
-# Business scene folder
-business/scene/
 
 # Cloudflare Workers configuration
 wrangler*
@@ -22,78 +7,35 @@ wrangler*
 # Ignore engineered prompts and worker files containing sensitive IP
 calorie.js
 income.js
-book.js
-fitness.js
-adventure.js
-app.js
-business.js
 enneagram.js
 event.js
-general.js
 decision.js
-report.js 
-workflow.js
-speculation.js
-social.js
 quiz.js
-symptom.js
-research.js
 philosophy.js
 fashion.js
-research.js
 shop.js
 fishing.js
-
 
 # Module creation instructions
 MODULE-CREATION-INSTRUCTIONS.md
 
+# Entire prompts directory
+future/
+
 # Local secrets (do not commit)
 secret.js
-
-# Catch-all patterns for any missed worker files
-app/**/*worker*.js
-/*worker.js
-app/*.secret.js
-
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
 # Private rate limiter logic
 app/rate-limiter/rateLimit.js
 
-# API keys and secrets
-*.pem
-*.key
-
 # OS generated files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
 
 # Node.js dependencies
 node_modules/
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-
-# Logs
-logs
-*.log
 
 # Editor directories and files
-.idea/
 .vscode/
-*.swp
-*.swo
 
 app/master.js
 
@@ -103,6 +45,10 @@ app/payment/stripe-app.js
 # any folder named hide
 hide
 
+# Payment folders (contain sensitive Stripe keys and configurations)
+product/payment/stripe-saas.js
+product/payment/wrangler-stripe-saas.toml
+
 # Config files
 app/master.toml
 app/fact-generator/fact-generator.toml
@@ -110,9 +56,6 @@ app/rate-limiter/ratelimit.toml
 
 # All markdown files
 *.md
-
-# Experimental MCP server (proprietary business logic)
-product/New/
 
 # Product folder - Cloudflare Workers and dependencies
 product/
