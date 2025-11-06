@@ -45,15 +45,8 @@ shop.js
 fishing.js
 
 
-# Template files for module creation
-ai/template/
-
 # Module creation instructions
 MODULE-CREATION-INSTRUCTIONS.md
-
-# Entire prompts directory
-DIRECTION/
-future/
 
 # Local secrets (do not commit)
 secret.js
@@ -109,30 +102,6 @@ app/payment/stripe-app.js
 
 # any folder named hide
 hide
-
-# Product folders to ignore
-product/_chat/
-product/_hub/
-product/_social/
-product/_reply/
-product/collection/
-
-
-# Twitter webhook setup worker (contains sensitive credentials)
-product/setup-twitter-webhook.js
-product/wrangler-setup-webhook.toml
-product/architecture/
-
-# Payment folders (contain sensitive Stripe keys and configurations)
-Payment/
-app/payment/stripe-app.js
-app/payment/wrangler-stripe-app.toml
-product/payment/stripe-saas.js
-product/payment/wrangler-stripe-saas.toml
-product/payment/wrangler-stripeintegration.toml
-
-# Client-specific configurations and knowledge (contains sensitive client data)
-*client/
 
 # Config files
 app/master.toml
