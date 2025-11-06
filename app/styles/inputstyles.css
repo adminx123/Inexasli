@@ -1,0 +1,978 @@
+/* Minimal product card layout for product descriptions */
+.product-card {
+  background: #fafbfc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 24px 18px 18px 18px;
+  max-width: 480px;
+  margin: 24px auto;
+}
+
+.product-icon-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.product-icon {
+  font-size: 2.2em;
+  color: #3a7ca5;
+}
+
+.product-headline {
+  text-align: center;
+  font-size: 1.18em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2a2a2a;
+  letter-spacing: 0.01em;
+}
+
+.product-divider {
+  width: 40px;
+  height: 2px;
+  background: #e3e7ea;
+  margin: 16px auto 12px auto;
+  border-radius: 2px;
+}
+
+/* Product benefit text1: same as product-description-text except margin-bottom */
+.product-benefit-text1 {
+  color: #4a4a4a;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  font-style: italic;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Geist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+input[type="datetime-local"] {
+  width: 100%;
+  max-width: 460px;
+  height: 40px;
+  padding: 8px 12px;
+  margin: 8px auto;
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #222;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+
+input[type="datetime-local"]:focus {
+  border-color: #6366f1;
+  outline: none;
+}
+.grid-item .product-description {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+/* ====================
+   1-Column Grid Layout
+   ==================== */
+.grid-items1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin: 10px 0 20px 0;
+  width: 100%;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .grid-items1 {
+    gap: 8px;
+  }
+}
+
+/* Global Reset and Base Styles */
+* {
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* INPUT VALIDATION STYLES */
+/* ====================== */
+
+/* Validation error messages */
+.validation-error {
+  color: #dc2626 !important;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.validation-error::before {
+  content: "⚠ ";
+  font-weight: bold;
+}
+
+/* Input fields with validation errors */
+input.validation-error-field,
+textarea.validation-error-field,
+select.validation-error-field {
+  border: 2px solid #dc2626 !important;
+  background-color: #fef2f2 !important;
+}
+
+/* Validation success styling */
+input.validation-success-field,
+textarea.validation-success-field,
+select.validation-success-field {
+  border: 2px solid #6b7280 !important;
+  background-color: #f9fafb !important;
+}
+
+/* Form validation summary */
+.validation-summary {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  color: #991b1b;
+}
+
+.validation-summary h4 {
+  color: #991b1b;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.validation-summary ul {
+  margin-left: 16px;
+  list-style-type: disc;
+}
+
+.validation-summary li {
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Security notice styling */
+.security-notice {
+  background-color: #f0f9ff;
+  border: 1px solid #bae6fd;
+  border-left: 4px solid #0ea5e9;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #0c4a6e;
+}
+
+.security-notice .icon {
+  display: inline-block;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* ====================== */
+/* END VALIDATION STYLES  */
+
+/* Headings */
+h1 {
+  font-family: "Geist", sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #4b5563;
+  text-align: center;
+  margin: 8px auto 16px auto;
+  max-width: 460px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(228, 230, 235, 1) 0%, rgba(215, 220, 225, 1) 100%);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 8px rgba(107, 114, 128, 0.15);
+  transition: all 0.2s ease;
+}
+
+h1:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.22);
+}
+
+h2 {
+  font-family: "Geist", sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #4b5563;
+  text-align: center;
+  margin: 8px auto 12px auto;
+  max-width: 460px;
+  padding: 10px 14px;
+  background: rgba(235, 237, 242, 1);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+h2:hover {
+  background: rgba(225, 230, 235, 1);
+}
+
+h3 {
+  font-family: "Geist", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2c2c2c;
+  text-align: center;
+  margin: 8px auto 12px auto;
+  max-width: 460px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+h3:hover {
+  color: #1a1a1a;
+}
+
+/* Mobile responsive headings */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 22px;
+    padding: 10px 12px;
+    margin: 6px auto 12px auto;
+  }
+  
+  h2 {
+    font-size: 18px;
+    padding: 8px 10px;
+    margin: 6px auto 10px auto;
+  }
+  
+  h3 {
+    font-size: 16px;
+    padding: 6px 8px;
+    margin: 6px auto 8px auto;
+  }
+}
+
+/* Links (for logo link) */
+a {
+  display: block;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+/* ====================
+   Form Controls
+   ==================== */
+input[type="number"],
+input[type="text"],
+select,
+textarea {
+  width: 100%;
+  max-width: 460px; /* Use most of device-container width (480px) */
+  height: 40px; /* Uniform height for inputs/selects */
+  padding: 8px 12px; /* Comfortable padding */
+  margin: 8px auto; /* Centered with vertical spacing */
+  font-size: 16px; /* Readable font size */
+  line-height: 1.5; /* Improved readability */
+    border: none;
+  border-radius: 6px; /* Modern rounded corners */
+  background-color: #f9f9f9; /* Subtle off-white background */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle depth */
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  font-family: "Inter", sans-serif;
+  display: block; /* Ensure block-level for centering */
+}
+
+input[type="number"] {
+  text-align: left; /* Left-align for number inputs */
+}
+
+select {
+  text-align: center; /* Center dropdown text */
+  -webkit-appearance: menulist-button;
+  -moz-appearance: menulist-button;
+  appearance: menulist-button;
+  text-align-last: center;
+}
+
+select option {
+  color: #333;
+  background-color: #fff;
+  font-size: 16px;
+  padding: 8px;
+  font-family: "Inter", sans-serif;
+}
+
+textarea {
+  height: auto; /* Let the rows attribute determine height */
+  max-width: 460px; /* Match inputs/selects */
+  resize: none; /* Disable manual resize since we're auto-expanding */
+  padding: 12px;
+  min-height: 40px; /* Minimum height for small textareas */
+  overflow: hidden; /* Hide scrollbar for auto-expanding */
+  transition: height 0.1s ease; /* Smooth height transitions */
+}
+
+textarea::placeholder {
+  white-space: pre-line; /* Enable newline rendering in placeholders */
+}
+
+/* ====================
+   Form Controls Focus State
+   ==================== */
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+  border-color: rgba(107, 114, 128, 0.3);
+  box-shadow: 0 0 8px rgba(107, 114, 128, 0.3);
+}
+
+/* ====================
+   Layout: Container
+   ==================== */
+.container {
+  background-color: #f2f9f3;
+  color: #000;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 0 0 5px 5px;
+  border: 2px solid #4a7c59;
+  text-align: left;
+  display: flex;
+  padding: 15px;
+  flex-direction: column;
+  background-color: #eef7f0;
+  box-shadow: 4px 4px 0 rgba(74, 124, 89, 0.7);
+}
+
+.container:active {
+  transform: translateY(1px);
+  background-color: #f2f9f3;
+  box-shadow: 2px 2px 0 rgba(74, 124, 89, 0.7);
+}
+
+/* ====================
+   Layout: Rows
+   ==================== */
+.row1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 10px;
+  width: 100%; /* Ensure full width */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ====================
+   Layout: Grid
+   ==================== */
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 460px; /* Match form inputs max-width for consistency */
+  margin: 0 auto; /* Center the grid container */
+}
+
+.grid-item {
+  background-color: rgba(2, 2, 2, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  white-space: normal;
+  width: 100%;
+}
+
+.grid-item:hover {
+  transform: translateY(-2px);
+  background-color: rgba(5, 5, 5, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+    0 6px 24px rgba(0, 0, 0, 0.3),
+    0 3px 12px rgba(0, 0, 0, 0.2),
+    0 1px 4px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.grid-item:active {
+  transform: translateY(1px);
+  background-color: rgba(8, 8, 8, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow:
+    inset 0 1px 0 rgba(0, 0, 0, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item.selected {
+  background-color: rgba(1, 1, 1, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 6px 24px rgba(0, 0, 0, 0.4),
+    0 3px 12px rgba(0, 0, 0, 0.3),
+    0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Make the last grid item span two columns if the number of items is odd */
+.grid-container .grid-item:last-child:nth-child(odd) {
+  grid-column: span 2;
+}
+
+/* ====================
+   2-Column Grid Layout
+   ==================== */
+.grid-items2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .grid-items2 {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+
+/* Button */
+/*
+button {
+  background-color: #6b7280;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 12px 24px;
+  margin: 8px auto;
+  transition: background-color 0.2s ease;
+  font-family: "Geist", sans-serif;
+  width: 100%;
+  max-width: 460px;
+  display: block;
+}
+
+button:hover {
+  background-color: #4b5563;
+}
+*/
+
+/* Generate Button */
+.generate-btn {
+  align-self: center;
+  background-color: #e5e7eb; /* muted grey */
+  color: #222;
+  border: 2px solid rgba(107, 114, 128, 0.08); /* transparent muted border */
+  box-shadow: 4px 4px 12px rgba(107, 114, 128, 0.13);
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.generate-btn:hover {
+  background-color: #d1d5db;
+  border-color: rgba(107, 114, 128, 0.13);
+  color: #111;
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(107, 114, 128, 0.18);
+}
+
+.generate-btn:active {
+  background-color: #f3f4f6;
+  border-color: rgba(107, 114, 128, 0.06);
+  color: #222;
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(107, 114, 128, 0.10);
+}
+
+.generate-btn#meal-recommend-btn {
+  margin-top: 24px !important;
+}
+
+/* Clear Button */
+.clear-btn {
+  background-color: #f8fafc;
+  color: #4b5563;
+  border: 1px solid #6b7280;
+  font-family: "Geist", sans-serif;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 12px 24px;
+  margin: 8px auto;
+  width: 100%;
+  max-width: 460px;
+  display: block;
+  transition: background-color 0.2s, color 0.2s;
+  box-shadow: 3px 3px 0.5px rgba(107, 114, 128, 0.7);
+}
+
+.clear-btn:hover {
+  background-color: #f1f5f9;
+  color: #4b5563;
+}
+
+/* Hidden Class */
+.hidden {
+  display: none;
+}
+
+/* Removed .constraint-inputs-container, .constraint-input-group, .constraint-item, .constraint-label, .constraint-input, .remove-constraint styles as they are not referenced in any input.txt files. */
+
+/* Checkbox Styles */
+.checkbox-wrapper-2 .ikxBAC {
+    background-color: #dfe1e4;
+    border-radius: 72px;
+    border-style: none;
+    flex-shrink: 0;
+    height: 20px;
+    margin: 0;
+    position: relative;
+    width: 30px;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC::before {
+    bottom: -6px;
+    content: "";
+    left: -6px;
+    position: absolute;
+    right: -6px;
+    top: -6px;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC,
+  .checkbox-wrapper-2 .ikxBAC::after {
+    transition: all 100ms ease-out;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC::after {
+    background-color: #fff;
+    border-radius: 50%;
+    content: "";
+    height: 14px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    width: 14px;
+  }
+  
+  .checkbox-wrapper-2 input[type="checkbox"] {
+    cursor: default;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC:hover {
+    background-color: #c9cbcd;
+    transition-duration: 0s;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC:checked {
+    background-color: #4a7c59;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC:checked::after {
+    background-color: #fff;
+    left: 13px;
+  }
+  
+  .checkbox-wrapper-2 :focus:not(.focus-visible) {
+    outline: 0;
+  }
+  
+  .checkbox-wrapper-2 .ikxBAC:checked:hover {
+    background-color: #3d6b4a;
+  }
+  
+
+.containerinter {
+  padding-left: 38px; /* Ensures contents are at least 38px from the left edge */
+}
+
+/* Section Headers and Description Text */
+.section-header {
+  text-align: center;
+  font-family: "Geist", sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #2d5a3d;
+  margin: 16px 0 8px 0;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #4a7c59;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Description text for explaining what user is doing */
+.section-description {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 12px 0;
+  padding: 0;
+  line-height: 1.4;
+  text-align: left;
+  font-weight: normal;
+}
+
+/* Section container with header and description */
+.section-container {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Category Label for grouping related UI elements */
+.category-label {
+  display: inline-block; /* Underline only text width */
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #2d5a3d;
+  font-family: "Geist", sans-serif;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #4a7c59;
+}
+
+/* Invisible device-sized wrapper */
+.device-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: transparent;
+}
+
+/* Ensure all children of device-container fill its width, excluding grid-container and multi-field inputs */
+.device-container .row1,
+.device-container table,
+.device-container button {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Removed multi-field input container and related styles */
+
+
+/* ====================
+   Guided Forms System Styles
+   ==================== */
+
+/* Hidden steps should not take up space but maintain element dimensions */
+.row1[style*="visibility: hidden"] {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+/* Form step transitions */
+.row1 {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Progress indicator styling refinements */
+#guided-form-progress {
+    font-family: "Inter", sans-serif !important;
+    user-select: none;
+}
+
+#guided-form-progress .progress-dot {
+    transition: all 0.2s ease;
+}
+
+#guided-form-progress .progress-dot:hover {
+    transform: scale(1.2);
+}
+
+/* Navigation button styling refinements */
+#guided-form-navigation button {
+    font-family: "Inter", sans-serif !important;
+    user-select: none;
+}
+
+#guided-form-navigation button:active {
+    transform: translate(1px, 1px) !important;
+    box-shadow: 1px 1px 0 #000 !important;
+}
+
+/* Focus states for guided mode */
+.guided-form-active .grid-item:focus,
+.guided-form-active input:focus,
+.guided-form-active textarea:focus,
+.guided-form-active select:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+/* Step completion indicators */
+.row1.step-completed::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #4CAF50;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.row1 {
+    position: relative;
+}
+
+/* Mobile responsiveness for guided forms */
+@media (max-width: 480px) {
+    #guided-form-progress {
+        top: 5px;
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+    
+    #guided-form-navigation {
+        bottom: 10px;
+        gap: 8px;
+    }
+    
+    #guided-form-navigation button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .progress-dot {
+        width: 6px !important;
+        height: 6px !important;
+    }
+}
+
+/* ====================
+   Product Description Styling
+   ==================== */
+
+/* Product description container */
+
+/* Product description heading */
+.product-description-heading {
+  color: #2c2c2c;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+  text-align: center;
+}
+
+/* Product description text */
+.product-description-text {
+  color: #4a4a4a;
+  font-size: 15px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Product description disclaimer */
+.product-description-disclaimer {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+  margin-top: 8px;
+  max-width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+/* Product description final text */
+.product-description-final {
+  color: #4a4a4a;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* Split Calendar Text Component Styles */
+/* ==================================== */
+
+.split-calendar-text {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  transition: border-color 0.2s ease;
+}
+
+.split-calendar-text:hover {
+  border-color: #c1c1c1;
+}
+
+.split-calendar-text:focus-within {
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+}
+
+.split-calendar-text .when-field {
+  flex: 0 0 140px;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.split-calendar-text .when-field:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+}
+
+.split-calendar-text .what-field {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  background-color: #fff;
+  color: #333;
+  resize: vertical;
+  min-height: 38px;
+  transition: border-color 0.2s ease;
+}
+
+.split-calendar-text .what-field:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.1);
+}
+
+.split-calendar-text .what-field::placeholder {
+  color: #888;
+  font-style: italic;
+}
+
+.split-calendar-text .delete-btn {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  background-color: #ff4444;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.split-calendar-text .delete-btn:hover {
+  background-color: #cc0000;
+}
+
+.split-calendar-text .delete-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.3);
+}
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .split-calendar-text {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .split-calendar-text .when-field {
+    flex: 1;
+    width: 100%;
+  }
+  
+  .split-calendar-text .delete-btn {
+    align-self: flex-end;
+  }
+}
+
