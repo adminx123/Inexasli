@@ -1,0 +1,1334 @@
+/**
+ * Input Functionality Module
+ * Reusable module for various input-related functionality including:
+ * - Auto-expanding textareas
+ * - Dynamic textarea management
+ * - Input validation enhancements
+ * - Form field behavior improvements
+ */
+
+console.log('[Input Functionality] Script loaded');
+
+/**
+ * Auto-expands a textarea to fit its content
+ * @param {HTMLTextAreaElement} textarea - The textarea element to expand
+ */
+function autoExpandTextarea(textarea) {
+    console.log('[Input Functionality] Auto-expanding textarea:', textarea.id || 'unnamed');
+    textarea.style.minHeight = '';
+    textarea.style.height = 'auto';
+    void textarea.offsetHeight;
+    textarea.style.height = textarea.scrollHeight + 'px';
+    
+    // Advanced debugging: log computed style and parent info
+    const computed = window.getComputedStyle(textarea);
+    const parent = textarea.parentElement;
+    console.log('[InputFunctionality][DEBUG] Computed height:', computed.height, 'Inline style.height:', textarea.style.height, 'Parent:', parent ? parent.className : null, 'Parent computed height:', parent ? window.getComputedStyle(parent).height : null);
+    
+    // Force reflow on parent container if present
+    if (parent) {
+        parent.style.display = 'none';
+        void parent.offsetHeight;
+        parent.style.display = '';
+    }
+}
+
+/**
+ * Initializes auto-expanding functionality for all textareas
+ */
+function initAutoExpandTextareas() {
+    // Helper function to check textarea visibility
+    function isTextareaVisible(element) {
+        let current = element;
+        while (current && current !== document.body) {
+            const computedStyle = window.getComputedStyle(current);
+            if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden') {
+                console.log(`[Text Functionality] Skipping hidden textarea: ${element.id || 'unnamed'} (hidden by: ${current.className || current.tagName})`);
+                return false;
+            }
+            current = current.parentElement;
+        }
+        return true;
+    }
+    
+    const textareas = document.querySelectorAll('textarea');
+    console.log('[Text Functionality] Found textareas:', textareas.length);
+    textareas.forEach((textarea, index) => {
+        console.log(`[Text Functionality] Processing textarea ${index + 1}:`, textarea.id || 'unnamed');
+        
+        // Only process visible textareas
+        if (!isTextareaVisible(textarea)) {
+            return;
+        }
+        
+        // Set initial height
+        autoExpandTextarea(textarea);
+        
+        // Add event listeners with visibility check
+        textarea.addEventListener('input', () => {
+            console.log('[Text Functionality] Input event on:', textarea.id || 'unnamed');
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
+        textarea.addEventListener('paste', () => {
+            setTimeout(() => {
+                if (isTextareaVisible(textarea)) {
+                    autoExpandTextarea(textarea);
+                }
+            }, 0);
+        });
+    });
+    
+    // Ensure all textareas are expanded after DOM and possible repopulation (with visibility check)
+    window.addEventListener('load', () => {
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
+    });
+    setTimeout(() => {
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
+    }, 100);
+    setTimeout(() => {
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
+    }, 500);
+    setTimeout(() => {
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
+    }, 1000);
+    // Also expand after formPersistence repopulates (with visibility check)
+    document.addEventListener('formpersistence:repopulated', () => {
+        document.querySelectorAll('textarea').forEach(textarea => {
+            if (isTextareaVisible(textarea)) {
+                autoExpandTextarea(textarea);
+            }
+        });
+    });
+}
+
+/**
+ * Initializes a mutation observer to handle dynamically added textareas
+ * @returns {MutationObserver} The mutation observer instance
+ */
+function initMutationObserver() {
+    // Also handle dynamically added textareas
+    const textareaObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === 1) { // Element node
+                    const textareas = node.querySelectorAll ? node.querySelectorAll('textarea') : [];
+                    textareas.forEach(textarea => {
+                        autoExpandTextarea(textarea);
+                        textarea.addEventListener('input', () => autoExpandTextarea(textarea));
+                        textarea.addEventListener('paste', () => {
+                            setTimeout(() => autoExpandTextarea(textarea), 0);
+                        });
+                    });
+                    
+                    if (node.tagName === 'TEXTAREA') {
+                        autoExpandTextarea(node);
+                        node.addEventListener('input', () => autoExpandTextarea(node));
+                        node.addEventListener('paste', () => {
+                            setTimeout(() => autoExpandTextarea(node), 0);
+                        });
+                    }
+                }
+            });
+        });
+    });
+
+    textareaObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+    return textareaObserver;
+}
+
+/**
+ * Generic function to add a dynamic textarea input group to a container.
+ * @param {Object} options - Options for the dynamic textarea
+ * @param {string} options.containerSelector - CSS selector for the container to append to
+ * @param {string} options.baseId - Base id for the textarea (e.g. 'calorie-snack')
+ * @param {string} [options.value] - Optional initial value
+ * @param {string} [options.placeholder] - Optional placeholder text
+ * @param {Function} [options.onRemove] - Optional callback when removed
+ * @param {boolean} [options.skipRepositioning] - Skip repositioning logic (for repopulation)
+ * @returns {HTMLTextAreaElement} The created textarea
+ */
+function addDynamicTextareaInput({
+  containerSelector,
+  baseId,
+  value = '',
+  placeholder = '',
+  onRemove = null,
+  skipRepositioning = false
+}) {
+  // Find all existing dynamic textareas for this baseId
+  const existing = Array.from(document.querySelectorAll(`textarea[id^="${baseId}"]`));
+  let maxNum = 0;
+  existing.forEach(el => {
+    const match = el.id.match(new RegExp(`^${baseId}(\\d+)$`));
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxNum) maxNum = num;
+    }
+  });
+  const newId = `${baseId}${maxNum + 1}`;
+
+  const inputGroup = document.createElement('div');
+  inputGroup.style.cssText = 'display: flex; align-items: center; gap: 8px; margin: 8px auto; max-width: 460px; width: 100%';
+
+  const textarea = document.createElement('textarea');
+  textarea.rows = 2;
+  textarea.setAttribute('data-dynamic', baseId);
+  textarea.id = newId;
+  textarea.placeholder = placeholder || `${baseId.charAt(0).toUpperCase() + baseId.slice(1)}: 100g yogurt, 2 oz crackers`;
+  if (value) textarea.value = value;
+  inputGroup.appendChild(textarea);
+
+  // Auto-expand and add listeners
+  autoExpandTextarea(textarea);
+  textarea.addEventListener('input', () => {
+    autoExpandTextarea(textarea);
+    // Dispatch generic save event for modules to handle
+    document.dispatchEvent(new CustomEvent('textarea:changed', {
+      detail: { textarea, id: newId, value: textarea.value }
+    }));
+  });
+  textarea.addEventListener('paste', () => {
+    setTimeout(() => {
+      autoExpandTextarea(textarea);
+      document.dispatchEvent(new CustomEvent('textarea:changed', {
+        detail: { textarea, id: newId, value: textarea.value }
+      }));
+    }, 0);
+  });
+
+  // Remove button
+  const removeBtn = document.createElement('button');
+  removeBtn.innerText = '×';
+  removeBtn.title = 'Remove this input';
+  removeBtn.style.cssText = 'width: 40px; height: 40px; align-self: center; border: 1px solid #4a7c59; box-shadow: 2px 2px 4px rgba(74, 124, 89, 0.15); background-color: #f2f9f3; color: #2d5a3d; border-radius: 5px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; padding: 0; font-family: "Geist", sans-serif; margin-left: 0;';
+  removeBtn.addEventListener('click', (e) => {
+    // Prevent event bubbling to avoid closing parent containers
+    e.preventDefault();
+    e.stopPropagation();
+    
+    inputGroup.remove();
+    if (typeof onRemove === 'function') onRemove(newId);
+    
+    // Trigger form data save after removal to update localStorage
+    document.dispatchEvent(new CustomEvent('textarea:changed', {
+      detail: { textarea: null, id: newId, value: '', action: 'removed' }
+    }));
+  });
+  inputGroup.appendChild(removeBtn);
+
+  // Append to container
+  const container = document.querySelector(containerSelector);
+  if (container) {
+    // Insert above the add (+) button if it exists, otherwise above the generate button
+    const addBtn = container.querySelector('.dynamic-add-btn');
+    const generateBtn = container.querySelector('button[id*="generate"]');
+    if (addBtn) {
+      container.insertBefore(inputGroup, addBtn);
+    } else if (generateBtn) {
+      container.insertBefore(inputGroup, generateBtn);
+    } else {
+      container.appendChild(inputGroup);
+    }
+  } else {
+    console.error('[InputFunctionality] Container not found:', containerSelector);
+  }
+  return textarea;
+}
+
+/**
+ * Adds a generic "Add" button for dynamic textarea inputs to a container.
+ * @param {Object} options
+ * @param {string} options.containerSelector - CSS selector for the container
+ * @param {string} options.baseId - Base id for the textarea (e.g. 'calorie-snack')
+ * @param {string} [options.placeholder] - Optional placeholder text
+ */
+function addDynamicTextareaAddButton({
+  containerSelector,
+  baseId,
+  placeholder = ''
+}) {
+  const container = document.querySelector(containerSelector);
+  if (!container) {
+    console.error('[InputFunctionality] Container not found for add button:', containerSelector);
+    return;
+  }
+  // Prevent duplicate add buttons
+  if (container.querySelector('.dynamic-add-btn')) return;
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.className = 'dynamic-add-btn';
+  addBtn.innerText = '+';
+  addBtn.title = 'Add another input';
+  addBtn.style.cssText = [
+    'width: 40px',
+    'height: 40px',
+    'margin: 8px auto',
+    'display: flex',
+    'align-items: center',
+    'justify-content: center',
+    'border: 1px solid #4a7c59',
+    'background: #f2f9f3',
+    'color: #2d5a3d',
+    'border-radius: 5px',
+    'font-size: 22px',
+    'cursor: pointer',
+    'font-family: inherit',
+    'box-sizing: border-box'
+  ].join(';');
+  addBtn.onclick = () => {
+    addDynamicTextareaInput({
+      containerSelector,
+      baseId,
+      placeholder
+    });
+  };
+  // Insert above the Generate Now button if it exists
+  const generateBtn = container.querySelector('#generate-calorie-btn');
+  if (generateBtn) {
+    container.insertBefore(addBtn, generateBtn);
+  } else {
+    container.appendChild(addBtn);
+  }
+}
+/**
+ * Debugging function for textarea expansion sequence
+ */
+function debugTextareaExpansionSequence() {
+    console.log('[InputFunctionality][DEBUG] --- Expansion Debug Sequence Start ---');
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach((ta, i) => {
+        console.log(`[InputFunctionality][DEBUG] Before expand [${i}] id=${ta.id} value=`, JSON.stringify(ta.value), 'scrollHeight=', ta.scrollHeight, 'offsetHeight=', ta.offsetHeight, 'style.height=', ta.style.height);
+    });
+    textareas.forEach(autoExpandTextarea);
+    textareas.forEach((ta, i) => {
+        console.log(`[InputFunctionality][DEBUG] After expand [${i}] id=${ta.id} value=`, JSON.stringify(ta.value), 'scrollHeight=', ta.scrollHeight, 'offsetHeight=', ta.offsetHeight, 'style.height=', ta.style.height);
+    });
+    console.log('[InputFunctionality][DEBUG] --- Expansion Debug Sequence End ---');
+}
+
+/**
+ * Triggers textarea expansion after form repopulation
+ */
+function triggerTextareaExpansion() {
+    debugTextareaExpansionSequence();
+}
+
+/**
+ * Main initialization function for input functionality
+ */
+function initInputFunctionality() {
+    console.log('[Input Functionality] Initializing...');
+    initAutoExpandTextareas();
+    initMutationObserver();
+}
+
+/**
+ * Generic dynamic input creation function
+ * @param {string} inputType - Type of input (for placeholder)
+ * @param {string} value - Initial value
+ * @param {boolean} skipRepositioning - Skip repositioning logic
+ * @returns {HTMLTextAreaElement} The created textarea
+ */
+function addDynamicInput(inputType = null, value = '', skipRepositioning = false) {
+  // Generic dynamic input that works for any module
+  return addDynamicTextareaInput({
+    containerSelector: '.row1:last-child',
+    baseId: 'dynamic-',
+    value,
+    placeholder: inputType ? `${inputType}: Enter details here` : 'Enter details here',
+    skipRepositioning
+  });
+}
+
+/**
+ * Delete an entry and trigger form persistence save
+ * @param {HTMLElement} entryContainer - The entry container to delete
+ */
+function deleteEntry(entryContainer) {
+    if (!entryContainer) return;
+    
+    // Get the entry ID for logging
+    const entryId = entryContainer.dataset.entryId;
+    
+    // Optional confirmation dialog
+    if (!confirm('Are you sure you want to delete this entry?')) {
+        return;
+    }
+    
+    // Remove the container with a smooth animation
+    entryContainer.style.transition = 'opacity 0.3s ease, height 0.3s ease';
+    entryContainer.style.opacity = '0';
+    entryContainer.style.height = '0';
+    entryContainer.style.overflow = 'hidden';
+    entryContainer.style.marginBottom = '0';
+    entryContainer.style.paddingTop = '0';
+    entryContainer.style.paddingBottom = '0';
+    
+    setTimeout(() => {
+        entryContainer.remove();
+        
+        // Trigger form persistence save after deletion
+        document.dispatchEvent(new CustomEvent('entry:deleted', {
+            detail: { entryId, timestamp: Date.now() }
+        }));
+        
+        console.log('[InputFunctionality] Entry deleted:', entryId);
+    }, 300);
+}
+
+/**
+ * Creates a split textarea component with "when" and "what" fields
+ * @param {Object} options - Configuration options
+ * @param {string} options.id - Base ID for the component
+ * @param {string} options.whenPlaceholder - Placeholder for when field
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {string} options.whenValue - Default value for when field
+ * @param {string} options.whatValue - Default value for what field
+ * @param {number} options.entryNumber - Entry number for display
+ * @returns {HTMLElement} The created split textarea component
+ */
+function createSplitTextarea(options = {}) {
+    const {
+        id = 'split-textarea',
+        whenPlaceholder = 'When?',
+        whatPlaceholder = 'What happened?',
+        whenValue = '',
+        whatValue = '',
+        entryNumber = 1
+    } = options;
+
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'split-textarea-container';
+    container.dataset.entryId = id;
+
+    // Create entry header
+    const header = document.createElement('div');
+    header.className = 'entry-header';
+    header.innerHTML = `
+        <span class="entry-number">Entry #${entryNumber}</span>
+    `;
+
+    // Create delete button (positioned absolutely in top right)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'plain-x-delete-btn';
+    deleteBtn.dataset.entryId = id;
+    deleteBtn.title = 'Delete this entry';
+    deleteBtn.innerHTML = '×';
+
+    // Create when field (using textarea for consistent height)
+    const whenField = document.createElement('textarea');
+    whenField.className = 'when-field';
+    whenField.id = `${id}-when`;
+    whenField.placeholder = whenPlaceholder;
+    whenField.value = whenValue;
+    whenField.rows = 2;
+
+    // Create what field
+    const whatField = document.createElement('textarea');
+    whatField.className = 'what-field';
+    whatField.id = `${id}-what`;
+    whatField.placeholder = whatPlaceholder;
+    whatField.value = whatValue;
+    whatField.rows = 2;
+
+    // Create fields container
+    const fieldsContainer = document.createElement('div');
+    fieldsContainer.className = 'split-fields-container';
+    
+    const whenContainer = document.createElement('div');
+    whenContainer.className = 'when-container';
+    const whenLabel = document.createElement('label');
+    whenLabel.textContent = 'When:';
+    whenLabel.htmlFor = whenField.id;
+    whenContainer.appendChild(whenLabel);
+    whenContainer.appendChild(whenField);
+
+    const whatContainer = document.createElement('div');
+    whatContainer.className = 'what-container';
+    const whatLabel = document.createElement('label');
+    whatLabel.textContent = 'What:';
+    whatLabel.htmlFor = whatField.id;
+    whatContainer.appendChild(whatLabel);
+    whatContainer.appendChild(whatField);
+
+    fieldsContainer.appendChild(whenContainer);
+    fieldsContainer.appendChild(whatContainer);
+
+    // Add event listeners
+    [whenField, whatField].forEach(field => {
+        field.addEventListener('input', () => {
+            // Trigger custom event for form persistence
+            document.dispatchEvent(new CustomEvent('textarea:changed', {
+                detail: { field, container }
+            }));
+        });
+    });
+
+    // Delete button event listener
+    deleteBtn.addEventListener('click', () => {
+        deleteEntry(container);
+    });
+
+    // Auto-expand both textareas
+    whenField.addEventListener('input', () => autoExpandTextarea(whenField));
+    whatField.addEventListener('input', () => autoExpandTextarea(whatField));
+
+    // Initial auto-expand for both fields
+    autoExpandTextarea(whenField);
+    autoExpandTextarea(whatField);
+
+    // Assemble container
+    container.appendChild(deleteBtn);
+    container.appendChild(header);
+    container.appendChild(fieldsContainer);
+
+    // Add CSS if not already present
+    if (!document.querySelector('#split-textarea-styles')) {
+        const style = document.createElement('style');
+        style.id = 'split-textarea-styles';
+        style.textContent = `
+            .split-textarea-container {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                background: #fafafa;
+                position: relative;
+            }
+            
+            .entry-header {
+                margin-bottom: 10px;
+                font-weight: bold;
+                color: #666;
+                font-size: 14px;
+            }
+            
+            .plain-x-delete-btn {
+                position: absolute !important;
+                top: 8px !important;
+                right: 8px !important;
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                width: auto !important;
+                height: auto !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                line-height: 1 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+                font-weight: normal !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                text-decoration: none !important;
+                outline: none !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                display: inline !important;
+                font-family: inherit !important;
+            }
+            
+            .plain-x-delete-btn:hover,
+            .plain-x-delete-btn:focus,
+            .plain-x-delete-btn:active {
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                box-shadow: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                outline: none !important;
+            }
+            
+            .split-fields-container {
+                display: flex;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .when-container {
+                flex: 0 0 180px;
+            }
+            
+            .what-container {
+                flex: 1;
+            }
+            
+            .when-container label,
+            .what-container label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #555;
+            }
+            
+            .when-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                background: white;
+                resize: none;
+                overflow: hidden;
+                min-height: 40px;
+            }
+            
+            .what-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                background: white;
+                resize: none;
+                overflow: hidden;
+                min-height: 40px;
+            }
+            
+            .when-field:focus,
+            .what-field:focus {
+                outline: none;
+                border-color: #ff6b9d;
+                box-shadow: 0 0 5px rgba(255, 107, 157, 0.3);
+            }
+            
+            @media (max-width: 480px) {
+                .split-fields-container {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+                
+                .when-container {
+                    flex: none;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    return container;
+}
+
+/**
+ * Creates a split calendar-text component with date picker and "what" field
+ * @param {Object} options - Configuration options
+ * @param {string} options.id - Base ID for the component
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {string} options.whenValue - Default value for date field (YYYY-MM-DD)
+ * @param {string} options.whatValue - Default value for what field
+ * @param {number} options.entryNumber - Entry number for display
+ * @returns {HTMLElement} The created split calendar-text component
+ */
+function createSplitCalendarText(options = {}) {
+    const {
+        id = 'split-calendar-text',
+        whatPlaceholder = 'What happened?',
+        whenValue = '',
+        whatValue = '',
+        entryNumber = 1
+    } = options;
+
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'split-calendar-container';
+    container.dataset.entryId = id;
+
+    // Create entry header
+    const header = document.createElement('div');
+    header.className = 'entry-header';
+    header.innerHTML = `
+        <span class="entry-number">Entry #${entryNumber}</span>
+    `;
+
+    // Create delete button (positioned absolutely in top right)
+    const deleteBtn = document.createElement('button');
+    deleteBtn.type = 'button';
+    deleteBtn.className = 'plain-x-delete-btn';
+    deleteBtn.dataset.entryId = id;
+    deleteBtn.title = 'Delete this entry';
+    deleteBtn.innerHTML = '×';
+
+    // Create date picker field
+    const whenField = document.createElement('input');
+    whenField.type = 'date';
+    whenField.className = 'when-date-field';
+    whenField.id = `${id}-when`;
+    whenField.value = whenValue;
+
+    // Create what field (textarea)
+    const whatField = document.createElement('textarea');
+    whatField.className = 'what-field';
+    whatField.id = `${id}-what`;
+    whatField.placeholder = whatPlaceholder;
+    whatField.value = whatValue;
+    whatField.rows = 2;
+
+    // Create fields container
+    const fieldsContainer = document.createElement('div');
+    fieldsContainer.className = 'split-fields-container';
+    
+    const whenContainer = document.createElement('div');
+    whenContainer.className = 'when-container';
+    const whenLabel = document.createElement('label');
+    whenLabel.textContent = 'When:';
+    whenLabel.htmlFor = whenField.id;
+    whenContainer.appendChild(whenLabel);
+    whenContainer.appendChild(whenField);
+
+    const whatContainer = document.createElement('div');
+    whatContainer.className = 'what-container';
+    const whatLabel = document.createElement('label');
+    whatLabel.textContent = 'What:';
+    whatLabel.htmlFor = whatField.id;
+    whatContainer.appendChild(whatLabel);
+    whatContainer.appendChild(whatField);
+
+    fieldsContainer.appendChild(whenContainer);
+    fieldsContainer.appendChild(whatContainer);
+
+    // Add event listeners
+    whenField.addEventListener('change', () => {
+        // Trigger custom event for form persistence (same as textarea for consistency)
+        document.dispatchEvent(new CustomEvent('textarea:changed', {
+            detail: { field: whenField, container }
+        }));
+    });
+
+    whatField.addEventListener('input', () => {
+        // Trigger custom event for form persistence
+        document.dispatchEvent(new CustomEvent('textarea:changed', {
+            detail: { field: whatField, container }
+        }));
+    });
+
+    // Delete button event listener
+    deleteBtn.addEventListener('click', () => {
+        deleteEntry(container);
+    });
+
+    // Auto-expand textarea only
+    whatField.addEventListener('input', () => autoExpandTextarea(whatField));
+
+    // Initial auto-expand for what field
+    autoExpandTextarea(whatField);
+
+    // Assemble container
+    container.appendChild(deleteBtn);
+    container.appendChild(header);
+    container.appendChild(fieldsContainer);
+
+    // Add CSS if not already present
+    if (!document.querySelector('#split-calendar-styles')) {
+        const style = document.createElement('style');
+        style.id = 'split-calendar-styles';
+        style.textContent = `
+            .split-calendar-container {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                background: #fafafa;
+                position: relative;
+            }
+            
+            .entry-header {
+                margin-bottom: 10px;
+                font-weight: bold;
+                color: #666;
+                font-size: 14px;
+            }
+            
+            .plain-x-delete-btn {
+                position: absolute !important;
+                top: 8px !important;
+                right: 8px !important;
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                width: auto !important;
+                height: auto !important;
+                cursor: pointer !important;
+                font-size: 16px !important;
+                line-height: 1 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                z-index: 10 !important;
+                font-weight: normal !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                text-decoration: none !important;
+                outline: none !important;
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                display: inline !important;
+                font-family: inherit !important;
+            }
+            
+            .plain-x-delete-btn:hover,
+            .plain-x-delete-btn:focus,
+            .plain-x-delete-btn:active {
+                background: none !important;
+                color: #666 !important;
+                border: none !important;
+                box-shadow: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+                outline: none !important;
+            }
+            
+            .split-fields-container {
+                display: flex;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .when-container {
+                flex: 0 0 180px;
+            }
+            
+            .what-container {
+                flex: 1;
+            }
+            
+            .when-container label,
+            .what-container label {
+                display: block;
+                margin-bottom: 5px;
+                font-size: 13px;
+                font-weight: 600;
+                color: #555;
+            }
+            
+            .when-date-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                font-family: inherit;
+                background: white;
+                color: #333;
+                min-height: 38px;
+                box-sizing: border-box;
+            }
+            
+            .when-date-field:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+            }
+            
+            .what-field {
+                width: 100%;
+                padding: 8px 12px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                background: white;
+                resize: none;
+                overflow: hidden;
+                min-height: 40px;
+            }
+            
+            .what-field:focus {
+                outline: none;
+                border-color: #ff6b9d;
+                box-shadow: 0 0 5px rgba(255, 107, 157, 0.3);
+            }
+            
+            @media (max-width: 600px) {
+                .split-calendar-container .split-fields-container {
+                    flex-direction: column;
+                }
+                
+                .split-calendar-container .when-container,
+                .split-calendar-container .what-container {
+                    width: 100%;
+                    margin-bottom: 15px;
+                }
+                
+                .split-calendar-container .what-container {
+                    margin-bottom: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    return container;
+}
+
+/**
+ * Handles conditional input display based on select dropdown value
+ * @param {string} selectId - ID of the select dropdown element
+ * @param {string} conditionalInputId - ID of the conditional input element
+ * @param {Object} placeholderMap - Map of select values to placeholder text
+ * @param {string} hideValue - Value that should hide the conditional input (default: 'none')
+ * @param {Function} persistenceCallback - Optional callback to save form data
+ */
+function handleConditionalInput(selectId, conditionalInputId, placeholderMap, hideValue = 'none', persistenceCallback = null) {
+    const selectElement = document.getElementById(selectId);
+    const conditionalInput = document.getElementById(conditionalInputId);
+    
+    if (!selectElement || !conditionalInput) {
+        console.warn('[Input Functionality] Conditional input elements not found:', selectId, conditionalInputId);
+        return null;
+    }
+    
+    function updateConditionalInput() {
+        const selectedValue = selectElement.value;
+        
+        if (selectedValue && selectedValue !== hideValue) {
+            conditionalInput.style.display = 'block';
+            conditionalInput.placeholder = placeholderMap[selectedValue] || 'Specify details';
+        } else {
+            conditionalInput.style.display = 'none';
+            conditionalInput.value = '';
+        }
+        
+        // Trigger container resize for datain.js
+        triggerContainerResize();
+        
+        // Call persistence callback if provided
+        if (persistenceCallback && typeof persistenceCallback === 'function') {
+            persistenceCallback();
+        }
+    }
+    
+    // Add event listener
+    selectElement.addEventListener('change', updateConditionalInput);
+    
+    return updateConditionalInput;
+}
+
+/**
+ * Handles conditional container visibility based on select dropdown value
+ * Perfect for showing different field groups based on contraceptive type, etc.
+ * @param {string} selectId - ID of the select dropdown element
+ * @param {Object} containerMap - Map of select values to container selectors or arrays of selectors
+ * @param {string|Array} hideValues - Value(s) that should hide all containers (default: ['none', ''])
+ * @param {Function} persistenceCallback - Optional callback to save form data
+ */
+function handleConditionalContainers(selectId, containerMap, hideValues = ['none', ''], persistenceCallback = null) {
+    const selectElement = document.getElementById(selectId);
+    
+    if (!selectElement) {
+        console.warn('[Input Functionality] Select element not found:', selectId);
+        return null;
+    }
+    
+    // Normalize hideValues to array
+    const hideValuesArray = Array.isArray(hideValues) ? hideValues : [hideValues];
+    
+    function updateContainerVisibility() {
+        const selectedValue = selectElement.value;
+        
+        // Hide all containers first
+        Object.values(containerMap).forEach(containerSelectors => {
+            const selectors = Array.isArray(containerSelectors) ? containerSelectors : [containerSelectors];
+            selectors.forEach(selector => {
+                const container = document.querySelector(selector);
+                if (container) {
+                    container.style.display = 'none';
+                }
+            });
+        });
+        
+        // Show containers for selected value
+        if (selectedValue && !hideValuesArray.includes(selectedValue) && containerMap[selectedValue]) {
+            const containerSelectors = Array.isArray(containerMap[selectedValue]) 
+                ? containerMap[selectedValue] 
+                : [containerMap[selectedValue]];
+            
+            containerSelectors.forEach(selector => {
+                const container = document.querySelector(selector);
+                if (container) {
+                    container.style.display = 'block';
+                    console.log(`[Input Functionality] Showing container: ${selector} for value: ${selectedValue}`);
+                } else {
+                    console.warn(`[Input Functionality] Container not found: ${selector}`);
+                }
+            });
+        }
+        
+        // Trigger container resize for layout adjustment
+        triggerContainerResize();
+        
+        // Call persistence callback if provided
+        if (persistenceCallback && typeof persistenceCallback === 'function') {
+            persistenceCallback();
+        }
+    }
+    
+    // Add event listener
+    selectElement.addEventListener('change', updateContainerVisibility);
+    
+    // Return function for manual triggering (useful for form repopulation)
+    return updateContainerVisibility;
+}
+
+/**
+ * Triggers container resize to prevent layout issues when content changes
+ */
+function triggerContainerResize() {
+    console.log('[Input Functionality] Triggering container resize');
+    
+    // Force a reflow by temporarily changing display
+    const containers = document.querySelectorAll('.device-container, .row1');
+    containers.forEach(container => {
+        const originalDisplay = container.style.display;
+        container.style.display = 'none';
+        void container.offsetHeight; // Force reflow
+        container.style.display = originalDisplay || '';
+    });
+    
+    // Dispatch resize event
+    const resizeEvent = new Event('resize');
+    document.dispatchEvent(resizeEvent);
+    
+    // Also try to trigger any global resize handlers
+    if (window.dispatchEvent) {
+        window.dispatchEvent(new Event('resize'));
+    }
+    
+    // Force reflow of device container if present
+    const deviceContainer = document.querySelector('.device-container');
+    if (deviceContainer) {
+        deviceContainer.style.height = 'auto';
+        void deviceContainer.offsetHeight; // Force reflow
+    }
+}
+
+/**
+ * Adds a generic "Add Entry" button for split entries to a container.
+ * @param {Object} options
+ * @param {string} options.containerSelector - CSS selector for the container (e.g., '#period-entries-container')
+ * @param {string} options.buttonId - ID for the add button (e.g., 'add-period-entry-btn')
+ * @param {string} options.buttonText - Text for the button (e.g., 'Add Entry')
+ * @param {string} options.entryIdPrefix - Prefix for entry IDs (e.g., 'period-entry')
+ * @param {string} options.whenPlaceholder - Placeholder for when field (textarea only)
+ * @param {string} options.whatPlaceholder - Placeholder for what field
+ * @param {boolean} options.useCalendar - Use calendar date picker instead of textarea for when field
+ * @param {Function} options.onAdd - Optional callback when entry is added
+ */
+function addEntryButton({
+  containerSelector,
+  buttonId,
+  buttonText = 'Add Entry',
+  entryIdPrefix,
+  whenPlaceholder = 'When?',
+  whatPlaceholder = 'What happened?',
+  useCalendar = false,
+  onAdd = null
+}) {
+  const container = document.querySelector(containerSelector);
+  if (!container) {
+    console.error('[InputFunctionality] Container not found for add entry button:', containerSelector);
+    return;
+  }
+
+  // Prevent duplicate buttons
+  if (document.getElementById(buttonId)) return;
+
+  let entryCounter = 1;
+
+  function addEntry(whenValue = '', whatValue = '') {
+    // Find existing entries to determine counter
+    const existingEntries = container.querySelectorAll(`[data-entry-id^="${entryIdPrefix}"]`);
+    entryCounter = existingEntries.length + 1;
+
+    // Default "when" value based on calendar vs textarea
+    if (!whenValue) {
+      const now = new Date();
+      if (useCalendar) {
+        whenValue = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+      } else {
+        whenValue = `Today ${now.toLocaleTimeString('en-US', { 
+          hour: 'numeric', 
+          minute: '2-digit',
+          hour12: true 
+        })}`;
+      }
+    }
+
+    const entryDiv = useCalendar ? 
+      createSplitCalendarText({
+        id: `${entryIdPrefix}-${entryCounter}`,
+        whatPlaceholder: whatPlaceholder,
+        whenValue: whenValue,
+        whatValue: whatValue,
+        entryNumber: entryCounter
+      }) :
+      createSplitTextarea({
+        id: `${entryIdPrefix}-${entryCounter}`,
+        whenPlaceholder: whenPlaceholder,
+        whatPlaceholder: whatPlaceholder,
+        whenValue: whenValue,
+        whatValue: whatValue,
+        entryNumber: entryCounter
+      });
+
+    container.appendChild(entryDiv);
+    
+    // Initialize auto-expand for textareas
+    const textareas = entryDiv.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        autoExpandTextarea(textarea);
+        textarea.addEventListener('input', () => autoExpandTextarea(textarea));
+        textarea.addEventListener('paste', () => {
+            setTimeout(() => autoExpandTextarea(textarea), 0);
+        });
+    });
+    
+    // Call callback if provided
+    if (typeof onAdd === 'function') {
+      onAdd(entryCounter, entryDiv);
+    }
+
+    return entryDiv;
+  }
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.id = buttonId;
+  addBtn.textContent = buttonText;
+  addBtn.style.cssText = [
+    'padding: 10px 20px',
+    'margin: 10px auto',
+    'display: block',
+    'border: 1px solid #4a7c59',
+    'background: #f2f9f3',
+    'color: #2d5a3d',
+    'border-radius: 5px',
+    'font-size: 14px',
+    'cursor: pointer',
+    'font-family: inherit',
+    'box-sizing: border-box'
+  ].join(';');
+  
+  addBtn.onclick = () => addEntry();
+
+  // Insert after the container
+  container.parentNode.insertBefore(addBtn, container.nextSibling);
+
+  // Expose the addEntry function globally for module use
+  window[`add${entryIdPrefix.split('-').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join('')}`] = addEntry;
+
+  return { button: addBtn, addEntry };
+}
+
+// Make functions globally available on window object
+if (typeof window !== 'undefined') {
+    window.initAutoExpandTextareas = initAutoExpandTextareas;
+    window.createSplitTextarea = createSplitTextarea;
+    window.createSplitCalendarText = createSplitCalendarText;
+    window.deleteEntry = deleteEntry;
+    window.handleConditionalInput = handleConditionalInput;
+    window.handleConditionalContainers = handleConditionalContainers;
+    window.triggerContainerResize = triggerContainerResize;
+    window.addEntryButton = addEntryButton;
+    window.autoExpandTextarea = autoExpandTextarea;
+    window.addDynamicTextareaInput = addDynamicTextareaInput;
+    window.addDynamicTextareaAddButton = addDynamicTextareaAddButton;
+    window.initInputFunctionality = initInputFunctionality;
+    window.clearConditionalFields = clearConditionalFields;
+    window.cleanupHiddenFieldData = cleanupHiddenFieldData;
+}
+
+// Auto-initialize when DOM is ready
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initInputFunctionality);
+    } else {
+        initInputFunctionality();
+    }
+}
+
+/**
+ * Clear specific conditional fields from localStorage for a module
+ * This is called when form logic changes and certain fields become irrelevant
+ * @param {string} moduleName - The name of the module
+ * @param {Array<string>} fieldsToRemove - Array of field names to remove from storage
+ */
+function clearConditionalFields(moduleName, fieldsToRemove) {
+    if (!moduleName || !Array.isArray(fieldsToRemove) || fieldsToRemove.length === 0) {
+        return;
+    }
+    
+    console.log(`[InputFunctionality] Clearing conditional fields for ${moduleName}:`, fieldsToRemove);
+    
+    // Import required utilities
+    import('./../../utility/getJSON.js').then(({ getJSON }) => {
+        import('./../../utility/setJSON.js').then(({ setJSON }) => {
+            const storageKey = `${moduleName}IqInput`;
+            const currentData = getJSON(storageKey, {});
+            
+            if (Object.keys(currentData).length === 0) {
+                console.log(`[InputFunctionality] No existing data for ${moduleName}, nothing to clear`);
+                return;
+            }
+            
+            // Remove specified fields
+            let removedCount = 0;
+            fieldsToRemove.forEach(fieldName => {
+                if (currentData.hasOwnProperty(fieldName)) {
+                    delete currentData[fieldName];
+                    removedCount++;
+                    console.log(`[InputFunctionality] Removed field: ${fieldName}`);
+                }
+            });
+            
+            if (removedCount > 0) {
+                // Save updated data back to localStorage
+                setJSON(storageKey, currentData);
+                console.log(`[InputFunctionality] Cleared ${removedCount} conditional fields, updated storage`);
+                
+                // Trigger FormPersistence to re-save current form state
+                if (window.FormPersistence) {
+                    try {
+                        const fpInstance = window.FormPersistence.getInstance(moduleName);
+                        if (fpInstance) {
+                            fpInstance.saveFormData();
+                            console.log(`[InputFunctionality] Triggered FormPersistence re-save for ${moduleName}`);
+                        }
+                    } catch (error) {
+                        console.warn(`[InputFunctionality] Could not trigger FormPersistence re-save:`, error);
+                    }
+                }
+            } else {
+                console.log(`[InputFunctionality] No fields were removed (didn't exist in storage)`);
+            }
+        });
+    });
+}
+
+/**
+ * Clean up all hidden field data from localStorage for a module
+ * This scans the DOM and removes any stored data for fields that are currently hidden
+ * @param {string} moduleName - The name of the module
+ */
+function cleanupHiddenFieldData(moduleName) {
+    if (!moduleName) return;
+    
+    console.log(`[InputFunctionality] Cleaning up hidden field data for ${moduleName}`);
+    
+    // Import required utilities
+    import('./../../utility/getJSON.js').then(({ getJSON }) => {
+        import('./../../utility/setJSON.js').then(({ setJSON }) => {
+            const storageKey = `${moduleName}IqInput`;
+            const currentData = getJSON(storageKey, {});
+            
+            if (Object.keys(currentData).length === 0) {
+                console.log(`[InputFunctionality] No existing data for ${moduleName}, nothing to cleanup`);
+                return;
+            }
+            
+            const fieldsToRemove = [];
+            const modulePrefix = `${moduleName}-`;
+            
+            // Check each stored field to see if its DOM element is visible
+            Object.keys(currentData).forEach(fieldName => {
+                // Skip special fields
+                if (fieldName === 'images') return;
+                
+                // Try to find the corresponding DOM element
+                let elementId = fieldName;
+                if (!fieldName.startsWith(modulePrefix)) {
+                    elementId = `${modulePrefix}${fieldName}`;
+                }
+                
+                const element = document.getElementById(elementId) || 
+                               document.querySelector(`[name="${fieldName}"]`) ||
+                               document.querySelector(`[class*="grid-items"][id*="${fieldName}"]`) ||
+                               document.querySelector(`.grid-container[id*="${fieldName}"]`);
+                
+                if (element && isElementHidden(element)) {
+                    fieldsToRemove.push(fieldName);
+                    console.log(`[InputFunctionality] Found hidden field to remove: ${fieldName}`);
+                }
+            });
+            
+            if (fieldsToRemove.length > 0) {
+                clearConditionalFields(moduleName, fieldsToRemove);
+            } else {
+                console.log(`[InputFunctionality] No hidden fields found to cleanup`);
+            }
+        });
+    });
+}
+
+/**
+ * Check if an element is currently hidden in the DOM
+ * @param {HTMLElement} element - The element to check
+ * @returns {boolean} True if element is hidden
+ */
+function isElementHidden(element) {
+    if (!element) return true;
+    
+    // Check if element and all parents are visible
+    let current = element;
+    while (current && current !== document.body) {
+        const computedStyle = window.getComputedStyle(current);
+        if (computedStyle.display === 'none' || 
+            computedStyle.visibility === 'hidden' ||
+            computedStyle.opacity === '0') {
+            return true;
+        }
+        current = current.parentElement;
+    }
+    
+    // Check if element has dimensions
+    const rect = element.getBoundingClientRect();
+    return rect.width === 0 && rect.height === 0;
+}
+
+// Export functions for module use
+export { 
+    initAutoExpandTextareas, 
+    createSplitTextarea,
+    createSplitCalendarText,
+    deleteEntry,
+    handleConditionalInput,
+    handleConditionalContainers,
+    triggerContainerResize,
+    addEntryButton,
+    autoExpandTextarea,
+    addDynamicTextareaInput,
+    addDynamicTextareaAddButton,
+    initInputFunctionality,
+    clearConditionalFields,
+    cleanupHiddenFieldData
+};
+

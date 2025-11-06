@@ -1,0 +1,675 @@
+<!-- /*
+ * Copyright (c) 2025 INEXASLI. All rights reserved.
+ * This code is protected under Canadian and international copyright laws.
+ * Unauthorized use, reproduction, distribution, or modification of this code 
+ * without explicit written permission via email from info@inexasli.com 
+ * is strictly prohibited. Violators will be pursued and prosecuted to the 
+ * fullest extent of the law in British Columbia, Canada, and applicable 
+ * jurisdictions worldwide.
+ */ -->
+
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+     <link rel="manifest" href="/manifest.json">
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+     <title>IncomeIQ™ Vacation</title>
+ 
+     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+     <link rel="stylesheet" href="/app/styles/incomestyles.css">
+ 
+     <link rel="icon" type="image/png" href="/images/favicon-96x96.png" sizes="96x96" />
+     <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+     <link rel="shortcut icon" href="/images/favicon.ico" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+ </head>
+ 
+ <style>
+ /* Header styling */
+ #expenseBreakdown h3 {
+     font-size: 24px;
+     color: #333; /* Darker gray for contrast */
+     margin-bottom: 20px;
+     text-align: center;
+     font-weight: 600;
+ }
+ </style>
+ 
+ <body>
+     <a href="/">
+         <img src="/images/apple-touch-icon.png" alt="Logo" style="width: 50px; height: auto; display: block; margin: 0 auto; padding-bottom: 10px;">
+     </a>
+ 
+     <!-- Trip Duration Input -->
+     <div class="containerround">
+         <h2 style="text-align: center; font-size: 16px; color: rgb(0, 0, 0);">Vacation Cost Estimator</h2>
+         <div class="row">
+             <label for="trip_duration">Trip Duration (days):</label>
+             <input type="number" inputmode="numeric" id="trip_duration" min="1" placeholder="e.g., 7">
+         </div>
+     </div>
+ 
+     <!-- Transportation -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Transportation</h3>
+         <div class="checkboxrow">
+             <label for="trip_flights">Flights: <span id="trip_flights_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_flights" step="0.01">
+             <div class="checkbox-button-group" id="trip_flights_frequency">
+                 <input type="checkbox" id="total_flights" name="trip_flights_frequency" value="total">
+                 <label for="total_flights" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_car">Car Rental: <span id="trip_car_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_car" step="0.01">
+             <div class="checkbox-button-group" id="trip_car_frequency">
+                 <input type="checkbox" id="total_car" name="trip_car_frequency" value="total">
+                 <label for="total_car" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_car" name="trip_car_frequency" value="daily">
+                 <label for="daily_car" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_car" name="trip_car_frequency" value="weekly">
+                 <label for="weekly_car" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_uber">Uber: <span id="trip_uber_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_uber" step="0.01">
+             <div class="checkbox-button-group" id="trip_uber_frequency">
+                 <input type="checkbox" id="total_uber" name="trip_uber_frequency" value="total">
+                 <label for="total_uber" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_uber" name="trip_uber_frequency" value="daily">
+                 <label for="daily_uber" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_uber" name="trip_uber_frequency" value="weekly">
+                 <label for="weekly_uber" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_transit">Public Transit: <span id="trip_transit_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_transit" step="0.01">
+             <div class="checkbox-button-group" id="trip_transit_frequency">
+                 <input type="checkbox" id="total_transit" name="trip_transit_frequency" value="total">
+                 <label for="total_transit" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_transit" name="trip_transit_frequency" value="daily">
+                 <label for="daily_transit" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_transit" name="trip_transit_frequency" value="weekly">
+                 <label for="weekly_transit" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_bike">Bike Rental: <span id="trip_bike_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_bike" step="0.01">
+             <div class="checkbox-button-group" id="trip_bike_frequency">
+                 <input type="checkbox" id="total_bike" name="trip_bike_frequency" value="total">
+                 <label for="total_bike" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_bike" name="trip_bike_frequency" value="daily">
+                 <label for="daily_bike" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_bike" name="trip_bike_frequency" value="weekly">
+                 <label for="weekly_bike" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Accommodation -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Accommodation</h3>
+         <div class="checkboxrow">
+             <label for="trip_hotels">Hotels: <span id="trip_hotels_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_hotels" step="0.01">
+             <div class="checkbox-button-group" id="trip_hotels_frequency">
+                 <input type="checkbox" id="total_hotels" name="trip_hotels_frequency" value="total">
+                 <label for="total_hotels" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_hotels" name="trip_hotels_frequency" value="daily">
+                 <label for="daily_hotels" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_hotels" name="trip_hotels_frequency" value="weekly">
+                 <label for="weekly_hotels" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_camping">Camping Fees: <span id="trip_camping_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_camping" step="0.01">
+             <div class="checkbox-button-group" id="trip_camping_frequency">
+                 <input type="checkbox" id="total_camping" name="trip_camping_frequency" value="total">
+                 <label for="total_camping" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_camping" name="trip_camping_frequency" value="daily">
+                 <label for="daily_camping" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_camping" name="trip_camping_frequency" value="weekly">
+                 <label for="weekly_camping" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Dining & Groceries -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Dining & Groceries</h3>
+         <div class="checkboxrow">
+             <label for="trip_dining">Dining Out: <span id="trip_dining_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_dining" step="0.01">
+             <div class="checkbox-button-group" id="trip_dining_frequency">
+                 <input type="checkbox" id="total_dining" name="trip_dining_frequency" value="total">
+                 <label for="total_dining" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_dining" name="trip_dining_frequency" value="daily">
+                 <label for="daily_dining" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_dining" name="trip_dining_frequency" value="weekly">
+                 <label for="weekly_dining" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_grocery">Grocery (Additional for trip): <span id="trip_grocery_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_grocery" step="0.01">
+             <div class="checkbox-button-group" id="trip_grocery_frequency">
+                 <input type="checkbox" id="total_grocery" name="trip_grocery_frequency" value="total">
+                 <label for="total_grocery" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_grocery" name="trip_grocery_frequency" value="daily">
+                 <label for="daily_grocery" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_grocery" name="trip_grocery_frequency" value="weekly">
+                 <label for="weekly_grocery" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Entertainment -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Entertainment</h3>
+         <div class="checkboxrow">
+             <label for="trip_tickets">Tickets: <span id="trip_tickets_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_tickets" step="0.01">
+             <div class="checkbox-button-group" id="trip_tickets_frequency">
+                 <input type="checkbox" id="total_tickets" name="trip_tickets_frequency" value="total">
+                 <label for="total_tickets" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_alcohol">Alcohol: <span id="trip_alcohol_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_alcohol" step="0.01">
+             <div class="checkbox-button-group" id="trip_alcohol_frequency">
+                 <input type="checkbox" id="total_alcohol" name="trip_alcohol_frequency" value="total">
+                 <label for="total_alcohol" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_alcohol" name="trip_alcohol_frequency" value="daily">
+                 <label for="daily_alcohol" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_alcohol" name="trip_alcohol_frequency" value="weekly">
+                 <label for="weekly_alcohol" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_gambling">Gambling: <span id="trip_gambling_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_gambling" step="0.01">
+             <div class="checkbox-button-group" id="trip_gambling_frequency">
+                 <input type="checkbox" id="total_gambling" name="trip_gambling_frequency" value="total">
+                 <label for="total_gambling" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_gambling" name="trip_gambling_frequency" value="daily">
+                 <label for="daily_gambling" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_gambling" name="trip_gambling_frequency" value="weekly">
+                 <label for="weekly_gambling" class="checkbox-button">1W</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_rental">Rental: <span id="trip_rental_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_rental" step="0.01">
+             <div class="checkbox-button-group" id="trip_rental_frequency">
+                 <input type="checkbox" id="total_rental" name="trip_rental_frequency" value="total">
+                 <label for="total_rental" class="checkbox-button">TOTAL</label>
+                 <input type="checkbox" id="daily_rental" name="trip_rental_frequency" value="daily">
+                 <label for="daily_rental" class="checkbox-button">1D</label>
+                 <input type="checkbox" id="weekly_rental" name="trip_rental_frequency" value="weekly">
+                 <label for="weekly_rental" class="checkbox-button">1W</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Essentials -->
+     <div class="containerround">
+         <h3 style="text-align: center;">Essentials</h3>
+         <div class="checkboxrow">
+             <label for="trip_insurance">Travel Insurance: <span id="trip_insurance_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_insurance" step="0.01">
+             <div class="checkbox-button-group" id="trip_insurance_frequency">
+                 <input type="checkbox" id="total_insurance" name="trip_insurance_frequency" value="total">
+                 <label for="total_insurance" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_sim">New SIM/Data Plan: <span id="trip_sim_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_sim" step="0.01">
+             <div class="checkbox-button-group" id="trip_sim_frequency">
+                 <input type="checkbox" id="total_sim" name="trip_sim_frequency" value="total">
+                 <label for="total_sim" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+         <div class="checkboxrow">
+             <label for="trip_luggage">Excessive Luggage Fees: <span id="trip_luggage_total"></span></label>
+             <input type="number" inputmode="numeric" id="trip_luggage" step="0.01">
+             <div class="checkbox-button-group" id="trip_luggage_frequency">
+                 <input type="checkbox" id="total_luggage" name="trip_luggage_frequency" value="total">
+                 <label for="total_luggage" class="checkbox-button">TOTAL</label>
+             </div>
+         </div>
+     </div>
+ 
+     <!-- Rest of the HTML remains unchanged -->
+     <div class="containerround">
+         <div style="padding-top:10px; display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="termscheckbox" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="termscheckbox" style="font-size: 11px;">
+                 I have read, understand, and agree to the Terms of Service.(last updated: 31/Mar/2025). By proceeding, I acknowledge that I use the vacation worksheet at my own risk, and INEXASLI is not liable for any loss, harm, or decisions based on its educational tools. All liability is capped as outlined in the Terms.
+                 <a href="#termsModal" id="TERMS_MODAL_OPEN" title="terms" class="inline-link">Read Terms of Service</a>
+             </label>
+         </div>
+ 
+         <div style="display: flex; align-items: center; gap: 15px; margin-top: 20px;">
+             <div class="checkbox-wrapper-2">
+                 <input type="checkbox" id="notintended" class="sc-gJwTLC ikxBAC">
+             </div>
+             <label for="notintended" style="font-size: 11px;">
+                 I consent to the use and storage of data in my browser’s local storage for essential website functionality, including but not limited to, calculations for my financial educational reports. Minimal cookies may be used for payment verification for premium access. These are necessary for the services I request.
+                 <a href="#" id="cookie-overwrite-link" style="text-decoration: none; color: #007bff;" class="inline-link">Click here to overwrite cookies</a>
+             </label>
+         </div>
+     </div>
+ 
+     <div class="containerround hidden" id="expenseBreakdown">
+         <h3>Expense Breakdown</h3>
+         <p id="expense_list"></p>
+         <button onclick="window.copyResults()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px; text-align: center;">Copy Results</button>
+     </div>
+ 
+     <div class="containerround">
+         <div class="containerround">
+             <div style="text-align: center; margin-bottom: 5px;">
+                 <button onclick="createCookies()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px;">Save</button>
+                 <button onclick="window.termsAgreed()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 120px; font-size: 14px;">Calculate Total</button>
+                 <button onclick="overwriteCookies1()" style="display: inline-block; margin: 0 5px; padding: 8px 16px; width: 100px; font-size: 14px;">Clear</button>
+             </div>
+         </div>
+     </div>
+ 
+     <div id="TERMS-modal" class="modal">
+         <div class="modal-content">
+             <iframe src="/legal.txt" height="100%" width="100%" frameborder="10%"></iframe>
+         </div>
+     </div>
+ 
+     <div id="totalCost" class="hidden">
+         <h4 style="text-align: center;">Total Estimated Vacation Cost: <span id="total_cost_display"></span></h4>
+     </div>
+ 
+     <script src="/utility/modal.js"></script>
+     <script src="/utility/legal.js"></script>
+     <script src="/utility/toolTip.js"></script>
+ 
+     <!-- Merged JavaScript from vacation.js with getJSON and setJSON implementation -->
+     <script type="module">
+     // Utility functions are now available via window from datain.js
+     // No direct imports needed
+
+     // Define expenseCategories and totalOnlyCategories FIRST
+     const expenseCategories = [
+         'flights', 'car', 'uber', 'transit', 'bike',
+         'hotels', 'camping',
+         'dining', 'grocery',
+         'tickets', 'alcohol', 'gambling', 'rental',
+         'insurance', 'sim', 'luggage'
+     ];
+
+     const totalOnlyCategories = ['flights', 'tickets', 'insurance', 'sim', 'luggage'];
+
+     // Form element IDs
+     const formElementIds = [
+         'trip_duration', 'trip_flights', 'trip_car', 'trip_uber', 'trip_transit', 'trip_bike',
+         'trip_hotels', 'trip_camping', 'trip_dining', 'trip_grocery', 'trip_tickets',
+         'trip_alcohol', 'trip_gambling', 'trip_rental', 'trip_insurance', 'trip_sim', 'trip_luggage'
+     ];
+
+     // Key names for JSON storage
+     const TRIP_INPUTS_KEY = 'vacation_trip_inputs';
+     const TRIP_FREQUENCIES_KEY = 'vacation_trip_frequencies';
+
+     function getTermsCookie(name) {
+         const now = Date.now();
+         const status = JSON.parse(window.localStorage.getItem(name));
+
+         if (status && now > status.time) {
+             localStorage.removeItem(name);
+             return false;
+         }
+
+         if (status && status.accepted) {
+             return true;
+         } else if (status && !status.accepted) {
+             return false;
+         }
+
+         return false;
+     }
+
+     function setTermsCookie(name, value) {
+         const date = new Date();
+         window.localStorage.setItem(name, JSON.stringify({
+             accepted: value,
+             time: date.setTime(date.getTime() + 30 * 60 * 1000)
+         }));
+     }
+
+     // Load all input values and frequencies from JSON storage
+     window.loadLocalStorage = function() {
+         console.log('Starting loadLocalStorage with JSON...');
+         
+         // Get all input values from JSON storage
+         const savedInputs = window.getJSON(TRIP_INPUTS_KEY, {});
+         formElementIds.forEach(id => {
+             const element = document.getElementById(id);
+             if (element) {
+                 // Use the saved value or empty string if not found
+                 const storedValue = savedInputs[id] || '';
+                 element.value = storedValue;
+                 console.log(`Set ${id} to ${element.value}`);
+             } else {
+                 console.warn(`Element with ID '${id}' not found in the DOM`);
+             }
+         });
+         
+         // Get all frequency selections from JSON storage
+         const savedFrequencies = window.getJSON(TRIP_FREQUENCIES_KEY, {});
+         document.querySelectorAll('.checkbox-button-group').forEach(group => {
+             const groupId = group.id;
+             const savedFrequency = savedFrequencies[groupId] || 'total';
+             
+             const checkboxToCheck = group.querySelector(`input[value="${savedFrequency}"]`);
+             if (checkboxToCheck) {
+                 checkboxToCheck.checked = true;
+                 console.log(`Set ${checkboxToCheck.value} as checked for ${groupId}`);
+             } else {
+                 group.querySelector('input[value="total"]').checked = true;
+             }
+         });
+         
+         console.log('JSON values loaded into form elements');
+     };
+
+     const tabs = document.querySelectorAll('.tab');
+
+     tabs.forEach(tab => {
+         const dataL = tab.getAttribute('data-location');
+         const location = document.location.pathname;
+
+         tab.addEventListener('click', (e) => {
+             const isChecked1 = getTermsCookie('term1');
+             const isChecked2 = getTermsCookie('term2');
+
+             if (!isChecked1 || !isChecked2) {
+                 e.preventDefault();
+                 alert("Please agree to the terms of service & acknowledge that all amounts entered are pre-tax & contributions");
+             }
+         });
+
+         if (location.includes(dataL)) {
+             tab.removeAttribute('href');
+             tab.classList.add('active');
+         }
+     });
+
+     const checkbox1 = document.querySelector('#termscheckbox');
+     const checkbox2 = document.querySelector('#notintended');
+
+     checkbox1.addEventListener('click', () => {
+         setTermsCookie('term1', checkbox1.checked);
+     });
+
+     checkbox2.addEventListener('click', () => {
+         setTermsCookie('term2', checkbox2.checked);
+     });
+
+     // Calculate total based on checkbox selection
+     function calculateTotalForCategory(category) {
+         const amountInput = document.getElementById(`trip_${category}`);
+         const frequencyGroup = document.getElementById(`trip_${category}_frequency`);
+         const totalSpan = document.getElementById(`trip_${category}_total`);
+         const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+
+         if (!amountInput || !amountInput.value || (tripDuration <= 0 && !totalOnlyCategories.includes(category))) {
+             if (totalSpan) totalSpan.textContent = '';
+             return 0;
+         }
+
+         const amount = parseFloat(amountInput.value) || 0;
+         const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
+         
+         // Get frequency from the checked checkbox or from saved frequencies
+         let frequency;
+         if (checkedCheckbox) {
+             frequency = checkedCheckbox.value;
+         } else {
+             const savedFrequencies = window.getJSON(TRIP_FREQUENCIES_KEY, {});
+             frequency = savedFrequencies[`trip_${category}_frequency`] || 'total';
+         }
+         
+         let total = 0;
+
+         if (totalOnlyCategories.includes(category)) {
+             total = amount;
+         } else {
+             switch (frequency) {
+                 case 'total':
+                     total = amount;
+                     break;
+                 case 'daily':
+                     total = amount * tripDuration;
+                     break;
+                 case 'weekly':
+                     const fullWeeks = Math.floor(tripDuration / 7);
+                     const remainingDays = tripDuration % 7;
+                     const dailyRate = amount / 7;
+                     total = (fullWeeks * amount) + (remainingDays * dailyRate);
+                     break;
+             }
+         }
+
+         if (totalSpan) totalSpan.textContent = `$${total.toFixed(2)}`;
+         return total;
+     }
+
+     window.updateFrequency = function(category) {
+         calculateTotalForCategory(category);
+     };
+
+     window.termsAgreed = function() {
+         const termsCheckbox = document.querySelector('#termscheckbox');
+         const cookieCheckbox = document.querySelector('#notintended');
+
+         if (!termsCheckbox.checked) {
+             alert('Please agree to the Terms of Service before calculating the total.');
+             return;
+         }
+         if (!cookieCheckbox.checked) {
+             alert('Please consent to cookie usage before calculating the total.');
+             return;
+         }
+
+         const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+         if (tripDuration <= 0 && expenseCategories.some(cat => !totalOnlyCategories.includes(cat) && document.getElementById(`trip_${cat}`).value)) {
+             alert('Please enter a valid trip duration for expenses with daily or weekly frequencies.');
+             return;
+         }
+
+         let grandTotal = 0;
+         const expenseList = document.getElementById('expense_list');
+         expenseList.innerHTML = '';
+
+         expenseCategories.forEach(category => {
+             const total = calculateTotalForCategory(category);
+             if (total > 0) {
+                 grandTotal += total;
+                 const li = document.createElement('li');
+                 li.textContent = `${category.replace('_', ' ').replace(/^\w/, c => c.toUpperCase())}: $${total.toFixed(2)}`;
+                 expenseList.appendChild(li);
+             }
+         });
+
+         const totalLi = document.createElement('li');
+         totalLi.textContent = `Total Expenses: $${grandTotal.toFixed(2)}`;
+         totalLi.style.fontWeight = 'bold';
+         expenseList.appendChild(totalLi);
+
+         const totalCostDisplay = document.getElementById('total_cost_display');
+         totalCostDisplay.textContent = `$${grandTotal.toFixed(2)}`;
+         document.getElementById('totalCost').classList.remove('hidden');
+         document.getElementById('expenseBreakdown').classList.remove('hidden');
+     };
+
+     window.copyResults = function() {
+         const termsCheckbox = document.querySelector('#termscheckbox');
+         if (!termsCheckbox.checked) {
+             alert('Please agree to the Terms of Service before copying results.');
+             return;
+         }
+
+         const tripDuration = parseInt(document.getElementById('trip_duration').value) || 0;
+         const totalCost = document.getElementById('total_cost_display').textContent;
+         const expenseItems = Array.from(document.getElementById('expense_list').getElementsByTagName('li'))
+             .map(li => li.textContent);
+
+         const textToCopy = `Vacation Cost Estimate\nTrip Duration: ${tripDuration} days\nTotal Estimated Cost: ${totalCost}\n\nExpense Breakdown:\n${expenseItems.join('\n')}`;
+
+         navigator.clipboard.writeText(textToCopy)
+             .then(() => alert('Results copied to clipboard!'))
+             .catch(err => alert('Failed to copy results: ' + err));
+     };
+
+     // Save all input values and frequencies as JSON
+     window.createCookies = function() {
+         console.log('Saving with JSON...');
+         
+         // Collect all input values into a single object
+         const inputValues = {};
+         formElementIds.forEach(id => {
+             const element = document.getElementById(id);
+             if (element) {
+                 inputValues[id] = element.value || '0';
+                 console.log(`Added ${id}: ${inputValues[id]} to inputs object`);
+             }
+         });
+         
+         // Save all input values as a single JSON object
+         window.setJSON(TRIP_INPUTS_KEY, inputValues);
+         
+         // Collect all frequency selections into a single object
+         const frequencyValues = {};
+         expenseCategories.forEach(category => {
+             const frequencyGroup = document.getElementById(`trip_${category}_frequency`);
+             const checkedCheckbox = frequencyGroup.querySelector('input[type="checkbox"]:checked');
+             const value = checkedCheckbox ? checkedCheckbox.value : 'total';
+             frequencyValues[`trip_${category}_frequency`] = value;
+             console.log(`Added trip_${category}_frequency: ${value} to frequencies object`);
+         });
+         
+         // Save all frequency selections as a single JSON object
+         window.setJSON(TRIP_FREQUENCIES_KEY, frequencyValues);
+         
+         console.log('All data saved as JSON objects');
+     };
+
+     // Clear all saved data
+     window.overwriteCookies1 = function() {
+         console.log('Clearing all JSON data...');
+         
+         // Clear input fields and save empty JSON
+         const emptyInputs = {};
+         formElementIds.forEach(id => {
+             emptyInputs[id] = '';
+             const element = document.getElementById(id);
+             if (element) element.value = '';
+         });
+         window.setJSON(TRIP_INPUTS_KEY, emptyInputs);
+         
+         // Reset all frequency selections to 'total' and save as JSON
+         const defaultFrequencies = {};
+         expenseCategories.forEach(category => {
+             const groupId = `trip_${category}_frequency`;
+             defaultFrequencies[groupId] = 'total';
+             
+             const frequencyGroup = document.getElementById(groupId);
+             const checkboxes = frequencyGroup.querySelectorAll('input[type="checkbox"]');
+             checkboxes.forEach(cb => {
+                 cb.checked = cb.value === 'total';
+             });
+         });
+         window.setJSON(TRIP_FREQUENCIES_KEY, defaultFrequencies);
+         
+         console.log("All Vacation Worksheet data has been cleared");
+     };
+
+     // Event listeners
+     expenseCategories.forEach(category => {
+         const inputElement = document.getElementById(`trip_${category}`);
+         if (inputElement) {
+             inputElement.addEventListener('input', () => updateFrequency(category));
+         }
+     });
+
+     const tripDurationInput = document.getElementById('trip_duration');
+     if (tripDurationInput) {
+         tripDurationInput.addEventListener('input', () => {
+             expenseCategories.forEach(category => updateFrequency(category));
+         });
+     }
+
+     document.addEventListener('DOMContentLoaded', () => {
+         console.log('DOMContentLoaded event fired');
+         loadLocalStorage();
+
+         // Add click handler for Terms of Service link
+         const termsLink = document.getElementById('TERMS_MODAL_OPEN');
+         if (termsLink) {
+             termsLink.addEventListener('click', (e) => {
+                 e.preventDefault();
+                 // Try to use the legal modal first
+                 if (typeof window.openLegalModal === 'function') {
+                     window.openLegalModal();
+                 } else if (typeof window.openTermsOfService === 'function') {
+                     window.openTermsOfService();
+                 } else if (typeof window.showTermsOfService === 'function') {
+                     window.showTermsOfService();
+                 } else if (typeof window.showLegal === 'function') {
+                     window.showLegal();
+                 } else if (typeof window.openModal === 'function') {
+                     // Fallback to iframe modal
+                     window.openModal('/legal.txt');
+                 } else {
+                     // Final fallback
+                     window.open('/legal.txt', '_blank');
+                 }
+             });
+         }
+
+         document.querySelectorAll('.checkbox-button-group').forEach(group => {
+             const checkboxes = group.querySelectorAll('input[type="checkbox"]');
+             checkboxes.forEach(checkbox => {
+                 checkbox.addEventListener('change', function() {
+                     if (this.checked) {
+                         // Uncheck other checkboxes in the same group
+                         checkboxes.forEach(cb => {
+                             if (cb !== this) cb.checked = false;
+                         });
+                         
+                         // Get current frequencies from storage
+                         const savedFrequencies = window.getJSON(TRIP_FREQUENCIES_KEY, {});
+                         savedFrequencies[group.id] = this.value;
+                         
+                         // Update the frequencies object and save
+                         window.setJSON(TRIP_FREQUENCIES_KEY, savedFrequencies);
+                         
+                         console.log(`Saved ${this.value} to JSON for ${group.id}`);
+                         
+                         const category = group.id.replace('trip_', '').replace('_frequency', '');
+                         updateFrequency(category);
+                     }
+                 });
+             });
+         });
+     });
+     </script>
+ </body>
+ </html>

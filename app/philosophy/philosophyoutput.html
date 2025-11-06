@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Philosophy Output</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/outputstyles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- PDF utilities now loaded centrally via dataout.js -->
+<style>
+
+
+  /* Using device-container, output-wrapper and api-output styles from outputstyles.css */
+
+  /* Override the star-like elements */
+  body::before {
+    display: none; /* Remove the radial gradient element */
+  }
+  
+  /* Remove the star symbol after the header */
+  .philosophy-header:after {
+    display: none;
+  }
+  
+  .philosophy-header {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #000;
+    font-family: "Playfair Display", serif;
+    padding: 10px;
+    border-bottom: 2px solid #000;
+    letter-spacing: 0.5px;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+
+  
+  .philosophy-display {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: normal;
+  }
+  
+  .wisdom-topic {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    padding-bottom: 15px;
+  }
+  
+  .wisdom-topic h2 {
+    margin: 0;
+    color: #333;
+    font-weight: 700;
+    font-size: 24px;
+  }
+  
+  .wisdom-topic:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #888, transparent);
+  }
+  
+  /* Container behind cards gets page background color for floating effect */
+  .quotes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: transparent;
+    padding: 0;
+  }
+  
+  .quote-card {
+    background: transparent;
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 0;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    border-left: 5px solid;
+    opacity: 0; /* For animation */
+    transform: translateY(20px); /* For animation */
+  }
+
+  .quote-card:hover {
+    transform: translateY(-6px) scale(1.025);
+    box-shadow: 0 16px 40px 0 rgba(80,60,180,0.18), 0 4px 16px 0 rgba(0,0,0,0.13);
+    z-index: 2;
+  }
+  
+  .tradition {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .tradition-taoism { color: #333; }
+  .quote-card.tradition-taoism { border-left-color: #ddd; }
+  
+  .tradition-buddhism { color: #333; }
+  .quote-card.tradition-buddhism { border-left-color: #ddd; }
+  
+  .tradition-christianity { color: #333; } 
+  .quote-card.tradition-christianity { border-left-color: #ddd; }
+  
+  .tradition-islam { color: #333; }
+  .quote-card.tradition-islam { border-left-color: #ddd; }
+  
+  .tradition-hermetic { color: #333; }
+  .quote-card.tradition-hermetic { border-left-color: #ddd; }
+  
+  .quote {
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    margin-bottom: 12px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #444;
+    padding-left: 10px;
+    border-left: 2px solid #eee;
+  }
+  
+  .source {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  
+  .relevance {
+    font-size: 15px;
+    color: #444;
+    background-color: transparent;
+    padding: 12px;
+    border-radius: 6px;
+    line-height: 1.6;
+  }
+  
+  .reflection {
+    background: transparent;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #e1e8ed;
+    position: relative;
+  }
+  
+  .reflection:before {
+    content: '✦';
+    position: absolute;
+    top: -12px;
+    left: 25px;
+    background: transparent;
+    padding: 0 10px;
+    color: #666;
+    border-radius: 12px;
+    font-size: 14px;
+  }
+  
+  .reflection-title {
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #333;
+    font-family: "Playfair Display", serif;
+  }
+  
+  /* Loading and empty state styles */
+  /* Ensure container background matches gap background */
+  .philosophy-container {
+    background-color: transparent;
+  }
+</style>
+</head>
+<body>
+  <!-- Main content container with ID for accessibility -->
+  <div id="main-content" class="device-container philosophy-container">
+    <div class="output-wrapper">
+      <div id="output-span" class="api-output"></div>
+    </div>
+  </div>
+
+  <!-- Copy utility is already included in the head -->
+  
+  <script>
+    // Run immediately without waiting for DOMContentLoaded
+    (function() {
+      // Reference the global utility functions
+      const getLocal = window.getLocal || function(key) {
+        try {
+          const value = localStorage.getItem(key);
+          return value ? decodeURIComponent(value) : null;
+        } catch (e) {
+          console.error('Error getting local value:', e);
+          return null;
+        }
+      };
+
+      const getJSON = window.getJSON || function(key) {
+        try {
+          const item = localStorage.getItem(key);
+          return item ? JSON.parse(item) : null;
+        } catch (e) {
+          console.error('Error parsing JSON:', e);
+          return null;
+        }
+      };
+
+      // Try to get span element - might be delayed
+      function updateOutput() {
+        const outputSpan = document.getElementById('output-span');
+        if (!outputSpan) {
+          setTimeout(updateOutput, 100);
+          return;
+        }
+
+        // Specifically look for philosophyIqResponse data
+        const responseKey = 'philosophyIqResponse';
+        
+        // Try several approaches to get the data
+        let data;
+        try {
+          // Check if the mock data should be used for demonstration
+          const urlParams = new URLSearchParams(window.location.search);
+          const useMockData = urlParams.get('demo') === 'true';
+          
+          if (useMockData) {
+            data = {
+              "topic": "Maintaining a faithful marriage",
+              "quotes": [
+                {
+                  "tradition": "Taoism",
+                  "quote": "The soft overcomes the hard; the gentle overcomes the rigid.",
+                  "source": "Tao Te Ching, Chapter 78, by Lao Tzu",
+                  "relevance": "This teaches that gentleness and adaptability in a marriage can help overcome challenges, fostering faithfulness through harmony rather than force."
+                },
+                {
+                  "tradition": "Buddhism",
+                  "quote": "Radiate boundless love towards the entire world.",
+                  "source": "Metta Sutta, attributed to Buddha",
+                  "relevance": "In the context of marriage, this encourages cultivating unconditional love and compassion, which are essential for maintaining faithfulness and emotional connection."
+                },
+                {
+                  "tradition": "Islam",
+                  "quote": "And among His signs is this, that He created for you mates from among yourselves, that you may dwell in tranquility with them, and He has put love and mercy between your hearts.",
+                  "source": "Quran 30:21",
+                  "relevance": "This verse highlights the divine purpose of marriage for peace and mercy, emphasizing the importance of faithfulness as a means to achieve tranquility in the relationship."
+                },
+                {
+                  "tradition": "Christianity",
+                  "quote": "Therefore what God has joined together, let no one separate.",
+                  "source": "Matthew 19:6, Bible",
+                  "relevance": "This underscores the sacred covenant of marriage, promoting lifelong faithfulness and commitment as ordained by God."
+                },
+                {
+                  "tradition": "Hermetic",
+                  "quote": "Gender is in everything; everything has its Masculine and Feminine Principles.",
+                  "source": "The Kybalion",
+                  "relevance": "This principle suggests that balance between masculine and feminine energies in a marriage can lead to harmony and faithful partnership, reflecting universal laws."
+                }
+              ],
+              "reflection": "Together, these perspectives from different traditions emphasize harmony, love, divine purpose, commitment, and balance, offering a multifaceted approach to nurturing a faithful marriage by integrating adaptability, compassion, mercy, covenant, and energetic equilibrium."
+            };
+          } else {
+            data = getJSON(responseKey);
+            if (!data) {
+              // Fallback to direct localStorage access
+              const rawData = localStorage.getItem(responseKey);
+              if (rawData) {
+                data = JSON.parse(rawData);
+              }
+            }
+            
+            // Handle the worker response format - check if it's nested in a response object
+            if (data && data.message === 'Success' && data.data) {
+              data = data.data;
+            }
+            
+            // Get the philosophical wisdom if it's nested in an object
+            if (data && data.philosophicalWisdom) {
+              data = data.philosophicalWisdom;
+            }
+          }
+        } catch (err) {
+          console.error('Error getting data:', err);
+        }
+        
+        if (data) {
+          if (data.quotes && Array.isArray(data.quotes)) {
+            displayPhilosophyData(data, outputSpan);
+          } else if (typeof data === 'object' && data !== null) {
+            // Use pretty formatting for other complex objects
+            outputSpan.textContent = JSON.stringify(data, null, 2);
+          } else {
+            outputSpan.textContent = data;
+          }
+        } else {
+          outputSpan.innerHTML = '';
+        }
+      }
+      
+      // Start the update process with slight delay to allow for animations
+      setTimeout(updateOutput, 500);
+      
+      function displayPhilosophyData(philosophyData, outputElement) {
+        outputElement.innerHTML = '';
+        outputElement.classList.add('philosophy-display');
+        
+        const container = document.createElement('div');
+        
+        // Topic header
+        const header = document.createElement('div');
+        header.className = 'wisdom-topic';
+        header.innerHTML = `<h2>Wisdom on: ${philosophyData.topic}</h2>`;
+        container.appendChild(header);
+        
+        // Quotes container
+        const quotesContainer = document.createElement('div');
+        quotesContainer.className = 'quotes-container';
+        
+        // Quotes section
+        if (philosophyData.quotes && Array.isArray(philosophyData.quotes)) {
+          philosophyData.quotes.forEach(quote => {
+            const quoteCard = document.createElement('div');
+            // Custom colors for different traditions using CSS classes
+            let traditionClass = '';
+            let iconHtml = '';
+            switch(quote.tradition.toLowerCase()) {
+              case 'taoism':
+                traditionClass = 'tradition-taoism';
+                iconHtml = '<i class="fas fa-yin-yang" title="Taoism" style="margin-right:8px;"></i>';
+                break;
+              case 'buddhism':
+                traditionClass = 'tradition-buddhism';
+                iconHtml = '<i class="fas fa-om" title="Buddhism" style="margin-right:8px;"></i>';
+                break;
+              case 'christianity':
+                traditionClass = 'tradition-christianity';
+                iconHtml = '<i class="fas fa-cross" title="Christianity" style="margin-right:8px;"></i>';
+                break;
+              case 'islam':
+                traditionClass = 'tradition-islam';
+                iconHtml = '<i class="fas fa-star-and-crescent" title="Islam" style="margin-right:8px;"></i>';
+                break;
+              case 'hermetic':
+                traditionClass = 'tradition-hermetic';
+                iconHtml = '<i class="fas fa-infinity" title="Hermetic" style="margin-right:8px;"></i>';
+                break;
+              default:
+                iconHtml = '';
+            }
+            quoteCard.className = `quote-card ${traditionClass}`;
+            quoteCard.innerHTML = `
+              <div class="tradition">
+                ${iconHtml}${quote.tradition}
+              </div>
+              <div class="quote">
+                "${quote.quote}"
+              </div>
+              <div class="source">
+                — ${quote.source}
+              </div>
+              <div class="relevance">
+                ${quote.relevance}
+              </div>
+            `;
+            quotesContainer.appendChild(quoteCard);
+          });
+        }
+        
+        container.appendChild(quotesContainer);
+        
+        // Reflection
+        if (philosophyData.reflection) {
+          const reflection = document.createElement('div');
+          reflection.className = 'reflection';
+          reflection.innerHTML = `
+            <div class="reflection-title">Reflection</div>
+            <div>${philosophyData.reflection}</div>
+          `;
+          container.appendChild(reflection);
+        }
+        
+        outputElement.appendChild(container);
+        
+        // Add animation effect to gradually reveal the cards
+        const cards = document.querySelectorAll('.quote-card');
+        cards.forEach((card, index) => {
+          setTimeout(() => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            
+            setTimeout(() => {
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, 100);
+          }, index * 150);
+        });
+      }
+    })();
+
+      // Initialize copy button with formatted text for philosophy output
+      copyUtil.init({ containerId: 'output-span', contentType: 'philosophy', mode: 'text' });
+      
+      // Initialize enhanced UI system
+      function initEnhancedUISystem() {
+        // Wait a bit to ensure DOM and containers are ready
+        setTimeout(() => {
+          // Initialize the enhanced UI with embed detection
+          if (window.enhancedUI) {
+            window.enhancedUI.init({
+              containerId: 'output-span',
+              scrollToTop: true,
+              embedEnforcement: true,
+              accessibility: true
+            });
+          } else {
+            console.warn('Enhanced UI system not loaded');
+          }
+        }, 100);
+      }
+      
+      // Initialize enhanced UI system after content loads
+      initEnhancedUISystem();
+    
+  </script>
+  
+</body>
+</html>
